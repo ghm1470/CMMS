@@ -1,0 +1,33 @@
+<ng-container *ngIf="!multiple">
+  <input type="file" accept="image/*" class="upload" (change)="setImage($event)"
+         style="display: none" #fileInput/>
+  <i class="fileUpload fa fa-picture-o" [title]="'افزودن عکس'" aria-hidden="true" style="font-size: 25px; cursor: pointer; z-index: 1"
+     (click)="fileInput.click()"></i>
+  <div>
+    <img *ngIf="image.imageStatus === MyImageStatus.SAVED_IMAGE"
+         style="width:150px; height: 150px; border-radius: 7px" [src]="url + image.smallPath">
+    <img *ngIf="image.imageStatus === MyImageStatus.NEW_IMAGE || image.imageStatus === MyImageStatus.UPDATE_IMAGE"
+         style="width:150px; height: 150px; border-radius: 7px" [src]="image.imageShow">
+    <i *ngIf="image.imageStatus != MyImageStatus.WITHOUT_IMAGE && image.imageStatus != MyImageStatus.DELETE_IMAGE"
+       class="fa fa-times" aria-hidden="true" style="color: red " (click)="deleteImage()"></i>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="multiple">
+  <div class="col-md-12">
+    <span style="font-weight: bold">
+          انتخاب تصویر
+    </span>
+    <input type="file" accept="image/*" class="upload" multiple (change)="setMultipleImage($event)"
+           style="display: none" #fileInput/>
+    <i class="fileUpload fa fa-picture-o" aria-hidden="true" style="font-size: 25px; cursor: pointer; z-index: 10000"
+       (click)="fileInput.click()"></i>
+  </div>
+  <div class="col-md-2" *ngFor="let image of imageList; let i = index;" style="margin-top: 10px">
+    <img *ngIf="image.imageStatus === MyImageStatus.SAVED_IMAGE" [src]="url + image.smallPath" style="width:150px; height: 120px; border-radius: 7px">
+    <img *ngIf="image.imageStatus === MyImageStatus.NEW_IMAGE || image.imageStatus === MyImageStatus.UPDATE_IMAGE"
+         [src]="image.imageShow" style="width:150px; height: 120px; border-radius: 7px">
+    <i *ngIf="image.imageStatus != MyImageStatus.WITHOUT_IMAGE && image.imageStatus != MyImageStatus.DELETE_IMAGE"
+       class="fa fa-times" aria-hidden="true" style="color: red " (click)="deleteImageFormList(i)"></i>
+  </div>
+</ng-container>

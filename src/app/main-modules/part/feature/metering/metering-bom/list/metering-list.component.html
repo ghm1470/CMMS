@@ -1,0 +1,108 @@
+<div class="card">
+    <div class="card-body card-body-content">
+        <div class="col-md-12">
+            <div class="row">
+                <div class=" text-right " *ngIf="!hasUnitList">
+                    <label class="control-label for-label" style="margin-top: -10px">مقیاس اندازه گیری:</label>
+                    <strong>
+                        {{unitName}}
+                    </strong>
+                </div>
+            </div>
+            <div class=" text-right " *ngIf="hasUnitList">
+                <label class="control-label for-label" style="margin-top: -10px">مقیاس اندازه گیری:</label>
+                <div class="col-md-4" style=" margin-bottom: 20px; margin-right: -16px">
+                    <ng-select [(ngModel)]="unitId" (change)="getPage(unitId)">
+                        <ng-option *ngFor="let item of unitList" [value]="item.id">{{item.title}}</ng-option>
+                    </ng-select>
+                </div>
+
+            </div>
+            <div class="col-md-12" style="text-align: center" *ngIf="loading">
+                <i class="fa fa-spinner fa-pulse fa-3x "></i>
+
+            </div>
+            <ng-container *ngIf="entityList.length===0 && loading === false&&selectedUid">
+                <div style="color: #7884a7;text-align: center">نتیجه ای یافت نشد.</div>
+            </ng-container>
+            <ng-container *ngIf="!selectedUid">
+                <div style="color: #7884a7;text-align: center">مقیاس اندازه گیری انتخاب نشده است.</div>
+            </ng-container>
+            <ng-container *ngIf="entityList.length> 0">
+                <table class="table table-bordered table-striped table-responsive-md">
+                    <thead>
+                    <tr style="text-align: center">
+                        <th class="text-center" style="width: 5%">ردیف</th>
+                        <th class="text-center">نام داریی</th>
+                        <th class="text-center">واحد اندازه گیری</th>
+                        <th class="text-center">کارکرد</th>
+                        <th class="text-center"> تاریخ ثبت</th>
+                        <th class="text-center"> ثبت شده توسط:</th>
+                        <!--<th class="text-center" style="width: 5%"></th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ng-container *ngFor="let item of entityList; let i = index">
+                        <tr class="text-center">
+                            <td>
+                                {{(i + 1 + (pageIndex * pageSize))}}
+                            </td>
+                            <td>{{item.assetName}}</td>
+                            <td>{{item?.unitOfMeasurementName}}</td>
+                            <td>{{item?.amount}}</td>
+                            <td>
+<!--                                {{item?.creationDate | convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                                {{myMoment.convertIsoToJDate(item?.creationDate) | perNumber}}
+
+                            </td>
+                            <td>{{item?.userName}}</td>
+                            <!--<td>-->
+                            <!--<a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+                            <!--(click)="chooseSelectedItemForView(item)" style="cursor: pointer ; font-weight: bold">-->
+                            <!--<i class="fa fa-eye" title="نمایش"></i>-->
+                            <!--</a>-->
+                            <!--</td>-->
+                            <!--<td  *ngIf="item?.userId === user.id && i + 1 === entityList.length">-->
+                            <!--<a class="btn btn-sm btn-outline-lightning rounded-0"-->
+                            <!--style="cursor: pointer" nbdAreYouSure (then)="deleteItem(item)">-->
+                            <!--<i class="fa fa-trash" title="حذف"></i>-->
+                            <!--</a>-->
+                            <!--</td>-->
+                            <!--<td  *ngIf="item?.userId !== user.id || user.id && i + 1 !== entityList.length">-->
+                            <!--<span class="btn btn-sm btn-outline-lightning rounded-0"-->
+                            <!--style=" opacity: 0.3; cursor: not-allowed ">-->
+                            <!--<i class="fa fa-trash"></i>-->
+                            <!--</span>-->
+                            <!--</td>-->
+                        </tr>
+                    </ng-container>
+
+                    </tbody>
+                </table>
+
+
+                <div class="card rounded-0 h-100" *ngIf="showMessage === true">
+                    <div class="card-title mb-1 p-3">
+                        <div class="col-md-12 text-center">
+                            برای این مقیاس اندازه گیری متراژی ثبت نشده است.
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <!--    pagination-->
+            <ng-container *ngIf="selectedUid">
+                <app-paginator
+                        [totalElements]="length"
+                        [pageSize]="pageSize"
+                        [pageIndex]="pageIndex"
+                        [pageSizeOptions]="[]"
+                        [showFirstLastButtons]="true"
+                        (page)=" changePage($event)"
+                ></app-paginator>
+            </ng-container>
+
+
+            <!--    pagination-->
+        </div>
+    </div>
+</div>

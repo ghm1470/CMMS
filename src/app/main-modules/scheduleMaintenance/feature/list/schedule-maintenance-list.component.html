@@ -1,0 +1,306 @@
+<div class="collapse" id="schedule-search">
+    <div class="card" style="margin-bottom: 10px">
+        <div class="card-body card-body-filter">
+            <div class="row" style="margin-bottom: 10px">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3 form-group">
+                            <label class="for-label">عنوان:</label>
+                            <input [(ngModel)]="getAllByFilterAndPagination.title" [placeholder]="'عنوان'"
+                                   class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label class="for-label">کد زمانبندی:</label>
+                            <input [(ngModel)]="getAllByFilterAndPagination.code" [placeholder]="'کد زمانبندی'"
+                                   class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-3" *ngIf="assetList.length">
+                            <label class="for-label">دارایی</label>
+                            <ng-select bindLabel="name" bindValue="id" [(ngModel)]="getAllByFilterAndPagination.assetId"
+                                       [items]="assetList" [placeholder]="'دارایی'"></ng-select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="for-label">اولویت</label>
+                            <ng-select bindLabel="_title" bindValue="_value"
+                                       [(ngModel)]="getAllByFilterAndPagination.priority"
+                                       [items]="priorityList" [placeholder]="'اولویت'"></ng-select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="for-label">نوع بازدید</label>
+                            <ng-select bindLabel="_title" bindValue="_value"
+                                       [(ngModel)]="getAllByFilterAndPagination.maintenanceType"
+                                       [items]="maintenanceTypeList" [placeholder]="'نوع بازدید'"></ng-select>
+                        </div>
+                        <div class="col-md-3" *ngIf="projectList.length">
+                            <label class="for-label">پروژه</label>
+                            <ng-select bindLabel="name" bindValue="id"
+                                       [(ngModel)]="getAllByFilterAndPagination.projectId"
+                                       [items]="projectList" [placeholder]="'پروژه'"></ng-select>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label class="for-label">وضعیت کار</label>
+                            <ng-select bindLabel="name" bindValue="id"
+                                       [(ngModel)]="getAllByFilterAndPagination.workOrderStatusId"
+                                       [items]="workOrderStatusList" [placeholder]="'وضعیت'"></ng-select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="for-label"> تاریخ سر رسید</label>
+                            <input class="form-control form-control-sm" id="dueDate" #dueDate
+                                   [placeholder]="'تاریخ سر رسید'">
+
+                        </div>
+                        <!--            <div class="col-md-3">-->
+                        <!--              <label class="for-label">وضعیت فعالیت</label>-->
+                        <!--              <ng-select  [(ngModel)]="getAllByFilterAndPagination.active"-->
+                        <!--                          [placeholder]="'وضعیت فعالیت'">-->
+                        <!--                <ng-option [value]="true" >فعال</ng-option>-->
+                        <!--                <ng-option [value]="false" >غیرفعال</ng-option>-->
+                        <!--              </ng-select>-->
+                        <!--            </div>-->
+                        <div class="col-md-12 text-left" style="margin-top: 30px">
+                            <button class="btn btn-search btn-sm" (click)="search()"
+                            >
+                                جستجو
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+<ng-container *ngIf="entityList.length===0 && loading === false">
+    <div style="text-align: center">نتیجه ای یافت نشد.</div>
+</ng-container>
+<ng-container *ngIf="entityList.length>0">
+    <table class="table table-bordered table-responsive-md table-striped">
+        <thead>
+        <tr style="text-align: center">
+            <th class="text-center">ردیف</th>
+            <th class="text-center">عنوان</th>
+            <th class="text-center">کد زمانبندی</th>
+            <th class="text-center">دارایی</th>
+            <th class="text-center">اولویت</th>
+            <th class="text-center">نوع بازدید</th>
+            <th class="text-center">پروژه</th>
+            <th class="text-center">وضعیت کار</th>
+            <th class="text-center">تاریخ های سررسید</th>
+            <th class="text-center">مسافت های سررسید</th>
+            <th class="text-center" style="width: 5%">نمایش</th>
+            <th class="text-center" style="width: 5%">ویرایش</th>
+            <th class="text-center" style="width: 5%">حذف</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of entityList; let i = index">
+            <tr class="text-center">
+                <td>
+                    {{(i + 1 + (pageIndex * pageSize))}}
+                </td>
+                <td>{{item.title}}</td>
+                <td>{{item.code}}</td>
+                <td>{{item.asset?.name}}</td>
+                <td>
+                    <ng-container *ngFor="let priority of priorityList">
+                        <ng-container *ngIf="priority._value === item.priority">
+                            {{priority._title}}
+                        </ng-container>
+                    </ng-container>
+                </td>
+                <td>
+                    <ng-container *ngFor="let maintenanceType of maintenanceTypeList">
+                        <ng-container *ngIf="maintenanceType._value === item.maintenanceType">
+                            {{maintenanceType._title}}
+                        </ng-container>
+                    </ng-container>
+                </td>
+                <td>{{item.project?.name}}</td>
+                <td>{{item.workOrderStatus?.name}}</td>
+                <td>
+
+                    <!--                    {{MyToolkit.En2Fa(MyToolkit2.Moment.getJaliliDateFromIsoOrFull(item.dueDate))}}-->
+
+                    <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                       (click)="getAllFutureDatesOfScheduleMaintenance(item)"
+                       style="cursor: pointer ; font-weight: bold">
+                        <i class="fa fa-eye" title="  مشاهده تاریخ های سررسید"></i>
+                        <ng-container
+                                *ngIf="  loadingGetAllFutureDatesOfScheduleMaintenance&&selectedEntity.id===item.id">
+                            <i class="fa fa-spinner  fa-pulse fa-1x loadingSearch"></i>
+                        </ng-container>
+                    </a>
+                </td>
+                <td>
+
+                    <!--                    {{MyToolkit.En2Fa(MyToolkit2.Moment.getJaliliDateFromIsoOrFull(item.dueDate))}}-->
+
+
+                    <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                       (click)="getAllFutureMeteringOfScheduleMaintenance(item)"
+                       style="cursor: pointer ; font-weight: bold">
+                        <i class="fa fa-eye" title="  مشاهده مسافت های سررسید"></i>
+                        <ng-container
+                                *ngIf="  loadingGetAllFutureMeteringScheduleMaintenance&&selectedEntity.id===item.id">
+                            <i class="fa fa-spinner  fa-pulse fa-1x loadingSearch"></i>
+                        </ng-container>
+                    </a>
+                </td>
+                <!--        <td>-->
+                <!--          <ng-container *ngIf="item.active" >-->
+                <!--            فعال-->
+                <!--          </ng-container>-->
+                <!--          <ng-container *ngIf="!item.active" >-->
+                <!--            غیرفعال-->
+                <!--          </ng-container>-->
+                <!--        </td>-->
+                <td>
+                    <ng-container *ngIf="roleList.Scheduling_see;else notSeeAccessTemp">
+                        <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                           (click)="chooseSelectedItemForView(item)" style="cursor: pointer ; font-weight: bold">
+                            <i class="fa fa-eye" title="مشاهده"></i>
+                        </a>
+                    </ng-container>
+                    <ng-template #notSeeAccessTemp>
+                        <i class="fa fa-eye" title="مشاهده" style="cursor: no-drop"></i>
+                    </ng-template>
+                </td>
+                <td>
+                    <ng-container *ngIf="roleList.Scheduling_update;else notEditAccessTemp">
+                        <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                           (click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">
+                            <i class="fa fa-edit" title="ویرایش"></i>
+                        </a>
+                    </ng-container>
+                    <ng-template #notEditAccessTemp>
+                        <i class="fa fa-edit" title="ویرایش" style="cursor: no-drop"></i>
+                    </ng-template>
+                </td>
+                <td>
+                    <ng-container *ngIf="roleList.Scheduling_delete;else notDeleteAccessTemp">
+                        <a class="btn btn-sm btn-outline-lightning rounded-0"
+                           style="cursor: pointer"
+                           (click)="showModalDelete(item,i)"
+                        >
+                            <i class="fa fa-trash" title="حذف"></i>
+                        </a>
+                    </ng-container>
+                    <ng-template #notDeleteAccessTemp>
+                        <i class="fa fa-trash" style="cursor: no-drop" title="حذف"></i>
+                    </ng-template>
+                </td>
+            </tr>
+        </ng-container>
+
+        </tbody>
+    </table>
+</ng-container>
+
+<!--    pagination-->
+<app-paginator
+        [totalElements]="length"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[]"
+        [showFirstLastButtons]="true"
+        (page)=" changePage($event)"
+></app-paginator>
+
+
+<!--    pagination-->
+<!--**************************************************************************-->
+<app-conferm-delete
+        [title]="selectedItemForDelete.title"
+        [loading]="selectedItemForDelete.loading"
+        [modalId]="'modalId'+selectedItemForDelete.id"
+        (value)="deleteItem($event)"
+></app-conferm-delete>
+<!--تاریخ های سر رسید-->
+
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.DEFAULT"
+        autoShow="false"
+        [myId]="'selectedEntityDateLisModal'">
+    <div modal-header>
+        <h6>
+            تاریخ های سر رسید
+            {{selectedEntity.title}}
+        </h6>
+    </div>
+    <div modal-body>
+        <div class="col-md-12">
+            <table class="table table-bordered table-striped " *ngIf="dateLis.length> 0">
+                <thead>
+                <tr>
+                    <th style="text-align: center">ردیف</th>
+                    <th style="text-align: center">تاریخ</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let date of dateLis;let i=index">
+                    <td class="text-center">{{i + 1}}</td>
+                    <td class="text-center">
+
+                        {{MyToolkit.En2Fa(MyToolkit2.Moment.getJaliliDateFromIsoOrFull(date))}}
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+            <div class="row justify-content-center">
+
+                <p class="text-center" *ngIf="dateLis.length === 0">
+                    <!--                تاریخ سر رسیدی برای این زمانبندی وجود ندارد-->
+                    تاریخ سر رسیدی ثبت نگردیده است.
+
+                </p>
+            </div>
+        </div>
+    </div>
+</nbw-modal>
+
+<!--مسافت های   سررسید-->
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.DEFAULT"
+        autoShow="false"
+        [myId]="'selectedEntityMeteringLisModal'">
+    <div modal-header>
+        <h6>
+
+            مسافت های سررسید
+            {{ selectedEntity.title}}
+        </h6>
+    </div>
+    <div modal-body>
+        <div class="col-md-12">
+            <table class="table table-bordered table-striped " *ngIf="meteringLis.length> 0">
+                <thead>
+                <tr>
+                    <th style="text-align: center">ردیف</th>
+                    <th class="text-center">مسافت</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let metering of meteringLis;let i=index">
+                    <td class="text-center">{{i + 1}}</td>
+                    <td class="text-center">
+                        {{metering}}
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+            <p class="text-center" *ngIf="meteringLis.length === 0">
+                مسافتی ثبت نگردیده است.
+            </p>
+        </div>
+    </div>
+</nbw-modal>

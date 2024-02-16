@@ -1,0 +1,34 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+        <i class="fa fa-list"></i>&nbsp;&nbsp;
+        <span>لیست شهر ها</span>
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+
+        <ng-container *ngIf="roleList.City_create;else notAccessCreateTemp">
+          <button [routerLink]="'action'" [queryParams]="{mode: actionMode.ADD}"
+                  class="btn btn-secondary btn-sm">
+            <i class="fa fa-plus"></i>
+            <span class="d-none d-sm-inline d-sm-inline">
+            &nbsp;&nbsp;            افزودن
+            </span>
+          </button>
+        </ng-container>
+        <ng-template #notAccessCreateTemp>
+          <button style="cursor: not-allowed"
+                  class="btn btn-secondary btn-sm">
+            <i class="fa fa-plus"></i>
+            <span class="d-none d-sm-inline d-sm-inline">
+            &nbsp;&nbsp;            افزودن
+            </span>
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <div class="card-body card-body-content">
+    <app-city-list></app-city-list>
+  </div>
+</div>

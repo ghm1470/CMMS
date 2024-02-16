@@ -1,0 +1,79 @@
+<div class="card">
+  <div class="card-body card-body-content">
+    <div class="row">
+      <div class="col-md-12" *ngIf="mode === actionMode.EDIT && !loading">
+        <table class="table table-bordered table-responsive-md table-striped" *ngIf="scheduleMetering">
+          <thead>
+          <tr>
+            <th class="text-center" style="width: 5%">ردیف</th>
+            <th class="text-center" >تاریخ ثبت</th>
+            <th class="text-center" >دوره ی راه اندازی</th>
+            <th class="text-center" >مشاهده مسافت های سررسید بعدی</th>
+            <th class="text-center" style="width: 5%" >مشاهده</th>
+<!--            <th class="text-center" style="width: 5%" *ngIf="MMode!== actionMode.VIEW">ویرایش</th>-->
+            <th class="text-center" style="width: 5%" *ngIf="MMode!== actionMode.VIEW">حذف</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="text-center">
+            <td>{{1}}</td>
+            <td>
+<!--              {{scheduleMetering.registrationDate | convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+              {{myMoment.convertIsoToJDate(scheduleMetering?.registrationDate) | perNumber}}
+            </td>
+
+            <!--<td>{{Toolkit2.Common.En2Fa(myMoment.convertIsoToJDate(scheduleMetering.scheduledTime.lastModify))}}</td>-->
+            <!--<td>{{Toolkit2.Common.En2Fa(myMoment.convertIsoToJDate(item.expiry))}}</td>-->
+            <td> هر {{ scheduleMetering.per }} {{ scheduleMetering.unitOfMeasurementName }}</td>
+            <td>
+              <a  (click)="openShowScheduledMeteringModal()" style="color: #007ad9;cursor: pointer" >
+                مشاهده مسافت های سررسید بعدی
+              </a>
+
+            </td>
+            <td>
+              <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                 (click)="chooseSelectedItemForView(scheduleMetering)" style="cursor: pointer ; font-weight: bold">
+                <i class="fa fa-eye" title="نمایش"></i>
+              </a>
+            </td>
+<!--            <td  *ngIf="MMode!== actionMode.VIEW">-->
+<!--              <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+<!--                 (click)="chooseSelectedItemForEdit(scheduleMetering)" style="cursor: pointer ; font-weight: bold">-->
+<!--                <i class="fa fa-edit" title="ویرایش"></i>-->
+<!--              </a>-->
+<!--            </td>-->
+            <td  *ngIf="MMode!== actionMode.VIEW">
+              <a class="btn btn-sm btn-outline-lightning rounded-0"
+                 style="cursor: pointer" nbdAreYouSure (then)="deleteItem()">
+                <i class="fa fa-trash" title="حذف"></i>
+              </a>
+            </td>
+
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div  class="row" *ngIf="mode === actionMode.ADD && !loading" >
+      <div  *ngIf="MMode !== actionMode.VIEW " class=" col-md-12 " style="margin-top: 5px ; margin-bottom: 25px ;float: right">
+        <button class="btn-sm btn btn-secondary" (click)="setService()">
+          افزودن
+        </button>
+      </div>
+
+      <div class="col-md-12 text-center"> بازدید کارکردی مشخص نشده است</div>
+    </div>
+    <div class="col-md-12" style="text-align: center" *ngIf="loading">
+      <i class="fa fa-spinner fa-pulse fa-3x "></i>
+    </div>
+  </div>
+</div>
+
+
+
+<ng-container *ngIf="viewMeteringModal">
+<app-metering-modal [scheduleMaintenanceId]="scheduleMaintenanceId" [againGetSWTAMBSMI]="againGetM" [modeView]="modeView"
+(sendScheduleWithTimeAndMetering)="receive($event)"  [mode]="mode" [receiveItemForEdit]="sendItemForEdit" (changeViewMeteringModal)="changeViewMeteringModal($event)" [unitOfMeasurementList] =unitOfMeasurementList></app-metering-modal >
+</ng-container>
+<app-show-scheduled-metering [readService]="readService"  [scheduleWithTimeAndMetering]="scheduleMetering" [view]="view" [mode]="mode"></app-show-scheduled-metering>

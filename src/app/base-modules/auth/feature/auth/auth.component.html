@@ -1,0 +1,179 @@
+<div style="height: 100vh;width: 100vw ;background-color: #242939" *ngIf="loader">
+  <div class="loader-walk">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</div>
+
+
+<ng-container>
+  <div class="col-md-12">
+    <div class="row main-content">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <div class="row justify-content-center">
+          <div class="login">
+            <div class="right">
+              <div class="logo">
+                <img src="../../../../../assets/images/logo/hamiMain.png" height="50" width="62">
+              </div>
+              <div class="app-name">
+                <span>سامانه نگهداری و تعمیرات حامی</span>
+              </div>
+
+              <div *ngIf="mode === 'signIn'">
+
+                <form (submit)="signInFunction(loginForm)" #loginForm="ngForm" *ngIf="!loader">
+                  <div class="form">
+                    <div class="input-group mb-3 input-group-lg" dir="ltr">
+                      <input type="text" class="form-control text-left px-2" name="userName"
+                             [(ngModel)]="signIn.username" placeholder="نام کاربری"
+                             nbvRequired #userName="ngModel"
+                             [class.is-valid]="!(userName?.errors?.nbvRequired)"
+                             [class.is-invalid]="userName?.errors?.nbvRequired && userName.touched"
+                             dest="userNameValidation">
+                      <div class="input-group-append">
+                      <span class="input-group-text">
+                        <img src="../../../../../assets/images/sign-in/svg/user.svg">
+                      </span>
+                      </div>
+                    </div>
+                    <div id="userNameValidation"></div>
+
+                    <div class="input-group mb-3 input-group-lg" dir="ltr">
+                      <input type="password" class="form-control text-left px-2" name="password"
+                             [(ngModel)]="signIn.password" placeholder="کلمه عبور"
+                             nbvRequired #password="ngModel"
+                             [class.is-valid]="!(password?.errors?.nbvRequired)"
+                             [class.is-invalid]="password?.errors?.nbvRequired && password.touched"
+                             dest="passwordValidation">
+                      <div class="input-group-append">
+                      <span class="input-group-text">
+                        <img src="../../../../../assets/images/sign-in/svg/lock.svg">
+                      </span>
+                      </div>
+                    </div>
+                    <div id="passwordValidation"></div>
+                  </div>
+
+                  <div class="col-md-12">
+                    <div class="row justify-content-center">
+                      <button type="submit" class="btn-login" [disabled]="loginForm.invalid || !action" >
+                        ورود
+                        <i class="fas fa-spinner fa-spin" *ngIf="!action" ></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-12" style="text-align: center; margin: 20px">
+                    <a style="font-size: 14px; cursor: pointer">رمز عبور خود را فراموش کرده اید؟</a>
+                  </div>
+                </form>
+
+              </div>
+              <!--*ngIf="'forgetUserNameOrPassword'"-->
+              <!--<div *ngIf="mode === 'signIn'">-->
+                <!--<form (submit)="forgetFunction(forgetUserNameOrPasswordForm)" #forgetUserNameOrPasswordForm="ngForm">-->
+                  <!--<div class="form">-->
+                    <!--<span style="margin-right: 120px ; font-size: 14px">بازیابی گذرواژه</span>-->
+                    <!--<hr style="margin-top: 10px ; margin-bottom: 10px">-->
+                    <!--<span style="font-size: 12px">برای بازیابی گذر واژه ی خود شماره تلفن یا ایمیل خود را وارد کنید </span>-->
+                    <!--<div class="input-group mb-3 input-group-lg" dir="ltr">-->
+                      <!--<input type="text" class="form-control text-right px-2" name="phoneOrEmail"-->
+                             <!--[(ngModel)]="forgetPass.phoneOrEmail" placeholder="شماره تلفن یا ایمیل"-->
+                             <!--nbvRequired #phoneOrEmail="ngModel"-->
+                             <!--[class.is-valid]="!(phoneOrEmail?.errors?.nbvRequired)"-->
+                             <!--[class.is-invalid]="phoneOrEmail?.errors?.nbvRequired && phoneOrEmail.touched"-->
+                             <!--dest="phoneOrEmailValidation">-->
+                    <!--</div>-->
+                    <!--<div id="phoneOrEmailValidation"></div>-->
+<!--<hr>-->
+                    <!--<div class="captcha-box d-flex fadeIn third">-->
+                      <!--<input type="text" class="form-control text-right px-2" name="captchaValueForget" placeholder="گذر واژه"-->
+                       <!--[(ngModel)]="forgetPass.captcha">-->
+                      <!--<div class="captcha-img">-->
+                          <!--<img *ngIf="captcha.image" [src]="'data:image/jpg;base64,'+captcha.image">-->
+                      <!--</div>-->
+                      <!--<div class="refresh">-->
+                        <!--<picture>-->
+                          <!--&lt;!&ndash;<source srcset="../../../../assets/images/new-signIn/reload.webp" type="image/webp"&ndash;&gt;-->
+                                  <!--&lt;!&ndash;title="new captcha" (click)="refreshCaptchaForget()">&ndash;&gt;-->
+                          <!--&lt;!&ndash;<source srcset="../../../../assets/images/new-signIn/reload.png" type="image/jpeg"&ndash;&gt;-->
+                                  <!--&lt;!&ndash;title="new captcha" (click)="refreshCaptchaForget()">&ndash;&gt;-->
+                          <!--<img src="../../../../../assets/images/captcha/addition-sign.png" title="new captcha"-->
+                               <!--height="30px" (click)="refreshCaptcha()">-->
+                        <!--</picture>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                  <!--</div>-->
+
+                  <!--<div class="col-md-12">-->
+                    <!--<div class="row justify-content-center">-->
+                      <!--<button type="submit" class="btn-login"  >-->
+                        <!--ارسال-->
+                        <!--<i class="fas fa-spinner fa-spin" *ngIf="!action" ></i>-->
+                      <!--</button>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                <!--</form>-->
+              <!--</div>-->
+              <div *ngIf="mode === 'signUp'">
+                <app-sign-up></app-sign-up>
+              </div>
+              <div *ngIf="mode === 'panel'">
+                <app-request-panel></app-request-panel>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+  </div>
+</ng-container>
+
+
+
+<!--=======================================-->
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="false"
+  [modalSize]="MyModalSize.LARGE"
+  autoShow="false"
+  [myId]="'showUserTypeAndOrgForLogin'">
+  <div modal-header>
+    <h5>با چه پستی وارد سامانه میشوید؟
+    </h5>
+  </div>
+  <div modal-body>
+    <div class="col-md-12">
+      <table class="table table-bordered table-responsive-md table-hover">
+        <thead>
+        <tr style="text-align: center">
+          <th class="text-center" style="width: 5%">ردیف</th>
+          <th class="text-center">سازمان</th>
+          <th class="text-center">پست</th>
+          <th></th>
+
+        </tr>
+        </thead>
+          <tbody>
+          <ng-container *ngFor="let item of orgAndUserTypeList;let i=index">
+            <tr style="text-align: center">
+              <td>{{(i + 1)}}</td>
+              <td>{{item.organizationName}}</td>
+              <td>{{item.userTypeName}}</td>
+              <td><a style="color: #007ad9;text-decoration: underline; cursor: pointer ; font-weight: bold" (click)="chooseUserType(item)" > انتخاب</a></td>
+            </tr>
+          </ng-container>
+
+          </tbody>
+      </table>
+
+
+
+    </div>
+  </div>
+</nbw-modal>

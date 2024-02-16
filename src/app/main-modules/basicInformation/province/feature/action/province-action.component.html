@@ -1,0 +1,97 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+        <ng-container *ngIf="mode === actionMode.ADD">
+          <i class="fa fa-plus"></i>&nbsp;
+          افزودن استان
+        </ng-container>
+        <ng-container *ngIf="mode === actionMode.EDIT">
+          <i class="fa fa-edit"></i>&nbsp;
+          ویرایش استان</ng-container>
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+          <button (click)="cancel()"
+            class="btn btn-cancel-back btn-sm">
+            بازگشت
+          </button>
+      </div>
+    </div>
+  </div>
+
+  <form #provinceForm="ngForm" (submit)="action(provinceForm)">
+<div class="card-body card-body-content">
+        <div class="row">
+          <div class="col-md-6 form-group required col-sm-12">
+            <div class="input-group input-group-sm">
+              <div class="col-md-12">
+                <label class="for-label"> نام استان :</label>
+                <label style="color: red">*</label>
+              </div>
+              <div class="col-md-12">
+                <input [(ngModel)]="locationOfProvince.name" name="province" class="form-control"
+                       placeholder="نام استان را وارد کنید"
+                       style="font-size: 13px"
+                       id="name"
+                       (change)="stringLength(locationOfProvince.name,'name')"
+                       #province="ngModel"
+                       nbvRequired
+                       nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."
+                       nbvPattern="{{myPattern.TITLEFa}}"
+                       [class.is-valid]="!(province?.errors?.nbvRequired || province?.errors?.nbvPattern)  && stringLength(locationOfProvince.name,'name')"
+                       [class.is-invalid]="(province?.errors?.nbvRequired || province?.errors?.nbvPattern )  && (province.touched || doSave)"
+                       dest="provinceValidation" maxlength="50">
+
+              </div>
+            </div>
+            <div id="provinceValidation" style="opacity: 0; height: 0"></div>
+          </div>
+<!--          <div class="col-md-6 required col-sm-12" style="padding-bottom: 40px;">-->
+<!--            <span style="color: red ;font-size:13px" >توجه:</span>-->
+<!--            <label class="text-info" *ngIf="!locationSelected" style="margin-bottom: 15px ;font-size:13px">-->
+<!--              &nbsp;&nbsp;&nbsp;-->
+<!--              برای انتخاب مکان شهر نقشه را جابجا کنید تا مکان نما بر روی شهر قرار بگیرد سپس بر روی مکان نما کلیک کنید.-->
+<!--            </label>-->
+<!--            <label class="text-info" *ngIf="locationSelected" style="margin-bottom: 15px ;font-size:13px">-->
+<!--              &nbsp;&nbsp;&nbsp;-->
+<!--              برای ویرایش مکان شهر بر روی ایکن مکان نما کلیک کنید.-->
+<!--            </label>-->
+<!--            <agm-map [latitude]="lat"-->
+<!--                     [longitude]="lng"-->
+<!--                     [zoom]="zoom"-->
+<!--                     (centerChange)="centerChange($event)">-->
+<!--              &lt;!&ndash;              add&ndash;&gt;-->
+<!--              <agm-marker *ngFor="let item of provinceList"-->
+<!--                          [latitude]="item.location.lat"-->
+<!--                          [longitude]="item.location.lng"-->
+<!--                          [label]="item.name"-->
+<!--                          animation="DROP">-->
+
+<!--              </agm-marker>-->
+<!--              &lt;!&ndash;              edit &ndash;&gt;-->
+<!--              <agm-marker *ngIf="locationSelected"-->
+<!--                          [latitude]="locationOfProvince.location.lat"-->
+<!--                          [longitude]="locationOfProvince.location.lng"-->
+<!--                          animation="DROP"-->
+<!--                          (markerClick)="changeLocation()">-->
+
+<!--              </agm-marker>-->
+<!--            </agm-map>-->
+<!--            <img *ngIf="!locationSelected" (click)="doSetCityMarker()"-->
+<!--                 src="../../../../../../assets/images/companyPin.png"-->
+<!--                 style="z-index: 99999; position: relative;margin-top: -492px;margin-right: 215px"-->
+<!--                 alt="...">-->
+<!--          </div>-->
+
+        </div>
+  </div>
+    <div class="card-footer text-left">
+      <button class="btn btn-action btn-sm" type="submit">
+        <span *ngIf="mode === actionMode.ADD">ثبت</span>
+        <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+        <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-1x"></i>
+
+      </button>
+    </div>
+  </form>
+</div>

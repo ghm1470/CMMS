@@ -1,0 +1,152 @@
+<div class="card">
+  <div class="card-body card-body-content">
+    <div  *ngIf="formStatus === 'pending' || formStatus === 'workOrder' || formStatus === 'schedule'">
+      <ng-container *ngIf=" modeS!== actionMode.VIEW">
+        <div class="col-md-12 mb-2 "  *ngIf="modeW!== actionMode.VIEW ">
+          <button class="btn btn-sm btn-secondary" (click)="setService()" >افزودن کار</button>
+        </div>
+      </ng-container>
+      <div class="col-md-12 text-center" *ngIf="taskList.length === 0">
+        <a  style="color: #7884a7">هیچ اطلاعاتی ثبت نشده!</a>
+      </div>
+
+          <table class="table table-bordered  table-striped" *ngIf="taskList.length > 0">
+            <thead>
+            <tr>
+              <th class="text-center" style="width: 5%">ردیف</th>
+              <th class="text-center">عنوان کار</th>
+              <th class="text-center"> کد کار</th>
+              <th class="text-center"> نوع کار</th>
+              <th class="text-center"> تخمین نفر ساعت</th>
+              <th class="text-center" style="width: 5%" *ngIf="modeW!== actionMode.VIEW&&modeS!== actionMode.VIEW">ویرایش</th>
+              <th class="text-center" style="width: 5%" >مشاهده</th>
+              <th class="text-center" style="width: 5%" *ngIf="modeW!== actionMode.VIEW&&modeS!== actionMode.VIEW">حذف</th>
+<!--              <th class="text-center" style="width: 5%"></th>-->
+            </tr>
+            </thead>
+            <tbody>
+
+            <ng-container *ngFor="let item of taskList; let i = index">
+              <tr class="text-center">
+                <td>{{i + 1}}</td>
+                <td>{{item?.title}}</td>
+                <td>{{item?.code}}</td>
+                <td>
+                  <ng-container *ngFor="let taskType of taskTypeList">
+                    <ng-container *ngIf="taskType._value === item.taskType" >
+                      {{taskType._title}}
+                    </ng-container>
+                  </ng-container>
+                </td>
+                <td>{{item?.timeEstimate}}</td>
+                <td *ngIf="modeW!== actionMode.VIEW&&modeS!== actionMode.VIEW">
+                  <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                     (click)="chooseSelectedItemForEdit(item,i)" style="cursor: pointer ; font-weight: bold">
+                    <i class="fa fa-edit" title="ویرایش"></i>
+                  </a>
+                </td>
+                <td>
+                  <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                     (click)="chooseSelectedItemForView(item,i)" style="cursor: pointer ; font-weight: bold">
+                    <i class="fa fa-eye" title="مشاهده"></i>
+                  </a>
+                </td>
+                <td *ngIf="modeW!== actionMode.VIEW&&modeS!== actionMode.VIEW">
+                  <a class="btn btn-sm btn-outline-lightning rounded-0"
+                     style="cursor: pointer"
+                     (click)="showModalDelete(item,i)">
+                    <i class="fa fa-trash" title="حذف"></i>
+                  </a>
+                </td>
+<!--                <td>-->
+<!--                  <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+<!--                     (click)="chooseSelectedItemForView(item)" style="cursor: pointer ; font-weight: bold">-->
+<!--                    <i class="fa fa-eye" title="مشاهده"></i>-->
+<!--                  </a>-->
+<!--                </td>-->
+
+              </tr>
+            </ng-container>
+
+            </tbody>
+          </table>
+
+    </div>
+    <!--==================WorkTableView=========================-->
+    <div class="row" *ngIf="formStatus !== 'pending' && formStatus !== 'workOrder'&& formStatus !== 'schedule'">
+      <table class="table table-striped table-bordered table-responsive-md" *ngIf="taskList.length > 0">
+        <thead>
+        <tr>
+          <th class="text-center" style="width: 5%">ردیف</th>
+          <th class="text-center">عنوان کار</th>
+          <th class="text-center"> کد کار</th>
+          <th class="text-center"> نوع کار</th>
+          <th class="text-center"> تخمین نفر ساعت</th>
+          <th class="text-center" style="width: 5%">مشاهده</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <ng-container *ngFor="let item of taskList; let i = index">
+          <tr class="text-center">
+            <td>{{i + 1}}</td>
+            <td>{{item?.title}}</td>
+            <td>{{item?.code}}</td>
+            <td>
+              <ng-container *ngFor="let taskType of taskTypeList">
+                <ng-container *ngIf="taskType._value === item.taskType">
+                  {{taskType._title}}
+                  {{taskType._value}}
+                </ng-container>
+              </ng-container>
+            </td>
+            <td>{{item?.timeEstimate}}</td>
+            <!--<td *ngIf="modeW!== actionMode.VIEW&&modeS!== actionMode.VIEW">-->
+            <!--<a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+            <!--(click)="chooseSelectedItemForEdit(item,i)" style="cursor: pointer ; font-weight: bold">-->
+            <!--<i class="fa fa-edit" title="ویرایش"></i>-->
+            <!--</a>-->
+            <!--</td>-->
+            <!--<td *ngIf="modeW!== actionMode.VIEW&&modeS!== actionMode.VIEW">-->
+            <!--<a class="btn btn-sm btn-outline-lightning rounded-0"-->
+            <!--style="cursor: pointer" nbdAreYouSure (then)="deleteItem(item)">-->
+            <!--<i class="fa fa-trash" title="حذف"></i>-->
+            <!--</a>-->
+            <!--</td>-->
+            <td>
+              <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                 (click)="chooseSelectedItemForView(item,i)" style="background-color: #042C76 ;color: white !important;cursor: pointer ; font-weight: bold">
+                <i class="fa fa-eye" title="مشاهده"></i>
+              </a>
+            </td>
+
+          </tr>
+        </ng-container>
+
+        </tbody>
+      </table>
+      <div class="col-md-12 text-center" *ngIf="taskList.length === 0" >
+        موردی یافت نشد
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="col-md-12">
+  <app-task-action [readService]="readService"
+                   [modeView]="modeView"
+                   [mode]="mode"
+                   [referenceId]="referenceId" (messageEvent)="receiveMessage($event)" [formStatus]="formStatus"
+                   [taskGroupId]="taskGroupId"
+                   [receiveTaskForEdit]="sendTaskForEdit" [taskId]="taskId"></app-task-action>
+</div>
+
+
+<app-conferm-delete
+  [title]="selectedItemForDelete.title"
+  [loading]="selectedItemForDelete.loading"
+  [modalId]="'modalId'+selectedItemForDelete.id"
+  (value)="deleteItem($event)"
+></app-conferm-delete>

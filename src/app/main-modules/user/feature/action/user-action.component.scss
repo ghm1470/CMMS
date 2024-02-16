@@ -1,0 +1,18 @@
+.form-control.is-invalid, .was-validated .form-control:invalid {
+  background-position: center left calc(.375em + .1875rem);
+}
+
+.form-control.is-valid, .was-validated .form-control:valid {
+  background-position: center left calc(.375em + .1875rem);
+}
+
+.validation {
+  color: #fdfeff !important;
+  font-size: small;
+  padding: 2px 10px;
+  margin-bottom: 0;
+  margin-top: 5px; //-25px
+  position: absolute;
+  background-color: #ff6d59;
+  border-radius: 6px;
+}

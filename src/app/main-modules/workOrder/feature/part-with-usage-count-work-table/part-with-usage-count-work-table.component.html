@@ -1,0 +1,280 @@
+<div style="    height: 50vh;
+    max-height: 50vh;
+    overflow: auto;">
+    <div class="row" style="margin: 0">
+        <ng-container *ngIf="!isView&&enableItems">
+            <div class=" col-md-12 " style="margin-top: 10px ; margin-bottom: 25px ">
+                <button class="btn btn-sm btn-secondary" (click)="addPartWithUsageCount()">
+                    <i class="fa fa-plus"></i>&nbsp;
+                    افزودن قطعه
+                </button>
+            </div>
+        </ng-container>
+
+        <div class="col-md-12" *ngIf="partWithUsageCountList.length > 0">
+            <table class="table  table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th class="text-center" style="width: 5%">ردیف</th>
+                    <th class="text-center">عنوان قطعه</th>
+                    <th class="text-center">تعداد  برنامه ریزی شده</th>
+                    <th class="text-center">تعداد واقعی</th>
+                    <th class="text-center" style="width: 5%" *ngIf="!isView&&enableItems">ویرایش</th>
+                    <th class="text-center" style="width: 5%" *ngIf="!isView&&enableItems">حذف</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <ng-container *ngFor="let item of partWithUsageCountList; let i = index">
+                    <tr class="text-center">
+                        <td>{{i + 1}}</td>
+                        <td>{{item?.partName}}</td>
+                        <td>{{item?.planedQuantity}}</td>
+                        <td>{{item?.actualQuantity}}</td>
+                        <td *ngIf="!isView&&enableItems">
+                            <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                               (click)="chooseSelectedItemForEdit(item,i)" style="cursor: pointer ; font-weight: bold">
+                                <i class="fa fa-edit" title="ویرایش"></i>
+                            </a>
+                        </td>
+                        <td *ngIf="!isView&&enableItems">
+                            <a class="btn btn-sm btn-outline-lightning rounded-0"
+                               style="cursor: pointer" nbdAreYouSure (then)="deleteItem(item)">
+                                <i class="fa fa-trash" title="حذف"></i>
+                            </a>
+                        </td>
+
+                    </tr>
+                </ng-container>
+
+                </tbody>
+            </table>
+        </div>
+        <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+
+    </div>
+
+    <div class="row" *ngIf="partWithUsageCountList.length === 0" style="margin: 0">
+        <div class="col-md-12 text-center"><span style="margin-right: 50px; color: #8a8f94; font-size: 15px">هنوز قطعه ای انتخاب نشده است</span>
+        </div>
+    </div>
+
+</div>
+<!--<div class="col-md-12 text-left">-->
+<!--    <ng-container *ngIf="sendInformationNumberOfTabs.numberOfFormIdList <-->
+<!--  sendInformationNumberOfTabs.lengthFormIdList - 1 || sendInformationNumberOfTabs.hasForm">-->
+<!--        <button (click)="nextOrPrev('next')" class="btn btn-sm btn-warning" type="button">-->
+
+<!--            <span>بعدی</span>-->
+<!--        </button>-->
+<!--    </ng-container>-->
+<!--    <button (click)="nextOrPrev('prev')" class="btn btn-sm btn-cancel-back" type="button" style="float: right">-->
+
+<!--        <span>قبلی</span>-->
+<!--    </button>-->
+<!--</div>-->
+
+<ng-container *ngIf=" showModal === true">
+
+    <!--    <div class="modal" tabindex="-1" role="dialog" id="partWithUsageCountWorkTableModal" data-backdrop="static">-->
+    <!--        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">-->
+    <!--            <div class="modal-content">-->
+    <!--                <div class="modal-header">-->
+    <!--                    <div class="col-lg-12">-->
+    <!--                        <div class="modal-title">-->
+    <!--                            <i class="fa fa-plus"></i> &nbsp;&nbsp;-->
+    <!--                            <span *ngIf="mode === actionMode.ADD"> افزودن قطعه</span>-->
+    <!--                            <span *ngIf="mode === actionMode.EDIT"> ویرایش قطعه</span>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+
+    <!--                <form #partWithUsageCountForm="ngForm">-->
+    <!--                    <div class="modal-body" style="display: flow-root;  padding: 15px;border-radius: 5px">-->
+
+    <!--                        <div class="col-md-12">-->
+    <!--                            <div class="row">-->
+    <!--                                <div class="col-md-4 form-group required col-sm-12">-->
+    <!--                                    <label class="control-label" style="font-size: 12px">نوع قطعه :</label>-->
+    <!--                                    <div class="input-group input-group-sm">-->
+    <!--                                        <div class="form-control" (click)="openViewPartModal()"-->
+    <!--                                             nbvRequired (change)="changePart()"-->
+    <!--                                        >-->
+    <!--                                            {{partWithUsageCount.partName}}-->
+    <!--                                        </div>-->
+    <!--                                    </div>-->
+    <!--                                    <div id="partWithUsageCountTypeValidation" style="opacity: 0; height: 0"></div>-->
+    <!--                                </div>-->
+
+    <!--                                <div class="col-md-4 form-group required col-sm-12">-->
+    <!--                                    <label class="for-label"> تعداد پیش بینی شده:</label>-->
+    <!--                                    <div class="input-group input-group-sm">-->
+    <!--                                        <input type="text" placeholder="تعداد پیش بینی شده"-->
+    <!--                                               [(ngModel)]="partWithUsageCount.planedQuantity"-->
+    <!--                                               class="form-control" maxlength="10" name="planedQuantity"-->
+    <!--                                               #planedQuantity="ngModel"-->
+    <!--                                               nbvRequired nbvPattern="{{myPattern.number}}"-->
+    <!--                                               nbvPatternMsgHtml="تعداد پیش بینی شده را به صورت عددی وارد کنید."-->
+    <!--                                               [class.is-valid]="!(planedQuantity?.errors?.nbvRequired || planedQuantity?.errors?.nbvPattern)"-->
+    <!--                                               [class.is-invalid]="(planedQuantity?.errors?.nbvRequired || planedQuantity?.errors?.nbvPattern) && (planedQuantity.touched || doSave)"-->
+    <!--                                               dest="planedQuantityValidation">-->
+    <!--                                    </div>-->
+    <!--                                    <div id="planedQuantityValidation"></div>-->
+    <!--                                </div>-->
+
+    <!--                                <div class="col-md-4 form-group required col-sm-12">-->
+    <!--                                    <label class="for-label"> تعداد واقعی:</label>-->
+    <!--                                    <div class="input-group input-group-sm">-->
+
+    <!--                                        <input type="text" placeholder="تعداد واقعی"-->
+    <!--                                               [(ngModel)]="partWithUsageCount.actualQuantity"-->
+    <!--                                               class="form-control" maxlength="10" name="actualQuantity"-->
+    <!--                                               #actualQuantity="ngModel"-->
+    <!--                                               nbvPattern="{{myPattern.number}}"-->
+    <!--                                               nbvPatternMsgHtml="تعداد واقعی را به صورت عددی وارد کنید."-->
+    <!--                                               [class.is-valid]="partWithUsageCount.actualQuantity && !(actualQuantity?.errors?.nbvPattern)"-->
+    <!--                                               [class.is-invalid]="(actualQuantity?.errors?.nbvRequired || actualQuantity?.errors?.nbvPattern) && (actualQuantity.touched || doSave)"-->
+    <!--                                               dest="actualQuantityValidation">-->
+    <!--                                    </div>-->
+    <!--                                    <div id="actualQuantityValidation"></div>-->
+    <!--                                </div>-->
+
+    <!--                            </div>-->
+    <!--                        </div>-->
+
+
+    <!--                    </div>-->
+    <!--                    <div class="modal-footer">-->
+    <!--                        <div class="btn-group-sm">-->
+    <!--                            <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal"-->
+    <!--                                    style="margin :0 5px "-->
+    <!--                                    (click)="cancelModal()">-->
+    <!--                                انصراف-->
+    <!--                            </button>-->
+    <!--                            <button type="button" class="btn btn-action  btn-sm"-->
+    <!--                                    (click)="action(partWithUsageCountForm)">-->
+    <!--                                <span *ngIf="mode === actionMode.ADD">ذخیره</span>-->
+    <!--                                <span *ngIf="mode === actionMode.EDIT">ویرایش</span>-->
+    <!--                            </button>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </form>-->
+    <!--            </div>-->
+
+    <!--        </div>-->
+    <!--    </div>-->
+
+
+    <nbw-modal
+            [hasHeader]="true"
+            [hasFooter]="true"
+            [dataBackdrop]="false"
+            [modalSize]="MyModalSize.CUSTOM_WIDTH"
+            [customWidthPercent]="{xs: 100, md:65}"
+            autoShow="false"
+            (onClose)="onCloseModal()"
+            (onShow)="onShowModal()"
+            [myId]="'partWithUsageCountWorkTableModal'">
+        <div modal-header>
+            <div class="col-lg-12">
+                <div class="modal-title">
+                    <i class="fa fa-plus"></i> &nbsp;&nbsp;
+                    <span *ngIf="mode === actionMode.ADD"> افزودن قطعه</span>
+                    <span *ngIf="mode === actionMode.EDIT"> ویرایش قطعه</span>
+                </div>
+            </div>
+        </div>
+
+        <div modal-body style="display: flow-root" *ngIf="showModalBody">
+
+            <form #partWithUsageCountForm="ngForm">
+                <div class="modal-body" style="display: flow-root;  padding: 15px;border-radius: 5px">
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-4 form-group required col-sm-12">
+                                <label class="control-label" style="font-size: 12px">نوع قطعه :</label>
+                                <label style="color: red">*</label>
+
+                                <div class="input-group input-group-sm">
+                                    <div class="form-control" (click)="openViewPartModal()"
+                                         nbvRequired (change)="changePart()"
+                                    >
+                                        {{partWithUsageCount.partName}}
+                                    </div>
+                                </div>
+                                <div id="partWithUsageCountTypeValidation" style="opacity: 0; height: 0"></div>
+                            </div>
+
+                            <div class="col-md-4 form-group required col-sm-12">
+                                <label class="for-label"> تعداد پیش بینی شده:</label>
+                                <label style="color: red">*</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" placeholder="تعداد پیش بینی شده"
+                                           [(ngModel)]="partWithUsageCount.planedQuantity"
+                                           class="form-control" maxlength="10" name="planedQuantity"
+                                           #planedQuantity="ngModel"
+                                           nbvRequired nbvPattern="{{myPattern.number}}"
+                                           nbvPatternMsgHtml="تعداد پیش بینی شده را به صورت عددی وارد کنید."
+                                           [class.is-valid]="!(planedQuantity?.errors?.nbvRequired || planedQuantity?.errors?.nbvPattern)"
+                                           [class.is-invalid]="(planedQuantity?.errors?.nbvRequired || planedQuantity?.errors?.nbvPattern) && (planedQuantity.touched || doSave)"
+                                           dest="planedQuantityValidation">
+                                </div>
+                                <div id="planedQuantityValidation"></div>
+                            </div>
+
+                            <div class="col-md-4 form-group required col-sm-12">
+                                <label class="for-label"> تعداد واقعی:</label>
+                                <div class="input-group input-group-sm">
+
+                                    <input type="text" placeholder="تعداد واقعی"
+                                           [(ngModel)]="partWithUsageCount.actualQuantity"
+                                           class="form-control" maxlength="10" name="actualQuantity"
+                                           #actualQuantity="ngModel"
+                                           nbvPattern="{{myPattern.number}}"
+                                           nbvPatternMsgHtml="تعداد واقعی را به صورت عددی وارد کنید."
+                                           [class.is-valid]="partWithUsageCount.actualQuantity && !(actualQuantity?.errors?.nbvPattern)"
+                                           [class.is-invalid]="(actualQuantity?.errors?.nbvRequired || actualQuantity?.errors?.nbvPattern) && (actualQuantity.touched || doSave)"
+                                           dest="actualQuantityValidation">
+                                </div>
+                                <div id="actualQuantityValidation"></div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-group-sm">
+                        <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal"
+                                style="margin :0 5px "
+                                (click)="cancelModal()">
+                            انصراف
+                        </button>
+                        <button type="button" class="btn btn-action  btn-sm"
+                                (click)="action(partWithUsageCountForm)">
+                            <span *ngIf="mode === actionMode.ADD">ذخیره</span>
+                            <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                            <i *ngIf="loadingAction" class="fa fa-spinner fa-pulse fa-1x"></i>
+
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+    </nbw-modal>
+
+
+    <app-view-part-modal [partWithUsageCountListIn]="partWithUsageCountList"
+                         (selectedPart)="receiveSelectedPart($event)"></app-view-part-modal>
+
+
+</ng-container>
+
+
+
+

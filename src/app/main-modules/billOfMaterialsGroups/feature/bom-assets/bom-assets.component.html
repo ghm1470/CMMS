@@ -1,0 +1,91 @@
+
+
+
+
+
+
+<div class="card">
+  <div class="card-body card-body-content">
+    <div class="col-md-6 mb-2">
+      <ng-container *ngIf="mode!== actionMode.VIEW">
+        <button (click)="setService()"
+                class="btn btn-secondary btn-sm">
+          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+          افزودن دارایی ‌BOM
+        </button>
+      </ng-container>
+    </div>
+    <ng-container *ngIf="dataOfAssetBOMList.length>0 && !loading">
+      <table class="table table-striped table-bordered table-responsive-md" >
+        <thead>
+        <tr>
+          <th class="text-center" style="width: 5%">ردیف</th>
+          <th class="text-center">نام دارایی</th>
+          <th class="text-center">کد دارایی</th>
+          <th class="text-center">تعداد</th>
+          <th class="text-center" style="width: 5%" *ngIf="mode!==actionMode.VIEW ">حذف</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of dataOfAssetBOMList; let i = index">
+          <tr class="text-center">
+            <td>
+              {{(i + 1 + (pageIndex * pageSize))}}
+            </td>
+            <td>{{item.assetName}}</td>
+            <td>{{tools.Fa2En(item.assetCode)}}</td>
+            <td>{{tools.Fa2En(item.assetQuantity)}}</td>
+            <td *ngIf="mode!==actionMode.VIEW">
+              <a class="btn btn-sm btn-outline-lightning rounded-0"
+                 style="cursor: pointer"
+                 (click)="showModalDelete(item,i)"
+
+              >
+                <i class="fa fa-trash" title="حذف"></i>
+              </a>
+            </td>
+          </tr>
+        </ng-container>
+
+        </tbody>
+      </table>
+
+    </ng-container>
+
+    <!--    pagination-->
+    <app-paginator
+            [totalElements]="length"
+            [pageSize]="pageSize"
+            [pageIndex]="pageIndex"
+            [pageSizeOptions]="[]"
+            [showFirstLastButtons]="true"
+            (page)=" changePage($event)"
+    ></app-paginator>
+
+
+    <!--    pagination-->
+    <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+    <ng-container *ngIf="dataOfAssetBOMList.length===0 && !loading">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-12 text-center" style="color: #7884a7">
+            دارایی ای برای این ‌BOM  ثبت نشد است
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+
+<ng-container *ngIf="showModal === true" >
+  <app-modal2 [BOMId]="BOMId" [VariableToDeclareGet]="VariableToDeclareGet" (getAssetList)="getAssetList()"></app-modal2>
+
+</ng-container>
+<app-conferm-delete
+  [title]="selectedItemForDelete.title"
+  [loading]="selectedItemForDelete.loading"
+  [modalId]="'modalId'+selectedItemForDelete.id"
+  (value)="deleteItem($event)"
+></app-conferm-delete>
+

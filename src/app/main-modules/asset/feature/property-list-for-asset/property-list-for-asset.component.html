@@ -1,0 +1,151 @@
+<div class="card">
+    <div class="card-body card-body-content">
+        <div class="col-md-12">
+            <div class="jumbotron" style="padding: 0.5rem" *ngIf="mode!==actionMode.VIEW">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group required col-sm-12">
+                            <label class="for-label">دسته بندی مشخصات:</label>
+                            <ng-select dir="rtl" (change)="changePropertyCategory()"
+                                       [(ngModel)]="selectedPropertyCategory"
+                                       placeholder="انتخاب دسته بندی مشخصات"
+                                       name="selectedPropertyCategory"
+                                       id="selectedPropertyCategory"
+                                       style="width: 100%;"
+                                       dropdownPosition="bottom">
+                                <ng-option *ngFor="let item of propertyCategoryList; let i = index"
+                                           [value]="item.id">
+                                    {{item.title}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="control-label for-label">انتخاب مشخصه:</label>
+                        <ng-select dir="rtl"
+                                   [(ngModel)]="selectedPropertyId"
+                                   (change)="changeProperty(selectedPropertyId)"
+                                   name="property"
+                                   placeholder="انتخاب مشخصه"
+                                   style="width: 100%;"
+                                   dropdownPosition="bottom">
+                            <ng-option *ngFor="let item of propertyList" [value]="item.id">{{item.key}}
+                            </ng-option>
+                        </ng-select>
+                        <!--        <div class="input-group input-group-sm">-->
+                        <!--<select [(ngModel)]="selectedProperty" name="property" class="form-control"-->
+                        <!--#property="ngModel">-->
+                        <!--<option value="-1" disabled>انتخاب مشخصات</option>-->
+                        <!--<option *ngFor="let item of propertyList" [ngValue]="item">{{item.key}}</option>-->
+                        <!--</select>-->
+                        <!--        </div>-->
+                    </div>
+                    <div class="col-md-4"
+                         *ngIf="selectedProperty?.id !== '-1' && selectedProperty?.type === propertyType[propertyType?.keyValue?.toString()]">
+                        <label class="control-label for-label">
+                            مقدار
+                        </label>
+                        <input *ngIf="!selectedProperty.valueType || selectedProperty.valueType === valueType.STRING "
+                               type="text" placeholder="مقدار" [(ngModel)]="valueOfKay"
+                               autocomplete="off"
+                               [ngModelOptions]="{standalone: true}" (change)="valueOfKay = valueOfKay.trim()"
+                               class="form-control form-control-sm" name="name">
+
+                        <input *ngIf="selectedProperty.valueType && selectedProperty.valueType === valueType.INTEGER "
+                               autocomplete="off"
+                               type="number" placeholder="مقدار" [(ngModel)]="valueOfKay"
+                               [ngModelOptions]="{standalone: true}"
+                               class="form-control form-control-sm" name="name">
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="padding-top: 0.5rem">
+                    <div class="row" *ngIf="selectedProperty?.id !== '-1'">
+                        <div class="col-md-12 row"
+                             *ngIf="selectedProperty?.type === propertyType[propertyType?.selectOne?.toString()]">
+                            <div class="col-md-4" *ngFor="let item of selectedProperty.repository">
+                                <input type="radio" (click)="addValueInData(item)" name="data"
+                                       value="data" class="radio1">{{item}}
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 row"
+                             *ngIf="selectedProperty?.type === propertyType[propertyType?.selectMulti?.toString()]">
+                            <div class="col-md-4" *ngFor="let item of selectedProperty.repository">
+                                <input type="checkbox" (click)="addOrRemoveData(item)" name="data"
+                                       value="data" class="radio1">{{item}}
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                            </div>
+                        </div>
+
+
+                        <div class="row col-md-12 text-left">
+                            <div class="form-group required col-sm-12">
+                                <button type="button" class="btn btn-action btn-sm" (click)="addProperty()">افزودن
+                                    مشخصات
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12" style="text-align: center" *ngIf="loading">
+            <i class="fa fa-spinner fa-pulse fa-3x "></i>
+        </div>
+
+        <div class="text-center">
+            <a *ngIf="!assetPropertyList?.length && !loading" style="color: #7884a7">مشخصات ثبت نشده!</a>
+        </div>
+        <table class="table table-striped table-responsive-md table-bordered"
+               *ngIf="assetPropertyList?.length && !loading">
+            <thead>
+            <tr>
+                <th class="text-center" style="width: 5%">ردیف</th>
+                <th class="text-center">کلید واژه</th>
+                <th class="text-center">مقدار</th>
+                <th class="text-center" style="width: 5%" *ngIf="mode!==actionMode.VIEW">ویرایش</th>
+                <th class="text-center" style="width: 5%" *ngIf="mode!==actionMode.VIEW">حذف</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let item of assetPropertyList; let i = index">
+                <tr class="text-center">
+                    <td>{{toolKit2.Common.En2Fa(i + 1)}}</td>
+                    <td>{{item.key}}</td>
+                    <td>
+            <span *ngIf="item.data">
+              <span *ngFor="let value of item.data;let i=index">
+                {{value}}
+                  <span *ngIf="item.data.length - 1 > i">,</span>
+              </span>
+            </span>
+                    </td>
+                    <td *ngIf="mode!==actionMode.VIEW">
+                        <a class="btn btn-sm btn-outline-lightning rounded-0"
+                           style="cursor: pointer" (click)="editProperty(item)">
+                            <i class="fa fa-edit" title="ویرایش"></i>
+                        </a>
+                    </td>
+                    <td *ngIf="mode!==actionMode.VIEW">
+                        <a class="btn btn-sm btn-outline-lightning rounded-0"
+                           style="cursor: pointer" nbdAreYouSure
+                           (then)="deleteProperty(item.id)">
+                            <i class="fa fa-trash" title="حذف"></i>
+                        </a>
+                    </td>
+                </tr>
+            </ng-container>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer text-left" *ngIf="mode!==actionMode.VIEW">
+        <button class="btn btn-action btn-sm" type="button" (click)="update()" style="margin-top: 15px">
+            ثبت اطلاعات
+        </button>
+    </div>
+</div>

@@ -1,0 +1,168 @@
+<div class="w-100 form-group" style="margin-bottom: 10px">
+  <div class="w-100 text-center" align="center">
+
+    <!--    یه کامپوننت کلی که تمامی کاوپوننت ها رو در هر step تو خودش جا داده -->
+    <ul class="nav nav-pills setup-panel text-center" style="width: 100%">
+
+      <li class="active text-center backShadow marginUl step" id="formProperty" style="padding: 5px "
+          [ngClass]="{ 'active': keyOfStep === 'firstTabForm' }
+        ">
+        <a href="#step-1" id="firstTabForm" >
+          <h5 class="list-group-item-heading stemText" *ngIf="data!=null">
+            {{data.createForm.formProperty}}
+          </h5>
+        </a>
+      </li>
+      <!--[ngClass]="{'currentLevel': item.status==='pending'}-->
+
+      <li class="text-center backShadow step" style="padding: 5px"
+          [ngClass]="{ 'active': keyOfStep === 'towTabForm' }" >
+
+          <h5 class="list-group-item-heading stemText" *ngIf="data!=null">
+            {{data.createForm.formQuestion}}
+          </h5>
+      </li>
+
+      <li class="text-center backShadow step" style="padding: 5px"
+          [ngClass]="{ 'active': keyOfStep === 'treeTabForm' }">
+        <!--<a href="#step-3" id="treeTabForm" (click)="changeKeyOfStep('treeTabForm')">-->
+          <h5 class="list-group-item-heading stemText" *ngIf="data!=null">
+            {{data.createForm.formRelation}}
+          </h5>
+        <!--</a>-->
+      </li>
+
+      <li class="text-center backShadow step" style="padding: 5px"
+          [ngClass]="{ 'active': keyOfStep === 'fourTabForm' }">
+        <!--<a href="#step-4" id="fourTabForm" (click)="changeKeyOfStep('fourTabForm')">-->
+          <h5 class="list-group-item-heading stemText" *ngIf="data!=null">
+            {{data.createForm.formPreDisplay}}
+          </h5>
+        <!--</a>-->
+      </li>
+
+      <li class="text-center backShadow step" style="padding: 5px"
+          [ngClass]="{ 'active': keyOfStep === 'fiveTabForm' }">
+        <!--<a href="#step-5" id="fiveTabForm" (click)="changeKeyOfStep('fiveTabForm')">-->
+          <h5 class="list-group-item-heading stemText" *ngIf="data!=null">
+            {{data.createForm.formSubmit}}
+          </h5>
+        <!--</a>-->
+      </li>
+    </ul>
+    <!--    یه کامپوننت کلی که تمامی کاوپوننت ها رو در هر step تو خودش جا داده -->
+
+  </div>
+</div>
+<!-- کامپوننت step ها-->
+<!--مشخصات فرم-->
+<div class="col-md-12"  *ngIf="keyOfStep === 'firstTabForm'">
+  <div class="w-100 setup-content text-center" id="step-1">
+    <app-first-register [resetForm]="reset">
+
+    </app-first-register>
+  </div>
+</div>
+<!--طراحی سوالات-->
+<div class="col-md-12 " *ngIf="keyOfStep === 'towTabForm'">
+  <div class="setup-content text-center" id="step-2">
+    <app-question-design [resetForm]="reset"></app-question-design>
+  </div>
+</div>
+<!-- ایجاد رابطه بین سوالات-->
+<div class="col-md-12" *ngIf="keyOfStep === 'treeTabForm'">
+  <div class="setup-content text-center" id="step-3">
+    <app-question-relation [resetForm]="reset"></app-question-relation>
+  </div>
+</div>
+<!--پیش نمایش فرم-->
+
+
+  <div class="col-md-12" *ngIf="keyOfStep === 'fourTabForm'">
+    <div class=" setup-content text-center" id="step-4">
+      <app-form-preview [resetForm]="reset">
+
+      </app-form-preview>
+    </div>
+  </div>
+
+<!--تایید نهایی-->
+  <div class="col-md-12" *ngIf="keyOfStep === 'fiveTabForm'">
+    <div class="setup-content text-center" id="step-5">
+      <app-final-register [end]="end" [resetForm]="reset" (edit)="changeEdit($event)"
+                          (onSubmit)="formSubmitted($event)" (sendApproveTheRules)="receiveApproveTheRules($event)">
+
+      </app-final-register>
+    </div>
+  </div>
+
+<button *ngIf="keyOfStep == 'firstTabForm'" class="btn btn-action btn-sm float-left" type="button"
+        (click)="changeKeyOfStep('towTabForm')"
+        style=" margin: 30px 5px 0 5px">ادامه
+</button>
+
+<!--==============================-->
+<button *ngIf="keyOfStep === 'towTabForm'" class="btn btn-action btn-sm float-left" type="button"
+        (click)="changeKeyOfStep('treeTabForm')"
+        style=" margin: 30px 5px 0 5px">ادامه
+</button>
+<button *ngIf="keyOfStep === 'treeTabForm'" class="btn btn-action btn-sm float-left" type="button"
+        (click)="changeKeyOfStep('fourTabForm')"
+        style=" margin: 30px 5px 0 5px">ادامه
+</button>
+<button *ngIf="keyOfStep === 'fourTabForm'" class="btn btn-action btn-sm float-left" type="button"
+        (click)="changeKeyOfStep('fiveTabForm')"
+        style=" margin: 30px 5px 0 5px">ادامه
+</button>
+<!--=====================================-->
+<button  *ngIf="keyOfStep === 'fiveTabForm'" class="btn btn-action btn-sm  float-left" type="button"
+         (click)="goToNextStep()" [disabled]="disableSave"
+         style=" margin: 30px 5px 0 5px">ثبت
+</button>
+ <!--کامپوننت step ها-->
+<button class="btn btn-sm btn-cancel-back float-left" type="button"
+        (click)="showNoSaveItem()"
+        style="margin-top: 30px">بازگشت
+</button>
+
+
+<!--===========================-->
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="false"
+  [modalSize]="MyModalSize.DEFAULT"
+  autoShow="false"
+  myId="noSaveMessage">
+  <div modal-header>
+    <span>بازگشت</span> &nbsp;&nbsp;&nbsp;
+    <i class="fa fa-arrow-alt-circle-left" style="color: red">
+
+    </i>
+  </div>
+  <div modal-body>
+    <div class="col-md-12">
+      <div class="row">
+        اطلاعات وارد شده ثبت نشده است ایا از بازگشت به صفحه ی قبل مطمئن هستید؟
+
+      </div>
+    </div>
+    <br>
+    <br>
+    <div class="col-md-12">
+      <div class="row justify-content-end">
+        <button class="btn  btn-cancel"
+                (click)="cancelCreateForm(false)">
+          خیر
+        </button>
+        <button class="btn btn-save"
+                (click)="cancelCreateForm(true)">
+          <!--[disabled]="loading"-->
+
+          بله
+          <!--<i class="fa fa-spinner fa-pulse " *ngIf="loading"></i>-->
+        </button>
+
+      </div>
+    </div>
+  </div>
+</nbw-modal>

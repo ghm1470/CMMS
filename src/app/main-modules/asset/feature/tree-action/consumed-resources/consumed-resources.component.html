@@ -1,0 +1,211 @@
+<div class="card">
+
+    <div class="card-body card-body-content">
+        <form class=" form" [formGroup]="htmlForm" (ngSubmit)="onSubmit()">
+            <div class="col-md-12">
+                <div class="row" style="    border-bottom: 1px solid;margin-bottom: 10px;">
+                    <!--                    سوخت فسیلی-->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <label> نوع سوخت فسیلی </label>
+                            <input
+                                    class=" form-control "
+                                    id="fossilFuel"
+                                    name="fossilFuel"
+                                    formControlName="fossilFuel"
+                                    type="text"
+                                    style="
+                                        font-family: IRANSansWeb-farsi!important;
+                                         "
+                                    autocomplete="off">
+
+                        </div>
+                    </div>
+
+
+                    <!--                    برق-->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <label> ولتاژ برق </label>
+                            <input
+                                    class=" form-control "
+                                    id="electricity"
+                                    name="electricity"
+                                    formControlName="electricity"
+                                    type="text"
+                                    style="
+                                        font-family: IRANSansWeb-farsi!important;
+                                         "
+                                    autocomplete="off">
+
+                        </div>
+                    </div>
+
+
+                    <!--                    آب-->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <label> مقدار آب مصرفی </label>
+                            <input
+                                    class=" form-control "
+                                    id="water"
+                                    name="water"
+                                    formControlName="water"
+                                    type="text"
+                                    style="
+                                        font-family: IRANSansWeb-farsi!important;
+                                         "
+                                    autocomplete="off">
+
+                        </div>
+                    </div>
+
+
+                    <!--                    هوای فشرده-->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <label>مقدار هوای فشرده </label>
+                            <input
+                                    class=" form-control "
+                                    id="compressedAir"
+                                    name="compressedAir"
+                                    formControlName="compressedAir"
+                                    type="text"
+                                    style="
+                                        font-family: IRANSansWeb-farsi!important;
+                                         "
+                                    autocomplete="off">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row ">
+                    <p style="font-size: 16px;
+    color: #5793c9;
+    border-bottom: 3px solid;
+    padding: 10px;">
+                        سایر منابع مصرفی
+                    </p>
+                </div>
+                <div class="row ">
+
+                    <!--                    غیره مشخصه -->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <label> مشخصه </label>
+                            <input
+                                    class=" form-control "
+                                    id="key"
+                                    name="key"
+                                    formControlName="key"
+                                    type="text"
+                                    style="
+                                        font-family: IRANSansWeb-farsi!important;
+                                         "
+                                    autocomplete="off">
+
+                        </div>
+                    </div>
+
+                    <!--                    غیره مقدار -->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <label> مقدار </label>
+                            <input
+                                    class=" form-control "
+                                    id="value"
+                                    name="value"
+                                    formControlName="value"
+                                    type="text"
+                                    style="
+                                        font-family: IRANSansWeb-farsi!important;
+                                         "
+                                    autocomplete="off">
+
+                        </div>
+                    </div>
+                    <ng-container *ngIf="actionMode!==ActionMode.VIEW">
+                        <div class="col-lg-3 col-sm-6">
+                            <button type="button" class="btn btn-action btn-sm"
+                                    (click)="addItem()"
+                                    style="    margin: 30px 5px;  min-width: 45px;text-align: center;">
+                            <span>
+                               افزودن
+                            </span>
+
+                                <i class="fa fa-arrow-down fa-1x" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </ng-container>
+                    <div class="col-12">
+                        <ng-container *ngTemplateOutlet="otherListTemp"></ng-container>
+
+                    </div>
+
+                </div>
+
+                <ng-container *ngIf="actionMode!==ActionMode.VIEW">
+                    <div modal-footer class="row justify-content-end"
+                         style="padding-right: 10px;padding-left:10px">
+                        <button type="button" class="btn btn-action btn-sm"
+                                (click)="creatForm()"
+                                style="    margin: 5px 5px;  min-width: 45px;text-align: center;">
+                            <span>
+                               بازخوانی فرم
+                            </span>
+                        </button>
+                        <button type="submit" class="btn btn-action btn-sm"
+                                style="    margin: 5px 5px;  min-width: 45px;text-align: center;">
+                            <span>
+                                {{actionMode === ActionMode.ADD ? ' ثبت  ' : 'ویرایش '}}
+                            </span>
+
+                            <i class="fa fa-spinner fa-pulse fa-1x" aria-hidden="true" *ngIf="loadingAction"></i>
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
+
+
+        </form>
+
+    </div>
+</div>
+
+
+<ng-template #otherListTemp>
+    <table class="table table-responsive-md table-bordered table-striped">
+        <thead>
+
+        <tr>
+            <th class="text-center" style="width: 5%">ردیف</th>
+            <th class="text-center">مشحصه</th>
+            <th class="text-center">مقدار</th>
+            <ng-container *ngIf="actionMode!==ActionMode.VIEW">
+                <th class="text-center" style="width: 5%">حذف</th>
+            </ng-container>
+        </tr>
+        </thead>
+        <tbody>
+
+        <ng-container *ngFor="let item of consumedResourcesKeyValueList; let i = index">
+            <tr class="text-center">
+                <td>{{i + 1}}</td>
+                <td>{{item?.key }}</td>
+                <td>{{item?.value }}</td>
+                <ng-container *ngIf="actionMode!==ActionMode.VIEW">
+                    <td>
+                        <a class="btn btn-sm btn-outline-lightning rounded-0"
+                           style="cursor: pointer"
+                           (click)="deleteItem(item,i)">
+                            <i class="fa fa-trash" title="حذف"></i>
+                        </a>
+                    </td>
+                </ng-container>
+
+            </tr>
+        </ng-container>
+        </tbody>
+    </table>
+
+</ng-template>

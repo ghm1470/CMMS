@@ -1,0 +1,277 @@
+<div class="card rounded-0 h-100" *ngIf="mode==''">
+  <div class="card-title mb-1 p-3">
+    <h6><i class="fa fa-list"></i>&nbsp;&nbsp;
+      <span>لیست پست ها</span>
+    </h6>
+
+    <button (click)="doAdd()"
+            class="btn btn-action btn-sm" style="float: left; margin-top: -40px">
+      <i class="fa fa-plus-circle fa-2x"></i>
+    </button>
+  </div>
+  <hr style="margin: 0">
+
+
+  <div class="card-body" style="direction: rtl!important;">
+    <!--search-->
+    <div class="row" style="margin-bottom: 10px">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label class="for-label">نام پست:</label>
+        <input type="text" class="form-control form-control-sm" placeholder="نام پست" [(ngModel)]="searchedUser.name"
+               (keyup)="search()">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label class="for-label">دسته بندی پست:</label>
+
+        <ng-select placeholder="دسته بندی پست" dropdownPosition="bottom" [(ngModel)]="searchedUser.role"
+                   (change)="search()">
+          <ng-option value="all">همه</ng-option>
+          <ng-option value="USER">کاربر</ng-option>
+          <ng-option value="ADMIN">ادمین</ng-option>
+          <ng-option value="MANAGER">مدیر</ng-option>
+          <ng-option value="EXPERT">کارشناس</ng-option>
+        </ng-select>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12 text-right" *ngIf="noSearchResult">
+      <span>موردی با این مشخصات یافت نشد.</span>
+    </div>
+
+    <ng-container *ngIf="userTypeList.length > 0">
+      <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+        <table   class="table table-bordered table-responsive-md">
+
+            <thead  class="thead-dark">
+            <tr>
+              <th class="text-center" style="width: 5%">ردیف</th>
+              <th class="text-center" style="width: 40%">نام پست</th>
+              <th class="text-center" style="width: 45%">پست</th>
+              <th class="text-center" style="width: 5%">ویرایش</th>
+              <th class="text-center" style="width: 5%">حذف</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of userTypeList;let i =index">
+              <td class="text-center">{{i + 1}}</td>
+              <td class="text-center">{{item.name}}</td>
+              <td class="text-center">
+                <div class="text-center" *ngIf="item.role=='USER'">کاربر</div>
+                <div class="text-center" *ngIf="item.role=='ADMIN'">ادمین</div>
+                <div class="text-center" *ngIf="item.role=='MANAGER'">مدیر</div>
+                <div class="text-center" *ngIf="item.role=='EXPERT'">کارشناس</div>
+              </td>
+              <td class="text-center">
+                <a (click)="doEdit(item.id)" style="cursor: pointer;color: green">
+                  <i class="fa fa-edit" title="ویرایش"></i>
+                </a>
+              </td>
+              <td class="text-center">
+                <a class="btnRemove" (click)="deleteRole(i,item.id)" style="cursor: pointer;color: red">
+                  <i class="fa fa-trash" title="حذف"></i>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+
+<div class="card rounded-0 h-100" *ngIf="mode=='add'">
+  <div class="card-title mb-1 p-3">
+    <h6>
+    <i class="fa fa-list"></i>&nbsp;&nbsp;
+      <span>اضافه کردن پست</span>
+    </h6>
+    <button (click)="cancel()"
+            class="btn btn-action btn-sm" style="float: left; margin-top: -40px">
+      <i class="fas fa-arrow-left float-left"></i>
+    </button>
+  </div>
+  <hr style="margin: 0">
+
+
+  <div class="card-body" style="direction: rtl!important;">
+    <div class="row">
+      <div class="col-md-6 text-center">
+        <p class="control-label text-right">عنوان پست </p>
+        <div class="input-group input-group-sm">
+          <input type="text" placeholder="عنوان پست" class="form-control" [(ngModel)]="userType.name">
+        </div>
+        <p style="color:red">{{myVal.checkFa(userType.name)}}</p>
+      </div>
+      <div class="col-md-6 text-center">
+        <p class="control-label text-right">دسته بندی پست </p>
+        <ng-select dir="rtl" [(ngModel)]="userType.role"
+
+                   placeholder="انتخاب مشخصات" name="role" style="width: 100%;"
+                   dropdownPosition="bottom">
+          <ng-option *ngFor="let item of roleList; let i = index"
+                     [value]="item._value">
+            {{item._title}}
+          </ng-option>
+        </ng-select>
+        <!--<div class="form-group">-->
+          <!--<select class="form-control" style="text-align: right;direction: rtl" (change)="setRole($event.target.value)"-->
+                  <!--[(ngModel)]="userType.role">-->
+            <!--<option style="text-align: right;direction: rtl" *ngFor="let item of roleList" value="{{item._value}}">-->
+              <!--{{item._title}}-->
+            <!--</option>-->
+          <!--</select>-->
+        <!--</div>-->
+      </div>
+    </div>
+
+    <div class="headerTitle"> انتخاب دسترسی ها</div>
+    <br>
+    <div class="col-md-12">
+      <div class="row">
+        <table class="table table-striped table-bordered table-hover">
+          <tr>
+            <td class="myTdHeader">نام مشخصات</td>
+            <td class="myTdHeader">جزئیات</td>
+            <td class="myTdHeader">
+              <mat-checkbox color="black" id="all" (change)="selectAllAccess($event.checked)"
+                            [checked]="userType.privilege.length == roleAccessList.length &&
+                            userType.accessList.length == accessControllerList.length">
+              </mat-checkbox>
+            </td>
+          </tr>
+          <tbody *ngFor="let controller of roleSorter; let j=index">
+          <tr>
+            <td class="myTdBody" style="background-color: #e4e4e4">
+              <h6>
+                {{controller.controllerName._title}}
+              </h6>
+            </td>
+            <td class="myTdBody">
+              <div class="col-md-12 form-inline text-right" style="padding: 0px">
+                <ng-container *ngFor="let role of controller.roleList ; let i=index">
+                  <div class="col-md-4 col-sm-12 col-xs-12" style="padding: 0px">
+                    <mat-checkbox color="black" id="{{i}}-{{j}}" [value]="role._value"
+                                  (change)="check(role._value, controller.controllerName)"
+                                  [checked]="userType.accessList.indexOf(role._value) > -1"> {{role._title}}</mat-checkbox>
+                  </div>
+                </ng-container>
+              </div>
+            </td>
+            <td class="myTdBody">
+              <mat-checkbox color="black" [id]="j" (change)="checkOnMenu($event.checked, controller.controllerName)"
+                            [checked]="allSelectedFromMenu.indexOf(controller.controllerName._value) > -1">
+              </mat-checkbox>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div>
+      <button (click)="addRole()" [disabled]="myVal.checkFa(userType.name) !==''"
+              class="btn btn-action">ثبت</button>
+    </div>
+  </div>
+</div>
+
+    <div class="card rounded-0 h-100" *ngIf="mode=='edit'">
+      <div class="card-title mb-1 p-3">
+        <i class="fa fa-list"></i>&nbsp;&nbsp;
+        <span>ویرایش کردن پست</span>
+        <button (click)="cancel()"
+                class="btn btn-action btn-sm" style="float: left; margin-top: -5px">
+          <i class="fas fa-arrow-left float-left"></i>
+        </button>
+      </div>
+      <hr style="margin: 0">
+
+
+      <div class="card-body" style="direction: rtl!important;">
+    <div>
+      <div class="row">
+        <div class="col-md-6 text-center">
+          <p class="control-label text-right">عنوان پست </p>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="عنوان پست" class="form-control" [(ngModel)]="userType.name">
+          </div>
+        </div>
+        <div class="col-md-6 text-center">
+          <p class="control-label text-right">پست کاربر </p>
+          <ng-select dir="rtl" [(ngModel)]="userType.role"
+
+                     (change)="setRole($event.target.value)"
+                     placeholder="پست کاربر" name="role" style="width: 100%;"
+                     dropdownPosition="bottom">
+            <ng-option *ngFor="let item of roleList; let i = index"
+                       [value]="item._value">
+              {{item._title}}
+            </ng-option>
+          </ng-select>
+          <!--<div class="form-group">-->
+            <!--<select class="form-control" (change)="setRole($event.target.value)" [(ngModel)]="userType.role"-->
+                    <!--style="direction: rtl">-->
+              <!--<option *ngFor="let item of roleList" value="{{item._value}}" style="direction: rtl">{{item._title}}-->
+              <!--</option>-->
+            <!--</select>-->
+          <!--</div>-->
+        </div>
+      </div>
+      <div class="headerTitle"> لیست دسترسی ها</div>
+      <br/>
+      <div class="col-md-12">
+        <div class="row">
+          <table class="table table-striped table-bordered table-hover">
+            <tr>
+              <td class="myTdHeader">نام مشخصات</td>
+              <td class="myTdHeader">جزئیات</td>
+              <td class="myTdHeader">
+                <mat-checkbox color="black" id="allEdit" (change)="selectAllAccess($event.checked)" [checked]="userType.privilege.length == roleAccessList.length &&
+                                         userType.accessList.length == accessControllerList.length">
+                </mat-checkbox>
+              </td>
+            </tr>
+            <tbody *ngFor="let controller of roleSorter; let j=index">
+            <tr>
+              <td class="myTdBody" style="background-color: #e4e4e4">
+                <h6>
+                  {{controller.controllerName._title}}
+                </h6>
+              </td>
+              <td class="myTdBody">
+                <div class="col-md-12 form-inline text-right" style="padding: 0px">
+                  <ng-container *ngFor="let role of controller.roleList ; let i=index">
+                    <div class="col-md-4 col-sm-12 col-xs-12" style="padding: 0px">
+                      <mat-checkbox color="black" id="edit{{i}}-{{j}}" [value]="role._value"
+                                    (change)="check(role._value, controller.controllerName)"
+                                    [checked]="userType.accessList.indexOf(role._value) > -1"> {{role._title}}</mat-checkbox>
+                    </div>
+                  </ng-container>
+                </div>
+              </td>
+              <td class="myTdBody">
+                <mat-checkbox color="black" [id]="j" (change)="checkOnMenu($event.checked, controller.controllerName)"
+                              [checked]="allSelectedFromMenu.indexOf(controller.controllerName._value) > -1">
+                </mat-checkbox>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <div>
+      <button (click)="editRole()" class="btn btn-action">ثبت</button>
+    </div>
+  </div>
+</div>

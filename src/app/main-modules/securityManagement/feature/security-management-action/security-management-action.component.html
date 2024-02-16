@@ -1,0 +1,167 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                <i class="fa fa-plus"></i>&nbsp;
+                <span>اضافه کردن پست</span>
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <button (click)="back()"
+                        class="btn btn-cancel-back btn-sm">
+                    بازگشت
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <form #form="ngForm">
+        <div class="card-body card-body-content">
+            <div class="row">
+
+                <div class="col-md-4 form-group required col-sm-12">
+                    <!--<p class="control-label text-right">نام </p>-->
+                    <label class="for-label">عنوان پست : </label>
+                    <div class="input-group input-group-sm">
+                        <input type="text" placeholder="عنوان"
+                               id="nameUserTypeSend"
+                               name="nameUserTypeSend"
+                               [(ngModel)]="userTypeSend.name"
+                               class="form-control"
+                               minlength="1"
+                               maxlength="80"
+                               nbvRequired
+                               #name="ngModel"
+                               (change)="trimTitle()"
+                               nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."
+                               nbvPattern="{{myPattern.TITLEFa}}"
+                               [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvPattern)"
+                               [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvPattern)  && (name.touched || doSave)"
+                               dest="nameUserTypeSendValidation">
+                    </div>
+                    <div id="nameUserTypeSendValidation"></div>
+                </div>
+
+
+                <!--        <div class="col-md-4 form-group required col-sm-12">-->
+                <!--          &lt;!&ndash;<p class="control-label text-right">نام </p>&ndash;&gt;-->
+                <!--          <label class="for-label">نوع پست : </label>-->
+                <!--          <ng-select style="text-align: right;direction: rtl"-->
+                <!--                     id="type"-->
+                <!--                     name="type"-->
+                <!--                     title="type"-->
+                <!--                     nbvRequired-->
+                <!--                     nbvRequiredMsgHtml=" نوع پست را انتخاب کنید "-->
+                <!--                     [(ngModel)]="userTypeSend.type">-->
+                <!--            <ng-option style="text-align: right;direction: rtl" *ngFor="let item of typeList" value="{{item._value}}">-->
+                <!--              {{item._title}}-->
+                <!--            </ng-option>-->
+                <!--          </ng-select>-->
+                <!--          <div id="typeValidation"></div>-->
+                <!--        </div>-->
+
+            </div>
+            <!--            <div class="col-md-12">-->
+            <!--                <div class="row">-->
+            <!--                    <div class="col-md-6">-->
+            <!--                        <div class="headerTitle"> انتخاب دسترسی ها</div>-->
+
+            <!--                    </div>-->
+            <!--                    &lt;!&ndash;          <div class="col-md-6">&ndash;&gt;-->
+            <!--                    &lt;!&ndash;            <div style="text-align: end">&ndash;&gt;-->
+            <!--                    &lt;!&ndash;              انتخاب همه دسترسی ها&ndash;&gt;-->
+            <!--                    &lt;!&ndash;              &nbsp;&nbsp;&nbsp;&ndash;&gt;-->
+            <!--                    &lt;!&ndash;              <mat-checkbox color="primary"&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                            [ngModel]="checkNgModelForAllCheckBoxes()"&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                            name="checkNgModelForAllCheckBoxes"&ndash;&gt;-->
+            <!--                    &lt;!&ndash;              >&ndash;&gt;-->
+
+            <!--                    &lt;!&ndash;              </mat-checkbox>&ndash;&gt;-->
+
+            <!--                    &lt;!&ndash;            </div>&ndash;&gt;-->
+            <!--                    &lt;!&ndash;          </div>&ndash;&gt;-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--            <br>-->
+
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-12" style="font-size: small">
+                        <div class="table-wrap table-responsive"
+                             style="background: #fffbff;height: 66vh;overflow: auto;">
+                            <table class="table table-striped  table-hover">
+                                <thead>
+                                <tr>
+                                    <th>نام دسترسی</th>
+                                    <th>جزئیات</th>
+                                    <th>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <mat-checkbox style="cursor: pointer"
+                                                      type="checkbox"
+                                                      name="checkbox"
+                                                      class="input-all"
+                                                      (change)="onChangeForTotal($event)"
+                                                      [checked]="checkNgModelTotal()"
+
+                                        ></mat-checkbox>
+                                        <!--                    [ngModel]="checkNgModelTotal()"-->
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody *ngFor="let access of roleSorter; let j=index">
+                                <tr>
+                                    <td width="20%" style="background-color: #e4e4e4">
+                                        <h5>
+                                            {{access.controllerName._title}}
+                                        </h5>
+                                    </td>
+
+                                    <td class="text-right" width="75%">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <ng-container *ngFor="let role of access.roleList ; let i=index">
+                                                    <div class="col-md-3">
+                                                        <mat-checkbox color="primary"
+                                                                      [name]="role._value"
+                                                                      [checked]="checkNgModel(role._value)"
+                                                                      (change)="onChange($event,role._value,access)"
+                                                                      [value]="role._value"
+                                                                      [id]="role._value">
+
+                                                        </mat-checkbox>
+                                                        {{role._title}}
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td width="5%" style="background-color: #e4e4e4">
+
+                                        <div class="col-md-3">
+                                            <mat-checkbox [checked]="checkNgModelAll(access)"
+                                                          (change)="onChangeAll($event,access)"
+                                                          [id]="'All'+access.id"
+                                                          [name]="access.id">
+                                            </mat-checkbox>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+
+        </div>
+        <div class="card-footer text-left">
+            <button (click)="action(form)"
+                    class="btn btn-sm btn-action">ثبت
+            </button>
+        </div>
+    </form>
+</div>

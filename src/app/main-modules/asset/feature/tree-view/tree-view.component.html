@@ -1,0 +1,497 @@
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="true"
+        [dataBackdrop]="false"
+        [modalSize]="MyModalSize.CUSTOM_WIDTH"
+        [customWidthPercent]="{xs: 100, md:65}"
+        (onShow)="getAllAssetWithoutParentId()"
+        autoShow="false"
+        [myId]="'treeAsset'">
+    <div modal-header>
+        <span *ngIf=" sendTypeGetAll === 'B'">مکان ها</span>
+        <span *ngIf=" sendTypeGetAll === 'F'|| sendTypeGetAll === 'T'">دستگاه ها</span>
+    </div>
+
+    <div modal-body style="display: flow-root" class="myTable overflow-auto">
+        <div class="col-md-12" *ngIf="assetList.length===0">
+            <br>
+            <br>
+            <div class="text-center" style="color: #6d6d6e">
+                <a >هیچ اطلاعاتی ثبت نشده!</a>
+            </div>
+        </div>
+
+
+        <table>
+            <tr>
+                <th style="text-align: center">نام </th>
+                <th style="text-align: center">کد </th>
+                <th style="text-align: center">وضعیت </th>
+                <th style="text-align: center">انتخاب</th>
+                <!--(click)="treeMethod(item)"-->
+            </tr>
+
+            <ng-container *ngFor="let assetOfAssetList of assetList; let i = index">
+                <ng-container *ngIf="mainAssetId!==assetOfAssetList.id">
+                    <tr>
+                        <td style="text-align: right">
+                            <ng-container *ngIf="assetOfAssetList.hasChild">
+
+
+                                <!--<span *ngIf="!item.openPlus"  [ngStyle]="{marginRight:item.marginRight+'px'}">-->
+                                <!--<i class="far fa-plus-square" (click)="getChildList(item, i)"></i>-->
+                                <!--</span>-->
+                                <i *ngIf="loadingForGetChild&&selectedParentIdForGetChild===assetOfAssetList.id"
+                                   class="fa fa-spinner fa-pulse fa-1x"></i>
+
+                                <img *ngIf="!assetOfAssetList.openPlus" width="20"
+                                     src="../../../../../assets/images/asset-tree/expand.png"
+                                     [ngStyle]="{marginRight:assetOfAssetList.marginRight +'px'}"
+                                     (click)="getChildList(assetOfAssetList)"
+                                     style="cursor: pointer"
+                                     alt="...">
+
+
+                                <img *ngIf="assetOfAssetList.openPlus" width="20"
+                                     src="../../../../../assets/images/asset-tree/navigate.png"
+                                     [ngStyle]="{marginRight:assetOfAssetList.marginRight +'px'}"
+                                     (click)="methodTow(assetOfAssetList)"
+                                     style="cursor: pointer"
+                                     alt="...">
+
+                                <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                                     width="20"
+                                     style="margin-right: 2px"
+                                     src="../../../../../assets/images/asset-tree/facilities-16.png"
+                                     alt="...">
+                                <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                                     width="20"
+                                     src="../../../../../assets/images/asset-tree/equipment-16.png"
+                                     style="margin-right: 2px"
+                                     alt="...">
+
+                                <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                                     width="20"
+                                     style="margin-right: 2px"
+                                     src="../../../../../assets/images/asset-tree/tools-16.png"
+                                     alt="...">
+                                <!--=============================================================================-->
+
+                                &nbsp;&nbsp;<ng-container *ngIf="sendTypeGetAll === 'B' &&
+        assetOfAssetList.categoryType ===  categoryType[categoryType.TOOLS.toString()] || mainAssetId === assetOfAssetList.id">
+                                <span style="font-size: 12px; margin-right: 2px; cursor: not-allowed ">{{assetOfAssetList.name}} </span>
+                            </ng-container>
+
+                                <ng-container *ngIf="sendTypeGetAll === 'B' &&
+        assetOfAssetList.categoryType ===  categoryType[categoryType.FACILITY.toString()] && mainAssetId !== assetOfAssetList.id">
+                                    <span style="font-size: 12px; margin-right: 2px; cursor: not-allowed "> {{assetOfAssetList.name}} </span>
+                                    <!--          (click)="treeMethod(item)"-->
+
+                                </ng-container>
+
+                                <ng-container *ngIf="sendTypeGetAll === 'B' &&
+        assetOfAssetList.categoryType ===  categoryType[categoryType.BUILDING.toString()] && mainAssetId !== assetOfAssetList.id">
+                                    <span style="font-size: 12px; margin-right: 2px">{{assetOfAssetList.name}}</span>
+                                </ng-container>
+                                <!--===============================================================================-->
+                                <ng-container *ngIf="sendTypeGetAll === 'F' && mainAssetId !== assetOfAssetList.id">
+                                    <ng-container
+                                            *ngIf=" assetOfAssetList.categoryType ===  categoryType[categoryType.FACILITY.toString()] ">
+                                        <span style="font-size: 12px; margin-right: 2px"> {{assetOfAssetList.name}} </span>
+                                    </ng-container>
+                                    <ng-container *ngIf=" assetOfAssetList.categoryType ===  categoryType[categoryType.BUILDING.toString()] ||
+assetOfAssetList.categoryType ===  categoryType[categoryType.TOOLS.toString()]">
+                                        <span style="font-size: 12px; margin-right: 2px; cursor: not-allowed "> {{assetOfAssetList.name}}</span>
+                                    </ng-container>
+                                </ng-container>
+                                <!--===============================================================================-->
+                                <ng-container *ngIf="sendTypeGetAll === 'T' && mainAssetId !== assetOfAssetList.id">
+                                    <ng-container *ngIf=" assetOfAssetList.categoryType ===  categoryType[categoryType.FACILITY.toString()] ||
+assetOfAssetList.categoryType ===  categoryType[categoryType.TOOLS.toString()]">
+                                        <span style="font-size: 12px; margin-right: 2px"> {{assetOfAssetList.name}} </span>
+                                    </ng-container>
+                                    <ng-container
+                                            *ngIf=" assetOfAssetList.categoryType ===  categoryType[categoryType.BUILDING.toString()]">
+                                        <span style="font-size: 12px; margin-right: 2px; cursor: not-allowed "> {{assetOfAssetList.name}}</span>
+                                    </ng-container>
+                                </ng-container>
+                                <!--=====================================================================================-->
+                            </ng-container>
+                            <ng-container *ngIf="!assetOfAssetList.hasChild ">
+
+                                <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                                     width="20"
+                                     src="../../../../../assets/images/asset-tree/equipment-16.png"
+                                     [ngStyle]="{marginRight:assetOfAssetList.marginRight + 35 +'px'}"
+                                     alt="...">
+                                <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                                     width="20"
+                                     src="../../../../../assets/images/asset-tree/facilities-16.png"
+                                     [ngStyle]="{marginRight:assetOfAssetList.marginRight + 35 +'px'}"
+                                     alt="...">
+                                <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                                     width="20"
+                                     src="../../../../../assets/images/asset-tree/tools-16.png"
+                                     [ngStyle]="{marginRight:assetOfAssetList.marginRight + 35 +'px'}"
+                                     alt="...">
+                                &nbsp;&nbsp;
+                                <!--=============================================================================-->
+
+                                &nbsp;&nbsp;<ng-container *ngIf="sendTypeGetAll === 'B' &&
+                        assetOfAssetList.categoryType ===  categoryType[categoryType.TOOLS.toString()] || mainAssetId === assetOfAssetList.id">
+                                <span style="font-size: 12px; margin-right: 2px;cursor: not-allowed "> {{assetOfAssetList.name}} </span>
+                            </ng-container>
+
+                                <ng-container *ngIf="sendTypeGetAll === 'B' &&
+        assetOfAssetList.categoryType ===  categoryType[categoryType.FACILITY.toString()] || mainAssetId === assetOfAssetList.id">
+                                    <span style="font-size: 12px; margin-right: 2px; cursor: not-allowed "> {{assetOfAssetList.name}} </span>
+
+                                </ng-container>
+
+                                <ng-container *ngIf="sendTypeGetAll === 'B' &&
+        assetOfAssetList.categoryType ===  categoryType[categoryType.BUILDING.toString()] && mainAssetId !== assetOfAssetList.id">
+                                    <span style="font-size: 12px; margin-right: 2px"> {{assetOfAssetList.name}}</span>
+                                </ng-container>
+                                <!--===============================================================================-->
+                                <ng-container *ngIf="sendTypeGetAll === 'F' && mainAssetId !== assetOfAssetList.id">
+                                    <ng-container
+                                            *ngIf=" assetOfAssetList.categoryType ===  categoryType[categoryType.FACILITY.toString()] ">
+                                        <span style="font-size: 12px; margin-right: 2px"> {{assetOfAssetList.name}} </span>
+                                    </ng-container>
+                                    <ng-container *ngIf=" assetOfAssetList.categoryType ===  categoryType[categoryType.BUILDING.toString()] ||
+                                                          assetOfAssetList.categoryType ===  categoryType[categoryType.TOOLS.toString()]">
+                                        <span style="font-size: 12px; margin-right: 2px; cursor: not-allowed "> {{assetOfAssetList.name}}</span>
+                                    </ng-container>
+                                </ng-container>
+                                <!--===============================================================================-->
+                                <ng-container *ngIf="sendTypeGetAll === 'T' && mainAssetId !== assetOfAssetList.id">
+                                    <ng-container *ngIf=" assetOfAssetList.categoryType ===  categoryType[categoryType.FACILITY.toString()] ||
+assetOfAssetList.categoryType ===  categoryType[categoryType.TOOLS.toString()]">
+                                        <span style="font-size: 12px; margin-right: 2px"> {{assetOfAssetList.name}} </span>
+                                    </ng-container>
+                                    <ng-container
+                                            *ngIf=" assetOfAssetList.categoryType ===  categoryType[categoryType.BUILDING.toString()]">
+                                        <span style="font-size: 12px; margin-right: 2px; cursor: not-allowed "> {{assetOfAssetList.name}}</span>
+                                    </ng-container>
+
+                                </ng-container>
+                                <!--=====================================================================================-->
+
+                            </ng-container>
+                        </td>
+
+                        <td style="text-align: right; font-size: 12px">{{assetOfAssetList.code}}</td>
+                        <td style="text-align: right; font-size: 12px">
+                            <ng-container *ngIf="assetOfAssetList.status"><p>فعال</p></ng-container>
+                            <ng-container *ngIf="!assetOfAssetList.status"><p> غیر فعال</p></ng-container>
+                        </td>
+
+                        <td style="text-align: center">
+                            <!--                    <p>sendTypeGetAll: {{sendTypeGetAll}}</p>-->
+                            <!--                    <p> item.categoryType: {{ item.categoryType}}</p>-->
+                            <!--                    <p> item.id: {{ item.id}}</p>-->
+                            <!--                    <p> mainAssetId: {{ mainAssetId}}</p>-->
+                            <ng-container *ngIf="assetOfAssetList.hasChild">
+                                <ng-container
+                                        *ngIf="sendTypeGetAll === 'B' && assetOfAssetList.categoryType ===  categoryType[categoryType.BUILDING.toString()] && mainAssetId !== assetOfAssetList.id">
+                                    <button class="btn btn-sm btn-action" (click)="treeMethod(assetOfAssetList)">
+                                        انتخاب
+                                    </button>
+                                </ng-container>
+                                <!--===============================================================================-->
+                                <ng-container *ngIf="sendTypeGetAll === 'F' && mainAssetId !== assetOfAssetList.id">
+                                    <ng-container
+                                            *ngIf=" assetOfAssetList.categoryType ===  categoryType[categoryType.FACILITY.toString()]">
+                                        <button class="btn btn-sm btn-action" (click)="treeMethod(assetOfAssetList)">
+                                            انتخاب
+                                        </button>
+                                    </ng-container>
+                                </ng-container>
+                                <!--===============================================================================-->
+                                <ng-container *ngIf="sendTypeGetAll === 'T' && mainAssetId !== assetOfAssetList.id">
+                                    <ng-container *ngIf=" assetOfAssetList.categoryType ===  categoryType[categoryType.FACILITY.toString()] ||
+assetOfAssetList.categoryType ===  categoryType[categoryType.TOOLS.toString()]">
+                                        <button class="btn btn-sm btn-action" (click)="treeMethod(assetOfAssetList)">
+                                            انتخاب
+                                        </button>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                            <ng-container *ngIf="!assetOfAssetList.hasChild ">
+
+                                <ng-container *ngIf="sendTypeGetAll === 'B' &&
+        assetOfAssetList.categoryType ===  categoryType[categoryType.BUILDING.toString()]
+        && mainAssetId !== assetOfAssetList.id">
+                                    <button class="btn btn-sm btn-action" (click)="treeMethod(assetOfAssetList)">
+                                        انتخاب
+                                    </button>
+                                </ng-container>
+                                <!--===============================================================================-->
+                                <ng-container *ngIf="sendTypeGetAll === 'F' && mainAssetId !== assetOfAssetList.id">
+                                    <ng-container
+                                            *ngIf=" assetOfAssetList.categoryType ===  categoryType[categoryType.FACILITY.toString()]">
+                                        <button class="btn btn-sm btn-action" (click)="treeMethod(assetOfAssetList)">
+                                            انتخاب
+                                        </button>
+                                    </ng-container>
+
+                                </ng-container>
+                                <!--===============================================================================-->
+                                <ng-container *ngIf="sendTypeGetAll === 'T' && mainAssetId !== assetOfAssetList.id">
+                                    <ng-container *ngIf=" assetOfAssetList.categoryType ===  categoryType[categoryType.FACILITY.toString()] ||
+assetOfAssetList.categoryType ===  categoryType[categoryType.TOOLS.toString()]">
+                                        <button class="btn btn-sm btn-action" (click)="treeMethod(assetOfAssetList)">
+                                            انتخاب
+                                        </button>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                        </td>
+
+
+                    </tr>
+                    <ng-container *ngIf="assetOfAssetList.hasChild">
+                        <ng-template [ngTemplateOutlet]="childListTemp"
+                                     [ngTemplateOutletContext]="{$implicit:assetOfAssetList.childAssetList,  stepIn:1 }">
+                        </ng-template>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+
+        </table>
+
+        <div modal-footer>
+            <div class="btn-group-sm" style="margin-top: 15px">
+                <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal" style="margin :0 5px "
+                        (click)="cancelModal()">
+                    انصراف
+                </button>
+            </div>
+        </div>
+
+    </div>
+</nbw-modal>
+
+<!--childList-->
+<ng-template #childListTemp let-childList let-stepIn='stepIn'>
+    <ng-container *ngFor="let child of childList; let i = index">
+        <tr>
+            <td style="text-align: right">
+                <ng-container *ngIf="child.hasChild">
+
+                    <span [style.margin-right.px]=" 30*stepIn">
+
+                    <i *ngIf="loadingForGetChild&&selectedParentIdForGetChild===child.id"
+                       class="fa fa-spinner fa-pulse fa-1x"></i>
+
+                    <img *ngIf="!child.openPlus" width="20"
+                         src="../../../../../assets/images/asset-tree/expand.png"
+                         [ngStyle]="{marginRight:child.marginRight +'px'}"
+                         (click)="getChildList(child)"
+                         style="cursor: pointer"
+                         alt="...">
+
+
+                    <img *ngIf="child.openPlus" width="20"
+                         src="../../../../../assets/images/asset-tree/navigate.png"
+                         [ngStyle]="{marginRight:child.marginRight +'px'}"
+                         (click)="methodTow(child)"
+                         style="cursor: pointer"
+                         alt="...">
+                        <!--<i class="far fa-minus-square" ></i>-->
+                        <!--(click)="methodTow(child.id)"-->
+                    &nbsp;&nbsp;&nbsp;
+
+                    <img *ngIf="child.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                         width="20"
+                         style="margin-right: 2px"
+                         src="../../../../../assets/images/asset-tree/facilities-16.png"
+                         alt="...">
+                    <img *ngIf="child.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                         width="20"
+                         src="../../../../../assets/images/asset-tree/equipment-16.png"
+                         style="margin-right: 2px"
+                         alt="...">
+
+                    <img *ngIf="child.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                         width="20"
+                         style="margin-right: 2px"
+                         src="../../../../../assets/images/asset-tree/tools-16.png"
+                         alt="...">
+                        <!--=============================================================================-->
+
+                    &nbsp;&nbsp;<ng-container *ngIf="sendTypeGetAll === 'B' &&
+        child.categoryType ===  categoryType[categoryType.TOOLS.toString()] || mainAssetId === child.id">
+                    <span style="font-size: 12px; margin-right: 2px; cursor: not-allowed ">{{child.name}} </span>
+                </ng-container>
+
+                    <ng-container *ngIf="sendTypeGetAll === 'B' &&
+        child.categoryType ===  categoryType[categoryType.FACILITY.toString()] && mainAssetId !== child.id">
+                        <span style="font-size: 12px; margin-right: 2px; cursor: not-allowed "> {{child.name}} </span>
+                        <!--          (click)="treeMethod(child)"-->
+
+                    </ng-container>
+
+                    <ng-container *ngIf="sendTypeGetAll === 'B' &&
+        child.categoryType ===  categoryType[categoryType.BUILDING.toString()] && mainAssetId !== child.id">
+                        <span style="font-size: 12px; margin-right: 2px">{{child.name}}</span>
+                    </ng-container>
+                        <!--===============================================================================-->
+                    <ng-container *ngIf="sendTypeGetAll === 'F' && mainAssetId !== child.id">
+                        <ng-container
+                                *ngIf=" child.categoryType ===  categoryType[categoryType.FACILITY.toString()] ">
+                            <span style="font-size: 12px; margin-right: 2px"> {{child.name}} </span>
+                        </ng-container>
+                        <ng-container *ngIf=" child.categoryType ===  categoryType[categoryType.BUILDING.toString()] ||
+child.categoryType ===  categoryType[categoryType.TOOLS.toString()]">
+                            <span style="font-size: 12px; margin-right: 2px; cursor: not-allowed "> {{child.name}}</span>
+                        </ng-container>
+                    </ng-container>
+                        <!--===============================================================================-->
+                    <ng-container *ngIf="sendTypeGetAll === 'T' && mainAssetId !== child.id">
+                        <ng-container *ngIf=" child.categoryType ===  categoryType[categoryType.FACILITY.toString()] ||
+child.categoryType ===  categoryType[categoryType.TOOLS.toString()]">
+                            <span style="font-size: 12px; margin-right: 2px"> {{child.name}} </span>
+                        </ng-container>
+                        <ng-container
+                                *ngIf=" child.categoryType ===  categoryType[categoryType.BUILDING.toString()]">
+                            <span style="font-size: 12px; margin-right: 2px; cursor: not-allowed "> {{child.name}}</span>
+                        </ng-container>
+                    </ng-container>
+                        <!--=====================================================================================-->
+                    </span>
+                </ng-container>
+                <ng-container *ngIf="!child.hasChild ">
+                    <span [style.margin-right.px]=" 30*(stepIn+1)">
+
+                    <img *ngIf="child.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                         width="20"
+                         src="../../../../../assets/images/asset-tree/equipment-16.png"
+                         [ngStyle]="{marginRight:child.marginRight + 35 +'px'}"
+                         alt="...">
+                    <img *ngIf="child.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                         width="20"
+                         src="../../../../../assets/images/asset-tree/facilities-16.png"
+                         [ngStyle]="{marginRight:child.marginRight + 35 +'px'}"
+                         alt="...">
+                    <img *ngIf="child.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                         width="20"
+                         src="../../../../../assets/images/asset-tree/tools-16.png"
+                         [ngStyle]="{marginRight:child.marginRight + 35 +'px'}"
+                         alt="...">
+                    &nbsp;&nbsp;
+                        <!--=============================================================================-->
+
+                    &nbsp;&nbsp;<ng-container *ngIf="sendTypeGetAll === 'B' &&
+                        child.categoryType ===  categoryType[categoryType.TOOLS.toString()] || mainAssetId === child.id">
+                    <span style="font-size: 12px; margin-right: 2px;cursor: not-allowed "> {{child.name}} </span>
+                </ng-container>
+
+                    <ng-container *ngIf="sendTypeGetAll === 'B' &&
+        child.categoryType ===  categoryType[categoryType.FACILITY.toString()] || mainAssetId === child.id">
+                        <span style="font-size: 12px; margin-right: 2px; cursor: not-allowed "> {{child.name}} </span>
+
+                    </ng-container>
+
+                    <ng-container *ngIf="sendTypeGetAll === 'B' &&
+        child.categoryType ===  categoryType[categoryType.BUILDING.toString()] && mainAssetId !== child.id">
+                        <span style="font-size: 12px; margin-right: 2px"> {{child.name}}</span>
+                    </ng-container>
+                        <!--===============================================================================-->
+                    <ng-container *ngIf="sendTypeGetAll === 'F' && mainAssetId !== child.id">
+                        <ng-container
+                                *ngIf=" child.categoryType ===  categoryType[categoryType.FACILITY.toString()] ">
+                            <span style="font-size: 12px; margin-right: 2px"> {{child.name}} </span>
+                        </ng-container>
+                        <ng-container *ngIf=" child.categoryType ===  categoryType[categoryType.BUILDING.toString()] ||
+                                                          child.categoryType ===  categoryType[categoryType.TOOLS.toString()]">
+                            <span style="font-size: 12px; margin-right: 2px; cursor: not-allowed "> {{child.name}}</span>
+                        </ng-container>
+                    </ng-container>
+                        <!--===============================================================================-->
+                    <ng-container *ngIf="sendTypeGetAll === 'T' && mainAssetId !== child.id">
+                        <ng-container *ngIf=" child.categoryType ===  categoryType[categoryType.FACILITY.toString()] ||
+child.categoryType ===  categoryType[categoryType.TOOLS.toString()]">
+                            <span style="font-size: 12px; margin-right: 2px"> {{child.name}} </span>
+                        </ng-container>
+                        <ng-container
+                                *ngIf=" child.categoryType ===  categoryType[categoryType.BUILDING.toString()]">
+                            <span style="font-size: 12px; margin-right: 2px; cursor: not-allowed "> {{child.name}}</span>
+                        </ng-container>
+
+                    </ng-container>
+                        <!--=====================================================================================-->
+                    </span>
+
+                </ng-container>
+            </td>
+
+            <td style="text-align: right; font-size: 12px">{{child.code}}</td>
+            <td style="text-align: right; font-size: 12px">
+                <ng-container *ngIf="child.status"><p>فعال</p></ng-container>
+                <ng-container *ngIf="!child.status"><p> غیر فعال</p></ng-container>
+            </td>
+
+            <td style="text-align: center">
+                <!--                    <p>sendTypeGetAll: {{sendTypeGetAll}}</p>-->
+                <!--                    <p> child.categoryType: {{ child.categoryType}}</p>-->
+                <!--                    <p> child.id: {{ child.id}}</p>-->
+                <!--                    <p> mainAssetId: {{ mainAssetId}}</p>-->
+                <ng-container *ngIf="child.hasChild">
+                    <ng-container
+                            *ngIf="sendTypeGetAll === 'B' && child.categoryType ===  categoryType[categoryType.BUILDING.toString()] && mainAssetId !== child.id">
+                        <button class="btn btn-sm btn-action" (click)="treeMethod(child)">انتخاب</button>
+                    </ng-container>
+                    <!--===============================================================================-->
+                    <ng-container *ngIf="sendTypeGetAll === 'F' && mainAssetId !== child.id">
+                        <ng-container
+                                *ngIf=" child.categoryType ===  categoryType[categoryType.FACILITY.toString()]">
+                            <button class="btn btn-sm btn-action" (click)="treeMethod(child)">انتخاب</button>
+                        </ng-container>
+                    </ng-container>
+                    <!--===============================================================================-->
+                    <ng-container *ngIf="sendTypeGetAll === 'T' && mainAssetId !== child.id">
+                        <ng-container *ngIf=" child.categoryType ===  categoryType[categoryType.FACILITY.toString()] ||
+child.categoryType ===  categoryType[categoryType.TOOLS.toString()]">
+                            <button class="btn btn-sm btn-action" (click)="treeMethod(child)">انتخاب</button>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="!child.hasChild ">
+
+                    <ng-container *ngIf="sendTypeGetAll === 'B' &&
+        child.categoryType ===  categoryType[categoryType.BUILDING.toString()]
+        && mainAssetId !== child.id">
+                        <button class="btn btn-sm btn-action" (click)="treeMethod(child)">انتخاب</button>
+                    </ng-container>
+                    <!--===============================================================================-->
+                    <ng-container *ngIf="sendTypeGetAll === 'F' && mainAssetId !== child.id">
+                        <ng-container
+                                *ngIf=" child.categoryType ===  categoryType[categoryType.FACILITY.toString()]">
+                            <button class="btn btn-sm btn-action" (click)="treeMethod(child)">انتخاب</button>
+                        </ng-container>
+
+                    </ng-container>
+                    <!--===============================================================================-->
+                    <ng-container *ngIf="sendTypeGetAll === 'T' && mainAssetId !== child.id">
+                        <ng-container *ngIf=" child.categoryType ===  categoryType[categoryType.FACILITY.toString()] ||
+child.categoryType ===  categoryType[categoryType.TOOLS.toString()]">
+                            <button class="btn btn-sm btn-action" (click)="treeMethod(child)">انتخاب</button>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </td>
+
+
+        </tr>
+        <ng-container *ngIf="child.hasChild">
+            <ng-template [ngTemplateOutlet]="childListTemp"
+                         [ngTemplateOutletContext]="{$implicit:child.childAssetList,  stepIn:stepIn+1 }">
+            </ng-template>
+        </ng-container>
+    </ng-container>
+</ng-template>
+<!--childList-->
+<!--=======================================-->
+<!--<i class="far fa-plus-square"></i>-->
+<!--<i class="far fa-minus-square"></i>-->

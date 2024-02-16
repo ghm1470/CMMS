@@ -1,0 +1,90 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                <ng-container *ngIf="mode === actionMode.ADD">
+                    <i class="fa fa-plus"></i>&nbsp;
+                    افزودن دپارتمان
+                </ng-container>
+                <ng-container *ngIf="mode === actionMode.EDIT">
+                    <i class="fa fa-edit"></i>&nbsp;
+                    ویرایش دپارتمان
+                </ng-container>
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <button (click)="cancel()"
+                        class="btn btn-cancel-back btn-sm">
+                    بازگشت
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <form #departmentForm="ngForm" (submit)="checkUniqueCode(departmentForm)">
+        <div class="card-body card-body-content">
+            <div class="row" style="margin-top: 2vh">
+
+                <div class="col-md-6 form-group required col-sm-12">
+                    <label class="for-label">عنوان:</label>
+                    <span style="color: red">*</span>
+                    <div class="input-group input-group-sm">
+                        <input placeholder="عنوان" type="text" [(ngModel)]="responsible.title"
+                               class="form-control"
+                               id="title"
+                               name="title" nbvRequired #title="ngModel"
+                               nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."
+                               nbvPattern="{{myPattern.TITLEFa}}"
+                               (change)="stringLength(responsible.title,'title')"
+                               [class.is-valid]="!(title?.errors?.nbvRequired || title?.errors?.nbvPattern)&& stringLength(responsible.title,'title')"
+                               [class.is-invalid]="(title?.errors?.nbvRequired || title?.errors?.nbvPattern)  && (title.touched || doSave)"
+                               dest="titleValidation">
+                    </div>
+                    <div id="titleValidation"></div>
+                </div>
+                <div class="col-md-6 form-group required col-sm-12">
+                    <label class="for-label">کد:</label>
+                    <span style="color: red">*</span>
+                    <div class="input-group input-group-sm">
+<!--                               (change)="checkUniqueCode(departmentForm)"-->
+                        <input placeholder="کد" [(ngModel)]="responsible.code" name="code" class="form-control"
+                               #code="ngModel" nbvRequired
+                               id="code"
+                               nbvPattern="{{myPattern.EnNumberAndAlphabetic}}"
+                               nbvPatternMsgHtml="ورودی به صورت عدد و حروف انگلیسی می باشد."
+                               [class.is-valid]="!(code?.errors?.nbvRequired || code?.errors?.nbvPattern)"
+                               [class.is-invalid]="(code?.errors?.nbvRequired || code?.errors?.nbvPattern)&& (code.touched || doSave)"
+                               dest="codeValidation">
+                    </div>
+                    <div id="codeValidation"></div>
+
+                </div>
+                <div class="col-md-6 form-group required col-sm-12">
+                    <label class="for-label">توضیحات:</label>
+                    <div class="input-group input-group-sm">
+
+ <textarea placeholder="توضیحات" [(ngModel)]="responsible.description" name="description"
+           maxlength="620" class="form-control">
+<!--     #description="ngModel" -->
+   <!--   nbvRequired-->
+   <!--           [class.is-valid]="!(description?.errors?.nbvRequired)"-->
+   <!--           [class.is-invalid]="(description?.errors?.nbvRequired) && description.touched"-->
+   <!--           dest="descriptionValidation"-->
+              </textarea>
+                    </div>
+                    <div id="descriptionValidation" style="opacity: 0; height: 0"></div>
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="card-footer text-left">
+            <button class="btn btn-action btn-sm" type="submit">
+                <span *ngIf="mode === actionMode.ADD">ذخیره</span>
+                <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+            </button>
+        </div>
+    </form>
+</div>

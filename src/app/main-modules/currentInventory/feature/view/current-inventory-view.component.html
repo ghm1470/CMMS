@@ -1,0 +1,90 @@
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="false"
+  [modalSize]="MyModalSize.CUSTOM_WIDTH"
+  [customWidthPercent]="{xs: 100, md:65}"
+  autoShow="false"
+  [myId]="modalId">
+  <div modal-header>
+    <h6>
+      انتخاب قطعه
+    </h6>
+  </div>
+  <div modal-body style="display: flow-root">
+      <div class="card" style="margin-bottom: 10px">
+          <div class="card-body card-body-filter">
+              <div class="row">
+                  <div class="col-md-4 form-group required col-sm-12">
+                      <label class="for-label">جستجو:</label>
+                      <input class="form-control" [(ngModel)]="term"
+                             [placeholder]="'جستجو براساس نام قطعه '">
+                  </div>
+                  <div class="col-md-1" style="margin-top: 30px">
+                      <button class="btn btn-search btn-sm" (click)="search()"
+                      >
+                          جستجو
+                      </button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th class="text-center" style="width: 5%">ردیف</th>
+          <th class="text-center">نام قطعه</th>
+          <th class="text-center">کد قطعه</th>
+<!--          <th class="text-center">برچسب</th>-->
+          <th class="text-center">انتخاب</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of partsList; let i = index">
+          <tr class="text-center">
+            <td>
+                {{(i + 1 + (pageIndex * pageSize))}}
+            </td>
+            <td>{{item.name}}</td>
+            <td>{{item.partCode}}</td>
+<!--            <td>ندارد</td>-->
+            <td class="text-center">
+<!--              <input type="checkbox"-->
+<!--                       (click)="sendMassage($event,item,i)"-->
+<!--                       [id]="'id'+item.id"-->
+<!--                     >-->
+
+              <button class="btn-sm btn btn-action" (click)="sendMassage(true,item,i)" *ngIf="!changeChecked(item,i)" >
+                انتخاب
+              </button>
+
+            </td>
+          </tr>
+        </ng-container>
+
+        </tbody>
+      </table>
+<!--      <shr-pagination-->
+<!--        *ngIf="partsList.itemPage !== null && partsList.itemPage !== undefined"-->
+<!--        [indicatorCount]="partsList.indicatorCount"-->
+<!--        [totalPages]="partsList.itemPage.totalPages"-->
+<!--        [currentPage]="partsList.queryParamReal.paging.page"-->
+<!--        (selectedPage)="setCurrentPage($event)"-->
+<!--        class="class1"-->
+<!--      ></shr-pagination>-->
+
+      <!--    pagination-->
+      <app-paginator
+              [totalElements]="length"
+              [pageSize]="pageSize"
+              [pageIndex]="pageIndex"
+              [pageSizeOptions]="[]"
+              [showFirstLastButtons]="true"
+              (page)=" changePage($event)"
+      ></app-paginator>
+
+
+      <!--    pagination-->
+  </div>
+</nbw-modal>
+
+

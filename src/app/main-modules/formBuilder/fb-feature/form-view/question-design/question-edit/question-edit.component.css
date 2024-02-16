@@ -1,0 +1,43 @@
+.panel {
+  border: 1px solid #ddd;
+  padding: 15px;
+}
+.panel .control-label:not(.default) {
+  position: absolute;
+  right: 24px;
+  top:-7px;
+  font-size: 13px;
+  z-index: 15;
+  background: #fff;
+  padding: 0 5px;
+  display: inline-block;
+  color: #8a8f94;
+  transition: all 0.2s ease;
+}
+.col-md-12.text-right {
+  position: relative;
+}
+
+.panel .control-label.default {
+  color: #8a8f94;
+}
+
+.font-size-15 {
+  font-size: 15px;
+}
+
+.panel .row.form-group > .w-100 > button:first-child {
+  margin-left: 15px;
+}
+
+.btn-remove-img {
+  position: absolute;
+  top: -7px;
+  width: 23px;
+  left: 5px;
+  z-index: 111;
+}
+
+.panel.panel-default h4 {
+  font-size: 18px;
+}

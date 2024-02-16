@@ -1,0 +1,41 @@
+<div class="myShadow" id="attachment">
+
+  <div>
+    <label *ngIf="!uploading" style="width: 180px; height: 40px; background: #085d63; padding: 10px 10px 10px 10px; text-align: center">
+      <a style="color: white;font-size: 14px; text-decoration: none"> انتخاب فایلها
+        <i class="fa fa-paperclip " aria-hidden="true" style="font-size: larger"></i>
+      </a>
+      <input type="file" style="display: none;" multiple [disabled]="uploading"
+             (change)="onChangeUploader(input)" #input>
+    </label>
+  </div>
+
+  <label *ngIf="uploading" class="btn btn-action sizeBtn" style="cursor: not-allowed; width: 180px; height: 50px;">
+    <a style="color: white; font-size: 11px;">
+      <i class="fa fa-spinner fa-spin fa-3x"></i>
+      لطفا صبرکنید در حال آپلود
+    </a>
+  </label>
+
+
+  <div class="row" style="margin: 10px">
+    <div class="flex-container" style="flex:10;">
+      <div class="col-md-4 col-sm-12 col-xs-12 " *ngFor="let file of uploadingFileList; let i = index;">
+        <div class="ccol-md-12 col-sm-12 col-xs-12" style="text-align: center">
+          <div class="row">
+            <a [href]="url + file.path" target="_blank" style=" cursor: pointer;width: 100% ; text-align: center">
+              <img src="../../../assets/images/icon/pdf.png" style="width:50px;height: 50px; margin: 10px;">
+              {{file.name}}
+            </a>
+            <a class="btnRemove" (click)="del(file,i)"
+               style="cursor: pointer;width: 100%;text-align: center">
+              <i class="glyphicon glyphicon-remove"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

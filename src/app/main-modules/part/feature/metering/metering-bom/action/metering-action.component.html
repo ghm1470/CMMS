@@ -1,0 +1,113 @@
+<div class="modal" tabindex="-1" role="dialog" id="meteringModal" data-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="col-lg-12">
+          <div class="modal-title" style="color:#40046D ;font-size: 18px;
+              text-align: center !important;
+              font-weight: bold">
+            <i class="fa fa-plus"></i> &nbsp;&nbsp;
+            <span *ngIf="mode === actionMode.ADD"> افزودن کارکرد زیرقطعه</span>
+            <span *ngIf="mode === actionMode.EDIT"> ویرایش کارکرد زیرقطعه</span>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="modal-body" style="display: flow-root;  padding: 15px;border-radius: 5px">
+
+        <form #meteringForm="ngForm" (submit)="action(meteringForm)" id="formsMetering">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="form-group w-75 d">
+                <label class="control-label" style="font-size: 12px">میزان کار وسیله بر اساس واحد :
+                </label>
+                <input class="form-control form-control-sm" type="text" id="history" placeholder="میزان کارکرد"
+                       autocomplete="off"
+                       [(ngModel)]="metering.amount"
+                       nbvRequired #amount="ngModel"
+                       name="amount"
+                       [nbvPattern]="myPattern.number"
+                       [class.is-valid]="!(amount?.errors?.nbvRequired || amount?.errors?.nbvPattern)"
+                       [class.is-invalid]="(amount?.errors?.nbvRequired || amount?.errors?.nbvPattern) && (amount.touched || doSave)"
+                       dest="amountValidation">
+              </div>
+              <div id="amountValidation"></div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="row">
+
+              <div class="input-group input-group-sm">
+                <div class="form-group w-75 d">
+                  <label class="control-label" style="font-size: 12px">واحد اندازه گیری :
+                  </label>
+                  <ng-select dir="rtl"
+                             [(ngModel)]="meteringUId"
+                             name="type"
+
+                             placeholder="واحد اندازه گیری "
+                             style="width: 100%;"
+                             dropdownPosition="bottom">
+                    <ng-option *ngFor="let item of unitOfMeasurementList" [value]="item.id">{{item.title}}
+                    </ng-option>
+                  </ng-select>
+                  <!--<select [(ngModel)]="meteringUId" name="type" class="form-control form-control-sm"-->
+                          <!--#unitOfMeasurement="ngModel" nbvRequired-->
+
+                          <!--[class.is-valid]="!(unitOfMeasurement?.errors?.nbvRequired || unitOfMeasurement?.errors?.nbvPattern)"-->
+                          <!--[class.is-invalid]="(unitOfMeasurement?.errors?.nbvRequired || unitOfMeasurement?.errors?.nbvPattern) && (unitOfMeasurement.touched || doSave)"-->
+                          <!--dest="unitOfMeasurementValidation">-->
+
+                    <!--<option value="-1" disabled>نوع</option>-->
+                    <!--<option *ngFor="let item of unitOfMeasurementList" [value]="item.id">{{item.title}}</option>-->
+                  <!--</select>-->
+                </div>
+                <div id="unitOfMeasurementValidation "></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="row">
+              <div class="form-group w-75">
+                <label class="control-label" style="font-size: 12px">توضیحات :
+                </label>
+                <textarea class="form-control form-control-sm" placeholder="توضیحات در مورد میزان کارکرد"
+                          [(ngModel)]="metering.description"
+                          nbvRequired #description="ngModel"
+                          name="description"
+
+                          [class.is-valid]="!(description?.errors?.nbvRequired || description?.errors?.nbvPattern)"
+                          [class.is-invalid]="(description?.errors?.nbvRequired || description?.errors?.nbvPattern) && (description.touched || doSave)"
+                          dest="descriptionValidation">
+
+          </textarea>
+              </div>
+              <div id="descriptionValidation"></div>
+            </div>
+
+
+          </div>
+          <div class="modal-footer">
+            <div class="btn-group-sm">
+              <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal" style="margin :0 5px "
+                      (click)="cancelModal()">
+                انصراف
+              </button>
+              <button type="submit" class="btn btn-action btn-sm">
+                <span *ngIf="mode === actionMode.ADD">ذخیره</span>
+                <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+

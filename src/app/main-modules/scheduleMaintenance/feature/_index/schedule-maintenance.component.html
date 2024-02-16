@@ -1,0 +1,48 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+        <i class="fa fa-list"></i>&nbsp;&nbsp;
+        <span>لیست زمان بندی بازدید</span>
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+        <button title="جستجو" data-toggle="collapse" href="#schedule-search" (click)="readService = true"
+                class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">
+          <i class="fa fa-search" ></i>
+        </button>
+
+
+
+
+
+        <!--///// افزودن-->
+        <ng-container>
+
+          <ng-container *ngIf="roleList.Scheduling_create;else notAccessCreateTemp">
+            <button [routerLink]="'action'" [queryParams]="{mode: actionMode.ADD}"
+                    class="btn btn-secondary btn-sm">
+              <i class="fa fa-plus"></i>
+              <span class="d-none d-sm-inline d-sm-inline">
+            &nbsp;&nbsp;            افزودن
+            </span>
+            </button>
+          </ng-container>
+          <ng-template #notAccessCreateTemp>
+            <button style="cursor: not-allowed"
+                    class="btn btn-secondary btn-sm">
+              <i class="fa fa-plus"></i>
+              <span class="d-none d-sm-inline d-sm-inline">
+            &nbsp;&nbsp;            افزودن
+            </span>
+            </button>
+          </ng-template>
+        </ng-container>
+        <!--///// افزودن!!!!-->
+
+      </div>
+    </div>
+  </div>
+  <div class="card-body card-body-content">
+    <app-schedule-maintenance-list [readService]="readService" ></app-schedule-maintenance-list>
+  </div>
+</div>

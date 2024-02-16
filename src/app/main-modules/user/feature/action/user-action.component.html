@@ -1,0 +1,613 @@
+<!--<div id="dragscroll2"-->
+<!--     [ngStyle]="{zoom:zoom}">-->
+<!--    <img src="https://sarvetalayi.com/wp-content/uploads/2021/04/81R9AtlERL._AC_SX522_.jpg">-->
+<!--    <button (click)="zoomPdf('down')">-</button>-->
+<!--    <button (click)="zoomPdf('up')">+</button>-->
+
+<!--</div>-->
+
+<div id="userCreate" class="carousel slide" data-interval="false">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6 col-8 col-sm-6 card-title">
+                            <ng-container *ngIf="mode === actionMode.ADD">
+                                <i class="fa fa-plus"></i>&nbsp;
+                                افزودن کاربر
+                            </ng-container>
+                            <ng-container *ngIf="mode === actionMode.EDIT">
+                                <i class="fa fa-edit"></i>&nbsp;
+                                ویرایش کاربر
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6 col-4 col-sm-6 text-left">
+                            <button (click)="cancel()"
+                                    class="btn btn-cancel-back btn-sm">
+                                بازگشت
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <form #userForm="ngForm" autocomplete="off" (submit)="checkNationalCoded(userForm)">
+                    <div class="card-body card-body-content">
+                        <div class="row" style="min-height: 400px">
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-4 form-group required col-sm-12">
+                                        <label class="for-label">نام: </label>
+                                        <span style="color: red">*</span>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" placeholder="نام"
+                                                   [(ngModel)]="userInformation.name"
+                                                   class="form-control"
+                                                   minlength="1"
+                                                   maxlength="20"
+                                                   id="name"
+                                                   name="name"
+                                                   (change)="stringLength(userInformation.name,'name')"
+                                                   nbvRequired #name="ngModel"
+                                                   nbvPatternMsgHtml="نام باید به صورت حروف و اعداد باشد."
+                                                   nbvPattern="{{myPattern.TITLEFa}}"
+                                                   [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvPattern) && stringLength(userInformation.name,'name')"
+                                                   [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvPattern) &&( name.touched|| doSave)"
+
+                                                   dest="nameValidation">
+                                        </div>
+                                        <div id="nameValidation"></div>
+                                    </div>
+                                    <div class="col-md-4 form-group required col-sm-12">
+                                        <!--<p class="control-label text-right">نام خانوادگی</p>-->
+                                        <label class="for-label">نام خانوادگی: </label>
+                                        <span style="color: red">*</span>
+                                        <div class="input-group  input-group-sm">
+                                            <input type="text" placeholder="نام خانوادگی"
+                                                   name="family"
+                                                   [(ngModel)]="userInformation.family"
+                                                   minlength="1"
+                                                   id="family"
+                                                   maxlength="20"
+                                                   (change)="stringLength(userInformation.name,'family')"
+                                                   class="form-control"
+                                                   nbvRequired
+                                                   #family="ngModel"
+                                                   nbvRequiredMsgHtml="تکمیل فیلد الزامی می باشد."
+                                                   nbvPatternMsgHtml="نام خانوادگی باید به صورت حروف و اعداد باشد."
+                                                   nbvPattern="{{myPattern.TITLEFa}}"
+                                                   [class.is-valid]="!(family?.errors?.nbvRequired || family?.errors?.nbvPattern) && stringLength(userInformation.family,'family')"
+                                                   [class.is-invalid]="(family?.errors?.nbvRequired || family?.errors?.nbvPattern) && (family.touched||doSave)"
+                                                   dest="familyValidation">
+                                        </div>
+                                        <div id="familyValidation"></div>
+                                    </div>
+                                    <div class="col-md-4 form-group required col-sm-12">
+                                        <label class="for-label"> وضعیت کاربر :</label>
+                                        <span style="color: red">*</span>
+                                        <ng-select
+                                                [clearable]="false"
+                                                id="active"
+                                                name="active"
+                                                bindLabel="name"
+                                                bindValue="id"
+                                                dropdownPosition="bottom"
+                                                #active="ngModel"
+                                                nbvRequired
+                                                [(ngModel)]="userInformation.active"
+                                                [addTag]="false"
+                                                [multiple]="false"
+                                                placeholder="  وضعیت را انتخاب کنید. "
+                                        >
+                                            <ng-option [value]="true">فعال</ng-option>
+                                            <ng-option [value]="false">غیر فعال</ng-option>
+
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 2vh" *ngIf=" userInformation.active">
+                                    <div class="col-md-4 form-group required col-sm-12">
+                                        <label class="for-label"> نام کاربری: </label>
+                                        <span style="color: red">*</span>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text"
+                                                   placeholder=" نام کاربری"
+                                                   name="userNameAdd"
+                                                   [(ngModel)]="userInformation.username"
+                                                   minlength="3"
+                                                   maxlength="20"
+                                                   class="form-control"
+                                                   autocomplete="off"
+                                                   (change)="checkIfUsernameIsRepetitive(userInformation.username)"
+                                                   id="userNameAdd"
+                                                   nbvRequiredMsgHtml="تکمیل فیلد الزامی می باشد."
+                                                   nbvRequired #myUserName="ngModel"
+                                                   nbvPattern="{{myPattern.userName}}"
+                                                   nbvPatternMsgHtml="ورودی باید به صورت حروف انگلیسی (حداقل ۳ کارکتر) باشد , ."
+                                                   [class.is-valid]="!(myUserName?.errors?.nbvRequired|| myUserName?.errors?.nbvPattern ) "
+                                                   [class.is-invalid]="(myUserName?.errors?.nbvRequired|| myUserName?.errors?.nbvPattern) && (myUserName.touched|| doSave) "
+
+                                                   dest="userNameValidation">
+                                        </div>
+                                        <div id="userNameValidation"></div>
+                                    </div>
+
+
+                                    <div class="col-md-4 form-group required col-sm-12">
+                                        <label>رمز عبور:</label>
+                                        <span style="color: red" *ngIf="requiredActive">*</span>
+                                        <div class="input-group" dir="ltr">
+
+                                            <div class="input-group mb-2 input-group-sm" dir="ltr">
+
+                                                <div class="input-group-prepend">
+                  <span class="input-group-text"
+                        (click)="hideOld = !hideOld"
+                        [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hideOld"
+                  >
+                  <ng-container *ngIf="!hideOld">
+                  <img class="preview-icon"
+                       style="width: 19px;"
+                       src="../../../../../assets/images/passwordIcon/hide.svg">
+                  </ng-container>
+                  <ng-container *ngIf="hideOld">
+                  <img class="preview-icon"
+                       style="width: 19px;"
+                       src="../../../../../assets/images/passwordIcon/eye.svg">
+                  </ng-container>
+                  </span>
+                                                </div>
+
+                                                <input
+                                                        type="password"
+                                                        id="passAdd"
+                                                        placeholder="بیش از ۶ کارکتر"
+                                                        name="passAdd"
+                                                        nbvMaxlength="15"
+                                                        nbvMinlength="6"
+                                                        autocomplete="new-password"
+                                                        [type]="!hideOld ? 'password' : 'text'"
+                                                        [(ngModel)]="userInformation.password"
+                                                        nbvPattern="{{myPattern.password}}"
+                                                        (change)="changePassword()"
+                                                        [required]="requiredActive"
+                                                        nbvRequiredMsgHtml="تکمیل فیلد الزامی می باشد."
+                                                        class="form-control" nbvRequired #myPassword="ngModel"
+                                                        [class.is-valid]="!(myPassword?.errors?.nbvRequired)"
+                                                        [class.is-invalid]="myPassword?.errors?.nbvRequired &&
+                                                         (myPassword.touched || showValid || doSave||  myPassword?.errors?.nbvMaxlength || myPassword?.errors?.nbvMinlength)"
+                                                        dest="passwordValidation">
+
+                                            </div>
+
+                                        </div>
+                                        <div id="passwordValidation"></div>
+                                    </div>
+
+                                    <div class="col-md-4 form-group required col-sm-12">
+                                        <div style="margin-top: -1px">
+                                            <label> تکرار رمز عبور:</label>
+                                            <span style="color: red" *ngIf="requiredActive">*</span>
+                                            <div class="input-group mb-2 input-group-sm" dir="ltr">
+                                                <div class="input-group-prepend">
+                  <span class="input-group-text"
+                        (click)="hideConfirm = !hideConfirm"
+                        [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hideConfirm"
+                  >
+                  <ng-container *ngIf="!hideConfirm">
+                  <img class="preview-icon" style="width: 19px;"
+                       src="../../../../../assets/images/passwordIcon/hide.svg">
+                  </ng-container>
+                  <ng-container *ngIf="hideConfirm">
+                  <img class="preview-icon" style="width: 19px;"
+                       src="../../../../../assets/images/passwordIcon/eye.svg">
+                  </ng-container>
+                  </span>
+                                                </div>
+                                                <input type="text"
+                                                       placeholder="بیش از ۶ کارکتر"
+                                                       name="rePass"
+                                                       minlength="6"
+                                                       maxlength="15"
+                                                       id="confirmPassword"
+                                                       [type]="!hideConfirm ? 'password' : 'text'"
+                                                       [(ngModel)]="userInformation.resetPasswordCode"
+                                                       nbvPattern="{{myPattern.password}}"
+                                                       class="form-control"
+                                                       [required]="requiredActive"
+                                                       nbvMaxlength="15"
+                                                       nbvMinlength="6"
+                                                       #rPassword="ngModel"
+                                                       nbvRequiredMsgHtml="تکمیل فیلد الزامی می باشد."
+                                                       (change)="changePassword()"
+                                                       [class.is-valid]="!(rPassword?.errors?.nbvRequired) && RepeatCorrectly "
+                                                       [class.is-invalid]="(rPassword?.errors?.nbvRequired &&
+                                                        (rPassword.touched || showValid || doSave||  rPassword?.errors?.nbvMaxlength || rPassword?.errors?.nbvMinlength))"
+                                                       dest="rPasswordValidation">
+                                            </div>
+                                        </div>
+                                        <div id="rPasswordValidation"></div>
+                                    </div>
+
+                                </div>
+                                <!--                                تک پستی-->
+                                <div class="row">
+                                    <div class="col-md-4 form-group required col-sm-12">
+                                        <label class="for-label">کدملی: </label>
+                                        <!--                                        <span style="color: red">*</span>-->
+                                        <i class="fa fa-spinner  fa-pulse fa-1x loadingSearch"
+                                           *ngIf="checkNationalCodeLoading"></i>
+
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" placeholder=" کدملی"
+                                                   [(ngModel)]="userInformation.nationalCode"
+                                                   id="nationalCode"
+                                                   class="form-control"
+                                                   name="nationalCodeAdd"
+                                                   nbvRequiredMsgHtml="تکمیل فیلد الزامی می باشد."
+                                                   nbvPatternMsgHtml="کد ملی به صورت عدد و شامل ۱۰ رقم است"
+                                                   #nationalCode="ngModel"
+                                                   [maxLength]="10"
+                                                   [minLength]="10"
+                                                   nbvPattern="{{myPattern.nationalCode}}"
+                                                   [class.is-valid]="!(nationalCode?.errors?.nbvRequired  || nationalCode?.errors?.nbvPattern ) && userInformation.nationalCode"
+                                                   [class.is-invalid]="(nationalCode?.errors?.nbvRequired  || nationalCode?.errors?.nbvPattern ) && nationalCode.touched"
+                                                   dest="nationalCodeValidation">
+                                        </div>
+                                        <div id="nationalCodeValidation"></div>
+                                    </div>
+
+                                    <div class="col-md-4 form-group required col-sm-12">
+                                        <label class="for-label"> پست :</label>
+                                        <span style="color: red">*</span>
+                                        <ng-select
+                                                [items]="userTypeList"
+                                                [clearable]="false"
+                                                id="userType"
+                                                name="userType"
+                                                bindLabel="name"
+                                                bindValue="id"
+                                                dropdownPosition="bottom"
+                                                #userType="ngModel"
+                                                nbvRequired
+                                                [(ngModel)]="userInformation.userTypeId"
+                                                [addTag]="false"
+                                                [multiple]="false"
+                                                [loading]="userTypeLoading"
+                                                [typeahead]="organizationInput"
+                                                placeholder="  پست را انتخاب کنید. "
+                                        >
+                                            <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                                    نتیجه یافت نشد...
+                                                </div>
+                                            </ng-template>
+
+                                            <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+                                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                                    در حال جستجو...
+                                                </div>
+                                            </ng-template>
+                                            <ng-template ng-typetosearch-tmp let-searchTerm="searchTerm">
+                                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                                    متن برای جستجو...
+                                                </div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div id="userTypeDest"></div>
+                                        <div id="userTypeIdValidation" style="opacity: 0; height: 0"></div>
+                                    </div>
+
+
+                                </div>
+                                <!--!!!!!!!!!!!!                                تک پستی-->
+                                <!--                                 وضعیت-->
+                                <!--                                چند پستی-->
+                                <ng-container>
+                                    <!--                                <div class="row">-->
+                                    <!--                                    <div class="col-md-4 form-group required col-sm-12">-->
+                                    <!--                                        <label class="for-label"> سازمان:</label>-->
+                                    <!--                                        <span style="color: red">*</span>-->
+                                    <!--                                        <ng-select-->
+                                    <!--                                                [items]="organizationList"-->
+                                    <!--                                                (change)="getUserTypeListByOrganizationId()"-->
+                                    <!--                                                id="organization"-->
+                                    <!--                                                name="organization"-->
+                                    <!--                                                bindLabel="name"-->
+                                    <!--                                                dropdownPosition="bottom"-->
+                                    <!--                                                #organization="ngModel"-->
+                                    <!--                                                nbvRequired-->
+                                    <!--                                                [(ngModel)]="organizationGroup.org"-->
+                                    <!--                                                [addTag]="false"-->
+                                    <!--                                                [multiple]="false"-->
+                                    <!--                                                [loading]="organizationLoading"-->
+                                    <!--                                                [typeahead]="organizationInput"-->
+                                    <!--                                                placeholder="  سازمان را انتخاب کنید. "-->
+                                    <!--                                        >-->
+                                    <!--                                            <ng-template ng-notfound-tmp let-searchTerm="searchTerm">-->
+                                    <!--                                                <div class="ng-option disabled" style="color: #a8a6a5">-->
+                                    <!--                                                    نتیجه یافت نشد...-->
+                                    <!--                                                </div>-->
+                                    <!--                                            </ng-template>-->
+
+                                    <!--                                            <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">-->
+                                    <!--                                                <div class="ng-option disabled" style="color: #a8a6a5">-->
+                                    <!--                                                    در حال جستجو...-->
+                                    <!--                                                </div>-->
+                                    <!--                                            </ng-template>-->
+                                    <!--                                            <ng-template ng-typetosearch-tmp let-searchTerm="searchTerm">-->
+                                    <!--                                                <div class="ng-option disabled" style="color: #a8a6a5">-->
+                                    <!--                                                    متن برای جستجو...-->
+                                    <!--                                                </div>-->
+                                    <!--                                            </ng-template>-->
+                                    <!--                                        </ng-select>-->
+                                    <!--                                        <div id="organizationDest"></div>-->
+                                    <!--                                        <div id="organizationIdValidation" style="opacity: 0; height: 0"></div>-->
+                                    <!--                                    </div>-->
+
+                                    <!--                                </div>-->
+                                    <!--                                <div class="row">-->
+                                    <!--                                    <div class="col-md-5">-->
+                                    <!--                                        <div class="card">-->
+                                    <!--                                            <div class="card-header">-->
+                                    <!--                                                <span> لیست پست ها</span>-->
+                                    <!--                                            </div>-->
+                                    <!--                                            <div class="card-body">-->
+                                    <!--                                                <ng-container *ngFor="let item of userTypeList;  let i = index ">-->
+                                    <!--                                                    <p>-->
+                                    <!--                                                        <span style="font-size: 14px">{{i + 1}}{{item.userTypeName}}</span>-->
+                                    <!--                                                        <i class="fa fa-angle-double-left fa-1x cursor-pointer"-->
+                                    <!--                                                           style="float: left"-->
+                                    <!--                                                           (click)="putUserTypeInSelectedOrg(item)"></i>-->
+                                    <!--                                                    </p>-->
+                                    <!--                                                </ng-container>-->
+                                    <!--                                            </div>-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
+
+
+                                    <!--                                    <div class="col-md-7">-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngFor="let item of  userInformation.orgAndUserTypeList;  let i = index ">-->
+                                    <!--                                            <div class="card">-->
+
+                                    <!--                                                <div class="card-header">-->
+                                    <!--                                                    <span style="margin-right: 60px">نام  سازمان:</span>-->
+                                    <!--                                                    <span>{{item.organizationName}}</span>-->
+
+                                    <!--                                                </div>-->
+                                    <!--                                                <div class="card-body">-->
+                                    <!--                                                    <ng-container *ngFor="let L of  item.userTypeList;  let i = index">-->
+
+                                    <!--                                                        <p>-->
+                                    <!--                            <span style="float: left; font-size: 14px">-->
+                                    <!--                              <span style="margin-left: 40px">{{L.userTypeName}}</span>-->
+                                    <!--                              <span>{{i + 1}}</span></span>-->
+                                    <!--                                                            <i class="fa fa-angle-double-right fa-1x cursor-pointer"-->
+                                    <!--                                                               (click)="putUserTypeInUserTypeList(L, item)"></i>-->
+                                    <!--                                                        </p>-->
+                                    <!--                                                    </ng-container>-->
+                                    <!--                                                </div>-->
+                                    <!--                                            </div>-->
+                                    <!--                                        </ng-container>-->
+
+                                    <!--                                    </div>-->
+                                    <!--                                </div>-->
+                                </ng-container>
+                                <!--!!!!!!!!!!!!                                چند پستی-->
+
+                            </div>
+
+                            <div class="col-md-3"
+                                 style="height: 75vh;
+                                    max-height: 75vh;
+                                    overflow: auto;
+                                    margin-top: 15px"
+                            >
+
+                                <label class="select-file  mx-1" style="cursor: pointer">
+                                    <a class="btn btn-sm btn-outline-secondary">
+                                        <i class="fa fa-paperclip " aria-hidden="true"
+                                           style="font-size: larger"></i>
+                                        انتخاب تصویر
+                                        <input type="file" style="display: none;"
+                                               accept="image/*"
+                                               [multiple]="false"
+                                               id="fileeee_fileeee"
+                                               class="upload visually-hidden"
+                                               (change)="fileChangeEvent($event)">
+                                    </a>
+
+                                </label>
+                                <label class="select-file mx-1" style="cursor: pointer" (click)="onUploadFile2()">
+                                    <a class="btn btn-sm btn-outline-secondary">
+                                        <i class="fa fa-upload " aria-hidden="true"
+                                           style="font-size: larger"></i>
+                                        بارگزاری تصویر
+                                    </a>
+                                </label>
+                                <image-cropper
+                                        [imageChangedEvent]="imageChangedEvent"
+                                        [maintainAspectRatio]="true"
+                                        [containWithinAspectRatio]="containWithinAspectRatio"
+                                        [aspectRatio]="4 / 4"
+                                        [resizeToWidth]="256"
+                                        [cropperMinWidth]="128"
+                                        [onlyScaleDown]="true"
+                                        [roundCropper]="true"
+                                        [canvasRotation]="canvasRotation"
+                                        [transform]="transform"
+                                        [alignImage]="'center'"
+                                        [style.display]="showCropper ? null : 'none'"
+                                        format="jpeg"
+                                        (imageCropped)="imageCropped($event)"
+                                        (imageLoaded)="imageLoaded()"
+                                        (cropperReady)="cropperReady($event)"
+                                        (loadImageFailed)="loadImageFailed()"
+                                ></image-cropper>
+
+                                <fieldset class="scheduler-border" id="comapny-documents"
+                                          style="background-color: #f5f5f5">
+                                    <legend class="scheduler-border"><h6>تصویر کاربر</h6></legend>
+                                    <!--                                    <ng-container-->
+                                    <!--                                            *ngIf="(!userInformation.image || !userInformation.image.fileByte) && !fileLoader">-->
+                                    <!--                                        <label>-->
+                                    <!--                                            <a class="btn btn-sm btn-outline-secondary">-->
+                                    <!--                                                <i class="fa fa-paperclip " aria-hidden="true"-->
+                                    <!--                                                   style="font-size: larger"></i>-->
+                                    <!--                                                انتخاب تصویر-->
+                                    <!--                                            </a>-->
+                                    <!--                                            <input type="file" style="display: none;" #input-->
+                                    <!--                                                   accept=".jpg,.jpeg,.webp,.psd,.tiff,.JPG,.JPEG,.webp,.PSD,.TIFF"-->
+                                    <!--                                                   (change)="onChangeUploader(input)">-->
+                                    <!--                                        </label>-->
+                                    <!--                                    </ng-container>-->
+                                    <div class="col-md-12 text-center img-fluid img-thumbnail"
+                                         *ngIf="(!userInformation.image || !userInformation.image.fileByte) && fileLoader">
+                                        <i class="fa fa-spin fa-2x fa-spinner"></i>
+                                    </div>
+                                    <div class="col-md-12 img-fluid img-thumbnail"
+                                         *ngIf="userInformation.image && userInformation.image.fileByte">
+                                        <img [src]="'data:image/jpg;base64,' + userInformation.image.fileByte"
+                                             class="img img-responsive"
+                                             height="100" width="100">
+                                        <i *ngIf="mode!==actionMode.VIEW" class="fa fa-trash"
+                                           style="color: red ; margin: 0 10px" (click)="deleteImage()"></i>
+                                    </div>
+
+                                </fieldset>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="card-footer text-left">
+                        <button *ngIf="mode === actionMode.ADD"
+                                class="btn btn-sm btn-action" type="submit">
+                            <span>ذخیره</span>
+                            <i *ngIf="loadingAction" class="fa fa-spinner fa-pulse fa-1x"></i>
+                        </button>
+                        <button *ngIf="mode === actionMode.EDIT"
+                                class="btn btn-sm btn-action" type="submit"
+
+                                style="margin: 0 5px">
+                            <span>ویرایش</span>
+                            <i *ngIf="loadingAction" class="fa fa-spinner fa-pulse fa-1x"></i>
+
+                        </button>
+
+                        <button class="btn btn-warning btn-sm" type="button" *ngIf="mode === actionMode.EDIT "
+                                (click)="next()">
+                            مرحله بعد - اطلاعات تکمیلی کاربر
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6 col-6 col-sm-6 card-title">
+                            <i class="fa fa-plus"></i>&nbsp;
+                            اطلاعات تکمیلی
+                            {{userInformation.name}} {{userInformation.family}}
+                        </div>
+                        <div class="col-md-6 col-6 col-sm-6 text-left">
+                            <button class="btn btn-sm btn-cancel-back" (click)="prev()">
+                                بازگشت به مرحله قبل
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body card-body-content">
+                    <div class="col-md-12" style="padding: 0" *ngIf="mode === actionMode.EDIT">
+                        <ul class="nav nav-tabs p-0" role="navigation">
+                            <li class="nav-item">
+                                <a href="#otherInformation" style="color: #a0a0a0;font-size: 14px"
+                                   class="nav-link active"
+                                   data-toggle="tab"
+                                   role="tab"
+                                   aria-controls="otherInformation"
+                                   (click)="SecondaryInformation = true">اطلاعات ثانویه</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#childUsers"
+                                   style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab"
+                                   role="tab"
+                                   aria-controls="childUsers"
+                                   title="بالادستی"
+                                   (click)="childUsers = true">گزارش به</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#message"
+                                   style="color: #a0a0a0;font-size: 14px"
+                                   class="nav-link"
+                                   data-toggle="tab"
+                                   role="tab"
+                                   aria-controls="message"
+                                   (click)="message = true">پیام رسانی</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#certification" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab" role="tab" aria-controls="certification"
+                                   (click)="certification = true">گواهینامه
+                                    ها </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#documentFile" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab" role="tab" aria-controls="documentFile"
+                                   (click)="documentFile = true">مستندات</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <!--اطلاعات تکمیلی-->
+                            <div class="tab-pane fade show active" id="otherInformation" role="tabpanel">
+                                <app-user-secondary-information *ngIf="SecondaryInformation"
+                                                                [userId]="userId"
+                                                                [mode]="'EDIT'"
+                                ></app-user-secondary-information>
+                            </div>
+                            <!--ارتباط به کاربر-->
+                            <div class="tab-pane fade" id="childUsers" role="tabpanel">
+                                <app-child-users *ngIf="childUsers"
+                                                 [userId]="userId"
+                                                 [mode]="'EDIT'"
+
+                                ></app-child-users>
+                            </div>
+                            <!--پیام رسانی-->
+                            <div class="tab-pane fade" id="message" role="tabpanel">
+                                <app-messaging *ngIf="message"
+                                               [userId]="userId"
+                                               [mode]="'EDIT'"
+                                ></app-messaging>
+                            </div>
+                            <!--گواهینامه ها-->
+                            <div class="tab-pane fade" id="certification" role="tabpanel">
+                                <app-certification *ngIf="certification"
+                                                   [userId]="userId"
+                                                   [mod]="'EDIT'"></app-certification>
+                            </div>
+                            <!--فایل ها و اسناد -->
+                            <div class="tab-pane fade" id="documentFile" role="tabpanel">
+                                <app-document *ngIf="documentFile" [extraId]="userId"
+                                              [mode]="'EDIT'"
+                                              (documents)="changeDocumentList($event)"></app-document>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

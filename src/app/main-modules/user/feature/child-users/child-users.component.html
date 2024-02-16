@@ -1,0 +1,226 @@
+<!--<app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>-->
+
+
+<div class="card" *ngIf="mode===actionMode.EDIT ">
+<!--<app-loading-spinner [loadingList]="false" *ngIf="loading"></app-loading-spinner>-->
+    <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+    <form #userForm="ngForm" (submit)="getUserReportTo(userForm)">
+        <div class="card-body card-body-content">
+            <div class="col-md-12">
+                <form #userForm="ngForm" (submit)="getUserReportTo(userForm)">
+                    <div class="row">
+                        <!--                        ///پست-->
+
+                        <div class="col-md-4 form-group required col-sm-12">
+                            <label class="for-label">انتخاب پست </label>
+                            <span style="color: red">*</span>
+                            <div class="input-group input-group-sm">
+                                <ng-select
+                                        style="width: 100%"
+                                        [loading]="loadingUserTypeList"
+                                        class="auto-grow"
+                                        bindLabel="name"
+                                        bindValue="id"
+                                        (change)="changeUserType($event)"
+                                        [items]="userTypeList"
+                                        [placeholder]="'عنوان پست'">
+
+                                </ng-select>
+                            </div>
+                        </div>
+                        <!--                        ///کاربر-->
+                        <div class="col-md-4 form-group required col-sm-12">
+                            <label class="for-label">انتخاب کاربر </label>
+                            <span style="color: red">*</span>
+                            <div class="input-group input-group-sm">
+
+                                <!--                                <ng-container *ngIf="!loadingUserList">-->
+                                <ng-select
+                                        style="width: 100%"
+                                        [(ngModel)]="parentUserId"
+                                        name="parentUserId"
+                                        class="auto-grow"
+                                        (scrollToEnd)="getAllUsersOfUserType()"
+                                        [loading]="loadingUserList"
+                                        [placeholder]="'انتخاب کاربر'">
+                                    <ng-container *ngFor="let user of userList; let i= index ">
+
+                                        <ng-option
+                                                [value]="user.id">
+                                            {{user.name + '  ' + user?.family}}
+<!--                                            {{' ( ' + user.userTypeName + ' )  ' }}-->
+                                        </ng-option>
+                                    </ng-container>
+
+                                </ng-select>
+                                <!--                                </ng-container>-->
+                                <!--                                <ng-select [(ngModel)]="parentUserId"-->
+                                <!--                                           name="userId"-->
+                                <!--                                           class="form-control"-->
+                                <!--                                           #parentUserIdd="ngModel"-->
+                                <!--                                           nbvRequired-->
+                                <!--                                           (change)="pae()"-->
+                                <!--                                           (scrollToEnd)="getAllUsersOfUserType()">-->
+                                <!--                                    dest="userIdValidation">-->
+                                <!--                                    <ng-container *ngFor="let user of userList; let i= index ">-->
+                                <!--                                        <option *ngIf="user.id !== userId"-->
+
+                                <!--                                                [ngValue]="user.id">-->
+                                <!--                                            {{user.name + '  ' + user?.family}}-->
+                                <!--                                            {{' ( ' + user.userTypeName + ' )  ' }}-->
+                                <!--                                        </option>-->
+                                <!--                                    </ng-container>-->
+                                <!--                                </ng-select>-->
+                            </div>
+                            <div id="parentUserIdValidation" style="opacity: 0; height: 0"></div>
+                        </div>
+                        <div class="col-md-2" style="margin-top: 30px">
+                            <button class="btn  btn-sm" style="background-color: #042C76; color: white;"
+                                    type="submit"
+                                    [disabled]="userForm.invalid">
+                                <span>ثبت</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-12" style="    margin-top: 10px;">
+                <fieldset class="scheduler-border">
+                    <legend class="scheduler-border"><span style="
+                margin-top: 20px; font-size: 14px;color: rgb(174, 28, 35);">کاربر گزارش گیرنده </span></legend>
+
+                    <!--==========================-->
+                    <ng-container *ngIf="!userForAssignedUser.name">
+                        <!--          <tr>-->
+                        <p style="text-align: center">کاربری انتخاب نشده است.</p>
+                        <!--          </tr>-->
+                    </ng-container>
+                    <ng-container *ngIf="userForAssignedUser.name">
+                        <div class=" table-responsive-md form-inline">
+
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <!--          <th class="text-center" style="width: 5%">ردیف</th>-->
+                                    <th class="text-center"> نام</th>
+                                    <th class="text-center"> نام خانوادگی</th>
+                                    <th class="text-center">پست</th>
+                                    <th class="text-center" style="width: 5%">حذف</th>
+                                </tr>
+
+                                </thead>
+
+                                <tbody>
+
+
+                                <!--          <ng-container *ngFor="let user of userForAssignedUser; let i = index">-->
+                                <tr class="text-center">
+                                    <td>{{userForAssignedUser?.name}} </td>
+                                    <td>{{userForAssignedUser?.family}} </td>
+                                    <ng-container *ngIf="userForAssignedUser?.userTypeName">
+                                        {{userForAssignedUser?.userTypeName}}
+                                        <!--                                        <a class="btn btn-sm btn-outline-lightning rounded-0"-->
+                                        <!--                                           style="cursor: pointer; margin-top: 10px;"-->
+                                        <!--                                           (click)="GetUserTypeForParentUser(userForAssignedUser)">-->
+                                        <!--                                            <i class="fa fa-eye" title="نمایش پست"></i>-->
+                                        <!--                                        </a>-->
+                                    </ng-container>
+                                    <ng-container *ngIf="!userForAssignedUser?.userTypeName">
+
+                                        <img src="../../../../../assets/images/passwordIcon/delete.svg"
+                                             height="12"
+                                             width="16"
+                                             style="cursor: pointer;margin-top: 20px"
+                                             title="بدون پست">
+                                    </ng-container>
+                                    <td>
+                                        <!--                <a class="btn btn-sm btn-outline-lightning rounded-0"-->
+                                        <!--                   style="cursor: pointer" nbdAreYouSure (then)="deleteChildUser(user,i)">-->
+                                        <!--                  <i class="fa fa-trash" title="حذف"></i>-->
+                                        <!--                </a>-->
+                                        <a class="btn btn-sm btn-outline-lightning rounded-0"
+                                           style="cursor: pointer" nbdAreYouSure
+                                           (then)="deleteChildUser(userForAssignedUser)">
+                                            <i class="fa fa-trash" title="حذف"></i>
+                                        </a>
+                                    </td>
+
+                                </tr>
+                                <!--          </ng-container>-->
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </ng-container>
+                </fieldset>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+
+<div class="card" *ngIf="mode===actionMode.VIEW  && !loading">
+    <div class="card-body card-body-content">
+        <ng-container *ngIf="!userForAssignedUser.family">
+            <!--          <tr>-->
+            <p style="text-align: center; padding-right: 200px; padding-left: 150px
+">کاربری انتخاب نشده است.</p>
+            <!--          </tr>-->
+        </ng-container>
+        <ng-container *ngIf="userForAssignedUser.family">
+            <div class="row">
+
+                <div class="col-md-4 col-xs-offset-1">
+                    <label class="for-label">کابر بالادستی :</label>&nbsp;
+                    <p class="for-label-view">  {{userForAssignedUser.name}} {{userForAssignedUser.family}}</p>
+
+                </div>
+
+                <div class="col-md-4 col-xs-offset-1">
+                    <label class="for-label">پست :</label>&nbsp;
+                    <p class="for-label-view">  {{userForAssignedUser.userTypeName}} </p>
+
+                </div>
+            </div>
+
+
+        </ng-container>
+    </div>
+</div>
+
+
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.DEFAULT"
+        autoShow="false"
+        [myId]="'UserTypeForParentUserModal'">
+    <div modal-body>
+        <div class="col-md-12">
+            <table class="table table-bordered table-responsive-md table-hover">
+                <thead>
+                <tr style="text-align: center">
+                    <th class="text-center" style="width: 5%">ردیف</th>
+                    <th class="text-center">پست</th>
+
+                </tr>
+                </thead>
+                <!--                <ng-container *ngIf="userForAssignedUser.userTypeName.length> 0">-->
+                <!--                    <tbody>-->
+                <!--                    <ng-container *ngFor="let item of userForAssignedUser.userTypeName; let i = index">-->
+                <!--                        <tr class="text-center">-->
+                <!--                            <td>{{i + 1}}</td>-->
+                <!--                            <td>{{item}}</td>-->
+                <!--                        </tr>-->
+                <!--                    </ng-container>-->
+
+                <!--                    </tbody>-->
+                <!--                </ng-container>-->
+            </table>
+
+
+        </div>
+    </div>
+</nbw-modal>

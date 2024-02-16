@@ -1,0 +1,312 @@
+<ng-container *ngIf="loadingGetOne">
+    <div class="row justify-content-center">
+
+        <i class="fa fa-spinner fa-pulse fa-3x"></i>
+
+    </div>
+</ng-container>
+<ng-container *ngIf="!loadingGetOne">
+    <form class=" form" [formGroup]="htmlForm" (ngSubmit)="onSubmit('accept')">
+        <div class="col-md-12">
+            <div class="row">
+                <!--            assetName -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="assetName">نام دستگاه</label>
+                        <input class=" form-control" id="assetName" type="text"
+                               formControlName="assetName"
+                               placeholder="نام دستگاه" autocomplete="off">
+
+                    </div>
+                </div>
+                <!--                شماره برگه em-->
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="pmSheetCode">شماره برگه em</label>
+                        <label style="color: red">*</label>
+
+                        <input class=" form-control" id="pmSheetCode" type="text"
+                               formControlName="pmSheetCode"
+                               disabled
+                               placeholder="شماره برگه em" autocomplete="off">
+
+                    </div>
+                </div>
+
+                <!--                / زمان تامین قطعه-->
+                <div class="col-md-4  timer">
+                    <div class="d-flex row justify-content-center align-items-center">
+                        <div style="width: 30%">
+                            <label>زمان تامین قطعه : </label>
+                        </div>
+                        <label class="field-label d-block text-center">دقیقه</label>
+                        <div>
+                            <!--        minute:-->
+                            <i (click)="setMin('up')" class="fa fa-chevron-up"></i>
+                            <input type="text" maxlength="2"
+                                   class="form-control field-input"
+                                   style="text-align: center;
+                                          background-color: white;
+                                          font-family: IRANSansWeb-farsi!important;
+                                          padding: 0"
+                                   formControlName="minute"
+                                   appNumeric
+                                   autocomplete="off"
+                                   (keydown)="keydownMin($event)" [(ngModel)]="minute"
+                                   (change)="setMin('change')">
+                            <i (click)="setMin('down')" class="fa fa-chevron-down"></i>
+                        </div>
+                        <!--                        <div class="dots">:</div>-->
+                        <label class="field-label d-block text-center">ساعت</label>
+                        <div>
+                            <!--        hour:-->
+                            <i (click)="setHour('up')" class="fa fa-chevron-up"></i>
+                            <input type="text" maxlength="2"
+                                   class="form-control field-input"
+                                   style="text-align: center;
+                                          background-color: white;
+                                          font-family: IRANSansWeb-farsi!important;
+                                          padding: 0"
+                                   appNumeric
+                                   autocomplete="off"
+                                   formControlName="hour"
+                                   (keydown)="keydownHour($event)" [(ngModel)]="hour"
+                                   (change)="setHour('change')">
+
+                            <i (click)="setHour('down')" class="fa fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <!--            inputDateStart -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="inputDateStart"> تاریخ و ساعت وقوع خرابی </label>
+                        <label style="color: red">*</label>
+                        <input type="text" class=" form-control"
+                               style="direction: ltr"
+                               id="inputDateStart"
+                               formControlName="startDate" autocomplete="off">
+
+                    </div>
+                </div>
+                <!--            inputRepairDate -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label> تاریخ و ساعت شروع تعمیر </label>
+                        <label style="color: red">*</label>
+                        <input type="text" class="form-control"
+                               style="direction: ltr"
+                               id="inputRepairDate"
+                               formControlName="inputRepairDate" autocomplete="off">
+
+                    </div>
+                </div>
+
+                <!--            inputDateEnd -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label> تاریخ و ساعت راه اندازی </label>
+                        <label style="color: red">*</label>
+                        <input type="text" class="form-control"
+                               style="direction: ltr"
+                               id="inputDateEnd"
+                               formControlName="endDate" autocomplete="off">
+
+                    </div>
+                </div>
+                <!--            requestDescription -->
+                <div class="col-12">
+                    <div class="form-group">
+                        <label> شرح درخواست </label>
+                        <label style="color: red">*</label>
+                        <textarea class="form-control"
+                                  placeholder="شرح درخواست"
+                                  formControlName="requestDescription"
+                                  style="max-height: 80px;min-height: 80px;max-width: 100%;min-width: 100%"
+                                  [id]="'requestDescription'"
+                        ></textarea>
+                    </div>
+                </div>
+                <!--            failureReason -->
+                <div class="col-12">
+                    <div class="form-group">
+                        <label> علت خرابی </label>
+                        <label style="color: red">*</label>
+                        <textarea class="form-control"
+                                  placeholder="علت خرابی"
+                                  formControlName="failureReason"
+                                  style="max-height: 80px;min-height: 80px;max-width: 100%;min-width: 100%"
+                                  [id]="'failureReason'"
+                        ></textarea>
+                    </div>
+                </div>
+                <!--            solution -->
+                <div class="col-12">
+                    <div class="form-group">
+                        <label> شرح اقدامات انجام شده </label>
+                        <label style="color: red">*</label>
+                        <textarea class="form-control"
+                                  placeholder="شرح اقدامات انجام شده"
+                                  formControlName="solution"
+                                  style="max-height: 80px;min-height: 80px;max-width: 100%;min-width: 100%"
+                                  [id]="'solution'"
+                        ></textarea>
+
+                    </div>
+                </div>
+
+
+                <div class="col-12">
+                    <div class="form-group">
+                        <label> افراد تعمیر کننده </label>
+                        <label style="color: red">*</label>
+                        <ng-select
+                                [items]="userList"
+                                [multiple]="true"
+                                [selectableGroup]="true"
+                                [closeOnSelect]="false"
+                                [loading]="loadingGetUsers"
+                                id="userIdList"
+                                name="userIdList"
+                                bindValue="id"
+                                bindLabel="nameForShow"
+                                formControlName="userIdList">
+                            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                                       [formControlName]="item.id"/>
+                                {{item.nameForShow}}
+                            </ng-template>
+                        </ng-select>
+
+                    </div>
+                </div>
+            </div>
+            <ng-container *ngTemplateOutlet="partsTemp"></ng-container>
+
+
+            <div modal-footer class="row justify-content-between"
+                 style="padding-right: 10px;padding-left:10px">
+
+                <button type="button" class="btn btn-cancel-back btn-sm"
+                        (click)="showModalRejectionReason();"
+                        style="    margin: 5px 5px;  min-width: 45px;text-align: center;">
+                    <span> رد   </span>
+                    <i class="fa fa-spinner fa-pulse fa-1x" aria-hidden="true" *ngIf="loadingReject"></i>
+                </button>
+                <button type="submit" class="btn btn-action btn-sm"
+                        style="    margin: 5px 5px;  min-width: 45px;text-align: center;">
+                    <span> ثبت  </span>
+                    <i class="fa fa-spinner fa-pulse fa-1x" aria-hidden="true" *ngIf="loadingSubmit"></i>
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </form>
+</ng-container>
+
+<ng-template #partsTemp>
+    <table class="table table-responsive-md table-bordered table-striped">
+        <thead>
+
+        <tr>
+            <th class="text-center" style="width: 5%">ردیف</th>
+            <th class="text-center">عنوان قطعه</th>
+            <th class="text-center" style="width: 10%">تعداد</th>
+            <th class="text-center" style="width: 5%">حذف</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <ng-container *ngFor="let item of workOrderDto.getOneUsedPartList; let i = index">
+            <tr class="text-center">
+                <td>{{i + 1}}</td>
+                <td>
+
+                    {{item?.partName }}
+
+                </td>
+                <td style="width: 10%">
+                    <!--                    <input *ngIf="mode=== actionMode.VIEW"-->
+                    <!--                           class=" form-control" id="usedNumberView" type="text"-->
+                    <!--                           [value]="item.usedNumber"-->
+                    <!--                           disabled-->
+                    <!--                           style="text-align: center"-->
+                    <!--                           autocomplete="off">-->
+                    <input
+                            class=" form-control " id="usedNumber" type="text"
+                            [(ngModel)]="item.usedNumber"
+                            (keydown)="keydownUsedNumber($event,item)"
+                            style="text-align: center; font-family: IRANSansWeb-farsi!important;padding: 0"
+                            appNumeric
+                            autocomplete="off">
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-outline-lightning rounded-0"
+                       style="cursor: pointer" nbdAreYouSure
+                       (then)="deletePart(item,i)">
+                        <i class="fa fa-trash" title="حذف"></i>
+                    </a>
+                </td>
+
+            </tr>
+        </ng-container>
+        <tr class="text-center">
+            <td colspan="4" style="background-color: #e0f5ff;padding-right: 5%;padding-left:15% ">
+                <span class="cursor-pointer" (click)="openViewPartModal()">
+                <i class="fa fa-plus-circle " style="color: #2D80B2;font-size: 24px"></i>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <app-view-part-modal *ngIf="showModalBody" [partWithUsageCountListIn]="workOrderDto.getOneUsedPartList"
+                         (selectedPart)="receiveSelectedPart($event)"></app-view-part-modal>
+</ng-template>
+<!--/// علت رد کرد//-->
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.DEFAULT"
+        autoShow="false"
+        [displayBackdrop]=true
+        myId="rejectionReasonModal">
+    <div modal-header>
+        <span> علت رد را وارد کنید </span> &nbsp;&nbsp;&nbsp;
+
+    </div>
+    <div modal-body>
+        <div class="col-md-12">
+            <div class="row">
+
+                    <textarea class="form-control"
+                              placeholder="علت رد"
+                              [(ngModel)]="rejectionReason"
+                              style="max-height: 80px;min-height: 80px;max-width: 100%;min-width: 100%"
+                    ></textarea>
+
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="col-md-12">
+            <div class="row justify-content-end">
+                <button type="button" class="btn btn-cancel-back btn-sm"
+                        (click)="onSubmit('reject');"
+                        style="    margin: 5px 5px;  min-width: 45px;text-align: center;">
+
+                    رد
+                </button>
+
+            </div>
+        </div>
+    </div>
+</nbw-modal>

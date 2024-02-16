@@ -1,0 +1,51 @@
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="true"
+  [dataBackdrop]="false"
+  [modalSize]="MyModalSize.CUSTOM_WIDTH"
+  [customWidthPercent]="{xs: 100, md:65}"
+  autoShow="false"
+  [myId]="'showScheduledTime'">
+  <div modal-header>
+    <span >تاریخ های سررسید </span>
+  </div>
+
+  <div modal-body style="display: flow-root">
+    <div class="col-md-12">
+      <div class="card table-responsive-md">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th class="text-center" style="width: 5%">ردیف</th>
+            <th class="text-center" >تاریخ های  سررسید  </th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngIf="NextLaunchDateLis">
+          <ng-container *ngFor="let item of NextLaunchDateLis; let i = index">
+            <tr class="text-center">
+              <td>{{i + 1}}</td>
+              <td>
+<!--                {{item | convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                {{myMoment.convertIsoToJDate(item) | perNumber}}
+              </td>
+              <!--<td>{{scheduleWithTimeAndMetering.scheduledTime.}}</td>-->
+            </tr>
+          </ng-container>
+          </ng-container>
+          </tbody>
+        </table>
+
+        <!--<shr-pagination-->
+        <!--*ngIf="NextLaunchDateLis.itemPage !== null && NextLaunchDateLis.itemPage !== undefined"-->
+        <!--[indicatorCount]="NextLaunchDateLis.indicatorCount"-->
+        <!--[totalPages]="NextLaunchDateLis.itemPage.totalPages"-->
+        <!--[currentPage]="NextLaunchDateLis.queryParamReal.paging.page"-->
+        <!--(selectedPage)="setCurrentPage($event)"-->
+        <!--class="class1"-->
+        <!--&gt;</shr-pagination>-->
+      </div>
+
+    </div>
+  </div>
+</nbw-modal>

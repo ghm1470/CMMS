@@ -1,0 +1,87 @@
+div, button, table, tr, td {
+  direction: rtl !important;
+}
+
+/deep/
+.mat-checkbox-layout {
+  display: inline !important;
+}
+
+/deep/
+.ng-select .ng-select-container{
+  min-height: 30px!important;
+  height: 30px!important;
+  overflow: visible!important;
+}
+/deep/
+.ng-select.ng-select-single .ng-select-container{
+  height: 30px;
+}
+/deep/
+.ng-select .ng-clear-wrapper .ng-clear {
+  display: none!important;
+}
+
+nb-card {
+  transform: translate3d(0, 0, 0);
+  height: 100%;
+}
+
+i {
+  font-size: 24px !important;
+}
+
+
+.imgBox {
+  margin-top: -14px;
+}
+
+
+/deep/ .mat-checkbox-checkmark-path {
+  stroke: black !important;
+}
+
+
+.btnText {
+  margin-left: -20px;
+}
+
+.myTdHeader {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.myTdBody {
+  text-align: right;
+  vertical-align: middle;
+  font-size: 15px;
+}
+
+@media screen and (max-width: 500px) {
+  .myTdBody {
+    font-size: 12px;
+  }
+}
+
+
+.tableview > .tableview-holder {
+  max-height: 42vh !important;
+}
+
+.modal-header {
+  justify-content: normal;
+}
+.btn-search{
+  padding: 4px!important;
+  width: 120px;
+  border-radius: 4px!important;
+}
+.btn-search i{
+  font-size: 14px!important;
+}
+
+.tableCustomSize2{
+  width: 100%;
+  height: 52vh!important;
+  border-radius: 5px;
+}

@@ -1,0 +1,173 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+        <span>مشاهده اطلاعات کاربر</span>
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+        <button (click)="cancel()"
+                class="btn btn-cancel-back btn-sm">
+          بازگشت
+        </button>
+      </div>
+    </div>
+  </div>
+
+    <div class="card-body card-body-content">
+      <div class="row">
+
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-4 col-xs-offset-1">
+              <label class="for-label">نام :</label>&nbsp;
+              <p class="for-label-view">  {{userInformation.name}}</p>
+
+            </div>
+            <div class="col-md-4  col-xs-offset-1">
+              <label class="for-label">نام خانوادگی:</label>&nbsp;
+              <p class="for-label-view">  {{userInformation.family}}</p>
+            </div>
+
+            <div class="col-md-4  col-xs-offset-1">
+              <label class="for-label">وضعیت  :</label>&nbsp;
+              <p class="for-label-view">  {{userInformation.active?'فعال':'غیرفعال'}}</p>
+            </div>
+            <div class="col-md-4  col-xs-offset-1">
+              <label class="for-label">پست:</label>&nbsp;
+              <p class="for-label-view">  {{userInformation.userTypeName}}</p>
+            </div>
+
+            <div class="col-md-4 col-xs-offset-1">
+              <label class="for-label">کد ملی:</label>&nbsp;
+              <p class="for-label-view">  {{userInformation.nationalCode}}</p>
+            </div>
+
+            <div class="col-md-4 col-xs-offset-1" *ngIf="userInformation.active">
+              <label class="for-label">نام کاربری:</label>&nbsp;
+              <p class="for-label-view">  {{userInformation.username}}</p>
+
+            </div>
+
+
+            <div class="col-md-7">
+<!--              <ng-container *ngFor="let item of  userInformation.orgAndUserTypeList;  let i = index ">-->
+<!--                <div class="card">-->
+<!--                  <div class="card-header">-->
+<!--                    <span style="margin-right: 60px">نام  سازمان:</span>-->
+<!--                    <span>{{item.organizationName}}</span>-->
+
+<!--                  </div>-->
+<!--                  <div class="card-body">-->
+<!--                    <ng-container *ngFor="let L of  item.userTypeList;  let i = index">-->
+<!--                      <p>-->
+<!--                            <span style=" font-size: 14px">-->
+<!--                               <span>{{i + 1}}</span>-->
+<!--                              <span>{{L.userTypeName}}</span>-->
+<!--                             </span>-->
+<!--                      </p>-->
+<!--                    </ng-container>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </ng-container>-->
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+        <div class="col-md-4" *ngIf="userInformation.image && userInformation.image.fileByte">
+          <div class=" img-fluid img-thumbnail" style="height: 210px;width: 210px">
+            <img [src]="'data:image/jpg;base64,' + userInformation.image.fileByte" class="img img-responsive"
+                 height="200" width="200">
+          </div>
+        </div>
+
+    </div>
+
+  <hr>
+  <div class="col-md-12" style="padding: 0" *ngIf="menuStatus">
+    <ul class="nav nav-tabs" role="navigation" style="text-align: right;padding-right: 0">
+      <li class="nav-item">
+        <a href="#otherInformation" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+           data-toggle="tab" role="tab" aria-controls="otherInformation" id="showSecondaryInformation"
+          >اطلاعات </a>
+      </li>
+      <li class="nav-item">
+        <a href="#childUsers" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+           data-toggle="tab" role="tab" aria-controls="childUsers" (click)="showChildUsers = true">گزارش به</a>
+      </li>
+      <li class="nav-item">
+        <a href="#message" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+           data-toggle="tab" role="tab" aria-controls="message" (click)="showMessaging = true">پیام رسانی
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="#certification" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+           data-toggle="tab" role="tab" aria-controls="certification" (click)="showCertification = true">گواهینامه</a>
+      </li>
+      <li class="nav-item">
+        <a href="#documentFile"
+           style="color: #a0a0a0;font-size: 14px"
+           class="nav-link"
+           data-toggle="tab"
+           role="tab"
+           aria-controls="documentFile"
+           (click)="showFileDocument = true">مستندات</a>
+      </li>
+
+    </ul>
+
+    <div class="tab-content">
+      <!--اطلاعات تکمیلی-->
+      <div class="tab-pane fade " id="otherInformation" role="tabpanel" style="padding: 20px">
+<!--                *ngIf="showSecondaryInformation"-->
+        <app-user-secondary-information
+                                        [userId]="userId"
+                                        [mode]="'VIEW'"
+
+        ></app-user-secondary-information>
+      </div>
+      <!--ارتباط به کاربر-->
+      <div class="tab-pane fade" id="childUsers" role="tabpanel" style="padding: 20px">
+        <app-child-users *ngIf="showChildUsers"
+                         [userId]="userId"
+                         [mode]="'VIEW'"
+        >
+        </app-child-users>
+      </div>
+      <!--پیام رسانی-->
+      <div class="tab-pane fade" id="message" role="tabpanel" style="padding: 20px">
+        <app-messaging *ngIf="showMessaging"
+                       [userId]="userId"
+                       [mode]="'VIEW'"
+
+        ></app-messaging>
+      </div>
+      <!--گواهینامه ها-->
+      <div class="tab-pane fade" id="certification" role="tabpanel" style="padding: 20px">
+        <app-certification *ngIf="showCertification"
+                           [userId]="userId"
+                           [mod]="'VIEW'"
+        ></app-certification>
+      </div>
+      <!--فایل ها و اسناد -->
+      <div class="tab-pane fade"
+           id="documentFile"
+           role="tabpanel"
+           style="padding: 20px">
+        <app-document *ngIf="showFileDocument" [extraId]="userId"
+                      [mode]="'VIEW'"        ></app-document>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+    </div>
+
+</div>

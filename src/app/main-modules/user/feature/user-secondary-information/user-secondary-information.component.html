@@ -1,0 +1,212 @@
+<div class="card" *ngIf="mode===actionMode.EDIT">
+  <form #userForm="ngForm" (submit)="action(userForm)">
+    <div class="card-body card-body-content">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-4 form-group required col-sm-12">
+            <label class="for-label">نام پدر: </label>
+
+            <div class="input-group input-group-sm">
+              <input type="text"
+                     placeholder="نام پدر"
+                     [(ngModel)]="userSecondaryInformation.fatherName"
+                     maxlength="20"
+                     name="fatherAdd"
+                     class="form-control"
+                     #fatherName="ngModel"
+                     nbvPattern="{{myPattern.faText}}"
+                     nbvPatternMsgHtml="ورودی باید به صورت حروف فارسی باشد."
+                     [class.is-valid]="!(fatherName?.errors?.nbvRequired || fatherName?.errors?.nbvPattern)"
+                     [class.is-invalid]="(fatherName?.errors?.nbvRequired || fatherName?.errors?.nbvPattern) && fatherName.touched"
+                     dest="fatherNameValidation">
+            </div>
+            <div id="fatherNameValidation"></div>
+            <!--<p style="color:red;margin-top: 1vh;" *ngIf="(addButton || infoFormAdd.controls['fatherName'].touched) &&-->
+            <!--!infoFormAdd.controls['fatherName'].valid">لطفا نام پدر را وارد نمایید. نام پدر باید از دو کاراکتر-->
+            <!--بیشتر باشد.</p>-->
+          </div>
+
+
+          <div class="col-md-4 form-group required col-sm-12">
+            <label class="for-label">تاریخ تولد: </label>
+            <div class="input-group input-group-sm">
+            <input class="form-control"
+                   id="birthDay"
+                   #birthDay placeholder="تاریخ تولد">
+            </div>
+          </div>
+
+          <div class="col-md-4 form-group required col-sm-12">
+            <label class="for-label">تاریخ شروع به کار: </label>
+            <div class="input-group input-group-sm">
+            <input class="form-control"
+                   (click)="startWorkCheck()"
+                   id="startWork"
+                   #startWork
+                   placeholder="تاریخ شروع به کار"
+            >
+            </div>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-md-4 form-group required col-sm-12">
+            <label class="for-label">شماره موبایل: </label>
+            <!--<p class="control-label text-right" for="phoneNumber"></p>-->
+            <div class="input-group input-group-sm">
+              <input id="phoneNumber"
+                     type="text"
+                     maxlength="11" class="form-control"
+                     name="phoneAdd"
+                     [(ngModel)]="userSecondaryInformation.userContact.phoneNumber"
+                     #phoneNumber="ngModel"
+                     placeholder="شماره موبایل"
+                     nbvPattern="{{myPattern.phone}}"
+                     nbvPatternMsgHtml="شماره موبایل را به صورت صحیح وارد کنید."
+                     [class.is-valid]="!(phoneNumber?.errors?.nbvRequired )"
+                     [class.is-invalid]="phoneNumber?.errors?.nbvRequired && phoneNumber.touched || phoneNumber?.errors?.nbvPattern"
+                     dest="phoneNumberValidation">
+            </div>
+            <div id="phoneNumberValidation"></div>
+            <!--<p style="color:red;margin-top: 1vh;" *ngIf="(addButton || infoFormAdd.controls['telephone'].touched) &&-->
+            <!--!infoFormAdd.controls['telephone'].valid"> لطفا شماره تلفن خود را به درستی وارد نمایید.</p>-->
+          </div>
+
+
+
+          <div class="col-md-4 form-group required col-sm-12">
+            <label class="for-label">ایمیل: </label>
+            <!--<p class="control-label text-right" for="email">ایمیل</p>-->
+            <div class="input-group input-group-sm">
+              <input id="email" type="email"
+                     placeholder="example@email.com"
+                     class="form-control"
+                     name="emailAdd"
+                     nbvPattern="{{myPattern.email}}"
+
+                     [(ngModel)]="userSecondaryInformation.userContact.email"
+                     #email="ngModel"
+                     nbvPatternMsgHtml="ورودی باید به صورت example@email.com باشد. "
+                     [class.is-valid]="userSecondaryInformation.userContact.email && !email?.errors?.nbvPattern "
+                     [class.is-invalid]="(email?.errors?.nbvRequired || email?.errors?.nbvPattern) && (email.touched )"
+
+                     dest="emailValidation">
+            </div>
+            <div id="emailValidation"></div>
+            <!--<p style="color:red;margin-top: 1vh;" *ngIf="(addButton || infoFormAdd.controls['email'].touched) &&-->
+            <!--!infoFormAdd.controls['email'].valid">لطفا ایمیل خود را به درستی وارد نمایید.</p>-->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 form-group required col-sm-12">
+            <label class="for-label">آدرس: </label>
+
+            <!--<p class="control-label text-right" for="address">آدرس</p>-->
+            <div class="input-group input-group-sm">
+              <input id="address"
+                     type="text"
+                     placeholder="آدرس"
+                     class="form-control"
+                     name="addressAdd"
+                     [(ngModel)]="userSecondaryInformation.userContact.address"
+                      #address="ngModel"
+                     [class.is-valid]="!(address?.errors?.nbvRequired)"
+                     [class.is-invalid]="address?.errors?.nbvRequired && address.touched"
+                     dest="addressValidation">
+            </div>
+            <div id="addressValidation"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="card-footer text-left">
+      <button class="btn btn-action  btn-sm" type="submit">
+        <span>ثبت</span>
+        <i *ngIf="loadingAction" class="fa fa-spinner fa-pulse fa-1x"></i>
+
+      </button>
+    </div>
+  </form>
+</div>
+
+<div class="card" *ngIf="mode===actionMode.VIEW">
+  <div class="card-body card-body-content">
+    <div class="col-md-12">
+
+      <div class="row">
+
+        <div class="col-md-8">
+
+          <div class="row">
+            <div class="col-md-4 col-xs-offset-1">
+              <label class="for-label">نام پدر:</label>&nbsp;
+              <p class="for-label-view" *ngIf="userSecondaryInformation.fatherName">  {{userSecondaryInformation.fatherName}}</p>
+              <ng-container *ngIf="!userSecondaryInformation.fatherName">
+                <p>---</p></ng-container>
+            </div>
+            <div class="col-md-4  col-xs-offset-1">
+              <label class="for-label">تاریخ تولد:</label>&nbsp;
+              <p class="for-label-view" *ngIf="userSecondaryInformation.birthDay">
+<!--                {{userSecondaryInformation.birthDay| convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY|perNumber}}-->
+                {{myMoment.convertIsoToJDate(userSecondaryInformation?.birthDay) | perNumber}}
+              </p>
+              <ng-container *ngIf="!userSecondaryInformation.birthDay">
+                <p>---</p></ng-container>
+            </div>
+
+            <div class="col-md-4 col-xs-offset-1">
+              <label class="for-label">تاریخ شروع به کار:</label>&nbsp;
+              <p class="for-label-view" *ngIf="userSecondaryInformation.startWork" >
+<!--                {{userSecondaryInformation.startWork| convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY|perNumber}}-->
+                {{myMoment.convertIsoToJDate(userSecondaryInformation?.startWork) | perNumber}}
+
+              </p>
+              <ng-container *ngIf="!userSecondaryInformation.startWork">
+                <p>---</p>
+              </ng-container>
+
+              <!--            <ng-container *ngFor="let item of categoryTypeList">-->
+              <!--              <p class="for-label-view" *ngIf="item.value===asset.categoryType">{{item.title}}</p>-->
+              <!--            </ng-container>-->
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-xs-offset-1">
+              <label class="for-label">شماره موبایل:</label>&nbsp;
+              <p class="for-label-view" *ngIf="userSecondaryInformation.userContact.phoneNumber">  {{userSecondaryInformation.userContact.phoneNumber}}</p>
+              <ng-container *ngIf="!userSecondaryInformation.userContact.phoneNumber">
+                <p>---</p></ng-container>
+            </div>
+
+
+
+            <div class="col-md-4 col-xs-offset-1">
+              <label class="for-label">ایمیل:</label>&nbsp;
+              <p class="for-label-view" *ngIf="userSecondaryInformation.userContact.email">  {{userSecondaryInformation.userContact.email}}</p>
+              <ng-container *ngIf="!userSecondaryInformation.userContact.email">
+                <p>---</p></ng-container>
+
+            </div>
+
+
+          </div>
+          <div class="row">
+
+            <div class="col-md-12 col-xs-offset-1">
+              <label class="for-label">آدرس:</label>&nbsp;
+              <p class="for-label-view" *ngIf="userSecondaryInformation.userContact.address">  {{userSecondaryInformation.userContact.address}}</p>
+              <ng-container *ngIf="!userSecondaryInformation.userContact.address">
+                <p>---</p></ng-container>
+
+            </div>
+          </div>
+
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+</div>

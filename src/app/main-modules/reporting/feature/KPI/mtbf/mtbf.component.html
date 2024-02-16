@@ -1,0 +1,137 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                <i class="fa fa-list"></i>&nbsp;&nbsp;
+                گزارش
+                {{ title }}
+            </div>
+        </div>
+    </div>
+    <div class="card-body card-body-content">
+
+        <div class="collapse active show" id="work-search">
+            <div class="card" style="margin-bottom: 10px">
+                <div class="card-body card-body-filter">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="for-label">نام دستگاه</label>
+                                    <ng-select bindLabel="name" bindValue="id"
+                                               (change)="changeAssetAndRange()"
+                                               [(ngModel)]="selectedAssetId"
+                                               [items]="assetList" [placeholder]="'نام دستگاه'"></ng-select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="for-label"> از تاریخ </label>
+                                    <input class="form-control form-control-sm"
+                                           style="direction: ltr" id="dateFrom" #requestTime
+                                           placeholder="از تاریخ    "
+                                           autocomplete="off">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="for-label">تا تاریخ</label>
+                                    <input class="form-control form-control-sm"
+                                           style="direction: ltr" id="dateUntil" #requestTime
+                                           placeholder="تا تاریخ"
+                                           autocomplete="off">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="for-label">دوره </label>
+                                    <ng-select bindLabel="title" bindValue="value"
+                                               [clearable]="false"
+                                               [items]="dateRangeList"
+                                               (change)="changeAssetAndRange()"
+                                               [(ngModel)]="selectedRange"
+
+                                               [placeholder]="' دوره'"></ng-select>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-1 text-center" style="margin-top: 30px;">
+                            <button class="btn btn-sm  btn-search" (click)="mtbfCalculation()">
+                                <!--<i class="fa fa-search"></i>-->
+                                جستجو
+                            </button>
+                        </div>
+                        <div class="col-md-1 text-center" style="margin-top: 30px;">
+                            <ng-container *ngIf=" lineChartLabels.length>0">
+                                <img src="../../../../../../assets/images/pdf-download.png" (click)="openPDF()"
+                                     matTooltip="دانلود نمودار به صورت pdf"
+                                     class="cursor-pointer"
+                                     style="    width: 30px;border-radius: 20%; height: 30px;">
+
+                            </ng-container>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="loading-get-one text-center" *ngIf="loading">
+                <span class="mt-5 px-4  align-items-center d-inline-flex">
+                  <span class="fa fa-spinner fa-spin ml-2"></span>
+                  درحال بارگذاری
+                </span>
+        </div>
+    </div>
+</div>
+<div class="container h-68  bg-color4 mb-2 overflow-x-scroll" id="htmlData">
+    <div class="row justify-content-center" style=" font-family: IRANSansWeb-farsi!important;">
+
+        <div class="col-11">
+            <div class="container h-60  bg-color4 mb-2 overflow-x-scroll" style="overflow-x:auto ">
+                <!--                (mousewheel)="setWidth($event)"-->
+                <div class="h-60" [ngStyle]="{ 'min-width': width + 'px' }" id="htmlData1">
+                    <canvas baseChart *ngIf="showChart"
+                            [datasets]="lineChartData"
+                            [labels]="lineChartLabels"
+                            [colors]="lineChartColors"
+                            [legend]="lineChartLegend"
+                            [chartType]="lineChartType"
+                            [plugins]="lineChartPlugins"
+                            [options]="lineChartOptions"
+                            (chartHover)="chartHovered($event)"
+                            (chartClick)="chartClicked($event)">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+        <!--        style="transform: rotate(180deg);writing-mode: tb-rl;"-->
+        <div class="col-1 row justify-content-center">
+            <span style="  font-size: 18px;
+    margin-right: -20px;
+    padding-top: 250px;
+    font-weight: bold;">
+
+            ساعت
+            </span>
+        </div>
+
+    </div>
+
+
+    <div class="row " *ngIf="showChart">
+        <div class="col-11 row justify-content-center"
+             style="  font-size: 18px;    font-weight: bold;">
+            تاریخ در بازه های
+            <ng-container *ngIf="selectedRange === 'daily'">روزانه</ng-container>
+            <ng-container *ngIf="selectedRange === 'monthly'">ماهانه</ng-container>
+            <ng-container *ngIf="selectedRange === 'yearly'">سالانه</ng-container>
+            <ng-container *ngIf=" lineChartLabels.length>0">
+                <span class="fa fa-search-plus mx-2 cursor-pointer" (click)="setWidth('plus')"></span>
+                <span class="fa fa-search-minus mx-2 cursor-pointer" (click)="setWidth('minus ')"></span>
+            </ng-container>
+
+        </div>
+        <div class="col-1"></div>
+    </div>
+</div>

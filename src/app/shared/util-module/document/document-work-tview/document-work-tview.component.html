@@ -1,0 +1,51 @@
+<div class="row" >
+  <ng-container *ngIf="documentList.length">
+    <table class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th class="text-center" style="width: 5%">ردیف</th>
+        <th class="text-center" >نام فایل</th>
+        <th class="text-center" >نوع فایل</th>
+        <!--<th class="text-center" style="width: 5%"></th>-->
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let item of documentList; let i = index">
+        <tr class="text-center ">
+          <td>{{i + 1}}</td>
+          <td>{{item.showName}}</td>
+          <td>
+            <a style="color: #488ae3">{{item.fileName}}</a>
+          </td>
+          <!--<td>-->
+            <!--<a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+               <!--(click)="downloadFile(item)" style="cursor: pointer ; font-weight: bold">-->
+              <!--<i class="fa fa-download" title="دانلود"></i>-->
+            <!--</a>-->
+          <!--</td>-->
+        </tr>
+      </ng-container>
+      </tbody>
+    </table>
+
+  </ng-container>
+</div>
+<div class="col-md-12" style="text-align: center" *ngIf="loading">
+  <i class="fa fa-spinner fa-pulse fa-3x " ></i>
+
+</div>
+
+<!--<div class="col-md-12 text-left" >-->
+<!--  <ng-container *ngIf="sendInformationNumberOfTabs.numberOfFormIdList < sendInformationNumberOfTabs.lengthFormIdList - 1 || sendInformationNumberOfTabs.hasForm ">-->
+<!--  <button class="btn btn-sm btn-warning" type="button"   (click)="nextOrPrev('next')">-->
+<!--    <span >بعدی</span>-->
+<!--  </button>-->
+<!--  </ng-container>-->
+<!--  <button class="btn btn-sm btn-cancel-back" type="button" style="float: right"  (click)="nextOrPrev('prev')">-->
+<!--    <span >قبلی</span>-->
+<!--  </button>-->
+<!--</div>-->
+<!-- *************************** modal **************************-->
+
+
+

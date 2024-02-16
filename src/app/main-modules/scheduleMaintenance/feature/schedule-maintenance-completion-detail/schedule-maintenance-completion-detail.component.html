@@ -1,0 +1,84 @@
+<div class="card">
+  <form #completionDetailForm="ngForm" (submit)="action(completionDetailForm)">
+    <div class="card-body card-body-content">
+      <div class="row">
+        <div class="col-md-12 form-group required col-sm-12">
+          <label class="for-label">یادداشت:
+          </label>
+          <div class="input-group input-group-sm">
+<!--                  nbvRequired-->
+        <textarea type="text" placeholder="یادداشت" [(ngModel)]="completionDetail.note"
+                  class="form-control" maxlength="620" name="note"
+                  #note="ngModel"
+                  [class.is-valid]="!(note?.errors?.nbvRequired)"
+                  [class.is-invalid]="(note?.errors?.nbvRequired) && (note.touched || doSave)"
+        >
+        </textarea>
+          </div>
+          <div id="noteValidation"></div>
+        </div>
+        <div class="col-md-12 form-group required col-sm-12">
+          <label class="for-label">مشکل:</label>
+          <div class="input-group input-group-sm">
+<!--                  nbvRequired-->
+        <textarea type="text" placeholder="مشکل" [(ngModel)]="completionDetail.problem"
+                  class="form-control" maxlength="620" name="problem"
+                  #problem="ngModel"
+                  [class.is-valid]="!(problem?.errors?.nbvRequired)"
+                  [class.is-invalid]="(problem?.errors?.nbvRequired) && (problem.touched || doSave)"
+        ></textarea>
+          </div>
+          <div id="problemValidation"></div>
+        </div>
+
+        <div class="col-md-12 form-group required col-sm-12">
+          <label class="for-label">علت:</label>
+          <div class="input-group input-group-sm">
+<!--                  nbvRequired-->
+        <textarea type="text" placeholder="علت" [(ngModel)]="completionDetail.rootCause"
+                  class="form-control" maxlength="620" name="rootCause"
+                  #rootCause="ngModel"
+                  [class.is-valid]="!(rootCause?.errors?.nbvRequired)"
+                  [class.is-invalid]="(rootCause?.errors?.nbvRequired) && (rootCause.touched || doSave)"
+        ></textarea>
+          </div>
+          <div id="rootCauseValidation"></div>
+        </div>
+
+        <div class="col-md-12 form-group required col-sm-12">
+          <label class="for-label">راه حل:</label>
+          <div class="input-group input-group-sm">
+<!--                  nbvRequired-->
+        <textarea type="text" placeholder="راه حل" [(ngModel)]="completionDetail.solution"
+                  class="form-control" maxlength="620" name="solution"
+                  #solution="ngModel"
+                  [class.is-valid]="!(solution?.errors?.nbvRequired)"
+                  [class.is-invalid]="(solution?.errors?.nbvRequired) && (solution.touched || doSave)"
+        ></textarea>
+          </div>
+          <div id="solutionValidation"></div>
+        </div>
+
+        <div class="col-md-12 form-group required col-sm-12">
+          <label class="for-label">یادداشت مدیر:</label>
+          <div class="input-group input-group-sm">
+<!--                  nbvRequired-->
+        <textarea type="text" placeholder="یادداشت مدیر" [(ngModel)]="completionDetail.adminNote"
+                  class="form-control" maxlength="620" name="adminNote"
+                  #adminNote="ngModel"
+                  [class.is-valid]="!(adminNote?.errors?.nbvRequired)"
+                  [class.is-invalid]="(adminNote?.errors?.nbvRequired) && (adminNote.touched || doSave)"
+        ></textarea>
+          </div>
+          <div id="adminNoteValidation"></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="card-footer text-left" *ngIf="mode!== actionMode.VIEW">
+      <button class="btn btn-action btn-sm" type="submit">
+        <span>ثبت اطلاعات</span>
+      </button>
+    </div>
+  </form>
+</div>

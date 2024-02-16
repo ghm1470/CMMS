@@ -1,0 +1,599 @@
+<!--================================مودال مشاهده تمام مراحل فرایند=============================-->
+<!--<ng-container *ngIf="showProcessStepsModal">-->
+<!--    <app-show-process-steps [activityInstanceId]="activityInstanceId"-->
+<!--                            [submitWorkRequestTitle]="'تعمیر'"></app-show-process-steps>-->
+<!--</ng-container>-->
+
+
+<!--====================================مودال تایید رد مرحله==================================- -->
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.DEFAULT"
+        autoShow="false"
+        [displayBackdrop]=true
+        myId="rejectStage">
+    <div modal-header>
+        <span>رد مرحله</span> &nbsp;&nbsp;&nbsp;
+        <i class="fa fa-arrow-alt-circle-left" style="color: red">
+
+        </i>
+    </div>
+    <div modal-body>
+        <app-loading-spinner [loadingList]="true" *ngIf="loadingModalReject"></app-loading-spinner>
+        <ng-container *ngIf="!loadingModalReject">
+            <div class="col-md-12">
+                <div class="row">
+                    ایا از رد درخواست ارسال شده مطمئن هستید؟
+
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="col-md-12">
+                <div class="row justify-content-end">
+                    <button class="btn  btn-cancel"
+                            (click)="cancelCreateForm(false)">
+                        خیر
+                    </button>
+                    <button class="btn btn-save"
+                            (click)="cancelCreateForm(true)">
+
+                        بله
+                    </button>
+
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</nbw-modal>
+
+
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-3 col-8 col-sm-6 card-title">
+                تکمیل فرم
+            </div>
+            <div class="col-md-9 col-4 col-sm-6 text-left">
+<!--                <button class="btn btn-sm btn-secondary " (click)="showTheTrendHere()"-->
+<!--                        style="margin: 0 5px"-->
+<!--                >-->
+<!--                    مشاهده فرایند طی شده تاکنون-->
+<!--                </button>-->
+                <!--                <button class="btn btn-sm btn-secondary " (click)="showProcessSteps()" style="margin: 0 5px"-->
+                <!--                >-->
+                <!--                    مشاهده تمام مراحل فرایند-->
+                <!--                </button>-->
+                <button (click)="cancel()"
+                        class="btn btn-cancel-back btn-sm">
+                    بازگشت
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body card-body-content">
+        <!--/////////////////////////////////////////////////////-->
+        <!--===========================  فرم جدید=========-->
+        <!--                *ngIf="workOrder"-->
+        <div class="carousel-item active" id="newForm">
+            <div class="mt-2">
+                <fieldset class="scheduler-border" style="background-color: #f7f7f7">
+                    <legend class="scheduler-border">
+                        <h6>
+                            اطلاعات مربوط به فرم جدید را تکمیل نمائید.
+                        </h6>
+                    </legend>
+                    <!--                            <ng-container *ngIf="staticFormAndDynamicForm?.workOrderId">-->
+                    <ng-container>
+                        <app-new-form-khales
+                                [workOrderId]="workOrderId"
+                                [activityLevelId]="activityLevelId"
+                                [activityInstanceId]="activityInstanceId"
+                                [selectedRequestType]="selectedRequestType"
+                                [workRequestAcceptor]="workRequestAcceptor"
+                                (back)="cancelNewForm()"
+                        ></app-new-form-khales>
+                    </ng-container>
+                </fieldset>
+            </div>
+
+        </div>
+        <div class="col-md-12" style="padding: 0">
+            <ul class="nav nav-tabs" role="navigation" style="text-align: right;padding-right: 0">
+<!--                <li class="nav-item">-->
+<!--                    <a href="#newForm" style="color: #a0a0a0;font-size: 14px" class="nav-link active"-->
+<!--                       id="newFormB"-->
+<!--                       data-toggle="tab" role="tab" aria-controls="newForm"-->
+<!--                       (click)="basicInformation = true; navigate(0,'newFormB')">فرم جدید</a>-->
+<!--                </li>-->
+                <ng-container>
+
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a href="#workOrder" style="color: #a0a0a0;font-size: 14px" class="nav-link active"-->
+                    <!--                           id="informationB"-->
+                    <!--                           data-toggle="tab" role="tab" aria-controls="workOrder"-->
+                    <!--                           (click)="basicInformation = true; navigate(0,'informationB')">کلیات</a>-->
+                    <!--                    </li>-->
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a href="#completionDetails" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+                    <!--                           id="completionDetailsB"-->
+                    <!--                           data-toggle="tab" role="tab" aria-controls="completionDetails"-->
+                    <!--                           (click)="completionDetails = true;  navigate(1,'completionDetailsB')">اطلاعات-->
+                    <!--                            تکمیلی</a>-->
+                    <!--                    </li>-->
+
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a href="#basicInformationItems" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+                    <!--                           id="basicInformationB"-->
+                    <!--                           data-toggle="tab" role="tab" aria-controls="basicInformation"-->
+                    <!--                           (click)="basicInformation = true; navigate(2,'basicInformationB') ">اطلاعات پایه</a>-->
+                    <!--                    </li>-->
+
+
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a href="#tasks" style="color: #a0a0a0;font-size: 14px" class="nav-link" id="tasksB"-->
+                    <!--                           data-toggle="tab" role="tab" aria-controls="tasks"-->
+                    <!--                           (click)="tasks = true; navigate(3,'tasksB') ">وظایف</a>-->
+                    <!--                    </li>-->
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a href="#taskGroup" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+                    <!--                           id="taskGroupB"-->
+                    <!--                           data-toggle="tab" role="tab" aria-controls="taskGroup"-->
+                    <!--                           (click)="taskGroup = true; navigate(4,'taskGroupB') ">مجموعه کارها</a>-->
+                    <!--                    </li>-->
+
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a href="#parts" style="color: #a0a0a0;font-size: 14px" class="nav-link" id="partsB"-->
+                    <!--                           data-toggle="tab" role="tab" aria-controls="parts"-->
+                    <!--                           (click)="parts = true; navigate(5,'partsB') "> قطعات به کار برده شده</a>-->
+                    <!--                    </li>-->
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a href="#miscCost" style="color: #a0a0a0;font-size: 14px" class="nav-link" id="miscCostB"-->
+                    <!--                           data-toggle="tab" role="tab" aria-controls="miscCost"-->
+                    <!--                           (click)="miscCost = true; navigate(6,'miscCostB') ">هزینه های متفرقه</a>-->
+                    <!--                    </li>-->
+                    <!--                    &lt;!&ndash;                <li class="nav-item">&ndash;&gt;-->
+                    <!--                    &lt;!&ndash;                  <a href="#notification" style="color: #a0a0a0;font-size: 14px" class="nav-link"&ndash;&gt;-->
+                    <!--                    &lt;!&ndash;                     data-toggle="tab" role="tab" aria-controls="notification" (click)="notification = true">آگاه سازی</a>&ndash;&gt;-->
+                    <!--                    &lt;!&ndash;                </li>&ndash;&gt;-->
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a href="#file" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+                    <!--                           data-toggle="tab" id="fileB"-->
+                    <!--                           role="tab" aria-controls="file"-->
+                    <!--                           (click)="file = true; navigate(7,'fileB') ">مستندات</a>-->
+                    <!--                    </li>-->
+                    <!--                    &lt;!&ndash;//فرم های دستی&ndash;&gt;-->
+                    <!--                    <ng-container *ngFor="let activitySampleForm of activitySampleFormList;let i=index">-->
+                    <!--                        <li class="nav-item">-->
+                    <!--                            <a [href]="'#formComplete'+i" style="color: #a0a0a0;font-size: 14px"-->
+                    <!--                               class="nav-link"-->
+                    <!--                               data-toggle="tab" [id]="'formCompleteB'+i"-->
+                    <!--                               role="tab" aria-controls="formComplete"-->
+                    <!--                               (click)=" navigate(8+i,'formCompleteB'+i) ">-->
+                    <!--                                {{activitySampleForm?.form?.title}}</a>-->
+                    <!--                        </li>-->
+                    <!--                    </ng-container>-->
+                    <!--                    &lt;!&ndash;                <li class="nav-item">&ndash;&gt;-->
+                    <!--                    &lt;!&ndash;                    <a href="#formComplete" style="color: #a0a0a0;font-size: 14px" class="nav-link"&ndash;&gt;-->
+                    <!--                    &lt;!&ndash;                       data-toggle="tab" id="formCompleteB"&ndash;&gt;-->
+                    <!--                    &lt;!&ndash;                       role="tab" aria-controls="formComplete"&ndash;&gt;-->
+                    <!--                    &lt;!&ndash;                       (click)="formComplete = true; navigate(8,'formCompleteB') ">&ndash;&gt;-->
+                    <!--                    &lt;!&ndash;                        {{formTitle ? ' فرم ' + formTitle : 'فرم متغییر'}}</a>&ndash;&gt;-->
+                    <!--                    &lt;!&ndash;                </li>&ndash;&gt;-->
+                </ng-container>
+
+            </ul>
+
+        </div>
+        <!--/////////////////////////////////////////////////////-->
+        <app-loading-spinner [loadingList]="true" *ngIf="loadingGetOne"></app-loading-spinner>
+
+
+        <!--========================carousel-->
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="false">
+<!--            <div class="carousel-inner">-->
+
+
+
+<!--                &lt;!&ndash;=========================== دستور کار=========&ndash;&gt;-->
+<!--                &lt;!&ndash;                *ngIf="workOrder"&ndash;&gt;-->
+<!--                &lt;!&ndash;                active&ndash;&gt;-->
+<!--                <div class="carousel-item " id="workOrder">-->
+<!--                    <div class="mt-2">-->
+<!--                        <fieldset class="scheduler-border" style="background-color: #f7f7f7">-->
+<!--                            <legend class="scheduler-border">-->
+<!--                                <h6>-->
+<!--                                    اطلاعات مربوط به دستور کار را تکمیل نمائید-->
+<!--                                </h6>-->
+<!--                            </legend>-->
+<!--                            &lt;!&ndash;                            <ng-container *ngIf="staticFormAndDynamicForm?.workOrderId">&ndash;&gt;-->
+<!--                            <ng-container *ngIf="basicInformation && showBody">-->
+
+<!--                                <app-work-order-carousel-->
+<!--                                        [typeOfNotification]="'action'"-->
+<!--                                        [staticFormsIdList]="staticFormAndDynamicForm.staticFormsIdList"-->
+<!--                                        [isView]="isView"-->
+<!--                                        [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"-->
+<!--                                        [activityLevelId]="activityLevelId"-->
+<!--                                        [activityId]="activityInstanceId"-->
+<!--                                        [numberOfParticipation]="numberOfParticipation"-->
+<!--                                        [workOrderDTO]="workOrderDTO"-->
+<!--                                        [workOrderAccessId]="staticFormAndDynamicForm.workOrderAccessId"-->
+<!--                                        [workOrderId]="staticFormAndDynamicForm.workOrderId"-->
+<!--                                >-->
+<!--                                </app-work-order-carousel>-->
+<!--                            </ng-container>-->
+<!--                        </fieldset>-->
+<!--                    </div>-->
+
+<!--                </div>-->
+<!--                &lt;!&ndash;========================اطلاعات تکمیلی=====carouselIndex 1==============&ndash;&gt;-->
+<!--                <div class="carousel-item" id="completionDetails">-->
+<!--                    &lt;!&ndash;                <div class="carousel-item" id="completionDetails" >&ndash;&gt;-->
+<!--                    <div class="mt-2">-->
+<!--                        <fieldset class="scheduler-border" style="background-color: #f7f7f7">-->
+<!--                            <legend class="scheduler-border">-->
+<!--                                <h6>فرم اطلاعات تکمیلی را تکمیل-->
+<!--                                    نمائید</h6></legend>-->
+<!--                            <ng-container *ngIf="completionDetails&&staticFormAndDynamicForm.workOrderId && showBody">-->
+
+<!--                                <app-completion-detail-work-table-->
+<!--                                        [staticFormsIdList]="staticFormAndDynamicForm.staticFormsIdList"-->
+<!--                                        [activityLevelId]="activityLevelId"-->
+<!--                                        [isView]="isView"-->
+<!--                                        [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"-->
+<!--                                        [activityInstanceId]="activityInstanceId"-->
+<!--                                        [numberOfParticipation]="numberOfParticipation"-->
+<!--                                        [workOrderId]="staticFormAndDynamicForm.workOrderId"-->
+<!--                                ></app-completion-detail-work-table>-->
+<!--                            </ng-container>-->
+<!--                        </fieldset>-->
+<!--                    </div>-->
+
+<!--                </div>-->
+<!--                &lt;!&ndash;========================= اطلاعات پایه====carouselIndex 2==============&ndash;&gt;-->
+<!--                <div class="carousel-item" id="basicInformationItems">-->
+<!--                    &lt;!&ndash;                <div class="carousel-item" id="basicInformation" >&ndash;&gt;-->
+<!--                    <div class="mt-2">-->
+<!--                        <fieldset class="scheduler-border" style="background-color: #f7f7f7">-->
+<!--                            <legend class="scheduler-border"><h6>فرم مربوط به اطلاعات پایه را تکمیل-->
+<!--                                نمائید</h6></legend>-->
+<!--                            <ng-container *ngIf="basicInformation&&staticFormAndDynamicForm.workOrderId && showBody">-->
+<!--                                <app-work-order-basic-information-work-table-->
+
+<!--                                        [activityLevelId]="activityLevelId"-->
+<!--                                        [isView]="isView"-->
+<!--                                        [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"-->
+<!--                                        [activityInstanceId]="activityInstanceId"-->
+<!--                                        [numberOfParticipation]="numberOfParticipation"-->
+<!--                                        [workOrderId]="staticFormAndDynamicForm.workOrderId"-->
+<!--                                        [staticFormsIdList]="staticFormAndDynamicForm.staticFormsIdList"-->
+
+<!--                                ></app-work-order-basic-information-work-table>-->
+<!--                            </ng-container>-->
+
+<!--                        </fieldset>-->
+<!--                    </div>-->
+
+<!--                </div>-->
+<!--                &lt;!&ndash;=====================  وظایف==========carouselIndex 3============&ndash;&gt;-->
+<!--                <div class="carousel-item " id="tasks">-->
+<!--                    &lt;!&ndash;                <div class="carousel-item " id="tasks" >&ndash;&gt;-->
+<!--                    <div class="mt-2">-->
+<!--                        <fieldset class="scheduler-border" style="background-color: #f7f7f7">-->
+<!--                            <legend class="scheduler-border"><h6>فرم مربوط به وظایف را تکمیل-->
+<!--                                نمائید</h6></legend>-->
+<!--                            <ng-container *ngIf="tasks&&staticFormAndDynamicForm.workOrderId && showBody">-->
+<!--                                <app-list-work-table-->
+<!--                                        [activityLevelId]="activityLevelId"-->
+<!--                                        [isView]="isView"-->
+<!--                                        [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"-->
+<!--                                        [activityInstanceId]="activityInstanceId"-->
+<!--                                        [numberOfParticipation]="numberOfParticipation"-->
+<!--                                        [workOrderId]="staticFormAndDynamicForm.workOrderId"-->
+<!--                                        [staticFormsIdList]="staticFormAndDynamicForm.staticFormsIdList"-->
+<!--                                ></app-list-work-table>-->
+<!--                            </ng-container>-->
+
+<!--                        </fieldset>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+
+<!--                &lt;!&ndash;===========================مجموعه کار========carouselIndex 4========&ndash;&gt;-->
+<!--                <div class="carousel-item" id="taskGroup">-->
+<!--                    &lt;!&ndash;                <div class="carousel-item" id="taskGroup" >&ndash;&gt;-->
+<!--                    <div class="mt-2">-->
+<!--                        <fieldset class="scheduler-border" style="background-color: #f7f7f7">-->
+<!--                            <legend class="scheduler-border"><h6>فرم مربوط به مجموعه کار را تکمیل-->
+<!--                                نمائید</h6></legend>-->
+<!--                            <ng-container *ngIf="taskGroup&&staticFormAndDynamicForm.workOrderId && showBody">-->
+<!--                                <app-work-order-task-group-work-table-->
+<!--                                        [activityLevelId]="activityLevelId"-->
+<!--                                        [isView]="isView"-->
+<!--                                        [taskGroupDTO]="taskGroupDTO"-->
+<!--                                        [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"-->
+<!--                                        [activityInstanceId]="activityInstanceId"-->
+<!--                                        [numberOfParticipation]="numberOfParticipation"-->
+<!--                                        [workOrderId]="staticFormAndDynamicForm.workOrderId"-->
+<!--                                        [staticFormsIdList]="staticFormAndDynamicForm.staticFormsIdList"-->
+
+<!--                                ></app-work-order-task-group-work-table>-->
+<!--                            </ng-container>-->
+
+<!--                        </fieldset>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash;=======================قطعات به کار برده شده=============carouselIndex 5=======&ndash;&gt;-->
+<!--                <div class="carousel-item" id="parts">-->
+<!--                    &lt;!&ndash;                <div class="carousel-item" id="parts">&ndash;&gt;-->
+<!--                    <div class="mt-2">-->
+<!--                        <fieldset class="scheduler-border" style="background-color: #f7f7f7">-->
+<!--                            <legend class="scheduler-border"><h6>فرم مربوط به قطعات به کار برده شده را تکمیل-->
+<!--                                نمائید</h6></legend>-->
+<!--                            <ng-container *ngIf="parts&&staticFormAndDynamicForm.workOrderId && showBody">-->
+
+<!--                                <app-part-with-usage-count-work-table-->
+<!--                                        [activityLevelId]="activityLevelId"-->
+<!--                                        [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"-->
+<!--                                        [activityInstanceId]="activityInstanceId"-->
+<!--                                        [isView]="isView"-->
+<!--                                        [numberOfParticipation]="numberOfParticipation"-->
+<!--                                        [workOrderId]="staticFormAndDynamicForm.workOrderId"-->
+<!--                                        [staticFormsIdList]="staticFormAndDynamicForm.staticFormsIdList"-->
+
+<!--                                ></app-part-with-usage-count-work-table>-->
+<!--                            </ng-container>-->
+
+
+<!--                        </fieldset>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash;=========================هزینه های متفرقه===========carouselIndex 6=======&ndash;&gt;-->
+<!--                <div class="carousel-item" id="miscCost">-->
+<!--                    &lt;!&ndash;                <div class="carousel-item" id="miscCost" >&ndash;&gt;-->
+<!--                    <div class="mt-2">-->
+<!--                        <fieldset class="scheduler-border" style="background-color: #f7f7f7">-->
+<!--                            <legend class="scheduler-border"><h6>فرم مربوط به هزینه های متفرقه را تکمیل-->
+<!--                                نمائید</h6></legend>-->
+<!--                            <ng-container *ngIf="miscCost&&staticFormAndDynamicForm.workOrderId && showBody">-->
+
+<!--                                <app-misc-cost-work-table-->
+<!--                                        [activityLevelId]="activityLevelId"-->
+<!--                                        [isView]="isView"-->
+<!--                                        [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"-->
+<!--                                        [activityInstanceId]="activityInstanceId"-->
+<!--                                        [numberOfParticipation]="numberOfParticipation"-->
+<!--                                        [workOrderId]="staticFormAndDynamicForm.workOrderId"-->
+<!--                                        [staticFormsIdList]="staticFormAndDynamicForm.staticFormsIdList"-->
+<!--                                ></app-misc-cost-work-table>-->
+
+<!--                            </ng-container>-->
+<!--                        </fieldset>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash;=======================آگاه سازی====================&ndash;&gt;-->
+<!--                &lt;!&ndash;        <div class="carousel-item" id="notification" *ngIf="notification">&ndash;&gt;-->
+<!--                &lt;!&ndash;          <div class="mt-2">&ndash;&gt;-->
+<!--                &lt;!&ndash;            <fieldset class="scheduler-border" style="background-color: #f7f7f7">&ndash;&gt;-->
+<!--                &lt;!&ndash;              <legend class="scheduler-border"><h6>فرم مربوط به آگاه سازی را تکمیل&ndash;&gt;-->
+<!--                &lt;!&ndash;                نمائید</h6></legend>&ndash;&gt;-->
+
+<!--                &lt;!&ndash;              <app-notify-work-table&ndash;&gt;-->
+<!--                &lt;!&ndash;                                     [activityLevelId]="activityLevelId"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                      [isView]="isView"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                     [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                     [activityInstanceId]="activityInstanceId"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                     [numberOfParticipation]="numberOfParticipation"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                     [workOrderId]="staticFormAndDynamicForm.workOrderId"&ndash;&gt;-->
+<!--                &lt;!&ndash;              ></app-notify-work-table>&ndash;&gt;-->
+
+
+<!--                &lt;!&ndash;            </fieldset>&ndash;&gt;-->
+<!--                &lt;!&ndash;          </div>&ndash;&gt;-->
+<!--                &lt;!&ndash;        </div>&ndash;&gt;-->
+<!--                &lt;!&ndash;=====================مستندات==============carouselIndex 7========&ndash;&gt;-->
+<!--                <div class="carousel-item" id="file">-->
+<!--                    &lt;!&ndash;                <div class="carousel-item">&ndash;&gt;-->
+<!--                    <div class="mt-2">-->
+<!--                        <fieldset class="scheduler-border" style="background-color: #f7f7f7">-->
+<!--                            <legend class="scheduler-border"><h6>اطلاعات مربوط به مستندات را تکمیل-->
+<!--                                نمائید</h6></legend>-->
+<!--                            <ng-container *ngIf="file&&staticFormAndDynamicForm.workOrderId && showBody">-->
+
+<!--                                <app-document-work-table-->
+
+<!--                                        [activityLevelId]="activityLevelId"-->
+<!--                                        [isView]="isView"-->
+<!--                                        [workOrderId]="staticFormAndDynamicForm.workOrderId"-->
+<!--                                        [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"-->
+<!--                                        [activityInstanceId]="activityInstanceId"-->
+<!--                                        [numberOfParticipation]="numberOfParticipation"-->
+<!--                                        [extraId]="staticFormAndDynamicForm.workOrderId"-->
+<!--                                        [staticFormsIdList]="staticFormAndDynamicForm.staticFormsIdList"-->
+
+<!--                                ></app-document-work-table>-->
+
+<!--                            </ng-container>-->
+<!--                        </fieldset>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash;============ carouselIndex 8===========================&ndash;&gt;-->
+
+
+<!--                &lt;!&ndash;//فرم های دستی&ndash;&gt;-->
+<!--                <ng-container *ngFor="let activitySampleForm of activitySampleFormList;let i=index">-->
+<!--                    <div class="carousel-item " [id]="'formComplete'+i">-->
+<!--                        &lt;!&ndash;                <div class="carousel-item " id="formComplete" >&ndash;&gt;-->
+<!--                        <div class="mt-2">-->
+<!--                            <fieldset class="scheduler-border" style="background-color: #f7f7f7">-->
+<!--                                <legend class="scheduler-border">-->
+<!--                                    <h6>اطلاعات مربوط به فرم ({{activitySampleForm?.form?.title}}-->
+<!--                                        )را تکمیل-->
+<!--                                        نمائید</h6></legend>-->
+<!--                                <ng-container *ngIf="formComplete&&staticFormAndDynamicForm.workOrderId && showBody">-->
+
+<!--                                    <app-form-answer [form]="activitySampleForm?.form"-->
+<!--                                                     [back]="back"-->
+<!--                                                     [disabledFiled]="staticFormAndDynamicForm.formId!==activitySampleForm?.form.id"-->
+<!--                                                     [activityLevelId]="activityLevelId"-->
+<!--                                                     [isView]="isView"-->
+<!--                                                     [formData]="activitySampleForm.formData"-->
+<!--                                                     (backOut)="backOut($event)"-->
+<!--                                                     [instanceId]="activityInstanceId"-->
+<!--                                    >-->
+
+<!--                                    </app-form-answer>-->
+
+<!--                                    &lt;!&ndash;                                            (sendFormTitle)="getFormTitle($event)"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                    <app-form-complete-work-table&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            [nextItem]="activitySampleFormList.length>i+1?true:false"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            [formId]="staticFormAndDynamicForm.formId"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            [activitySampleForm]="activitySampleForm"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            [showSaveButton]="true"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                          &ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            [activityLevelId]="activityLevelId"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            [activityInstanceId]="activityInstanceId"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            [numberOfParticipation]="numberOfParticipation"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            [instanceId]="activityInstanceId"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            [incomingFormId]="staticFormAndDynamicForm.formId"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            [formStatus]="'pending'"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            [isView]="isView"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            [formDataId]="staticFormAndDynamicForm.formDataId"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            [formData]="activitySampleForm.formData"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            [hasWorkOrder]="workOrder"&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                    ></app-form-complete-work-table>&ndash;&gt;-->
+<!--                                </ng-container>-->
+
+<!--                            </fieldset>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </ng-container>-->
+<!--                <div class="carousel-item " id="formComplete">-->
+<!--                    &lt;!&ndash;                <div class="carousel-item " id="formComplete" >&ndash;&gt;-->
+<!--                    &lt;!&ndash;                    <div class="mt-2">&ndash;&gt;-->
+<!--                    &lt;!&ndash;                        <fieldset class="scheduler-border" style="background-color: #f7f7f7">&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            <legend class="scheduler-border">&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                <h6>اطلاعات مربوط به فرم ({{formTitle}}&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                    )را تکمیل&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                    نمائید</h6></legend>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            <ng-container *ngIf="formComplete&&staticFormAndDynamicForm.workOrderId">&ndash;&gt;-->
+
+<!--                    &lt;!&ndash;                                <app-form-complete-work-table&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                        [showSaveButton]="true"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                      &ndash;&gt;-->
+<!--                    &lt;!&ndash;                                        [activityLevelId]="activityLevelId"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                        [activityInstanceId]="activityInstanceId"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                        [numberOfParticipation]="numberOfParticipation"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                        (sendFormTitle)="getFormTitle($event)"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                        [instanceId]="activityInstanceId"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                        [incomingFormId]="staticFormAndDynamicForm.formId"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                        [formStatus]="'pending'"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                        [isView]="isView"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                        [formDataId]="staticFormAndDynamicForm.formDataId"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                        [hasWorkOrder]="workOrder"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                ></app-form-complete-work-table>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            </ng-container>&ndash;&gt;-->
+
+<!--                    &lt;!&ndash;                        </fieldset>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--                </div>-->
+<!--            </div>-->
+        </div>
+    </div>
+<!--    <div class="card-footer text-left">-->
+<!--        <div class="col-md-12">-->
+<!--            <div class="row">-->
+<!--                <div class="col-md-6">-->
+<!--                    <mat-checkbox *ngIf="staticFormAndDynamicForm.workRequestAcceptor && !isView"-->
+<!--                                  [checked]="staticFormAndDynamicForm.workOrderAccepted"-->
+<!--                                  (change)="changeWorkOrderAcceptorBoolean($event)"-->
+<!--                    >-->
+<!--                        <span style="font-size: 16px;  font-weight: bold; color: #4c4c4c; margin-left: 500px">ثبت در گزارشات</span>-->
+<!--                    </mat-checkbox>-->
+<!--                </div>-->
+<!--                <div class="col-md-6">-->
+<!--                    <button *ngIf="!isView" (click)="RejectButton()"-->
+<!--                            class="btn btn-cancel-back  btn-sm">-->
+<!--                        <span>رد مرحله</span>-->
+<!--                    </button>-->
+<!--                    <button *ngIf="!isView" (click)="AcceptButtonInConstantForm()" class="btn btn-action btn-sm"-->
+<!--                            style="margin:  0 5px">-->
+<!--                        <span>تایید مرحله</span>-->
+<!--                        <i class="fa fa-spinner fa-pulse fa-1x" *ngIf="loadingAcceptButtonInConstantForm"-->
+<!--                           aria-hidden="true"></i>-->
+<!--                    </button>-->
+
+<!--                    <button *ngIf="isView" (click)="pleaseAssignedMe()"-->
+<!--                            class="btn btn-cancel-back  btn-sm">-->
+<!--                        <span>این درخواست را من انجام میدهم</span>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
+
+
+<!-- *************************** modal **************************-->
+
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize"
+        autoShow="false"
+        (onClose)="loadingAcceptButtonInConstantForm=false"
+        [myId]="setUserModalId">
+    <div modal-header>
+        <h6>
+            تعیین کاربر مرحله بعدی
+        </h6>
+    </div>
+    <div modal-body>
+        <div class="col-md-12" style="margin-bottom: 15px">
+            <div class="row">
+
+                <label style="font-size: 14px; color: #4c4c4c ; margin-right: 10px"> پست :</label> <span
+                    style="font-size: 12px"> {{orgNameAndUserTypeNameForNextLevel.userTypeName}}</span>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <input type="checkbox" id="selectAllUser" [checked]="selectAllUserBoolean"
+                       (click)="selectAllUser($event)"> <span
+                    style="font-size: 14px; color: #4c4c4c ; margin-right: 10px">انتخاب همه ی کاربران</span>
+            </div>
+        </div>
+        <table class="table table-bordered table-responsive-md table-striped">
+            <thead>
+            <tr style="text-align: center">
+                <th></th>
+                <th>نام کاربر</th>
+                <th style="width: 20%"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let user of  userByUserTypeIdAndOrganizationId; let i = index">
+                <tr>
+                    <td style="text-align: center">{{i + 1}}</td>
+                    <td style="text-align: center">{{user.name}} {{user.family}}</td>
+                    <td style="text-align: center">
+                        <input type="checkbox" [checked]=userByUserTypeIdAndOrganizationChecked(user.id)
+                               (change)="selectUser($event, i)" id="ddd"></td>
+                </tr>
+            </ng-container>
+            </tbody>
+        </table>
+
+
+        <div class="col-md-12 form-group required text-left" style="margin-top: 30px">
+            <button class="btn btn-action btn-sm"
+                    (click)="setUserIdInActivityLevel()">تایید
+                <i class="fa fa-spinner fa-pulse fa-1x" *ngIf="loadingSetUserIdInActivityLevel"></i>
+            </button>
+        </div>
+    </div>
+</nbw-modal>

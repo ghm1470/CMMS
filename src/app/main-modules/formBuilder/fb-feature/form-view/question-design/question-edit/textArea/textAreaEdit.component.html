@@ -1,0 +1,120 @@
+
+<br>
+<div class="row">
+  <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-body backShadow">
+          <form class="form-horizontal" [formGroup]="textAreaForm">
+            <div class="row">
+              <input type="text" style="display: none" [placeholder]="textArea.id" [(ngModel)]="textArea.id"
+                     formControlName="id">
+            </div>
+            <div class="row form-group">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.questionTitle}}
+                <span style="color: red">*</span>
+                </label>
+              </div>
+              <div class="col-md-12 text-left">
+                <textarea *ngIf="editingItem.newElement" rows="3" type="text" class="form-control"
+                          [placeholder]="editingItem.item.label"
+                          (keyup)="changeLabel($event.target.value)" #label formControlName="label">
+                </textarea>
+                <textarea *ngIf="!editingItem.newElement" rows="3" type="text" class="form-control"
+                          [(ngModel)]="textArea.label"
+                          #label formControlName="label">
+                </textarea>
+                <p style="color: red" *ngIf="(saveButton || textAreaForm.controls['label'].touched) && textArea.label == '' ">
+                  {{data.errorMessages.labelRequired}}
+                </p>
+              </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.questionHelpText}}
+                </label>
+              </div>
+              <div class="col-md-12 text-left">
+                <input *ngIf="editingItem.newElement" type="text" class="form-control"
+                       [placeholder]="editingItem.item.helpText"
+                       (keyup)="changeHelpText($event.target.value)" #helpText formControlName="helpText">
+                <input *ngIf="!editingItem.newElement" type="text" class="form-control" [(ngModel)]="textArea.helpText"
+                       #helpText formControlName="helpText">
+
+              </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="col-md-4 text-left">
+                <label class="control-label default font-size-15" *ngIf="data != null">{{data.formQuestion.questionRequired}}</label>
+              </div>
+              <div class="col-md-8 text-center">
+                <div class="col-md-6 col-md-offset-3">
+                  <input type="checkbox" formControlName="required"  [(ngModel)]="textArea.required" #required>
+
+                  <!--<input type="checkbox" class="form-control"-->
+                         <!--[(ngModel)]="textArea.required"-->
+                         <!--#required formControlName="required">-->
+                </div>
+              </div>
+            </div>
+        <hr>
+        <div class="row form-group">
+          <div class="col-md-12 text-left">
+            <label class="control-label" *ngIf="data != null">{{data.formQuestion.answerPlaceholder}}
+            </label>
+          </div>
+          <div class="col-md-12 text-left">
+            <input *ngIf="editingItem.newElement" type="text" class="form-control" [placeholder]="editingItem.item.placeHolder"
+                   (keyup)="changePlaceHolder($event.target.value)" #placeHolder formControlName="placeHolder">
+            <input *ngIf="!editingItem.newElement" type="text" class="form-control" [(ngModel)]="textArea.placeHolder"
+                   #placeHolder formControlName="placeHolder">
+
+          </div>
+        </div>
+        <hr>
+        <br>
+        <div class="row form-group">
+          <div class="w-100">
+            <button class="btn btn-sm btn-cancel-back" style="margin-top: 10px!important;" (click)="close()" *ngIf="data != null">
+                  <span>{{data.public.close}}</span>
+                </button>
+          <button class="btn btn-sm btn-action"  style="margin-top: 10px!important;" (click)="save()" *ngIf="data != null">
+                  <span>{{data.public.save}}</span>
+                </button>
+          </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="panel panel-default">
+      <div class="panel-body backShadow">
+
+        <div class="col-md-12 text-right" *ngIf="data != null">
+          <h4>{{data.formQuestion.questionTitle}}:</h4>
+          <span>{{textArea.label}}</span>
+          <span style="color: red" *ngIf="textArea.required">*</span>
+          <a class="toolTipColor" [title]="textArea.helpText">
+            <i class="fa fa-info-circle"></i>
+          </a>
+        </div>
+
+        <!--questionTitle image-->
+        <!--<div class="col-md-12">-->
+          <!--<br>-->
+          <!--<div class="col-md-6">-->
+            <!--<input type="file" accept="image/*" id="image" class="upload" (change)="settingQuestionImage($event)"/>-->
+          <!--</div>-->
+          <!--<div class="col-md-6" *ngIf="textArea.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE">-->
+            <!--<img style="width:200px; border-radius: 7px" [attr.src]="textArea.picture.imageData">-->
+            <!--<i class="fa fa-times" aria-hidden="true" style="color: red " (click)="deleteQuestionImage()"></i>-->
+          <!--</div>-->
+        <!--</div>-->
+
+      </div>
+    </div>
+  </div>
+</div>

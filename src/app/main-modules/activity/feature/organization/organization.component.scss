@@ -1,0 +1,19 @@
+.placeholder {
+  position: absolute;
+  right: 54px;
+  top:7px;
+  font-size: 20px;
+  z-index: 15;
+  background: #fff;
+  padding: 0 5px;
+  display: inline-block;
+  color: #8a8f94;
+  transition: all 0.2s ease;
+  &.active {
+    top: -10px;
+    z-index: 999;
+    font-size: 14px;
+
+  }
+}
+

@@ -1,0 +1,40 @@
+.placeholder {
+  position: absolute;
+  right: 54px;
+  top:7px;
+  font-size: 20px;
+  z-index: 15;
+  /*background: #fff;*/
+  background: rgb(255,255,255);
+  background: -moz-linear-gradient(180deg, rgba(255,255,255,1) 51%, rgba(255,255,255,0.15449929971988796) 100%);
+  background: -webkit-linear-gradient(180deg, rgba(255,255,255,1) 51%, rgba(255,255,255,0.15449929971988796) 100%);
+  background: linear-gradient(180deg, rgba(255,255,255,1) 51%, rgba(255,255,255,0.15449929971988796) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff",endColorstr="#ffffff",GradientType=1);
+  padding: 0 5px;
+  display: inline-block;
+  color: #8a8f94;
+  transition: all 0.2s ease;
+}
+.placeholder.active {
+  top: -10px;
+  z-index: 999;
+  font-size: 14px;
+}
+
+h4 {
+  font-size: 1rem;
+}
+
+fieldset {
+  padding: 10px;
+}
+
+input[type=checkbox] {
+  align-self: center;
+  display: flex;
+  margin-left: 7px;
+  cursor: pointer;
+}
+.determine-access label{
+  cursor: pointer;
+}

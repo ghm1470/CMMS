@@ -1,0 +1,149 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+
+        <ng-container *ngIf="mode === actionMode.ADD">
+          <i class="fa fa-plus"></i>&nbsp;
+          ارسال پیام
+        </ng-container>
+
+        <ng-container *ngIf="mode === actionMode.VIEW">
+          <i class="fa fa-eye"></i>&nbsp;
+          مشاهده ی پیام
+        </ng-container>
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+        <button (click)="cancel()"
+                class="btn btn-cancel-back btn-sm">
+          بازگشت
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <form #inboxForm="ngForm" (submit)="action(inboxForm)">
+    <div class="card-body card-body-content">
+      <div class="row">
+        <div class="col-md-12" style="margin-top: 15px">
+            <div class="row">
+
+<!--              <div class="col-md-6 form-group required col-sm-12">-->
+<!--                <br>-->
+<!--                <i class="fas  fa-calendar  prefix grey-text" style="margin-right: 5px"></i>-->
+<!--                <span class="for-label" style="margin-right: 5px ; ">تاریخ ارسال:</span>-->
+<!--                <span-->
+<!--                  style="margin-right: 15px">-->
+<!--&lt;!&ndash;                  {{MyToolkit.En2Fa(MyToolkit2.Moment.getJaliliDateFromIsoOrFull(inbox.creationDate))}}&ndash;&gt;-->
+<!--                  {{inbox.creationDate| convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY|perNumber}}_{{inbox.creationDate|convertToJaliliDate:dateViewMode.TIME|perNumber}}-->
+<!--                </span>-->
+<!--                &lt;!&ndash;{{inbox.creationDate | convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}&#45;&#45;-->
+<!--                لانگ را به تاریخ شمسی تبدیل میکند ولی بالایی به ساعت و تاریخ شمسی تبدیل میکند&ndash;&gt;-->
+<!--              </div>-->
+<!--              <div class="col-md-6 form-group required col-sm-12">-->
+<!--                <br>-->
+
+<!--                <i class="fas fa-user prefix grey-text" style="margin-right: 5px"></i>-->
+<!--                <span class="for-label" style="margin-right: 5px;">ارسال کننده:</span>-->
+<!--                <span style="font-size: 12px;margin-top: 7px; margin-right: 15px">{{user.name}} {{user.family}}</span>-->
+<!--              </div>-->
+              <div class="col-md-6 form-group required col-sm-12">
+                <label class="for-label" for="recipient" style="margin-right: 5px; ">گیرنده:</label>
+                <span style="color: red">*</span>
+
+                <div class="input-group input-group-sm">
+
+                  <!--=============================-->
+                  <ng-select dir="rtl" [(ngModel)]="inbox.recipientUserId"
+                             placeholder="گیرنده" name="recipient"
+                             style="width: 100%; margin-bottom: 15px ; font-size: 13px"
+                             dropdownPosition="bottom"
+                             id="recipient"
+                             nbvRequired #recipient="ngModel"
+                             nbvRequiredMsgHtml="انتخاب گیرنده ی پیام الزامی می باشد."
+                             [class.is-valid]="!(recipient?.errors?.nbvRequired ) "
+                             [class.is-invalid]="(recipient?.errors?.nbvRequired ) && recipient.touched"
+                             dest="recipientValidation">
+<!--             && stringLength(inbox.recipientUserId,'recipient')     -->
+                    <ng-option value="-1" disabled="">انتخاب گیرنده ی پیام</ng-option>
+                    <ng-option *ngFor="let item of userList; let i = index"
+                               [value]="item.id">
+                      {{item.name}} {{item.family}}
+                    </ng-option>
+                  </ng-select>
+                  <div id="recipientValidation"></div>
+                </div>
+                </div>
+              <div class="col-md-6 form-group required col-sm-12">
+                <label for="Subject" class="for-label" style="margin-right: 5px; ">عنوان پیام:</label>
+                <span style="color: red">*</span>
+                <div class="input-group">
+<!--                         (change)="stringLength(inbox.subject,'subject')"
+-->
+                  <input type="text"
+                         id="subject"
+                         class="form-control form-control-sm"
+                         name="subject"
+                         nbvMaxlength="70"
+                         (change)="trim()"
+                         nbvMaxlengthMsgHtml="موضوع پیام باید کمتر از ۷۰ کارکتر باشد."
+                         nbvRequired #subject="ngModel"
+                         nbvRequiredMsgHtml="تکمیل فیلد الزامی می باشد."
+                         [class.is-valid]="!(subject?.errors?.nbvRequired || subject?.errors?.nbvMaxlength)"
+                         [class.is-invalid]="subject?.errors?.nbvRequired  && subject.touched"
+                         dest="subjectValidation"
+                         [(ngModel)]="inbox.subject">
+                </div>
+                <div id="subjectValidation"></div>
+              </div>
+
+              <div class="col-md-12 form-group required">
+<!--                <fieldset class="scheduler-border" id="comapvny-documents" style="background-color: #f5f5f5">-->
+                  <h6> متن پیام
+                    <span style="color: red">*</span>
+                  </h6>
+                  <div class="form-group has-feedback">
+                    <ckeditor [(ngModel)]="inbox.message"
+name="dddd"
+                              [config]="config"
+                              [editorUrl]="'../../../../../../../../assets/ckeditor_4.13.1_full/ckeditor/ckeditor.js'">
+                    </ckeditor>
+<!--                    <div style="color: red; margin-top: 10px" *ngIf="myckeditor.invalid && myckeditor.touched" class="help-block">*تکمیل متن پیام-->
+<!--                       الزامی می باشد.-->
+<!--                    </div>-->
+                  </div>
+<!--                </fieldset>-->
+              </div>
+
+
+              <div class="col-md-12">
+<!--                (finishedUpload)="allowToSaveAfterUpload"-->
+                <app-document
+                  (documents)="changeDocumentList($event)"
+                (formData)="getFormData($event)"
+                (finishedUpload)="allowToSaveAfterUpload($event)"></app-document>
+              </div>
+
+
+
+            </div>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="card-footer text-left">
+
+      <button class="btn btn-action btn-sm " *ngIf="!loading" type="submit">
+        <span *ngIf="mode === actionMode.ADD">ارسال</span>
+
+      </button>
+      <button class="btn btn-action btn-sm " *ngIf="loading" type="button">
+        <span *ngIf="mode === actionMode.ADD">ارسال</span>
+        <i class="fa fa-spinner fa-pulse "></i>
+
+      </button>
+    </div>
+  </form>
+</div>
+

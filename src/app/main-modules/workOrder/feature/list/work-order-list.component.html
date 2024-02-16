@@ -1,0 +1,678 @@
+<ng-container *ngIf="listMode">
+
+
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6 col-8 col-sm-6 card-title">
+                    <i class="fa fa-list"></i>&nbsp;&nbsp;
+                    لیست آرشیو دستور کار
+                </div>
+                <div class="col-md-4 col-4 col-sm-6 text-left">
+<!--                    <button title="جستجو" data-toggle="collapse" href="#work-search" (click)="readSearchService = true "-->
+<!--                            class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">-->
+<!--                        <i class="fa fa-search"></i>-->
+<!--                    </button>-->
+                    <!--        <ng-container *ngIf="roleList.WorkOrder_create">-->
+                    <!--          <button [routerLink]="'action'" [queryParams]="{mode: actionMode.ADD}"-->
+                    <!--                  class="btn btn-secondary btn-sm">-->
+                    <!--            <i class="fa fa-plus"></i>&nbsp;&nbsp;-->
+                    <!--            افزودن-->
+                    <!--          </button>-->
+                    <!--        </ng-container>-->
+                </div>
+
+                                <div class="col-md-1">
+                                    <div class="row justify-content-center m-0">
+
+                                        <ng-container *ngIf=" entityList.length>0">
+
+                                            <img src="assets/images/excel.PNG" class=" cursor-pointer"
+                                                 (click)="fireEvent()"
+                                                 matTooltip="دانلود  به صورت excel"
+                                                 style="    width: 30px;border-radius: 20%; height: 30px;">
+
+                                        </ng-container>
+                                    </div>
+                                </div>
+                <div class="col-md-2">
+                    <div class="row justify-content-end m-0">
+
+                        <div class="col-3 text-left">
+                            <ng-container >
+                                <img src="assets/images/excel.PNG" class=" cursor-pointer"
+                                     (click)="getAllWorkOrderForExcel('excel')"
+                                     matTooltip="دانلود  به صورت excel"
+                                     style="    width: 30px;border-radius: 20%; height: 30px;">
+
+                            </ng-container>
+                        </div>
+                        <div class="col-3 text-right">
+                            <ng-container *ngIf="!loadingOpenPdf">
+                                <img src="assets/images/pdf-download.png" class=" cursor-pointer"
+                                     (click)="getAllWorkOrderForExcel('pdf')"
+                                     matTooltip="دانلود  به صورت pdf"
+                                     style="    width: 30px;border-radius: 20%; height: 30px;">
+                            </ng-container>
+                            <ng-container *ngIf="loadingOpenPdf">
+                                                <span class="fa fa-spinner fa-spin ml-2"
+                                                      matTooltip="درحال ایجاد فایل pdf"
+                                                ></span>
+                            </ng-container>
+                        </div>
+                        <div class="col-3 text-center">
+                            <button title="جستجو" data-toggle="collapse" href="#work-search" (click)="readSearchService = true "
+                                    class="btn btn-outline-secondary btn-sm" >
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="card-body card-body-content  ">
+
+            <div class="collapse" id="work-search">
+                <div class="card" style="margin-bottom: 10px">
+                    <div class="card-body card-body-filter">
+                        <div class="row">
+                            <!--                <div class="col-md-2   form-group">-->
+                            <!--                    <label class="for-label">عنوان دستور کار</label>-->
+                            <!--                    <input type="text" class="form-control form-control-sm" placeholder="عنوان دستور کار"-->
+                            <!--                           style="width: 100%" [(ngModel)]="getAllByFilterAndPagination.title">-->
+                            <!--                </div>-->
+
+
+                            <!--                <div class="col-md-2 form-group">-->
+                            <!--                    <label class="for-label">کد دستور کار</label>-->
+                            <!--                    <input type="text" class="form-control form-control-sm" placeholder="کد دستور کار"-->
+                            <!--                           style="width: 100%" [(ngModel)]="getAllByFilterAndPagination.code">-->
+                            <!--                </div>-->
+                            <!--                <div class="col-md-2">-->
+                            <!--                    <label class="for-label"> وضعیت </label>-->
+                            <!--                    <ng-select bindLabel="name" bindValue="id" [(ngModel)]="getAllByFilterAndPagination.statusId"-->
+                            <!--                               [items]="workOrderStatusList" [placeholder]="'وضعیت  '"></ng-select>-->
+                            <!--                </div>-->
+                            <div class="col-md-3">
+                                <label class="for-label">نام دستگاه</label>
+                                <ng-select bindLabel="name" bindValue="id"
+                                           [(ngModel)]="getAllByFilterAndPagination.assetId"
+                                           [items]="assetList" [placeholder]="'نام دستگاه'"></ng-select>
+                            </div>
+                            <!--                <div class="col-md-2">-->
+                            <!--                    <label class="for-label">پروژه</label>-->
+                            <!--                    <ng-select bindLabel="name" bindValue="id" [(ngModel)]="getAllByFilterAndPagination.projectId"-->
+                            <!--                               [items]="projectList" [placeholder]="'پروژه'"></ng-select>-->
+                            <!--                </div>-->
+                            <!--                <div class="col-md-2">-->
+                            <!--                    <label class="for-label">اولویت</label>-->
+                            <!--                    <ng-select bindLabel="_title" bindValue="_value" [(ngModel)]="getAllByFilterAndPagination.priority"-->
+                            <!--                               [items]="priorityList" [placeholder]="'اولویت'"></ng-select>-->
+                            <!--                </div>-->
+                            <!--                <div class="col-md-2">-->
+                            <!--                    <label class="for-label">نوع بازدید</label>-->
+                            <!--                    <ng-select bindLabel="_title" bindValue="_value"-->
+                            <!--                               [(ngModel)]="getAllByFilterAndPagination.maintenanceType"-->
+                            <!--                               [items]="maintenanceTypeList" [placeholder]="'نوع بازدید'"></ng-select>-->
+                            <!--                </div>-->
+                            <div class="col-md-3">
+                                <label class="for-label" style="color: #191b1c">شماره برگه em</label>
+                                <input class="form-control form-control-sm"
+                                       [(ngModel)]="getAllByFilterAndPagination.pmSheetCode"
+                                       style="direction: ltr" id="pmSheetCode" name="pmSheetCode"
+                                       maxlength="5"
+                                       placeholder="em شماره برگه   "
+                                       appNumeric
+                                       autocomplete="off">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="for-label">تاریخ وقوع خرابی(از تاریخ) </label>
+                                <input class="form-control form-control-sm"
+                                       style="direction: ltr" id="failureDateFrom" #requestTime
+                                       placeholder="تاریخ وقوع خرابی(از تاریخ)   "
+                                       autocomplete="off">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="for-label">تاریخ وقوع خرابی(تا تاریخ) </label>
+                                <input class="form-control form-control-sm"
+                                       style="direction: ltr" id="failureDateUntil" #requestTime
+                                       placeholder="تاریخ وقوع خرابی(تا تاریخ) "
+                                       autocomplete="off">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="for-label">نوع درخواست </label>
+                                <ng-select [(ngModel)]="getAllByFilterAndPagination.fromSchedule"
+                                           name="fromSchedule"
+                                           [placeholder]="'نوع درخواست'">
+                                    <ng-option [value]="true">پیشگیرانه</ng-option>
+                                    <ng-option [value]="false"> اضطراری</ng-option>
+                                </ng-select>
+                            </div>
+                            <!--                <div class="col-md-2">-->
+                            <!--                    <label class="for-label"> تاریخ شروع</label>-->
+                            <!--                    <input class="form-control form-control-sm" id="startDate" #startDate placeholder="تاریخ شروع پروژه"-->
+                            <!--                           autocomplete="off">-->
+                            <!--                    &lt;!&ndash;<ng-select bindLabel="_title" bindValue="_value" [(ngModel)]="getAllByFilterAndPagination.startDate"&ndash;&gt;-->
+                            <!--                    &lt;!&ndash;[items]="schedulingList" [placeholder]="'زمان شروع'"></ng-select>&ndash;&gt;-->
+                            <!--                </div>-->
+                            <!--                <div class="col-md-2">-->
+                            <!--                    <label class="for-label">تاریخ پایان</label>-->
+                            <!--                    <input class="form-control form-control-sm" id="endDate" #endDate placeholder="تاریخ پایان پروژه"-->
+                            <!--                           autocomplete="off">-->
+                            <!--                    &lt;!&ndash;<ng-select bindLabel="_title" bindValue="_value" [(ngModel)]="getAllByFilterAndPagination.startDate"&ndash;&gt;-->
+                            <!--                    &lt;!&ndash;[items]="schedulingList" [placeholder]="'زمان پایان'"></ng-select>&ndash;&gt;-->
+                            <!--                </div>-->
+                            <div class="col-md-1 text-left" style="margin-top: 30px;">
+                                <button class="btn btn-sm  btn-search" (click)="search()">
+                                    <!--<i class="fa fa-search"></i>-->
+                                    جستجو
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="loading-get-one text-center" *ngIf="loading">
+                <span class="mt-5 px-4  align-items-center d-inline-flex">
+                  <span class="fa fa-spinner fa-spin ml-2"></span>
+                  درحال بارگذاری
+                </span>
+            </div>
+            <div class="col-md-12 text-center">
+                <a *ngIf="!entityList.length&&!loading" style="color: #7884a7;    margin: 20px;">دستور کار ثبت نشده!</a>
+            </div>
+            <ng-container *ngIf="entityList.length">
+                <div class="tab-pane fade show active myTable overflow-auto">
+                <table class="table table-bordered table-striped table-responsive-md">
+                    <thead>
+                    <tr style="text-align: center">
+                        <th class="text-center">ردیف</th>
+                        <!--            <th class="text-center">عنوان</th>-->
+                        <th class="text-center">نام دستگاه</th>
+                        <th>شماره برگه em</th>
+
+                        <!--            <th class="text-center">کد</th>-->
+                        <!--            <th class="text-center">اولویت</th>-->
+                        <!--            <th class="text-center">نوع بازدید</th>-->
+                        <!--            <th class="text-center">پروژه</th>-->
+                        <!--            <th class="text-center">وضعیت</th>-->
+                        <th class="text-center">تاریخ وقوع خرابی</th>
+                        <th class="text-center"> تاریخ راه اندازی</th>
+                        <th class="text-center">نوع درخواست</th>
+                        <th class="text-center">مشاهده</th>
+                        <th class="text-center">ویرایش</th>
+                        <th class="text-center">حذف</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ng-container *ngFor="let item of entityList; let i = index">
+                        <tr class="text-center">
+                            <td class="text-center">
+                                {{(i + 1 + (pageIndex * pageSize))}}
+                            </td>
+                            <!--                <td  class="text-center">{{item.title}}</td>-->
+                            <td class="text-center">{{item?.asset?.name}}</td>
+                            <td class="text-center">{{item?.pmSheetCode}}</td>
+
+                                <!--                <td  class="text-center">{{item.code}}</td>-->
+                            <!--                <td class="text-center">-->
+                            <!--                    <ng-container *ngFor="let priority of priorityList">-->
+                            <!--                        <ng-container *ngIf="priority._value === item.priority">-->
+                            <!--                            {{priority._title}}-->
+                            <!--                        </ng-container>-->
+                            <!--                    </ng-container>-->
+                            <!--                </td>-->
+                            <!--                <td class="text-center">-->
+                            <!--                    <ng-container *ngFor="let maintenanceType of maintenanceTypeList">-->
+                            <!--                        <ng-container *ngIf="maintenanceType._value === item.maintenanceType">-->
+                            <!--                            {{maintenanceType._title}}-->
+                            <!--                        </ng-container>-->
+                            <!--                    </ng-container>-->
+                            <!--                </td>-->
+                            <!--                <td>{{item?.project?.name}}</td>-->
+                            <!--                <td class="text-center">{{item?.status?.name}}-->
+                            <!--                </td>-->
+                            <td class="text-center" style="direction: ltr">
+                                {{moment.convertIsoToJDateWithTime(item?.startDate) | perNumber}}
+                            </td>
+                            <td class="text-center" style="direction: ltr">
+                                {{moment.convertIsoToJDateWithTime(item?.endDate) | perNumber}}
+                                <!--                    {{item?.endDate| convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                            </td>
+                            <td class="text-center">
+                                <ng-container *ngIf="item.fromSchedule === true">پیشگیرانه</ng-container>
+                                <ng-container *ngIf="item.fromSchedule === false"> اضطراری</ng-container>
+                            </td>
+                            <td class="text-center">
+                                <ng-container *ngIf="roleList.WorkOrderRandom_see;else notEditSeeTemp">
+                                    <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                       (click)="chooseSelectedItemForView(item)"
+                                       style="cursor: pointer ; font-weight: bold">
+                                        <i class="fa fa-eye" title="مشاهده"></i>
+                                    </a>
+                                </ng-container>
+                                <ng-template #notEditSeeTemp>
+                                    <i class="fa fa-eye" title="مشاهده" style="cursor: no-drop"></i>
+
+                                </ng-template>
+                            </td>
+                            <td class="text-center">
+                                <ng-container *ngIf="roleList.WorkOrderRandom_update;else notEditAccessTemp">
+
+                                    <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                       (click)="chooseSelectedItemForEdit(item)"
+                                       style="cursor: pointer ; font-weight: bold">
+                                        <i class="fa fa-edit" title="ویرایش"
+                                           *ngIf="!loadingForCheckUpdate||item.id!==selectedWorkOrderIdForCheck"></i>
+                                        <i *ngIf="loadingForCheckUpdate&&item.id===selectedWorkOrderIdForCheck"
+                                           class="fa fa-spinner fa-pulse fa-1x"></i>
+                                    </a>
+                                </ng-container>
+                                <ng-template #notEditAccessTemp>
+                                    <i class="fa fa-edit" title="ویرایش" style="cursor: no-drop"></i>
+
+                                </ng-template>
+                            </td>
+                            <td class="text-center">
+
+
+                                <ng-container *ngIf="roleList.WorkOrderRandom_delete;else notDeleteAccessTemp">
+                                    <a class="btn btn-sm btn-outline-lightning rounded-0"
+                                       style="cursor: pointer"
+                                       (click)="showModalDelete(item,i)"
+                                    >
+                                        <i class="fa fa-trash" title="حذف"
+                                           *ngIf="!loadingForCheckDelete||item.id!==selectedWorkOrderIdForCheck"></i>
+                                        <i *ngIf="loadingForCheckDelete&&item.id===selectedWorkOrderIdForCheck"
+                                           class="fa fa-spinner fa-pulse fa-1x"></i>
+                                    </a>
+                                </ng-container>
+                                <ng-template #notDeleteAccessTemp>
+                                    <i class="fa fa-trash" style="cursor: no-drop" title="حذف"></i>
+
+                                </ng-template>
+                            </td>
+                        </tr>
+                    </ng-container>
+
+
+                    </tbody>
+                </table>
+                </div>
+
+            </ng-container>
+            <!--    pagination-->
+            <app-paginator
+                    [totalElements]="length"
+                    [pageSize]="pageSize"
+                    [pageIndex]="pageIndex"
+                    [pageSizeOptions]="[]"
+                    [showFirstLastButtons]="true"
+                    (page)=" changePage($event)"
+            ></app-paginator>
+
+
+            <!--    pagination-->
+
+        </div>
+    </div>
+
+</ng-container>
+<ng-container *ngIf="!listMode">
+    <app-work-order-action
+            [mode]="modeForAction"
+            [workOrderId]="selectedItemIdForAction"
+            [from]="'workOrder'"
+            (back)="backEmit()"
+            (edit)="getPage()"
+    >
+
+    </app-work-order-action>
+</ng-container>
+
+<!--**************************************************************************-->
+<app-conferm-delete
+        [title]="selectedItemForDelete.title"
+        [loading]="selectedItemForDelete.loading"
+        [modalId]="'modalId'+selectedItemForDelete.id"
+        (value)="deleteItem($event)"
+></app-conferm-delete>
+<!--***************************************************************************-->
+
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="true"
+        [dataBackdrop]="true"
+
+        [modalSize]="MyModalSize.CUSTOM_WIDTH"
+        [customWidthPercent]="{xs: 120, md:65}"
+        autoShow="true"
+        [myId]="workOrderSearchModal">
+    <div modal-header>
+        جستجو بر اساس:
+    </div>
+    <div modal-body style="display: flow-root">
+
+        <div class=" table-responsive-md">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]="searchBoxSelected.title && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px;"></i>
+                                        عنوان دستور کار
+                                        <div class="btn-group-sm ">
+                                            <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                                    *ngIf="searchBoxSelected.title === false"
+                                                    style="margin-right: 23px "
+                                                    (click)="searchBoxSelected.title = true">
+                                                افزودن
+                                            </button>
+                                            <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                                    *ngIf="searchBoxSelected.title === true"
+                                                    style="margin-right: 14px "
+                                                    (click)="searchBoxSelected.title = false">
+                                                برداشتن
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]="searchBoxSelected.code && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px"></i>
+                                کد دستور کار
+                                <hr style="margin-top: 10px ; margin-bottom:  10px">
+                                <div class="btn-group-sm ">
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.code === false"
+                                            style="margin-right: 25px " (click)="searchBoxSelected.code = true">
+                                        افزودن
+                                    </button>
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.code === true"
+                                            style="margin-right: 25px " (click)="searchBoxSelected.code = false">
+                                        برداشتن
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]="searchBoxSelected.statusId === true && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px"></i>
+                                وضعیت درخواست
+
+
+                                <div class="btn-group-sm ">
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.statusId === false"
+                                            (click)="searchBoxSelected.statusId = true">
+                                        افزودن
+                                    </button>
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.statusId === true"
+                                            style="margin-right: -10px " (click)="searchBoxSelected.statusId = false">
+                                        برداشتن
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]="searchBoxSelected.assetId && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px"></i>
+                                دارایی
+
+                                <div class="btn-group-sm ">
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.assetId === false"
+                                            style=" margin-right: 90px; " (click)="searchBoxSelected.assetId = true">
+                                        افزودن
+                                    </button>
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.assetId === true"
+                                            style="margin-right: 80px; " (click)="searchBoxSelected.assetId = false">
+                                        برداشتن
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]=" searchBoxSelected.projectId  && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px"></i>
+                                پروژه
+
+                                <div class="btn-group-sm ">
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.projectId === false"
+                                            style=" margin-right: 95px;" (click)="searchBoxSelected.projectId = true">
+                                        افزودن
+                                    </button>
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.projectId === true"
+                                            style="margin-right: 88px; " (click)="searchBoxSelected.projectId = false">
+                                        برداشتن
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]=" searchBoxSelected.priority  && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px"></i>
+                                اولویت
+
+                                <div class="btn-group-sm ">
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.priority === false"
+                                            style=" margin-right: 90px;" (click)="searchBoxSelected.priority = true">
+                                        افزودن
+                                    </button>
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.priority === true"
+                                            style="margin-right: 80px; " (click)="searchBoxSelected.priority = false">
+                                        برداشتن
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]=" searchBoxSelected.maintenanceType  && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px"></i>
+                                نوع بازدید
+                                <div class="btn-group-sm ">
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.maintenanceType === false"
+                                            style=" margin-right: 65px;"
+                                            (click)="searchBoxSelected.maintenanceType = true">
+                                        افزودن
+                                    </button>
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.maintenanceType === true"
+                                            style="margin-right: 56px; "
+                                            (click)="searchBoxSelected.maintenanceType = false">
+                                        برداشتن
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]=" searchBoxSelected.fromSchedule  && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px"></i>
+                                وضعیت زمان بندی
+
+                                <div class="btn-group-sm ">
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.fromSchedule === false"
+                                            style=" margin-right: 15px;"
+                                            (click)="searchBoxSelected.fromSchedule = true">
+                                        افزودن
+                                    </button>
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.fromSchedule === true"
+                                            style="margin-right: 5px; "
+                                            (click)="searchBoxSelected.fromSchedule = false">
+                                        برداشتن
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]=" searchBoxSelected.startDate  && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px"></i>
+                                زمان شروع
+
+                                <div class="btn-group-sm ">
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.startDate === false"
+                                            style=" margin-right: 62px;" (click)="searchBoxSelected.startDate = true ">
+                                        افزودن
+                                    </button>
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.startDate === true"
+                                            style="margin-right: 54px; " (click)="searchBoxSelected.startDate = false">
+                                        برداشتن
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]=" searchBoxSelected.endDate  && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px"></i>
+                                زمان پایان
+
+                                <div class="btn-group-sm ">
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.endDate === false"
+                                            style=" margin-right: 65px;" (click)="searchBoxSelected.endDate = true">
+                                        افزودن
+                                    </button>
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="searchBoxSelected.endDate === true"
+                                            style="margin-right: 56px; " (click)="searchBoxSelected.endDate = false">
+                                        برداشتن
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+    <div modal-footer>
+        <div class="btn-group-sm">
+            <button type="button" class="btn btn-action btn-sm "
+                    (click)="hideModalAssetSearch()" style="margin-right: 70px ">
+                تایید
+            </button>
+        </div>
+    </div>
+
+
+</nbw-modal>
+
+
+<div style="    display: inline-grid;   height: 0px;  overflow: hidden;">
+    <table class="table table-bordered table-striped table-responsive-md" id="htmlData">
+        <thead>
+        <tr style="text-align: center">
+            <th class="text-center">ردیف</th>
+            <th class="text-center">نام دستگاه</th>
+            <th class="text-center">تاریخ وقوع خرابی</th>
+            <th class="text-center"> تاریخ راه اندازی</th>
+            <th class="text-center">نوع درخواست</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of entityListForFile; let i = index">
+            <tr class="text-center">
+                <td class="text-center">
+                    {{(i + 1 + (pageIndex * pageSize)) | perNumber}}
+                </td>
+                <td class="text-center">{{item?.assetName}}</td>
+                <td class="text-center" style="direction: ltr">
+                    {{moment.convertIsoToJDateWithTime(item?.startDate) | perNumber}}
+                </td>
+                <td class="text-center" style="direction: ltr">
+                    {{moment.convertIsoToJDateWithTime(item?.endDate) | perNumber}}
+                </td>
+                <td class="text-center">
+                    <ng-container *ngIf="item.fromSchedule === true">پیشگیرانه</ng-container>
+                    <ng-container *ngIf="item.fromSchedule === false"> اضطراری</ng-container>
+                </td>
+            </tr>
+        </ng-container>
+
+
+        </tbody>
+    </table>
+
+</div>

@@ -1,0 +1,125 @@
+<div class="collapse" id="project-search">
+    <div class="card" style="margin-bottom: 10px">
+        <div class="card-body card-body-filter">
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    <label class="for-label">عنوان:</label>
+                    <input [(ngModel)]="name" [placeholder]="'عنوان'" class=" form-control">
+                </div>
+                <div class="col-md-3 form-group">
+                    <label class="for-label">کد:</label>
+                    <input [(ngModel)]="code" [placeholder]="'کد'" class=" form-control">
+                </div>
+                <div class="col-md-3" style="margin-top: 30px">
+                    <button class="btn btn-sm  btn-search" (click)="search()">
+                        جستجو
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+<ng-container *ngIf="entityList.length ===0 && loading === false">
+    <div style="text-align: center">نتیجه ای یافت نشد.</div>
+</ng-container>
+<ng-container *ngIf="entityList.length">
+    <table class="table table-bordered table-striped table-responsive-md">
+        <thead>
+        <tr style="text-align: center">
+            <th class="text-center">ردیف</th>
+            <th class="text-center">عنوان</th>
+            <th class="text-center">کد</th>
+            <th class="text-center"> تاریخ شروع</th>
+            <th class="text-center">تاریخ پایان</th>
+            <th class="text-center">آخرین مهلت</th>
+            <th class="text-center">مشاهده</th>
+            <th class="text-center">ویرایش</th>
+            <th class="text-center">حذف</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of entityList; let i = index">
+            <tr class="text-center">
+                <td>
+                    {{(i + 1 + (pageIndex * pageSize))}}
+                </td>
+                <td>{{item.name}}</td>
+                <td>{{item.code}}</td>
+                <td>
+                    <!--                    {{item.startDate | convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                    {{myMoment.convertIsoToJDate(item?.startDate) | perNumber}}
+                </td>
+                <td>
+                    <!--                    {{item.endDate | convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                    {{myMoment.convertIsoToJDate(item?.endDate) | perNumber}}
+                </td>
+                <td>
+                    <!--                    {{item.requiredCompletionDate | convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                    {{myMoment.convertIsoToJDate(item?.requiredCompletionDate) | perNumber}}
+                </td>
+                <td>
+                    <ng-container *ngIf="roleList.Project_see;else notSeeAccessTemp">
+                        <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                           (click)="chooseSelectedItemForView(item)" style="cursor: pointer ; font-weight: bold">
+                            <i class="fa fa-eye" title="مشاهده"></i>
+                        </a>
+                    </ng-container>
+                    <ng-template #notSeeAccessTemp>
+                        <i class="fa fa-eye" title="مشاهده" style="cursor: no-drop"></i>
+                    </ng-template>
+                </td>
+                <td>
+                    <ng-container *ngIf="roleList.Project_update;else notEditAccessTemp">
+                        <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                           (click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">
+                            <i class="fa fa-edit" title="ویرایش"></i>
+                        </a>
+                    </ng-container>
+                    <ng-template #notEditAccessTemp>
+                        <i class="fa fa-edit" title="ویرایش" style="cursor: no-drop"></i>
+                    </ng-template>
+
+                </td>
+                <td>
+                    <ng-container *ngIf="roleList.Project_delete;else notDeleteAccessTemp">
+                        <a class="btn btn-sm btn-outline-lightning rounded-0"
+                           style="cursor: pointer"
+                           (click)="showModalDelete(item,i)"
+                        >
+                            <i class="fa fa-trash" title="حذف"></i>
+                        </a>
+                    </ng-container>
+                    <ng-template #notDeleteAccessTemp>
+                        <i class="fa fa-trash" style="cursor: no-drop" title="حذف"></i>
+                    </ng-template>
+                </td>
+            </tr>
+        </ng-container>
+
+        </tbody>
+    </table>
+</ng-container>
+<!--    pagination-->
+<app-paginator
+        [totalElements]="length"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[]"
+        [showFirstLastButtons]="true"
+        (page)=" changePage($event)"
+></app-paginator>
+
+
+<!--    pagination-->
+
+<!--**************************************************************************-->
+<app-conferm-delete
+        [title]="selectedItemForDelete.title"
+        [loading]="selectedItemForDelete.loading"
+        [modalId]="'modalId'+selectedItemForDelete.id"
+        (value)="deleteItem($event)"
+></app-conferm-delete>

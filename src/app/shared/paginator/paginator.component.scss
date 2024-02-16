@@ -1,0 +1,14 @@
+///deep/ .mat-option-text {
+//  font-family: IRANSans-web-FaNum ;
+//
+//}
+//
+///deep/ .mat-select-value-text {
+//  color: #3a3a3a !important;;
+//  font-family: IRANSans-web-FaNum;
+//}
+
+::ng-deep.cdk-overlay-container {
+  position: fixed;
+  z-index: 1000000;
+}

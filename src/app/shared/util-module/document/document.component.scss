@@ -1,0 +1,122 @@
+//.content {
+//  position: absolute;
+//  //top: 50%;
+//  //left: 50%;
+//  //transform: translate(-50%, 50%);
+//  display: flex;
+//  align-items: center;
+//direction: ltr;
+//  .custom-btn {
+//    height: 50px;
+//    width: 120px;
+//
+//    button {
+//      height: 100%;
+//      width: 100%;
+//      border: none;
+//      outline: none;
+//      background: #6298c2;
+//      color: #fffbff;
+//      border-radius: 5px;
+//      font-size: 15px;
+//      cursor: pointer;
+//      transition: all 0.3s ease;
+//
+//      &:hover {
+//        background: #54789b;
+//      }
+//    }
+//  }
+//  .file-list{
+//    height: 40px;
+//    width: 200px;
+//    background: #6298c2;
+//    color: #fffbff;
+//    padding: 10px 10px;
+//    border-radius: 5px;
+//    margin-left: 15px;
+//
+//    &:before{
+//      position: absolute;
+//      content: '';
+//      height: 15px;
+//      width: 15px;
+//      background: #6298c2;
+//      left: 128px;
+//      top: 50%;
+//      transform: translateY(-50%)rotate(45deg);
+//    }
+//  }
+//
+//}
+.custom-btn1 {
+  background-color: #6298c2;
+  border: none;
+  color: white;
+  //padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 5px;
+  cursor: pointer;
+  height: 50px;
+  width: 130px;
+  border-radius: 10px;
+
+  &:hover {
+    background-color: #5989b2;
+  }
+}
+
+.custom-btn2 {
+  background-color: #6298c2;
+  border: none;
+  color: white;
+  //padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 10px 5px;
+  cursor: pointer;
+  height: 40px;
+  width: 180px;
+  border-radius: 15px;
+  transition: all 0.5s;
+
+  span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+
+    &:after {
+      content: '\00bb';
+      position: absolute;
+      opacity: 0;
+      top: 0;
+      right: -20px;
+      transition: 0.5s;
+    }
+  }
+
+  &:hover span {
+    padding-right: 25px;
+  }
+
+  &:hover span:after {
+    opacity: 1;
+    right: 0;
+
+  }
+
+  &:hover {
+    background-color: #5989b2;
+  }
+}
+
+td {
+  padding: 2px;
+  font-size: 12px
+}

@@ -1,0 +1,79 @@
+<div class="card-body card-body-content">
+    <!--/////////////////////////////////////////////////////-->
+    <app-form-answer *ngIf="form.id"[form]="form"
+
+                     [disabledFiled]="false"
+                     [activityLevelId]=""
+                     [formData]=""
+                     [instanceId]=""
+    >
+
+    </app-form-answer>
+    <div class="col-md-12" style="padding: 0">
+        <ul class="nav nav-tabs" role="navigation" style="text-align: right;padding-right: 0">
+            <li class="nav-item">
+                <a href="#information" style="color: #a0a0a0;font-size: 14px" class="nav-link active"
+                   id="informationB"
+                   data-toggle="tab" role="tab" aria-controls="information"
+                >مشخصات فرم</a>
+            </li>
+            <li class="nav-item" *ngIf="form.id">
+                <a href="#fields" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                   id="fieldsB"
+                   data-toggle="tab" role="tab" aria-controls="fields"
+                >طرح سوال
+                </a>
+            </li>
+
+
+        </ul>
+
+    </div>
+    <!--/////////////////////////////////////////////////////-->
+    <app-loading-spinner [loadingList]="true" *ngIf="loadingGetOne"></app-loading-spinner>
+
+
+    <!--========================carousel-->
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="false">
+        <div class="carousel-inner">
+            <!--===========================  مشخصات فرم=========-->
+            <div class="carousel-item active" id="information">
+                <div class="mt-2">
+                    <fieldset class="scheduler-border" style="background-color: #f7f7f7">
+                        <legend class="scheduler-border">
+                            <h6>
+                                مشخصات فرم
+                                {{form.title ? form.title : '' }}
+                                {{mode !== actionMode.VIEW? ' را تکمیل نمائید' : ''}}
+
+                            </h6>
+                        </legend>
+                        <app-form-information [form]="form"
+                                              [mode]="mode"
+                                              (formIdOut)="form.id=$event"
+                        ></app-form-information>
+                    </fieldset>
+                </div>
+
+            </div>
+            <!--===========================   طرح سوال فرم=========-->
+            <div class="carousel-item " id="fields">
+                <div class="mt-2" *ngIf="form.id">
+                    <fieldset class="scheduler-border" style="background-color: #f7f7f7">
+                        <legend class="scheduler-border">
+                            <h6>
+                                سوال های فرم
+                                {{form.title}}
+                                {{mode !== actionMode.VIEW? ' را تکمیل نمائید' : ''}}
+
+                            </h6>
+                        </legend>
+                        <app-form-fields [form]="form" [mode]="mode"></app-form-fields>
+                    </fieldset>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

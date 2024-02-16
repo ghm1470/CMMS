@@ -1,0 +1,787 @@
+<!--<div class="container-fluid">-->
+  <!--<div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">-->
+    <!--<div class="col-md-12">-->
+      <!--<br>-->
+      <!--<div class="col-md-2 text-right">-->
+        <!--<input type="checkbox" (click)="analysisFilter(0)" checked>&nbsp;-->
+        <!--<img src="~/../assets/images/analysis/total.svg" width="40px" height="40px">-->
+        <!--<span>{{filterType[0]}}</span>-->
+      <!--</div>-->
+      <!--<div class="col-md-2 text-right">-->
+        <!--<input type="checkbox" (click)="analysisFilter(1)">&nbsp;-->
+        <!--<img src="~/../assets/images/analysis/genderA.svg" width="40px" height="40px">-->
+        <!--<span>{{filterType[1]}}</span>-->
+      <!--</div>-->
+      <!--<div class="col-md-2 text-right">-->
+        <!--<input type="checkbox" (click)="analysisFilter(2)">&nbsp;-->
+        <!--<img src="~/../assets/images/analysis/graduation.svg" width="40px" height="40px">-->
+        <!--<span>{{filterType[2]}}</span>-->
+      <!--</div>-->
+      <!--<div class="col-md-2 text-right">-->
+        <!--<input type="checkbox" (click)="analysisFilter(4)">&nbsp;-->
+        <!--<img src="~/../assets/images/analysis/provinceA.png" width="40px" height="40px">-->
+        <!--<span>{{filterType[3]}}</span>-->
+      <!--</div>-->
+      <!--<div class="col-md-2 text-right">-->
+        <!--<button md-raised-button style="background-color: #00E9DA;color: white" (click)="excelOutput()">-->
+          <!--{{data.formAnalysis.excel}}-->
+        <!--</button>&nbsp;-->
+      <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="row">-->
+      <!--<div class="container-fluid mainBox">-->
+        <!--<div class="col-md-12 text-center">-->
+          <!--<br>-->
+<!--          <md-card style="font-family: iranSans;color:#2A00A2">-->
+            <!--<h4>نتایج پاسخ های داده شده به نظرسنجی</h4>-->
+          <!--</md-card>-->
+          <!--<br>-->
+          <!--<br>-->
+        <!--</div>-->
+
+        <!--<div class="form-group" *ngFor="let item of list;let i = index;">-->
+          <!--<div [ngSwitch]="item.question.elementType">-->
+
+            <!--<div *ngSwitchCase="'TEXT_FIELD'">-->
+              <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
+                  <!--<label class="control-label text-justify" style="margin:10px;">-->
+                    <!--<p> سوال {{i+1}}. {{item.question.label}}</p>-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;TextField &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; total&ndash;&gt;-->
+              <!--<div class="row" *ngIf="filterFlag[0]==true">-->
+                <!--<div class="col-md-12 divBorder" *ngFor="let totalAnswer of item.answers;">-->
+                  <!--<div class="col-md-12 text-right">-->
+                    <!--<h4 class="text-center" style="color:#2A00A2;">{{totalAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of totalAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{j+1}}.{{answer}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;TextField &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; gender&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[1]==true  && listGender.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">جنسیت</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4 divBorder" *ngFor="let genderAnswer of listGender[i].answers">-->
+                  <!--<div class="col-md-12 text-center">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{genderAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of genderAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{j+1}}.{{answer}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;TextField &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; degree&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[2]==true  && listDegree.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">مدرک</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4 divBorder" *ngFor="let degreeAnswer of listDegree[i].answers">-->
+                  <!--<div class="col-md-12 text-center">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{degreeAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of degreeAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{j+1}}.{{answer}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+
+              <!--&lt;!&ndash;TextField &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Province&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[4]==true  && listProvince.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">استان</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4 divBorder" *ngFor="let proAnswer of listProvince[i].answers;let index=p;">-->
+                  <!--<div class="col-md-12 text-right">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{proAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of proAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{j+1}}.{{answer}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+                <!--<hr class="hrBorder">-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div *ngSwitchCase="'TEXT_AREA'">-->
+              <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
+                  <!--<label class="control-label  text-justify" style="margin:10px;">-->
+                    <!--<p>سوال {{i+1}}. {{item.question.label}}</p>-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;TextArea &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; total&ndash;&gt;-->
+              <!--<div class="row" *ngIf="filterFlag[0]==true">-->
+                <!--<div class="col-md-12 divBorder" *ngFor="let totalAnswer of item.answers;let index=t;">-->
+                  <!--<div class="col-md-12 text-right">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{totalAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of totalAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{j+1}}.{{answer}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;TextArea &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; gender&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[1]==true  && listGender.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">جنسیت</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4 divBorder" *ngFor="let genderAnswer of listGender[i].answers;let index=g;">-->
+                  <!--<div class="col-md-12 text-right">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{genderAnswer.filteringValue}}</h4></div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of genderAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{j+1}}.{{answer}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;TextArea &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; degree&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[2]==true  && listDegree.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">مدرک</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4 divBorder" *ngFor="let degreeAnswer of listDegree[i].answers;let index=d;">-->
+                  <!--<div class="col-md-12 text-right">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{degreeAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of degreeAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{j+1}}.{{answer}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+
+              <!--&lt;!&ndash;TextArea &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Province&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[4]==true  && listProvince.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">استان</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4 divBorder" *ngFor="let proAnswer of listProvince[i].answers;let index=p;">-->
+                  <!--<div class="col-md-12 text-right">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{proAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of proAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{j+1}}.{{answer}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+                <!--<hr class="hrBorder">-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div *ngSwitchCase="'DATE'">-->
+              <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
+                  <!--<label class="control-label  text-justify" style="margin:10px;">-->
+                    <!--<p>سوال {{i+1}}. {{item.question.label}}</p>-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;Date &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; total&ndash;&gt;-->
+              <!--<div class="row" *ngIf="filterFlag[0]==true">-->
+                <!--<div class="col-md-12 divBorder" *ngFor="let totalAnswer of item.answers;let index=t;">-->
+                  <!--<div class="col-md-12 text-right">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{totalAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of totalAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{answer.year}}/{{answer.month}}/{{answer.day}}.{{j+1}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;Date &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; gender&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[1]==true  && listGender.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">جنسیت</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4 divBorder" *ngFor="let genderAnswer of listGender[i].answers;let index=g;">-->
+                  <!--<div class="col-md-12 text-right">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{genderAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of genderAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{answer.year}}/{{answer.month}}/{{answer.day}}.{{j+1}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;Date &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; degree&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[2]==true  && listDegree.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">مدرک</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4 divBorder" *ngFor="let degreeAnswer of listDegree[i].answers;let index=d;">-->
+                  <!--<div class="col-md-12 text-right">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{degreeAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of degreeAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{answer.year}}/{{answer.month}}/{{answer.day}}.{{j+1}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+
+              <!--&lt;!&ndash;Date &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Province&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[4]==true  && listProvince.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">استان</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4 divBorder" *ngFor="let proAnswer of listProvince[i].answers;let index=p;">-->
+                  <!--<div class="col-md-12 text-right">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{proAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of proAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{answer.year}}/{{answer.month}}/{{answer.day}}.{{j+1}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+                <!--<hr class="hrBorder">-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div *ngSwitchCase="'TIME'">-->
+              <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
+                  <!--<label class="control-label  text-justify" style="margin:10px;">-->
+                    <!--<p>سوال {{i+1}}. {{item.question.label}}</p>-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;Time &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; total&ndash;&gt;-->
+              <!--<div class="row" *ngIf="filterFlag[0]==true">-->
+                <!--<div class="col-md-12 divBorder" *ngFor="let totalAnswer of item.answers;let index=t;">-->
+                  <!--<div class="col-md-12 text-right">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{totalAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of totalAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{answer.hour}}:{{answer.minute}}.{{j+1}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;Time &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; gender&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[1]==true  && listGender.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">جنسیت</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4 divBorder" *ngFor="let genderAnswer of listGender[i].answers;let index=g;">-->
+                  <!--<div class="col-md-12 text-right">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{genderAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of genderAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{answer.hour}}:{{answer.minute}}.{{j+1}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;Time &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; degree&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[2]==true && listDegree.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">مدرک</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4 divBorder" *ngFor="let degreeAnswer of listDegree[i].answers;let index=d;">-->
+                  <!--<div class="col-md-12 text-right">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{degreeAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of degreeAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{answer.hour}}:{{answer.minute}}.{{j+1}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+
+              <!--&lt;!&ndash;Time &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Province&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[4]==true && listProvince.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">استان</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4 divBorder" *ngFor="let proAnswer of listProvince[i].answers;let index=p;">-->
+                  <!--<div class="col-md-12 text-right">-->
+                    <!--<h4 class="text-center" style="color: #2A00A2">{{proAnswer.filteringValue}}</h4>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-12" *ngFor="let answer of proAnswer.filteringAnswers;let j=index;">-->
+                    <!--<p>{{answer.hour}}:{{answer.minute}}.{{j+1}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+                <!--<hr class="hrBorder">-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div *ngSwitchCase="'CHECK_BOX'">-->
+              <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
+                  <!--<label class="control-label  text-justify" style="margin:10px;">-->
+                    <!--<p>سوال {{i+1}}. {{item.question.label}}</p>-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+              <!--</div>-->
+              <!--<div class="col-md-12">-->
+                <!--<div class="col-md-4" style="text-align: right;margin-bottom: 2%"-->
+                     <!--*ngFor="let ch of item.question.option;let p=index;">-->
+                  <!--<div class="col-md-5">-->
+                    <!--{{p+1}}.-->
+                    <!--<span>&nbsp;&nbsp;{{ch.caption}}</span>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-2">-->
+                    <!--<img *ngIf="ch.imageStatus=='IMAGE_SAVED'"-->
+                         <!--src="{{url}}/resources/image/{{formId}}/{{item.question.id}}/{{ch.path}}" height="80px"-->
+                         <!--width="80px"-->
+                         <!--alt="{{ch.alt}}">-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row" *ngIf="filterFlag[0]==true">-->
+                <!--<div class="col-md-12 divBorder text-center">-->
+                  <!--<h4 style="color: #2A00A2">کلی</h4>-->
+                  <!--<div class="col-md-12">-->
+                    <!--<AnalysisChart [filterType]="'total'" [questionType]="'CHECK_BOX'" [total]="item.totalAnswer"-->
+                                   <!--[data]="item.answers" [options]="item.question.option"></AnalysisChart>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[1]==true && listGender.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">جنسیت</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-12">-->
+                  <!--<AnalysisChart [filterType]="'gender'" [questionType]="'CHECK_BOX'" [total]="item.totalAnswer"-->
+                                 <!--[data]="listGender[i].answers"-->
+                                 <!--[options]="listGender[i].question.option"></AnalysisChart>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[2]==true && listDegree.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">مدرک</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-12">-->
+                  <!--<AnalysisChart [filterType]="'degree'" [questionType]="'CHECK_BOX'" [total]="item.totalAnswer"-->
+                                 <!--[data]="listDegree[i].answers"-->
+                                 <!--[options]="listDegree[i].question.option"></AnalysisChart>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[4]==true && listProvince.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">استان</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-12">-->
+                  <!--<AnalysisChart [filterType]="'province'" [questionType]="'CHECK_BOX'" [total]="item.totalAnswer"-->
+                                 <!--[data]="listProvince[i].answers"-->
+                                 <!--[options]="listProvince[i].question.option"></AnalysisChart>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+                <!--<hr class="hrBorder">-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div *ngSwitchCase="'RADIO_BUTTON'">-->
+              <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
+                  <!--<label class="control-label  text-justify" style="margin:10px;">-->
+                    <!--<p>سوال {{i+1}}. {{item.question.label}}</p>-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+              <!--</div>-->
+              <!--<div class="col-md-12">-->
+                <!--<div class="col-md-4 text-center" style="text-align: right;margin-bottom: 2%"-->
+                     <!--*ngFor="let ch of item.question.option;let j=index">-->
+                  <!--<div class="col-md-5">-->
+                    <!--{{j+1}}.-->
+                    <!--<span>&nbsp;&nbsp;{{ch.caption}}</span>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-2">-->
+                    <!--<img *ngIf="ch.imageStatus == 'IMAGE_SAVED'"-->
+                         <!--src="{{url}}/resources/image/{{formId}}/{{item.question.id}}/{{ch.path}}" height="80px"-->
+                         <!--width="80px"-->
+                         <!--alt="{{ch.alt}}">-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row" *ngIf="filterFlag[0]==true">-->
+                <!--<div class="col-md-12 divBorder text-center">-->
+                  <!--<h4 style="color: #2A00A2">کلی</h4>-->
+                  <!--<div class="col-md-12">-->
+                    <!--<AnalysisChart [filterType]="'total'" [questionType]="'RADIO_BUTTON'" [total]="item.totalAnswer"-->
+                                   <!--[data]="item.answers" [options]="item.question.option"></AnalysisChart>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[1]==true && listGender.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">جنسیت</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-12">-->
+                  <!--<AnalysisChart [filterType]="'gender'" [questionType]="'RADIO_BUTTON'" [total]="item.totalAnswer"-->
+                                 <!--[data]="listGender[i].answers"-->
+                                 <!--[options]="listGender[i].question.option"></AnalysisChart>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[2]==true && listDegree.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">مدرک</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-12">-->
+                  <!--<AnalysisChart [filterType]="'degree'" [questionType]="'RADIO_BUTTON'" [total]="item.totalAnswer"-->
+                                 <!--[data]="listDegree[i].answers"-->
+                                 <!--[options]="listDegree[i].question.option"></AnalysisChart>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[4]==true && listProvince.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">استان</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-12">-->
+                  <!--<AnalysisChart [filterType]="'province'" [questionType]="'RADIO_BUTTON'" [total]="item.totalAnswer"-->
+                                 <!--[data]="listProvince[i].answers"-->
+                                 <!--[options]="listProvince[i].question.option"></AnalysisChart>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+                <!--<hr class="hrBorder">-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div *ngSwitchCase="'COMBO_BOX'">-->
+              <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
+                  <!--<label class="control-label text-justify" style="margin:10px;">-->
+                    <!--<p>سوال {{i+1}}. {{item.question.label}}</p>-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+              <!--</div>-->
+              <!--<div class="col-md-12">-->
+                <!--<div class="col-md-4 text-center" style="text-align: right"-->
+                     <!--*ngFor="let ch of item.question.comboBoxOption;let j=index">-->
+                  <!--<span *ngIf="j!=0">{{j+1}}.&nbsp;&nbsp;{{ch}}</span>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row" *ngIf="filterFlag[0]==true">-->
+                <!--<div class="col-md-12 divBorder text-center">-->
+                  <!--<h4 style="color: #2A00A2">کلی</h4>-->
+                  <!--<div class="col-md-12">-->
+                    <!--<AnalysisChart [filterType]="'total'" [questionType]="'COMBO_BOX'" [total]="item.totalAnswer"-->
+                                   <!--[data]="item.answers" [options]="item.question.comboBoxOption"></AnalysisChart>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[1]==true && listGender.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">جنسیت</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-12">-->
+                  <!--<AnalysisChart [filterType]="'gender'" [questionType]="'COMBO_BOX'" [total]="item.totalAnswer"-->
+                                 <!--[data]="listGender[i].answers"-->
+                                 <!--[options]="listGender[i].question.comboBoxOption"></AnalysisChart>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[2]==true && listDegree.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">مدرک</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-12">-->
+                  <!--<AnalysisChart [filterType]="'degree'" [questionType]="'COMBO_BOX'" [total]="item.totalAnswer"-->
+                                 <!--[data]="listDegree[i].answers"-->
+                                 <!--[options]="listDegree[i].question.comboBoxOption"></AnalysisChart>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[4]==true && listProvince.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">استان</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-12">-->
+                  <!--<AnalysisChart [filterType]="'province'" [questionType]="'COMBO_BOX'" [total]="item.totalAnswer"-->
+                                 <!--[data]="listProvince[i].answers"-->
+                                 <!--[options]="listProvince[i].question.comboBoxOption"></AnalysisChart>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+                <!--<hr class="hrBorder">-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div *ngSwitchCase="'MATRIX'">-->
+              <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
+                  <!--<label class="control-label  text-justify" style="margin:10px;">-->
+                    <!--<p>سوال{{i+1}}. {{item.question.label}}</p>-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+              <!--</div>-->
+              <!--<div class="row col-md-8 col-md-offset-2">-->
+                <!--<table class="table table-striped table-hover table-bordered table-condensed text-center">-->
+                  <!--<tr>-->
+                    <!--<td></td>-->
+                    <!--<ng-container *ngFor="let opt of item.question.option">-->
+                      <!--<td>-->
+                        <!--{{opt.caption}}-->
+                        <!--<img class="img-responsive" *ngIf="opt.imageStatus=='IMAGE_SAVED'"-->
+                             <!--src="{{url}}/resources/image/{{formId}}/{{item.question.id}}/{{opt.path}}" height="30px"-->
+                             <!--width="30px"-->
+                             <!--alt="{{opt.alt}}">-->
+                      <!--</td>-->
+                    <!--</ng-container>-->
+                  <!--</tr>-->
+                  <!--<tr *ngFor="let question of item.question.matrixQuestionList">-->
+                    <!--<td>{{question.title}}</td>-->
+                    <!--<td *ngFor="let opt of item.question.option">-->
+                      <!--<input *ngIf="question.multipleSelect" type="checkbox" disabled>-->
+                      <!--<input *ngIf="!question.multipleSelect" type="radio" disabled>-->
+                    <!--</td>-->
+                  <!--</tr>-->
+                <!--</table>-->
+              <!--</div>-->
+              <!--<div class="row" *ngIf="filterFlag[0]==true">-->
+                <!--<div class="col-md-12 divBorder text-center">-->
+                  <!--<h4 style="color: #2A00A2">کلی</h4>-->
+                  <!--<div class="col-md-12">-->
+                    <!--<AnalysisChart [filterType]="'total'" [questionType]="'MATRIX'" [total]="item.totalAnswer"-->
+                                   <!--[data]="item.answers" [options]="item.question.option"></AnalysisChart>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[1]==true && listGender.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">جنسیت</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-12">-->
+                  <!--<AnalysisChart [filterType]="'gender'" [questionType]="'MATRIX'" [total]="item.totalAnswer"-->
+                                 <!--[data]="listGender[i].answers"-->
+                                 <!--[options]="listGender[i].question.option"></AnalysisChart>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[2]==true && listDegree.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">مدرک</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-12">-->
+                  <!--<AnalysisChart [filterType]="'degree'" [questionType]="'MATRIX'" [total]="item.totalAnswer"-->
+                                 <!--[data]="listDegree[i].answers"-->
+                                 <!--[options]="listDegree[i].question.option"></AnalysisChart>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[4]==true && listProvince.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">استان</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-12">-->
+                  <!--<AnalysisChart [filterType]="'province'" [questionType]="'MATRIX'" [total]="item.totalAnswer"-->
+                                 <!--[data]="listProvince[i].answers"-->
+                                 <!--[options]="listProvince[i].question.option"></AnalysisChart>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+                <!--<hr class="hrBorder">-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div *ngSwitchCase="'NUMERICAL'">-->
+              <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
+                  <!--<label class="control-label text-justify" style="margin:10px;">-->
+                    <!--<p>سوال {{i+1}}. {{item.question.label}}</p>-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;numerical     total&ndash;&gt;-->
+              <!--<div class="row" *ngIf="filterFlag[0]==true">-->
+                <!--<div class="col-md-12 divBorder text-center">-->
+                  <!--<h4 style="color: #2A00A2">کلی</h4>-->
+                  <!--<div class="col-md-6 col-md-offset-3">-->
+                    <!--<p-slider id="slider" [min]="item.question.minLength" [max]="item.question.maxLength"-->
+                              <!--[step]="item.question.step" [(ngModel)]="item.answers[0].filteringAnswers[0]"></p-slider>-->
+                    <!--<br><br>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;numerical     gender&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[1]==true && listGender.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">جنسیت</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-8 col-md-offset-2">-->
+                  <!--<div class="col-md-6">-->
+                    <!--<h4 class="text-center">{{listGender[i].answers[0].filteringValue}}</h4>-->
+                    <!--<p-slider id="genderSlider1" [min]="item.question.minLength" [max]="item.question.maxLength"-->
+                              <!--[step]="item.question.step"-->
+                              <!--[(ngModel)]="listGender[i].answers[0].filteringAnswers[0]"></p-slider>-->
+                    <!--<br><br>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-6">-->
+                    <!--<h4 class="text-center">{{listGender[i].answers[1].filteringValue}}</h4>-->
+                    <!--<p-slider id="genderSlider2" [min]="item.question.minLength" [max]="item.question.maxLength"-->
+                              <!--[step]="item.question.step"-->
+                              <!--[(ngModel)]="listGender[i].answers[1].filteringAnswers[0]"></p-slider>-->
+                    <!--<br>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;numerical     Degree&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[2]==true && listDegree.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">مدرک</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4" *ngFor="let degreeAnswer of listDegree[i].answers;let k=index;">-->
+                  <!--<h4 class="text-center">{{degreeAnswer.filteringValue}}</h4>-->
+                  <!--<p-slider id="degreeSlider{{k}}" [min]="item.question.minLength" [max]="item.question.maxLength"-->
+                            <!--[step]="item.question.step" [(ngModel)]="degreeAnswer.filteringAnswers[0]"></p-slider>-->
+                  <!--<br><br>-->
+                <!--</div>-->
+              <!--</div>-->
+
+              <!--&lt;!&ndash;numerical     province&ndash;&gt;-->
+              <!--<div class="row" *ngIf="filterFlag[4]==true && listProvince.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">استان</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4" *ngFor="let proAnswer of listProvince[i].answers;let p=index;">-->
+                  <!--<h4 class="text-center">{{proAnswer.filteringValue}}</h4>-->
+                  <!--<p-slider id="proSlider{{p}}" [min]="item.question.minLength" [max]="item.question.maxLength"-->
+                            <!--[step]="item.question.step" [(ngModel)]="proAnswer.filteringAnswers[0]"></p-slider>-->
+                  <!--<br><br>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+                <!--<hr class="hrBorder">-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div *ngSwitchCase="'STAR_RATING'">-->
+              <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
+                  <!--<label class="control-label text-justify" style="margin:10px;">-->
+                    <!--<p>سوال {{i+1}}. {{item.question.label}}</p>-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<br>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;starRating    Total&ndash;&gt;-->
+              <!--<div class="row" *ngIf="filterFlag[0]==true">-->
+                <!--<div class="col-md-12 divBorder text-center">-->
+                  <!--<h4 style="color: #2A00A2">کلی</h4>-->
+                  <!--<div class="col-md-6 col-md-offset-3">-->
+                    <!--<star-rating-comp [starType]="'svg'" [labelVisible]="true" [direction]="item.question.direction"-->
+                                      <!--[labelText]="item.question.starLabel"-->
+                                      <!--[showHalfStars]="true" [labelPosition]="'top'"-->
+                                      <!--[numOfStars]="item.question.starCount"-->
+                                      <!--[rating]="item.answers[0].filteringAnswers[0]"-->
+                                      <!--[staticColor]="item.question.colorStatus"></star-rating-comp>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;starRating     Gender&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[1]==true && listGender.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">جنسیت</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-6 col-md-offset-3">-->
+                  <!--<div class="col-md-6">-->
+                    <!--<h4 class="text-center">{{listGender[i].answers[0].filteringValue}}</h4>-->
+                    <!--<star-rating-comp [starType]="'svg'" [labelVisible]="true" [direction]="item.question.direction"-->
+                                      <!--[labelText]="item.question.starLabel"-->
+                                      <!--[showHalfStars]="true" [labelPosition]="'top'"-->
+                                      <!--[numOfStars]="item.question.starCount"-->
+                                      <!--[rating]="listGender[i].answers[0].filteringAnswers[0]"-->
+                                      <!--[staticColor]="item.question.colorStatus"></star-rating-comp>-->
+                  <!--</div>-->
+                  <!--<div class="col-md-6">-->
+                    <!--<h4 class="text-center">{{listGender[i].answers[1].filteringValue}}</h4>-->
+                    <!--<star-rating-comp [starType]="'svg'" [labelVisible]="true" [direction]="item.question.direction"-->
+                                      <!--[labelText]="item.question.starLabel"-->
+                                      <!--[showHalfStars]="true" [labelPosition]="'top'"-->
+                                      <!--[numOfStars]="item.question.starCount"-->
+                                      <!--[rating]="listGender[i].answers[1].filteringAnswers[0]"-->
+                                      <!--[staticColor]="item.question.colorStatus"></star-rating-comp>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;starRating    Degree&ndash;&gt;-->
+              <!--<div class="row divBorder" *ngIf="filterFlag[2]==true && listDegree.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">مدرک</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4" *ngFor="let degreeAnswer of listDegree[i].answers;let k=index;">-->
+                  <!--<h4 class="text-center">{{degreeAnswer.filteringValue}}</h4>-->
+                  <!--<star-rating-comp [starType]="'svg'" [labelVisible]="true" [direction]="item.question.direction"-->
+                                    <!--[labelText]="item.question.starLabel"-->
+                                    <!--[showHalfStars]="true" [labelPosition]="'top'"-->
+                                    <!--[numOfStars]="item.question.starCount"-->
+                                    <!--[rating]="degreeAnswer.filteringAnswers[0]"-->
+                                    <!--[staticColor]="item.question.colorStatus"></star-rating-comp>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;starRating      Province&ndash;&gt;-->
+              <!--<div class="row" *ngIf="filterFlag[4]==true && listProvince.length!=0">-->
+                <!--<div class="col-md-12 text-center">-->
+                  <!--<h4 style="color: #2A00A2">استان</h4>-->
+                <!--</div>-->
+                <!--<div class="col-md-4" *ngFor="let proAnswer of listProvince[i].answers;let p=index;">-->
+                  <!--<h4 class="text-center">{{proAnswer.filteringValue}}</h4>-->
+                  <!--<star-rating-comp [starType]="'svg'" [labelVisible]="true" [direction]="item.question.direction"-->
+                                    <!--[labelText]="item.question.starLabel"-->
+                                    <!--[showHalfStars]="true" [labelPosition]="'top'"-->
+                                    <!--[numOfStars]="item.question.starCount"-->
+                                    <!--[rating]="proAnswer.filteringAnswers[0]"-->
+                                    <!--[staticColor]="item.question.colorStatus"></star-rating-comp>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+
+
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="row">-->
+      <!--<br>-->
+    <!--</div>-->
+
+    <!--<div class="row">-->
+      <!--<br>-->
+      <!--<br>-->
+    <!--</div>-->
+
+  <!--</div>-->
+<!--</div>-->
+

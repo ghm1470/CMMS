@@ -1,0 +1,55 @@
+<div class="col-md-12">
+  <div class="col-md-12">
+    <label style="width: 180px; height: 30px; margin: 30px -50px 15px 10px; text-align: center">
+      <a class="btn btn-action btn-sm" style="font-size: 14px;">
+        <i class="fa fa-paperclip " aria-hidden="true"
+           style="font-size: larger"></i>
+        انتخاب فایلها
+      </a>
+      <input type="file" style="display: none;" multiple #input
+             (change)="onChangeUploader(input)">
+    </label>
+  </div>
+  <div class="col-md-12 card table-responsive-md">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th class="text-center" style="width: 5%">ردیف</th>
+        <th class="text-center" >نام فایل</th>
+        <th class="text-center" >نوع فایل</th>
+        <th class="text-center" style="width: 5%"></th>
+        <th class="text-center" style="width: 5%"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let item of documentList; let i = index">
+        <tr class="text-center">
+          <td>{{toolKit2.Common.En2Fa(i + 1)}}</td>
+          <td>{{item.fileName}}</td>
+          <td>{{item.fileContentType}}</td>
+          <td>
+            <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+               (click)="downloadFile(item)" style="cursor: pointer ; font-weight: bold">
+              <i class="fa fa-download" title="دانلود"></i>
+            </a>
+          </td>
+          <td>
+            <a class="btn btn-sm btn-outline-lightning rounded-0"
+               style="cursor: pointer" nbdAreYouSure (then)="deleteItem(item.id)">
+              <i class="fa fa-trash" title="حذف"></i>
+            </a>
+          </td>
+        </tr>
+      </ng-container>
+
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="col-md-12 text-left">
+    <button class="btn btn-action btn-sm" type="button" style="margin-top: 10px; margin-left: -15px" (click)="updateAssetDocumentList()">
+      ثبت اطلاعات
+    </button>
+  </div>
+</div>

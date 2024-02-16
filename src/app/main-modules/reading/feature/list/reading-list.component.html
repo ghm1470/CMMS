@@ -1,0 +1,155 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+        <i class="fa fa-list"></i>&nbsp;&nbsp;
+        <span>
+           متراژخوانی
+         </span>
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+        <button [routerLink]="'action'" [queryParams]="{mode: actionMode.ADD}"
+                class="btn btn-secondary btn-sm">
+          <i class="fa fa-plus"></i>
+          <span class="d-none d-sm-inline d-sm-inline" >
+            &nbsp;&nbsp;
+            افزودن
+            </span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body card-body-content">
+    <fieldset class="scheduler-border" id="comapny-documents" style="background-color: #f7f7f7">
+      <legend class="scheduler-border"><h6>دارایی مورد نظر را انتخاب کنید</h6></legend>
+      <div class="row">
+        <div class="col-md-6">
+          <ng-container *ngIf="!asset.name" >
+            <button class="btn btn-secondary btn-sm" (click)="openAssetModal()">
+              انتخاب دارایی
+            </button>
+          </ng-container>
+
+          <ng-container *ngIf="asset.name" >
+            <label>دارایی انتخاب شده:</label>&nbsp;&nbsp;
+            <strong>{{asset.name}}</strong>&nbsp;&nbsp;
+             <i class="fa fa-times"  title="حذف دارایی انتخاب شده" style="color: red ; cursor: pointer" (click)="deleteSelectedAsset()" ></i>
+          </ng-container>
+
+        </div>
+        <ng-container *ngIf="asset.name" >
+        <div *ngIf="!hasUnitList" class="col-md-6">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-12">
+                <label>مقیاس اندازه گیری:</label>&nbsp;&nbsp;
+                <strong>{{unitName}}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="hasUnitList" class="col-md-6">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6" style="margin-right: -35px">
+                <label>مقیاس اندازه گیری:</label>
+              </div>
+              <div class="col-md-6" style="margin-right: -55px">
+                <ng-select [(ngModel)]="unitId"  (change)="getListSelf(unitId)">
+                  <ng-option *ngFor="let item of unitList" [value]="item.id">{{item.title}}</ng-option>
+                </ng-select>
+              </div>
+            </div>
+          </div>
+        </div>
+        </ng-container>
+      </div>
+    </fieldset>
+
+    <table class="table table-bordered table-striped" style="height: 50px" *ngIf="entityList.length> 0 && asset.name">
+      <thead>
+      <tr>
+        <th class="text-center" style="width: 5%">ردیف</th>
+        <th class="text-center">نام داریی</th>
+        <th class="text-center">واحد اندازه گیری</th>
+        <th class="text-center">کارکرد</th>
+        <th class="text-center"> تاریخ ثبت</th>
+        <th class="text-center"> ثبت شده توسط:</th>
+        <th class="text-center" style="width: 5%">مشاهده</th>
+        <th class="text-center" style="width: 5%">حذف</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let item of entityList; let i = index">
+        <tr class="text-center">
+          <td>
+            {{(i + 1 + (pageIndex * pageSize))}}
+          </td>
+<!--          <td>{{item.asset.name}}{{tools.Fa2En(item.asset.code)}}</td>-->
+          <td>{{item.assetName}}</td>
+          <td>{{item?.unitOfMeasurementName}}</td>
+          <td>{{tools.Fa2En(item?.amount)}}</td>
+          <td>{{MyToolkit.En2Fa(Toolkit2.Moment.getJaliliDateFromIsoOrFull(item?.creationDate))}}</td>
+          <!--<td>{{item?.creationDate | convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}</td>-->
+          <td>{{item?.userName}}</td>
+          <td>
+            <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+               (click)="chooseSelectedItemForView(item)" style="cursor: pointer ; font-weight: bold">
+              <i class="fa fa-eye" title="نمایش"></i>
+            </a>
+          </td>
+          <td *ngIf="item?.userId === user.id && i + 1 === entityList.length">
+<!--               nbdAreYouSure-->
+            <a class="btn btn-sm btn-outline-lightning rounded-0"
+               style="cursor: pointer"
+               (click)="showModalDelete(item,i)">
+              <i class="fa fa-trash" title="حذف"></i>
+            </a>
+          </td>
+          <td *ngIf="item?.userId !== user.id || user.id && i + 1 !== entityList.length">
+              <span class="btn btn-sm btn-outline-lightning rounded-0"
+                    style=" opacity: 0.3; cursor: not-allowed ">
+                <i class="fa fa-trash"></i>
+              </span>
+          </td>
+        </tr>
+      </ng-container>
+
+      </tbody>
+    </table>
+
+    <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+    <div class="col-md-12" *ngIf="showMessage === true">
+      <div class="row">
+        <div class="col-md-12 text-center"><span style="margin-right: 100px"> برای این مقیاس اندازه گیری متراژی ثبت نشده است.</span>
+        </div>
+      </div>
+    </div>
+
+    <!--    pagination-->
+    <app-paginator
+            [totalElements]="length"
+            [pageSize]="pageSize"
+            [pageIndex]="pageIndex"
+            [pageSizeOptions]="[]"
+            [showFirstLastButtons]="true"
+            (page)=" changePage($event)"
+    ></app-paginator>
+
+
+    <!--    pagination-->
+  </div>
+</div>
+
+
+<app-conferm-delete
+        [title]="selectedItemForDelete.title"
+        [loading]="selectedItemForDelete.loading"
+        [modalId]="'modalId'+selectedItemForDelete.id"
+        (value)="deleteItem($event)"
+></app-conferm-delete>
+
+<app-asset-view (parentAsset)="getAsset($event)" [show]="show"></app-asset-view>
+
+<app-reading-view [meteringId]="meteringId"></app-reading-view>

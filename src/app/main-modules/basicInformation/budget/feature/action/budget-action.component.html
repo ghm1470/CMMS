@@ -1,0 +1,135 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+        <ng-container *ngIf="mode === actionMode.ADD">
+          <i class="fa fa-plus"></i>&nbsp;
+          افزودن بودجه
+        </ng-container>
+        <ng-container *ngIf="mode === actionMode.EDIT">
+          <i class="fa fa-edit"></i>&nbsp;
+          ویرایش بودجه</ng-container>
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+        <button (click)="cancel()"
+                class="btn btn-cancel-back btn-sm">
+          بازگشت
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <form #userForm2="ngForm" (submit)="checkCode(userForm2)">
+    <div class="card-body card-body-content">
+      <div class="row">
+        <!--==============================-->
+        <div class="col-md-6 form-group required col-sm-12">
+          <label class="for-label">عنوان بودجه:</label>
+          <label style="color: red">*</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="عنوان بودجه" [(ngModel)]="budget.title"
+                   class="form-control" minlength="1" maxlength="20" name="title2"
+                   nbvRequired #title2="ngModel"
+                   id="title2"
+                   (change)="budget.title = budget.title.trim()"
+                   nbvPattern="{{myPattern.TITLEFa}}"                   nbvRequiredMsgHtml="پرکردن این فیلد الزامی می باشد."
+                   nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."
+                   [class.is-valid]="!(title2?.errors?.nbvRequired || title2?.errors?.nbvPattern)"
+                   [class.is-invalid]="(title2?.errors?.nbvRequired || title2?.errors?.nbvPattern) && (title2.touched || doSave)"
+                   dest="title2Validation">
+          </div>
+          <div id="title2Validation"></div>
+        </div>
+        <!--==============================-->
+        <div class="col-md-6 form-group required col-sm-12">
+          <label class="for-label">کد بودجه:</label>
+          <label style="color: red">*</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="کد بودجه" [(ngModel)]="budget.code"
+                   class="form-control" minlength="1" maxlength="20" name="code"
+                   nbvRequired #code="ngModel"
+                   id="code"
+                   (change)="budget.code = budget.code.trim() ; "
+                   nbvPattern="{{myPattern.EnNumberAndAlphabetic}}"
+                   nbvRequiredMsgHtml="پرکردن این فیلد الزامی می باشد."
+
+                   nbvPatternMsgHtml="کد بودجه باید به صورت کاراکتر انگلیسی وارد گردد."
+                   [class.is-valid]="!(code?.errors?.nbvRequired || code?.errors?.nbvPattern)"
+                   [class.is-invalid]="(code?.errors?.nbvRequired || code?.errors?.nbvPattern) && (code.touched || doSave)"
+                   dest="codeValidation">
+          </div>
+          <div id="codeValidation"></div>
+        </div>
+        <!--==============================-->
+
+        <div class="col-md-6 form-group required col-sm-12">
+          <label class="for-label"> واحد پولی:</label>
+          <label style="color: red">*</label>
+          <div class="input-group input-group-sm">
+            <ng-select dir="rtl" [(ngModel)]="budget.currencyId"
+                       placeholder="واحد پولی" name="currencyId" id="currencyId" style="width: 100%; margin-bottom: 15px ; font-size: 13px"
+                       nbvRequired
+                       (change)="changeCurrency()"
+                       dropdownPosition="bottom">
+              <ng-option value="-1" disabled="">انتخاب واحد پولی</ng-option>
+              <ng-option *ngFor="let item of currencyList; let i = index"
+                         [value]="item.id">
+                {{item.title}}
+              </ng-option>
+            </ng-select>
+          </div>
+          <div id="currencyIdValidation" style="opacity: 0; height: 0"></div>
+        </div>
+        <!--==============================-->
+
+        <div class="col-md-6 form-group required col-sm-12">
+          <label class="for-label">مبلغ بودجه:</label>
+          <label style="color: red">*</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="مبلغ بودجه" [(ngModel)]="budget.budgetAmount"
+                   class="form-control" minlength="1" maxlength="25" name="budgetAmount"
+                   nbvRequired #budgetAmount="ngModel"
+                   id="budgetAmount"
+
+                   dir="ltr"
+                   nbvPattern="{{myPattern.number}}"
+                   nbvPatternMsgHtml="ورودی مبلغ بودجه به صورت عدد می باشد."
+                   nbvRequiredMsgHtml="پرکردن این فیلد الزامی می باشد."
+                   [class.is-valid]="!(budgetAmount?.errors?.nbvRequired || budgetAmount?.errors?.nbvPattern)"
+                   [class.is-invalid]="(budgetAmount?.errors?.nbvRequired || budgetAmount?.errors?.nbvPattern) && (budgetAmount.touched || doSave)"
+                   dest="budgetAmountValidation">
+<!--            currencyMask-->
+<!--            [options]="{prefix: '', precision: 0, thousands: ','}" min="0"-->
+          </div>
+          <div id="budgetAmountValidation"></div>
+        </div>
+        <!--==============================-->
+
+
+        <div class="col-md-12 form-group required col-sm-12">
+          <label class="for-label">توضیحات بودجه:</label>
+          <div class="input-group input-group-sm">
+                <textarea
+                  type="text" placeholder="توضیحات بودجه" [(ngModel)]="budget.description"
+                  class="form-control" minlength="3"  name="description">
+<!--                dest="descriptionValidation"-->
+                  <!--                nbvRequired #description="ngModel"-->
+                  <!--                [class.is-valid]="!(description?.errors?.nbvRequired)"-->
+                  <!--                [class.is-invalid]="(description?.errors?.nbvRequired) && (description.touched || doSave)"-->
+                </textarea>
+          </div>
+          <div id="descriptionValidation"></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="card-footer text-left">
+      <button class="btn btn-action btn-sm" type="submit">
+        <span *ngIf="mode === actionMode.ADD">ثبت</span>
+        <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+        <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+      </button>
+    </div>
+  </form>
+</div>

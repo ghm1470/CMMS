@@ -1,0 +1,120 @@
+<div class="col-md-12" style="padding: 10px">
+    <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+    <form #workOrderBasicInformationForm="ngForm" (submit)="action(workOrderBasicInformationForm)">
+        <div class="row">
+            <div class="col-md-4 form-group required col-sm-12">
+                <label class="for-label">انتخاب پست </label>
+                <div class="input-group input-group-sm">
+                    <ng-select
+                            style="width: 100%"
+                            [loading]="loadingUserTypeList2"
+                            class="auto-grow"
+                            bindLabel="name"
+                            bindValue="id"
+                            name="userTypeList2"
+                            [disabled]="isView||!enableItems"
+                            [(ngModel)]="workOrderBasicInformation.userAssignedUserTypeId"
+                            (change)="changeUserType($event)"
+                            [items]="userTypeList2"
+                            [placeholder]="'عنوان پست'">
+
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-md-4 form-group required col-sm-12">
+                <label class="for-label">تخصیص یافته به:</label>
+
+                <div class="input-group input-group-sm">
+                    <ng-select [disabled]="isView||!enableItems" dir="rtl"
+                               [(ngModel)]="workOrderBasicInformation.userAssignedId"
+                               [loading]="loadingUserList2"
+                               [matTooltip]="workOrderBasicInformation.userAssignedUserTypeId?'انتخاب کاربر':'برای مشاهده کاربران باید پست انتخاب شود.'"
+                               matTooltipPosition="above"
+                               placeholder="تکمیل شده توسط" name="completedUserId" style="width: 100%;"
+                               dropdownPosition="bottom">
+                        <ng-option *ngFor="let item of userList2; let i = index"
+                                   [value]="item.id">
+                            {{item?.name + ' ' + item?.family}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+                <div id="completedUserIdValidation" style="opacity: 0; height: 0"></div>
+            </div>
+
+            <div class="col-md-4 form-group required col-sm-12">
+                <label class="for-label">تخمین نفر ساعت:</label>
+                <div class="input-group input-group-sm">
+                    <input [disabled]="isView||!enableItems" type="number" [min]="0"
+                           placeholder="تخمین نفر ساعت" [(ngModel)]="workOrderBasicInformation.laborHour"
+                           class="form-control form-control-sm" maxlength="80" name="laborHour"
+                           nbvPattern="{{myPattern.number}}"
+                           nbvRequired
+                           nbvPatternMsgHtml="تخمین نفر ساعت باید به صورت عددی وارد گردد."
+                           Persian2English
+                           #laborHour="ngModel"
+                           [class.is-valid]="!(laborHour?.errors?.nbvRequired || laborHour?.errors?.nbvPattern)"
+                           [class.is-invalid]="(laborHour?.errors?.nbvRequired || laborHour?.errors?.nbvPattern )  && (laborHour.touched || doSave)"
+                           dest="laborHourValidation">
+                </div>
+                <div id="laborHourValidation"></div>
+            </div>
+
+            <div class="col-md-4 form-group required col-sm-12">
+                <label class="for-label">نفر ساعت کار انجام شده:</label>
+                <div class="input-group input-group-sm">
+                    <input [disabled]="isView||!enableItems" type="number" [min]="0"
+                           placeholder="نفر ساعت کار انجام شده"
+                           [(ngModel)]="workOrderBasicInformation.actualLaborHour"
+                           class="form-control form-control-sm" maxlength="80" name="actualLaborHour"
+                           nbvRequired
+                           nbvPattern="{{myPattern.number}}"
+                           nbvPatternMsgHtml="نفر ساعت کار انجام شده باید به صورت عددی وارد گردد."
+                           Persian2English
+                           #actualLaborHour="ngModel"
+                           [class.is-valid]="!(actualLaborHour?.errors?.nbvRequired || actualLaborHour?.errors?.nbvPattern)"
+                           [class.is-invalid]="(actualLaborHour?.errors?.nbvRequired || actualLaborHour?.errors?.nbvPattern )  && (actualLaborHour.touched || doSave)"
+                           dest="actualLaborHourValidation">
+                </div>
+                <div id="actualLaborHourValidation"></div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12 form-group required col-sm-12">
+                <label class="for-label">خلاصه کار:</label>
+                <div class="input-group input-group-sm">
+        <textarea [disabled]="isView||!enableItems" type="text" placeholder="خلاصه کار"
+                  [(ngModel)]="workOrderBasicInformation.issueSummary"
+                  class="form-control" maxlength="620" name="issueSummary"></textarea>
+                </div>
+            </div>
+            <div class="col-md-12 form-group required col-sm-12">
+                <label class="for-label">دستور العمل کار:</label>
+                <div class="input-group input-group-sm">
+        <textarea [disabled]="isView||!enableItems" type="text" placeholder="دستور العمل کار"
+                  [(ngModel)]="workOrderBasicInformation.workInstruction"
+                  class="form-control" maxlength="620" name="workInstruction"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group required col-sm-12 text-left">
+
+            <button *ngIf="!isView&&enableItems" class="btn btn-sm btn-action" type="submit">
+                <span>ثبت اطلاعات</span>
+            </button>
+<!--            <ng-container-->
+<!--                    *ngIf="sendInformationNumberOfTabs.numberOfFormIdList < sendInformationNumberOfTabs.lengthFormIdList - 1  || sendInformationNumberOfTabs.hasForm">-->
+<!--                <button (click)="nextOrPrev('next')" class="btn btn-sm btn-warning" type="button"-->
+<!--                        style=" margin-right: 5px ">-->
+
+<!--                    <span>بعدی</span>-->
+<!--                </button>-->
+<!--            </ng-container>-->
+<!--            <button (click)="nextOrPrev('prev')" class="btn btn-sm btn-cancel-back" type="button" style="float: right">-->
+
+<!--                <span>قبلی</span>-->
+<!--            </button>-->
+        </div>
+    </form>
+</div>

@@ -1,0 +1,352 @@
+<div class="modal" tabindex="-1" role="dialog" id="warrantyModal" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered " role="document" style="max-width: 70%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-lg-12">
+                    <div class="modal-title" style="font-size: 18px;
+              font-weight: bold">
+                        <h6>
+              <span *ngIf="mode === actionMode.ADD">
+                 <i class="fa fa-plus"></i>&nbsp;افزودن گارانتی</span>
+                            <span *ngIf="mode === actionMode.EDIT">
+                 <i class="fa fa-edit"></i>&nbsp;ویرایش گارانتی </span>
+                            <span *ngIf="mode === actionMode.VIEW">
+                 <i class="fa fa-eye"></i>&nbsp;نمایش گارانتی </span>
+                        </h6>
+                    </div>
+                </div>
+
+
+            </div>
+
+*************************
+            <form #warrantyForm="ngForm" (submit)="existCode(warrantyForm)" id="formsSSWarranty">
+                <div class="modal-body" style="display: flow-root;">
+                    <div class="row">
+                        <div class="col-md-6 form-group required col-sm-12">
+                            <label class="for-label">نام گارانتی:</label>
+                            <span style="color: red">*</span>
+                            <div class="input-group input-group-sm" *ngIf="mode!== actionMode.VIEW">
+                                <input type="text" placeholder="نام گارانتی" [(ngModel)]="warranty.name"
+                                       class="form-control input-p" minlength="1" maxlength="20" name="name"
+                                       autocomplete="off"
+                                       nbvRequired
+                                       nbvPatternMsgHtml="نام باید به صورت حروف و اعداد باشد."
+                                       nbvPattern="{{myPattern.TITLEFa}}"
+                                       #name="ngModel"
+                                       (change)="warranty.name = warranty.name.trim()"
+                                       [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvPattern)"
+                                       [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvPattern) && (name.touched|| doSave)"
+                                       dest="nameValidation">
+                            </div>
+
+                            <ng-container *ngIf="mode=== actionMode.VIEW">
+                                <p [ngStyle]="{'background-color':mode === actionMode.VIEW ? 'rgb(229, 225, 216)': 'white' }"
+                                   class="form-control form-control-sm"
+                                > {{warranty.name}}
+                                </p>
+                            </ng-container>
+                            <div id="nameValidation"></div>
+                        </div>
+
+                        <div class="col-md-6 form-group required col-sm-12">
+                            <label class="for-label">انتخاب شرکت گارانتی کننده:</label>
+                            <span style="color: red">*</span>
+                            <div class="input-group input-group-sm" *ngIf="mode!== actionMode.VIEW">
+                                <select dir="rtl" [(ngModel)]="warranty.companyId"
+                                        name="company"
+                                        class="form-control input-p"
+                                        nbvRequired
+                                        #company="ngModel"
+                                        [class.is-valid]="!(company?.errors?.nbvRequired || company?.errors?.nbvPattern)"
+                                        [class.is-invalid]="(company?.errors?.nbvRequired || company?.errors?.nbvPattern) && (company.touched|| doSave)"
+                                        dest="typeValidation">
+                                    <option *ngFor="let item of companyList" [value]="item.id">{{item.name}}</option>
+                                    <!--                  <template ng-notfound-tmp let-searchTerm="searchTerm">-->
+                                    <!--                    <div class="ng-option disabled" style="color: #a8a6a5">-->
+                                    <!--                      نتیجه یافت نشد...-->
+                                    <!--                    </div>-->
+                                    <!--                  </template>-->
+
+                                    <!--                  <template ng-loadingtext-tmp let-searchTerm="searchTerm">-->
+                                    <!--                    <div class="ng-option disabled" style="color: #a8a6a5">-->
+                                    <!--                      در حال جستجو...-->
+                                    <!--                    </div>-->
+                                    <!--                  </template>-->
+                                    <!--                  <template ng-typetosearch-tmp let-searchTerm="searchTerm">-->
+                                    <!--                    <div class="ng-option disabled" style="color: #a8a6a5">-->
+                                    <!--                      متن برای جستجو...-->
+                                    <!--                    </div>-->
+                                    <!--                  </template>-->
+                                </select>
+                            </div>
+                            <ng-container *ngIf="mode=== actionMode.VIEW">
+                                <p [ngStyle]="{'background-color':mode === actionMode.VIEW ? 'rgb(229, 225, 216)': 'white' }"
+                                   class="form-control form-control-sm"
+                                > {{warranty.companyName}}
+                                </p>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-6 form-group required col-sm-12">
+                            <label class="for-label">نوع گارانتی :</label>
+                            <span style="color: red">*</span>
+                            <div class="input-group input-group-sm" *ngIf="mode!== actionMode.VIEW">
+                                <select dir="rtl" [(ngModel)]="warranty.type"
+                                        name="type"
+                                        class="form-control input-p"
+                                        nbvRequired
+                                        #type="ngModel"
+                                        [class.is-valid]="!(type?.errors?.nbvRequired || type?.errors?.nbvPattern)"
+                                        [class.is-invalid]="(type?.errors?.nbvRequired || type?.errors?.nbvPattern) && (type.touched|| doSave)"
+                                        (change)="changeWarrantyType($event)"
+                                        dest="typeValidation">
+                                    <option value="-1" disabled>انتخاب گارانتی</option>
+                                    <option *ngFor="let item of warrantyTypeList"
+                                            [value]="item.value">{{item.title}}</option>
+                                </select>
+                            </div>
+                            <div class="input-group input-group-sm" *ngIf="mode=== actionMode.VIEW">
+                                <select style="background-color: rgb(229, 225, 216)" [(ngModel)]="warranty.type"
+                                        name="type" class="form-control input-p" disabled>
+                                    <option *ngFor="let item of warrantyTypeList"
+                                            [value]="item.value">{{item.title}}</option>
+                                </select>
+                            </div>
+                            <div id="typeValidation" style="opacity: 0; height: 0"></div>
+                        </div>
+
+
+                        <div class="col-md-6 form-group required col-sm-12">
+                            <!--<p class="control-label text-right">نام </p>-->
+                            <label class="for-label">کد گارانتی:</label>
+                            <span style="color: red">*</span>
+                            <i class="fa fa-spinner  fa-pulse fa-1x loadingSearch"
+                               *ngIf="warrantyCodeExistsLoading"></i>
+
+                            <div class="input-group input-group-sm" *ngIf="mode!== actionMode.VIEW">
+                                <input type="text" placeholder="کد گارانتی" [(ngModel)]="warranty.warrantyCode"
+                                       autocomplete="off"
+                                       class="form-control input-p" name="warrantyCode"
+                                       nbvRequired #warrantyCode="ngModel"
+                                       [nbvPattern]="myPattern.EnNumberAndAlphabetic"
+                                       nbvPatternMsgHtml="کد گارانتی باید به صورت اعداد و حروف انگلیسی وارد گردد."
+                                       [class.is-valid]="!(warrantyCode?.errors?.nbvRequired || warrantyCode?.errors?.nbvPattern)"
+                                       [class.is-invalid]="(warrantyCode?.errors?.nbvRequired || warrantyCode?.errors?.nbvPattern) && (warrantyCode.touched|| doSave)"
+                                       dest="warrantyCodeValidation">
+                            </div>
+                            <ng-container *ngIf="mode=== actionMode.VIEW">
+                                <p [ngStyle]="{'background-color':mode === actionMode.VIEW ? 'rgb(229, 225, 216)': 'white' }"
+                                   class="form-control form-control-sm"
+                                > {{warranty.warrantyCode}}
+                                </p>
+                            </ng-container>
+                            <div id="warrantyCodeValidation"></div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <!--            <div class="col-md-8" >-->
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6 form-group required col-sm-12">
+                                    <!--<p class="control-label text-right">نام </p>-->
+                                    <label class="for-label">تاریخ شروع گارانتی:</label>
+                                    <div class="input-group input-group-sm" *ngIf="mode!== actionMode.VIEW">
+                                        <input class="form-control input-p" id="startWarrantyTime"
+                                               placeholder="تاریخ شروع"
+                                               autocomplete="off" [(ngModel)]="time" name="startWarrantyTime"
+                                               #startWarrantyTime>
+                                    </div>
+                                    <ng-container *ngIf="mode=== actionMode.VIEW">
+                                        <p [ngStyle]="{'background-color':mode === actionMode.VIEW ? 'rgb(229, 225, 216)': 'white' }"
+                                           class="form-control form-control-sm"
+                                        > {{time}}
+                                        </p>
+                                    </ng-container>
+
+                                </div>
+
+
+                                <div class="col-md-6 form-group required col-sm-12">
+                                    <!--<p class="control-label text-right">نام </p>-->
+                                    <label class="for-label">تاریخ پایان گارانتی:</label>
+                                    <div class="input-group input-group-sm" *ngIf="mode!== actionMode.VIEW">
+                                        <input class="form-control input-p" id="expiryTime" placeholder="تاریخ پایان"
+                                               [(ngModel)]="expiry" name="expiry" autocomplete="off" #expiryTime>
+                                    </div>
+                                    <ng-container *ngIf="mode=== actionMode.VIEW">
+                                        <p [ngStyle]="{'background-color':mode === actionMode.VIEW ? 'rgb(229, 225, 216)': 'white' }"
+                                           class="form-control form-control-sm"
+                                        > {{expiry}}
+                                        </p>
+                                    </ng-container>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--            </div>-->
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12" *ngIf="warranty.type !== warrantyType[warrantyType.TIME.toString()]">
+                            <!--              <div class="col-md-12">-->
+                            <div class="row">
+                                <div class="col-md-6 form-group required col-sm-12">
+                                    <!--<p class="control-label text-right">نام </p>-->
+                                    <label class="for-label"> متراژ پایان گارانتی : </label>
+                                    <div class="input-group input-group-sm" *ngIf="mode!== actionMode.VIEW">
+                                        <input type="text" placeholder="مقدار متراژ"
+                                               [(ngModel)]="warranty.kilometerWarranty"
+                                               autocomplete="off"
+                                               class="form-control input-p" name="kilometerWarranty"
+                                               nbvPattern="{{myPattern.number}}"
+                                               nbvPatternMsgHtml="متراژ باید به صورت عدد مثبت وارد شود."
+                                               #kilometerWarranty="ngModel"
+                                               [class.is-valid]="( this.warranty.kilometerWarranty && !kilometerWarranty?.errors?.nbvPattern) "
+                                               [class.is-invalid]="( kilometerWarranty?.errors?.nbvPattern) &&( kilometerWarranty.touched|| doSave)"
+                                               dest="kilometerWarrantyValidation"
+                                        >
+                                    </div>
+                                    <ng-container *ngIf="mode=== actionMode.VIEW">
+                                        <p [ngStyle]="{'background-color':mode === actionMode.VIEW ? 'rgb(229, 225, 216)': 'white' }"
+                                           class="form-control form-control-sm"
+                                        > {{warranty.kilometerWarranty}}
+                                        </p>
+                                    </ng-container>
+
+                                    <div id="kilometerWarrantyValidation"></div>
+                                </div>
+
+                                <div class="col-md-6 form-group required col-sm-12">
+                                    <label class="for-label">انتخاب واحد اندازه گیری متراژ:</label>
+                                    <div class="input-group input-group-sm" *ngIf="mode!== actionMode.VIEW">
+                                        <ng-select *ngIf="mode!== actionMode.VIEW" dir="rtl"
+                                                   [(ngModel)]="warranty.unitOfMeasurementId"
+                                                   placeholder="انتخاب واحد اندازه گیری متراژ"
+                                                   name="uniteOfMeasurement" id="uniteOfMeasurement"
+                                                   style="width: 100%;"
+                                                   dropdownPosition="bottom">
+                                            <option value="-1" disabled>انتخاب واحد اندازه گیری</option>
+                                            <ng-option *ngFor="let item of uniteOfMeasurementList"
+                                                       [value]="item.id">{{item.title}}</ng-option>
+                                            <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                                    نتیجه یافت نشد...
+                                                </div>
+                                            </ng-template>
+
+                                            <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+                                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                                    در حال جستجو...
+                                                </div>
+                                            </ng-template>
+                                            <ng-template ng-typetosearch-tmp let-searchTerm="searchTerm">
+                                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                                    متن برای جستجو...
+                                                </div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <ng-select *ngIf="mode=== actionMode.VIEW" dir="rtl"
+                                                   [(ngModel)]="warranty.unitOfMeasurementId"
+                                                   placeholder="انتخاب واحد اندازه گیری متراژ" disabled
+                                                   name="uniteOfMeasurement" id="uniteOfMeasurement1"
+                                                   style="width: 100%;"
+                                                   dropdownPosition="bottom">
+                                            <option value="-1" disabled>انتخاب واحد اندازه گیری</option>
+                                            <ng-option *ngFor="let item of uniteOfMeasurementList"
+                                                       [value]="item.id">{{item.title}}</ng-option>
+                                            <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                                    نتیجه یافت نشد...
+                                                </div>
+                                            </ng-template>
+
+                                            <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+                                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                                    در حال جستجو...
+                                                </div>
+                                            </ng-template>
+                                            <ng-template ng-typetosearch-tmp let-searchTerm="searchTerm">
+                                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                                    متن برای جستجو...
+                                                </div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                    <ng-container *ngIf="mode=== actionMode.VIEW">
+                                        <p [ngStyle]="{'background-color':mode === actionMode.VIEW ? 'rgb(229, 225, 216)': 'white' }"
+                                           class="form-control form-control-sm"
+                                        > {{warranty.unitOfMeasurementName}}
+                                        </p>
+                                    </ng-container>
+                                </div>
+                            </div>
+                            <!--              </div>-->
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 form-group required col-sm-12">
+                            <label class="for-label">توضیحات:</label>
+                            <div class="input-group  input-group-sm">
+              <textarea type="text" placeholder="توضیحات" name="description"
+                        [(ngModel)]="warranty.description" maxlength="620"
+                        [disabled]="mode === actionMode.VIEW"
+                        [ngStyle]="{'background-color':mode === actionMode.VIEW ? 'rgb(229, 225, 216)': 'white' }"
+                        class="form-control input-p"></textarea>
+                                <!--                nbvRequired #description="ngModel"-->
+                                <!--                [class.is-valid]="!(description?.errors?.nbvRequired || description?.errors?.nbvPattern)"-->
+                                <!--                [class.is-invalid]="(description?.errors?.nbvRequired || description?.errors?.nbvPattern) && (description.touched|| doSave)"-->
+                                <!--                dest="descriptionValidation"-->
+                            </div>
+                            <!--              <div id="descriptionValidation"></div>-->
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <div class="row float-left">
+                        <div class="col-md-12 form-group  required col-sm-12 text-center" style="margin-left: 23px">
+                            <div class="row">
+                                <button *ngIf="mode===actionMode.VIEW" type="button" class="btn btn-cancel-back btn-sm "
+                                        data-dismiss="modal"
+                                        style="margin-left: -10PX"
+                                        (click)="cancelModal()">
+                                    بستن
+                                </button>
+                                <div class="btn-group-sm" *ngIf="mode!==actionMode.VIEW">
+                                    <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal"
+                                            style="margin :0 5px "
+                                            (click)="cancelModal()">
+                                        انصراف
+                                    </button>
+                                    <!--                  <button class="btn btn-action btn-sm" type="submit" [disabled]="warrantyForm.invalid"-->
+                                    <!--                          style="margin-left: -22px">-->
+                                    <!--                    <span *ngIf="mode === actionMode.ADD">ثبت</span>-->
+                                    <!--                    <span *ngIf="mode === actionMode.EDIT">ویرایش</span>-->
+                                    <!--                  </button>-->
+
+                                    <button class="btn btn-action btn-sm" type="submit">
+                                        <span *ngIf="mode === actionMode.ADD">ثبت</span>
+                                        <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                                        <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

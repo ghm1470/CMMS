@@ -1,0 +1,158 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                <ng-container *ngIf="mode === actionMode.ADD">
+                    <i class="fa fa-plus"></i>&nbsp;
+                    خواندن متراژ جدید برای دستگاه
+                </ng-container>
+                <ng-container *ngIf="mode === actionMode.EDIT">
+                    <i class="fa fa-edit"></i>&nbsp;
+                    ویرایش متراژخوانده شده
+                </ng-container>
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <button (click)="cancel()"
+                        class="btn btn-cancel-back btn-sm">
+                    بازگشت
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <form #readingForm="ngForm" (submit)="action(readingForm)">
+        <div class="card-body card-body-content">
+            <fieldset class="scheduler-border" id="comapny-documents" style="background-color: #f7f7f7">
+                <legend class="scheduler-border"><h6>دارایی مورد نظر را انتخاب کنید</h6></legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ng-container *ngIf="!parentAssetB.name">
+                            <button class="btn btn-secondary btn-sm" type="button" (click)="openModal()">
+                                انتخاب دارایی
+                            </button>
+                        </ng-container>
+
+                        <ng-container *ngIf="parentAssetB.name">
+                            <label>دارایی انتخاب شده:</label>&nbsp;&nbsp;
+                            <strong>{{parentAssetB.name}}</strong>&nbsp;&nbsp;
+                            <i class="fa fa-times" title="حذف دارایی انتخاب شده" style="color: red ; cursor: pointer"
+                               (click)="deleteSelectedAsset()"></i>
+                        </ng-container>
+                    </div>
+                </div>
+            </fieldset>
+            <ng-container *ngIf="parentAssetB.name">
+                <div class="row">
+                    <!--                    <div class="col-md-6 form-group required col-sm-12">-->
+                    <!--                        <label class="for-label">واحد اندازه گیری:</label>-->
+                    <!--                        <ng-select dir="rtl" [(ngModel)]="reading.unitOfMeasurement"-->
+                    <!--                                   name="unitId"-->
+
+                    <!--                                   (change)="getMax()"-->
+                    <!--                                   placeholder="واحد اندازه گیری" style="width: 100%;"-->
+                    <!--                                   dropdownPosition="bottom">-->
+                    <!--                            <ng-option *ngFor="let item of unitOfMeasurementList; let i = index"-->
+                    <!--                                       [value]="item">-->
+                    <!--                                {{item.title}}-->
+                    <!--                            </ng-option>-->
+                    <!--                        </ng-select>-->
+                    <!--                        &lt;!&ndash;<div class="input-group input-group-sm">&ndash;&gt;-->
+                    <!--                        &lt;!&ndash;<select [(ngModel)]="reading.unitOfMeasurement" name="unitId" class="form-control"&ndash;&gt;-->
+                    <!--                        &lt;!&ndash;#unitId="ngModel" nbvRequired&ndash;&gt;-->
+                    <!--                        &lt;!&ndash;[class.is-valid]="!(unitId?.errors?.nbvRequired || unitId?.errors?.nbvPattern)"&ndash;&gt;-->
+                    <!--                        &lt;!&ndash;[class.is-invalid]="(unitId?.errors?.nbvRequired || unitId?.errors?.nbvPattern) && (unitId.touched || doSave)"&ndash;&gt;-->
+                    <!--                        &lt;!&ndash;dest="unitIdValidation">&ndash;&gt;-->
+                    <!--                        &lt;!&ndash;<option value="-1" disabled>واحداندازه گیری</option>&ndash;&gt;-->
+                    <!--                        &lt;!&ndash;<option *ngFor="let item of unitOfMeasurementList" [ngValue]="item">{{item.title}}</option>&ndash;&gt;-->
+                    <!--                        &lt;!&ndash;</select>&ndash;&gt;-->
+                    <!--                        &lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--                        <div id="unitIdValidation"></div>-->
+                    <!--                    </div>-->
+
+
+                    <div class="col-md-6 form-group required col-sm-12">
+                        <label class="for-label">واحد اندازه گیری:</label>
+                        <span style="color: red">*</span>
+                        <ng-select dir="rtl" [(ngModel)]="selectedUnitOfMeasurementId"
+                                   (change)="getMax()"
+                                   placeholder="نوع فرایند"
+                                   style="padding: 0"
+                                   #unitId="ngModel"
+                                   id="unitId"
+                                   name="unitId"
+                                   class="form-control"
+                                   nbvRequired
+                                   [class.is-valid]="!(unitId?.errors?.nbvRequired || unitId?.errors?.nbvPattern)"
+                                   [class.is-invalid]="(unitId?.errors?.nbvRequired || unitId?.errors?.nbvPattern)
+                                                        && (unitId.touched || doSave)"
+                                   dropdownPosition="bottom">
+                            <ng-option *ngFor="let item of unitOfMeasurementList; let i = index"
+                                       [value]="item.id">
+                                {{item.title}}
+                            </ng-option>
+                        </ng-select>
+                        <div id="unitIdListValidation" style="opacity: 0; height: 0"></div>
+                    </div>
+
+
+                    <div class="col-md-6 form-group required col-sm-12">
+                        <label class="for-label" for="Metering">مقدار متراژفعلی:</label>
+                        <div class="input-group input-group-sm">
+                            <!--                            <input id="Metering" [(ngModel)]="reading.amount" name="Metering" class="form-control"-->
+                            <!--#Metering="ngModel" nbvRequired-->
+                            <!--(change)="checkMax()"-->
+                            <!--[placeholder]="max?'مقدار فعلی:'+max:''"-->
+                            <!--nbvPattern="{{myPattern.number}}"-->
+                            <!--nbvPatternMsgHtml="لطفا متراژ را به صورت عددی وارد کنید"-->
+                            <!--dest="MeteringValidation">-->
+
+                            <input [(ngModel)]="reading.amount" name="Metering" class="form-control"
+                                   [placeholder]="max?'مقدار نباید کمتر از  :' + max + ' باشد. ' :''"
+                                   style="font-size: 13px"
+                                   id="Metering"
+                                   (ngModelChange)="checkMax()"
+                                   #Metering="ngModel"
+                                   nbvRequired
+                                   nbvPatternMsgHtml="لطفا متراژ را به صورت عددی وارد کنید"
+                                   nbvPattern="{{myPattern.number}}"
+                                   [class.is-valid]="!(Metering?.errors?.nbvRequired || Metering?.errors?.nbvPattern) "
+                                   [class.is-invalid]="(Metering?.errors?.nbvRequired || Metering?.errors?.nbvPattern||max > reading.amount )  &&
+                                    (Metering.touched || doSave)"
+                                   dest="MeteringValidation" maxlength="50">
+                        </div>
+                        <div id="MeteringValidation" style="opacity: 0; height: 0"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 form-group required col-sm-12">
+                        <label class="for-label">توضیحات </label>
+                        <div class="input-group input-group-sm">
+                            <!--                          nbvPattern="{{myPattern.faText}}"-->
+                            <!--                          nbvPatternMsgHtml="توضیحات  باید به صورت کاراکتر های فارسی وارد گردد."-->
+                            <textarea type="text" [(ngModel)]="reading.description"
+                                      class="form-control" minlength="1" maxlength="620" name="description"
+                                      #description="ngModel"
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <div class="card-footer text-left" *ngIf="parentAssetB.name">
+            <!--      <button class="btn btn-action btn-sm" type="submit"  [disabled]="readingForm.invalid">-->
+            <!--        <span *ngIf="mode === actionMode.ADD">ثبت</span>-->
+            <!--        <span *ngIf="mode === actionMode.EDIT">ویرایش</span>-->
+            <!--      </button>-->
+
+            <button class="btn btn-action btn-sm" type="submit">
+                <span *ngIf="mode === actionMode.ADD">ثبت</span>
+                <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+            </button>
+        </div>
+    </form>
+</div>
+
+
+<app-asset-view [show]="show" (parentAsset)="receiveParentAsset($event)"></app-asset-view>

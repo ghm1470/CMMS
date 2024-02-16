@@ -1,0 +1,188 @@
+<br>
+<div class="row">
+  <div class="col-md-12">
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-body backShadow">
+          <form class="form-horizontal" [formGroup]="starRatingForm">
+            <input type="text" style="display: none" [placeholder]="starRating.id" [(ngModel)]="starRating.id"
+                   formControlName="id">
+
+            <div class="row form-group">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.questionTitle}}</label>
+              </div>
+              <div class="col-md-12 text-left">
+                <textarea *ngIf="editingItem.newElement" rows="3" type="text" class="form-control"
+                          [placeholder]="editingItem.item.label"
+                          (keyup)="changeLabel($event.target.value)" #label formControlName="label">
+                </textarea>
+                <textarea *ngIf="!editingItem.newElement" rows="3" type="text" class="form-control"
+                          [(ngModel)]="starRating.label"
+                          #label formControlName="label">
+                </textarea>
+                <p style="color: red" *ngIf="(saveButton || starRatingForm.controls['label'].touched) && starRating.label == '' ">
+                  {{data.errorMessages.labelRequired}}
+                </p>
+              </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.questionHelpText}}</label>
+              </div>
+              <div class="col-md-12 text-left">
+                <input *ngIf="editingItem.newElement" type="text" class="form-control"
+                       [placeholder]="editingItem.item.helpText"
+                       (keyup)="changeHelpText($event.target.value)" #helpText formControlName="helpText">
+                <input *ngIf="!editingItem.newElement" type="text" class="form-control"
+                       [(ngModel)]="starRating.helpText"
+                       #helpText formControlName="helpText">
+                <p style="color: red" *ngIf="(saveButton || starRatingForm.controls['helpText'].touched) && starRating.helpText == '' ">
+                  {{data.errorMessages.helpTextRequired}}
+                </p>
+              </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="col-md-4 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.questionRequired}}</label>
+              </div>
+              <div class="col-md-8 text-left">
+                <div class="col-md-6 col-md-offset-3">
+                  <!--<input type="checkbox" class="form-control" formControlName="required"-->
+                         <!--[(ngModel)]="starRating.required" #required>-->
+                  <input type="checkbox" formControlName="required"  [(ngModel)]="starRating.required" #required>
+
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.starCount}} (بین ۱ تا ۱۱)</label>
+              </div>
+              <div class="col-md-12 text-left">
+                <input class="form-control" [placeholder]="starRating.starCount"
+                       (change)="changeStarCount($event.target.value)"
+                       min="1" max="11" [(ngModel)]="starRating.starCount" formControlName="count">
+                <p style="color: red" *ngIf="(saveButton || starRatingForm.controls['count'].touched) && !starRatingForm.controls['count'].valid">
+                  {{data.errorMessages.starCountRequired}}
+                </p>
+              </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.initialStarCount}} (بین ۰ تا ۱۱)</label>
+              </div>
+              <div class="col-md-12 text-left">
+                <input maxlength="2" class="form-control"
+                       [(ngModel)]="starRating.initialRate" formControlName="initialRate" (change)="setInitial($event.target.value)">
+                <p style="color: red" *ngIf="(saveButton || starRatingForm.controls['initialRate'].touched) && !starRatingForm.controls['initialRate'].valid">
+                  {{data.errorMessages.initialStarCountRequired}}
+                </p>
+              </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.starColorStatus}}</label>
+              </div>
+              <div class="col-md-12 text-left">
+                <div class="row">
+                  <div class="col-md-4 text-left">
+                    <input type="radio" value="undefined" name="radioGroupStatus"
+                           (click)="onChangeStatus($event.target.value)"
+                           [checked]="starRating.colorStatus==='undefined'" *ngIf="data != null">&nbsp;&nbsp;{{data.formQuestion.starColorChanging}}
+                  </div>
+                  <div class="col-md-4 text-left">
+                    <input type="radio" value="positive" name="radioGroupStatus"
+                           (click)="onChangeStatus($event.target.value)"
+                           [checked]="starRating.colorStatus==='positive'" *ngIf="data != null">&nbsp;&nbsp;{{data.formQuestion.starColorGreen}}
+                  </div>
+                  <div class="col-md-4 text-left">
+                    <input type="radio" value="ok" name="radioGroupStatus" (click)="onChangeStatus($event.target.value)"
+                           [checked]="starRating.colorStatus==='ok'" *ngIf="data != null">&nbsp;&nbsp;{{data.formQuestion.starColorYellow}}
+                  </div>
+                  <div class="col-md-4 text-left">
+                    <input type="radio" value="negative" name="radioGroupStatus"
+                           (click)="onChangeStatus($event.target.value)"
+                           [checked]="starRating.colorStatus==='negative'" *ngIf="data != null">&nbsp;&nbsp;{{data.formQuestion.starColorRed}}
+                  </div>
+                  <div class="col-md-4 text-left">
+                    <input type="radio" value="default" name="radioGroupStatus"
+                           (click)="onChangeStatus($event.target.value)"
+                           [checked]="starRating.colorStatus==='default'" *ngIf="data != null">&nbsp;&nbsp;{{data.formQuestion.starColorGray}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr>
+
+            <div class="row form-group">
+              <div class="col-md-12 text-left">
+                <label class="control-label">{{data.formQuestion.starDirection}}</label>
+              </div>
+              <div class="col-md-12 text-left">
+                <div class="row">
+                  <div class="col-md-6 text-left">
+                    <input type="radio" value="rtl" name="radioGroupDirection"
+                           (click)="onChangeDirection($event.target.value)"
+                           [checked]="starRating.direction==='rtl'" *ngIf="data != null">&nbsp;&nbsp;{{data.formQuestion.directionRTL}}
+                  </div>
+                  <div class="col-md-6 text-left">
+                    <input type="radio" value="ltr" name="radioGroupDirection"
+                           (click)="onChangeDirection($event.target.value)"
+                           [checked]="starRating.direction==='ltr'" *ngIf="data != null">&nbsp;&nbsp;{{data.formQuestion.directionLTR}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <br>
+            <div class="row form-group">
+              <div class="col-md-8 col-md-offset-2">
+                <button class="btn btn-sm btn-cancel-back" style="margin-top: 10px!important;" (click)="close()" *ngIf="data != null">
+                  <span class="hidden-xs hidden-sm">{{data.public.close}}</span>
+                </button>
+              <button class="btn btn-sm btn-action"  style="margin-top: 10px!important;" (click)="save()" *ngIf="data != null">
+                  <span class="hidden-xs hidden-sm">{{data.public.save}}</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-body backShadow">
+
+          <div class="col-md-12 text-left" *ngIf="data != null">
+            <h4>{{data.formQuestion.questionTitle}}:</h4>
+            <span>{{starRating.label}}</span>
+            <span *ngIf="starRating.required" style="color: red">*</span>
+            <a class="toolTipColor" [tooltip]="starRating.helpText" tooltipPlacement="bottom">
+              <i class="glyphicon glyphicon-info-sign"></i>
+            </a>
+          </div>
+          <br>
+
+          <!--<div class="col-md-12">-->
+            <!--<br>-->
+            <!--<div class="col-md-6">-->
+              <!--<input type="file" accept="image/*" id="image" class="upload" (change)="settingQuestionImage($event)"/>-->
+            <!--</div>-->
+            <!--<div class="col-md-6" *ngIf="starRating.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE">-->
+              <!--<img style="width:200px; border-radius: 7px" [attr.src]="starRating.picture.imageData">-->
+              <!--<i class="fa fa-times" aria-hidden="true" style="color: red " (click)="deleteQuestionImage()"></i>-->
+            <!--</div>-->
+          <!--</div>-->
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

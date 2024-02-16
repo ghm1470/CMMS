@@ -1,0 +1,244 @@
+<app-loading-spinner [loadingList]="true" *ngIf="loading" ></app-loading-spinner>
+
+<div class="card" *ngIf="!loading">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+        <span>فرایند طی شده تاکنون</span>
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+        <button (click)="cancel()"
+                class="btn btn-cancel-back btn-sm">
+          بازگشت
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body card-body-content">
+    <div class="row form-inline mt-4 hist-row">
+      <div *ngIf="!fromSchedule" class="col-md-4 form-inline mb-3">
+        <div class="col-md-8 activityLevelBox text-center form-inline"
+             style="padding: 0; box-shadow: 0px 1.5px 2.5px 0px #888888; border-radius: 5px 5px 0 0; flex-wrap: wrap;">
+          <div class="col-md-12 boxLevel" (click)="showFormWorkRequest(workRequestForm)"
+               style="cursor: pointer"
+          >
+
+            <button mat-stroked-button matTooltip="مشاهده فرم درخواست کار">
+              <a (click)="showFormWorkRequest(workRequestForm)">
+                <label style="cursor: pointer">درخواست کار ارسال شده</label>
+              </a>
+            </button>
+          </div>
+          <hr>
+          <div class="boxLevelAction">
+            <span class="iconLevelAction fa fa-hourglass-half"></span>
+            <span>درخواست شده</span>
+          </div>
+
+          <div class="w-100">
+            <ul class="levelAction"
+                style="font-size: 13px; list-style: none; padding: 5px 13px; margin-bottom: 0; text-align: right;">
+              <ng-container>
+                <li class="mb-1">
+              <span class="cursor-pointer"
+                    style="display: flex; align-items: center; justify-content: space-between;">
+
+                {{workRequestForm.userTypeName}}
+                -{{workRequestForm.name}} {{workRequestForm.family}}
+                            </span>
+                </li>
+              </ng-container>
+            </ul>
+            <hr style="margin:5px 7px 7px;">
+            <label
+              style="font-size: 10px;  padding-bottom: 30px; margin-bottom: 7px; line-height: 16px; display: flex; justify-content: right; padding-right: 14px;">
+              <i class="fa fa-clock ml-1" matTooltip=" تاریخ  درخواست تعمیر" matTooltipPosition="above"></i>
+              {{MyToolkit.En2Fa(MyToolkit2.Moment.getJaliliDateFromIsoOrFull(workRequestForm.workRequestDate))}}
+            </label>
+          </div>
+        </div>
+        <div class="col text-center pr-5">
+        <span class="relationship d-none d-sm-block d-md-block" style="margin: 0!important;">
+          <span class="fa fa-chevron-left px-1"></span>
+          <span class="fa fa-chevron-left px-1"></span>
+          <!--<span class="fa fa-chevron-left px-1"></span>-->
+        </span>
+
+          <span class="relationship d-inline d-md-none d-sm-none mt-2" style="margin: 0!important;">
+          <span class="fa fa-chevron-down" style="font-size: 12pt!important;"></span>
+            <br>
+          <span class="fa fa-chevron-down" style="font-size: 12pt!important;"></span>
+            <br>
+          <span class="fa fa-chevron-down" style="font-size: 12pt!important;"></span>
+        </span>
+        </div>
+      </div>
+
+      <!--============================================>-->
+      <div class="col-md-4 form-inline mb-3" *ngFor="let item of ActivityLevelListSortSequenceList;let i = index">
+        <div class="col-md-8 activityLevelBox text-center form-inline"
+             style="padding: 0; box-shadow: 0px 1.5px 2.5px 0px #888888; border-radius: 5px 5px 0 0; flex-wrap: wrap;">
+          <div class="col-md-12 boxLevel" (click)="setFormId(item.ActivityLevel[0], i,item.status)"
+               style="cursor: pointer"
+               [ngClass]="{'currentLevel': item.status==='pending'}">
+
+            <ng-container
+              *ngIf="item.status === 'pending';else currentActionType">
+              <button mat-stroked-button matTooltip="مشاهده اطلاعات فرم" style="border-color: #8c8c8c;"
+                     >
+                <a>
+                  <label style="cursor: pointer">{{item.ActivityLevel.title}} <span
+                    style="font-size: 10px; margin-right: 5px"> (مرحله جاری) </span></label>
+                </a>
+              </button>
+            </ng-container>
+            <ng-template #currentActionType>
+              <button mat-stroked-button matTooltip="مشاهده اطلاعات فرم">
+                <a (click)="setFormId(item.ActivityLevel[0], i, item.status)">
+                  <label style="cursor: pointer">{{item.ActivityLevel[0].title}}</label>
+                </a>
+              </button>
+            </ng-template>
+          </div>
+          <hr>
+          <div class="boxLevelAction">
+            <ng-container *ngIf="item.status === 'pending'">
+              <span class="iconLevelAction fa fa-hourglass-half"></span>
+              <span>در انتظار اعلام نظر</span>
+            </ng-container>
+
+            <ng-container *ngIf="item.status === 'accepted'">
+              <span class="iconLevelAction fa fa-check"></span>
+              <span style="color: #25884d">تایید شده</span>
+            </ng-container>
+
+            <ng-container *ngIf="item.status === 'rejected'">
+              <span class="iconLevelAction fa fa-times"></span>
+              <span style="color: #a75d61">رد شده</span>
+            </ng-container>
+
+            <ng-container
+              *ngIf="item.status === 'accepted' && item.ActivityLevel.nextActivityLevel === 'end'">
+              <span class="iconLevelAction fa fa-check-double"></span>
+              <span>تایید و تکمیل نهایی شده</span>
+            </ng-container>
+          </div>
+
+          <div class="w-100">
+            <ul class="levelAction"
+                style="font-size: 13px; list-style: none; padding: 5px 13px; margin-bottom: 0; text-align: right;">
+              <ng-container>
+                <li class="mb-1">
+                <span *ngIf="item.status === 'pending'" class="cursor-pointer"
+                      style="display: flex; align-items: center; justify-content: space-between;">
+                  {{item.ActivityLevel.userTypeTitle}}
+                  -{{item.ActivityLevel.assignedUserName}} {{item.ActivityLevel.assignedUserFamily}}
+
+                              </span>
+                  <span *ngIf="item.status !== 'pending'" class="cursor-pointer"
+                        style="display: flex; align-items: center; justify-content: space-between;">
+                  {{item.ActivityLevel[0].userTypeTitle}}
+                    -{{item.ActivityLevel[0].assignedUserName}} {{item.ActivityLevel[0].assignedUserFamily}}
+
+                              </span>
+                </li>
+              </ng-container>
+            </ul>
+            <ng-container *ngIf="item.status === 'pending'">
+              <ng-container *ngIf="item.ActivityLevel.pendingDate">
+                <hr style="margin:5px 7px 7px;">
+                <label
+                  style=" font-size: 10px; margin-bottom: 7px; line-height: 16px; display: flex; justify-content: right; padding-right: 14px; ">
+                  <i class="fa fa-clock ml-1" matTooltip="تاریخ آغاز مرحله" matTooltipPosition="above"></i>
+                  {{MyToolkit.En2Fa(MyToolkit2.Moment.getJaliliDateFromIsoOrFull(item.ActivityLevel.pendingDate))}}
+                </label>
+              </ng-container>
+              <ng-container *ngIf="item.levelEndDate">
+                <hr style="margin:5px 7px 7px;">
+                <label
+                  style=" font-size: 10px; margin-bottom: 7px; line-height: 16px; display: flex; justify-content: right; padding-right: 14px;">
+                  <i class="fa fa-user-clock ml-1" matTooltip="تاریخ پاسخ" matTooltipPosition="above"></i>
+                  {{MyToolkit.En2Fa(MyToolkit2.Moment.getJaliliDateFromIsoOrFull(item.levelEndDate))}}
+                </label>
+              </ng-container>
+              <ng-container *ngIf="!item.levelEndDate">
+                <label
+                  style=" padding-bottom: 30px;"></label>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="item.status !== 'pending'">
+              <ng-container *ngIf="item.ActivityLevel[0].pendingDate">
+                <hr style="margin:5px 7px 7px;">
+                <label
+                  style=" font-size: 10px; margin-bottom: 7px; line-height: 16px; display: flex; justify-content: right; padding-right: 14px; ">
+                  <i class="fa fa-clock ml-1" matTooltip="تاریخ آغاز مرحله" matTooltipPosition="above"></i>
+                  {{MyToolkit.En2Fa(MyToolkit2.Moment.getJaliliDateFromIsoOrFull(item.ActivityLevel[0].pendingDate))}}
+                </label>
+              </ng-container>
+              <ng-container *ngIf="item.levelEndDate">
+                <hr style="margin:5px 7px 7px;">
+                <label
+                  style=" font-size: 10px; margin-bottom: 7px; line-height: 16px; display: flex; justify-content: right; padding-right: 14px;">
+                  <i class="fa fa-user-clock ml-1" matTooltip="تاریخ پاسخ" matTooltipPosition="above"></i>
+                  {{MyToolkit.En2Fa(MyToolkit2.Moment.getJaliliDateFromIsoOrFull(item.levelEndDate))}}
+                </label>
+              </ng-container>
+              <ng-container *ngIf="!item.levelEndDate">
+                <label
+                  style=" padding-bottom: 30px;"></label>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+        <div class="col text-center pr-5">
+
+          <span *ngIf="ActivityLevelListSortSequenceList.length > i + 1"
+                class="relationship d-none d-sm-block d-md-block" style="margin: 0!important;">
+          <span class="fa fa-chevron-left px-1"></span>
+          <span class="fa fa-chevron-left px-1"></span>
+            <!--<span class="fa fa-chevron-left px-1"></span>-->
+        </span>
+
+          <span *ngIf="ActivityLevelListSortSequenceList.length > i + 1" class="relationship d-inline d-md-none d-sm-none mt-2" style="margin: 0!important;">
+          <span class="fa fa-chevron-down" style="font-size: 12pt!important;"></span>
+            <br>
+          <span class="fa fa-chevron-down" style="font-size: 12pt!important;"></span>
+            <br>
+          <span class="fa fa-chevron-down" style="font-size: 12pt!important;"></span>
+        </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+<ng-container *ngIf="showWorkRequestModal">
+  <app-show-work-request-modal [workRequestId]="workRequestForm.workRequestId"></app-show-work-request-modal>
+</ng-container>
+<ng-container *ngIf="ShowTheFormOfPreviousStepsModal">
+  <app-show-the-form-of-previous-steps [activityInstanceId]="activityInstanceId" [activityLevelId]="activityLevelId"
+                                       [formIdList]="formIdList" [numberOfParticipation]="numberOfParticipation" [workOrderAccessId]="workOrderAccessId" [sendUser]="sendUser"
+  ></app-show-the-form-of-previous-steps>
+</ng-container>
+
+
+
+<!--================================modal===================-->
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="false"
+  [modalSize]="MyModalSize.LARGE"
+  autoShow="false"
+  [myId]="'messageForCurrentStep'">
+  <div modal-header>
+  </div>
+  <div modal-body>
+    ****این مرحله هنوز به اتمام نرسیده ودر حال بررسی است.****
+  </div>
+</nbw-modal>
+

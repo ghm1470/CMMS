@@ -1,0 +1,225 @@
+<div class="modal" tabindex="-1" role="dialog" id="warrantyModal" data-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="col-lg-12">
+          <div class="modal-title" style="color:#40046D ;font-size: 18px;
+              text-align: center !important;
+              font-weight: bold">
+            <h6>
+              <span *ngIf="mode === actionMode.ADD">افزودن گارانتی</span>
+              <span *ngIf="mode === actionMode.EDIT">ویرایش گارانتی </span>
+
+            </h6>
+          </div>
+        </div>
+
+
+      </div>
+
+
+      <div class="modal-body" style="display: flow-root;padding: 15px;border-radius: 5px">
+        <hr style="margin: 0">
+
+        <form #warrantyForm="ngForm" (submit)="action(warrantyForm)" id="formsSSWarranty">
+          <div class="row">
+            <div class="col-md-4 form-group required col-sm-12">
+              <!--<p class="control-label text-right">نام </p>-->
+              <label class="for-label">نام گارانتی:</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="نام گارانتی" [(ngModel)]="warranty.name"
+                       class="form-control" minlength="3" maxlength="20" name="name"
+                       nbvRequired #name="ngModel"
+                       [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvPattern)"
+                       [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvPattern) && (name.touched|| doSave)"
+                       dest="nameValidation">
+              </div>
+              <div id="nameValidation"></div>
+            </div>
+
+
+
+            <div class="col-md-4 form-group required col-sm-12">
+              <label class="for-label" for="company">انتخاب شرکت گارانتی کننده:</label>
+              <ng-select dir="rtl" [(ngModel)]="warranty.companyId" name="company"
+
+                         id="company"
+                         placeholder="انتخاب شرکت" style="width: 100%;"
+                         dropdownPosition="bottom"
+                        >
+                <ng-option *ngFor="let item of companyList; let i = index"
+                           [value]="item.id">
+                  {{item.name}}
+                </ng-option>
+              </ng-select>
+              <!--<div class="input-group input-group-sm">-->
+                <!--<select [(ngModel)]="companyUId" name="company" class="form-control"-->
+                        <!--#company="ngModel" nbvRequired-->
+                        <!--[class.is-valid]="!(company?.errors?.nbvRequired || company?.errors?.nbvPattern)"-->
+                        <!--[class.is-invalid]="(company?.errors?.nbvRequired || company?.errors?.nbvPattern) && (company.touched|| doSave)"-->
+                        <!--dest="companyValidation">-->
+                  <!--<option value="-1" disabled>انتخاب شرکت</option>-->
+                  <!--<option *ngFor="let item of companyList" [value]="item.id">{{item.name}}</option>-->
+                <!--</select>-->
+              <!--</div>-->
+              <div id="companyValidation" style="opacity: 0; height: 0"></div>
+            </div>
+
+            <div class="col-md-4 form-group required col-sm-12">
+              <label class="for-label">نوع گارانتی :</label>
+              <ng-select dir="rtl" [(ngModel)]="warranty.type" name="type"
+
+                         id="type"
+                         (change)="changeWarrantyType($event)"
+                         placeholder="انتخاب گارانتی" style="width: 100%;"
+                         dropdownPosition="bottom"
+              >
+                <ng-option *ngFor="let item of warrantyTypeList; let i = index"
+                           [value]="item.value">
+                  {{item.title}}
+                </ng-option>
+              </ng-select>
+              <!--<div class="input-group input-group-sm">-->
+                <!--<select [(ngModel)]="warranty.type" name="type" class="form-control" (change)="changeWarrantyType($event)"-->
+                        <!--#type="ngModel" nbvRequired-->
+                        <!--[class.is-valid]="!(type?.errors?.nbvRequired || type?.errors?.nbvPattern)"-->
+                        <!--[class.is-invalid]="(type?.errors?.nbvRequired || type?.errors?.nbvPattern) && (type.touched|| doSave)" dest="typeValidation">-->
+                  <!--<option value="-1" disabled>انتخاب گارانتی</option>-->
+                  <!--<option *ngFor="let item of warrantyTypeList" [value]="item.value">{{item.title}}</option>-->
+                <!--</select>-->
+              <!--</div>-->
+              <div id="typeValidation" style="opacity: 0; height: 0"></div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 2vh">
+            <div class="col-md-8" *ngIf="warranty?.type === warrantyType[warrantyType.TIME.toString()]" >
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 form-group required col-sm-12">
+                    <!--<p class="control-label text-right">نام </p>-->
+                    <label class="for-label">تاریخ شروع گارانتی:</label>
+                    <div class="input-group input-group-sm">
+                      <input class="form-control" id="time"
+                             placeholder="تاریخ شروع"
+                             [(ngModel)]="time"
+                             name="timeN">
+                    </div>
+
+                  </div>
+                  <div class="col-md-6 form-group required col-sm-12">
+                    <!--<p class="control-label text-right">نام </p>-->
+                    <label class="for-label">تاریخ پایان گارانتی:</label>
+                    <div class="input-group input-group-sm">
+                      <input class="form-control" id="expiry"  placeholder="تاریخ پایان"
+                             [(ngModel)]="expiry" name="expiry">
+                    </div>
+
+
+                  </div>
+                </div></div>
+            </div>
+            <div class="col-md-8" *ngIf="warranty.type !== warrantyType[warrantyType.TIME.toString()]" >
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 form-group required col-sm-12">
+                    <!--<p class="control-label text-right">نام </p>-->
+                    <label class="for-label">مقدار متراژ : </label>
+                    <div class="input-group input-group-sm">
+                      <input type="text" placeholder="مقدار متراژ" [(ngModel)]="warranty.kilometerWarranty"
+                             class="form-control"  name="kilometerWarranty"
+                             nbvRequired #kilometerWarranty="ngModel"
+                             nbvPattern="{{myPattern.number}}"
+                             nbvPatternMsgHtml="متراژ باید عدد وارد شود"
+                             [class.is-valid]="!(kilometerWarranty?.errors?.nbvRequired || kilometerWarranty?.errors?.nbvPattern)"
+                             [class.is-invalid]="(kilometerWarranty?.errors?.nbvRequired || kilometerWarranty?.errors?.nbvPattern) &&( kilometerWarranty.touched|| doSave)"
+                             dest="kilometerWarrantyValidation">
+                    </div>
+                    <div id="kilometerWarrantyValidation"></div>
+                  </div>
+
+                  <div class="col-md-6 form-group required col-sm-12">
+                    <label class="for-label">انتخاب واحد اندازه گیری متراژ:</label>
+                    <ng-select dir="rtl" [(ngModel)]="warranty.unitOfMeasurementId" name="uniteOfMeasurement"
+
+                               id="uniteOfMeasurement"
+                               placeholder="انتخاب واحد اندازه گیری" style="width: 100%;"
+                               dropdownPosition="bottom"
+                    >
+                      <ng-option *ngFor="let item of uniteOfMeasurementList; let i = index"
+                                 [value]="item.id">
+                        {{item.title}}
+                      </ng-option>
+                    </ng-select>
+                    <!--<div class="input-group input-group-sm">-->
+                      <!--<select [(ngModel)]="warranty.unitOfMeasurementId" name="uniteOfMeasurement" class="form-control"-->
+                              <!--#uniteOfMeasurement="ngModel" nbvRequired-->
+                              <!--[class.is-valid]="!(uniteOfMeasurement?.errors?.nbvRequired || uniteOfMeasurement?.errors?.nbvPattern)"-->
+                              <!--[class.is-invalid]="(uniteOfMeasurement?.errors?.nbvRequired || uniteOfMeasurement?.errors?.nbvPattern) && (uniteOfMeasurement.touched|| doSave)"-->
+                              <!--dest="uniteOfMeasurementValidation">-->
+                        <!--<option value="-1" disabled>انتخاب واحد اندازه گیری</option>-->
+                        <!--<option *ngFor="let item of uniteOfMeasurementList" [value]="item.id">{{item.title}}</option>-->
+                      <!--</select>-->
+                    <!--</div>-->
+                    <div id="uniteOfMeasurementValidation" style="opacity: 0; height: 0"></div>
+                  </div>
+                </div></div>
+            </div>
+            <div class="col-md-4 form-group required col-sm-12">
+              <!--<p class="control-label text-right">نام </p>-->
+              <label class="for-label">کد گارانتی:</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="کد گارانتی" [(ngModel)]="warranty.warrantyCode"
+                       class="form-control"  name="warrantyCode"
+                       nbvRequired #warrantyCode="ngModel"
+                       [class.is-valid]="!(warrantyCode?.errors?.nbvRequired || warrantyCode?.errors?.nbvPattern)"
+                       [class.is-invalid]="(warrantyCode?.errors?.nbvRequired || warrantyCode?.errors?.nbvPattern) && (warrantyCode.touched|| doSave)"
+                       dest="warrantyCodeValidation">
+              </div>
+              <div id="warrantyCodeValidation"></div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 2vh">
+            <div class="col-md-4 form-group required col-sm-12">
+              <label class="for-label">توضیحات:</label>
+
+              <div class="input-group  input-group-sm">
+              <textarea type="text" placeholder="توضیحات" name="description"
+                        [(ngModel)]="warranty.description" maxlength="620"
+                        class="form-control" nbvRequired #description="ngModel"
+                        [class.is-valid]="!(description?.errors?.nbvRequired || description?.errors?.nbvPattern)"
+                        [class.is-invalid]="(description?.errors?.nbvRequired || description?.errors?.nbvPattern) && (description.touched|| doSave)"
+                        dest="descriptionValidation"></textarea>
+              </div>
+              <div id="descriptionValidation"></div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <div class="row float-left">
+              <div class="col-md-12 form-group  required col-sm-12 text-center" style="margin-left: 23px">
+                <div class="row">
+                  <div class="btn-group-sm">
+                    <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal" style="margin :0 5px "
+                            (click)="cancelModal()">
+                      انصراف
+                    </button>
+                    <button class="btn btn-action btn-sm" type="submit"  [disabled]="warrantyForm.invalid" style="margin-left: -22px">
+                      <span *ngIf="mode === actionMode.ADD">ثبت</span>
+                      <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+        </form>
+
+
+      </div>
+    </div></div></div>
+

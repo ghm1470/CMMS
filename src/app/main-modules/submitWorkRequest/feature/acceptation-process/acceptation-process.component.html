@@ -1,0 +1,121 @@
+<app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+<fieldset class="scheduler-border" *ngIf="!loading">
+    <legend class="scheduler-border"><span style="  margin-top: 20px; font-size: 16px;color: rgb(174, 28, 35);">پیشرفت درخواست {{submitWorkRequestTitle}}
+        :</span></legend>
+
+    <div class="main-progress">
+
+        <ul class="progress-tracker">
+            <ng-container *ngFor="let item of processList2; let i= index">
+                <li class="progress-step">
+                    <div class="progress-marker"
+                         [ngClass]=" i===0 &&  'is-accept'||
+             item.actionLevel === 'accepted' && 'is-accept'||
+             item.actionLevel === 'pending' && 'is-current' ||
+             item.actionLevel === 'finish'&& processList2[processList2.length - 2].actionLevel === 'accepted'&& 'is-accept' ||
+            item.actionLevel === 'rejected' && 'is-injected'
+
+
+         ">
+
+                        <span *ngIf="i === 0">{{item.title}}</span>
+                        <span *ngIf="i > 0 && processList2.length - 1 > i">{{item.id}}</span>
+                        <span *ngIf="i > 0 && processList2.length - 1 === i">پایان</span>
+
+                        <div class="progress-tooltip text-center"
+                             [ngStyle]="{'margin-right':(i > 0 && processList2.length - 1 > i )? '-55px': ''}"
+                             >
+                            <header>
+                                <p class="mb-0 text-center">{{item.title}}</p>
+                                <!--              <ng-container *ngIf="i > 0 && processList.length > i">-->
+                                <i style="font-size: 12px;"
+                                   *ngIf="item.id === 'start' && item.actionLevel === 'accepted'"></i>
+                                <i style="font-size: 12px;"
+                                   *ngIf="item.actionLevel === 'pending'">{{item.assigned}}
+                                    <br>
+                                    (درحال بررسی)
+                                </i>
+                                <i style="font-size: 12px;"
+                                   *ngIf="item.actionLevel === 'rejected'">
+                                    {{item.assigned}}
+                                    <br>
+                                    ( رد شده)
+                                </i>
+                                <i style="font-size: 12px;"
+                                   *ngIf="item.actionLevel === 'waiting'">
+                                    {{item.assigned}}
+                                    <br>
+
+                                    ( درانتظار)
+                                </i>
+                                <i style="font-size: 12px;"
+                                   *ngIf="item.actionLevel === 'accepted'&&item.id !== 'start'">{{item.assigned}}
+                                    <br>
+
+                                    (تایید شد)
+                                </i>
+
+                                <i style="font-size: 12px;"
+                                   *ngIf="item.actionLevel ==='FINISH'">{{item.assigned}}
+                                    <br>
+                                    (تایید نهایی شد)
+                                </i>
+                                <!--              </ng-container>-->
+                                <!--              <ng-container *ngIf="processList.length === i">-->
+                                <!--                -->
+                                <!--              </ng-container>-->
+                            </header>
+
+                        </div>
+
+                    </div>
+
+
+                    <!--                <div class="progress-marker" [ngClass]="-->
+                    <!--                    i === 0 && 'is-accept' ||-->
+                    <!--                    newProcessList[i-1]?.levelAction === 'ACCEPT' && 'is-accept' ||-->
+                    <!--                    newProcessList[i-1]?.levelAction === 'FINISH' && 'is-finished' ||-->
+                    <!--                    newProcessList[i-1]?.levelAction === 'REJECTION' && 'is-cancel' ||-->
+                    <!--                    newProcessList[i-1]?.levelAction === 'PENDDING' && 'is-request' &&-->
+                    <!--                    newProcessList[i-1]?.levelAction === 'PENDDING' && 'is-current'">-->
+                    <!--                  <span *ngIf="i === 0">{{item.title}}</span>-->
+                    <!--                  <span *ngIf="i > 0 && processList.length - 1 > i">{{i}}</span>-->
+                    <!--                  <span *ngIf="i > 0 && processList.length - 1 === i">پایان</span>-->
+                    <!--                  <div class="progress-tooltip">-->
+                    <!--                    <header>-->
+                    <!--                      <p class="mb-0">{{processList[i].title}}</p>-->
+                    <!--                      <ng-container *ngIf="i > 0 && processList.length > i">-->
+                    <!--                        <i style="font-size: 12px;"-->
+                    <!--                           *ngIf="newProcessList[i - 1] && newProcessList[i - 1]?.levelAction === 'PENDDING'">(درحال بررسی)</i>-->
+                    <!--                        <i style="font-size: 12px;"-->
+                    <!--                           *ngIf="newProcessList[i - 1] && newProcessList[i - 1]?.levelAction === 'REJECT'">(رد شده)</i>-->
+                    <!--                        <i style="font-size: 12px;"-->
+                    <!--                           *ngIf="newProcessList[i - 1] && newProcessList[i - 1]?.levelAction === 'ACCEPT'">(تایید شد)</i>-->
+                    <!--                        <i style="font-size: 12px;"-->
+                    <!--                           *ngIf="newProcessList[i] && newProcessList[i]?.levelAction ==='FINISH'">(تایید نهایی شد)</i>-->
+                    <!--                      </ng-container>-->
+                    <!--                      &lt;!&ndash;              <ng-container *ngIf="processList.length === i">&ndash;&gt;-->
+                    <!--                      &lt;!&ndash;                &ndash;&gt;-->
+                    <!--                      &lt;!&ndash;              </ng-container>&ndash;&gt;-->
+                    <!--                    </header>-->
+                    <!--                    <main *ngIf="newProcessList[i]">-->
+                    <!--                      <p *ngIf="i === 0">درخواست کننده: ({{companyRequestName}})</p>-->
+                    <!--                      <p *ngIf="i > 0 && newProcessList[i] && newProcessList[i].receiver">سمت: <i>{{newProcessList[i - 1]?.receiver?.post?.title}}</i></p>-->
+                    <!--                      <p *ngIf="i > 0 && newProcessList[i]"><i class="fa fa-user-clock" matTooltip="تاریخ ارسال"></i> : {{newProcessList[i - 1].levelEndDate | perNumber}}</p>-->
+                    <!--                      <p></p>-->
+                    <!--                    </main>-->
+                    <!--                  </div>-->
+                    <!--                </div>-->
+
+
+                </li>
+            </ng-container>
+
+
+        </ul>
+        <!--  </div>-->
+    </div>
+
+</fieldset>
+
+

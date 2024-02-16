@@ -1,0 +1,38 @@
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="false"
+  [modalSize]="MyModalSize.X_LARGE"
+  autoShow="false"
+  (onClose)="onCloseModal()"
+  [displayBackdrop]="true"
+  [myId]="'showProcessStepsModal'">
+  <div modal-header>
+    <span style="font-size: 16px">
+      مشاهده ی تمام مراحل این فرایند
+    </span>
+  </div>
+  <div modal-body>
+
+
+
+          <div class="col-md-12 p-0">
+            <app-acceptation-process
+              [activityInstanceId]="activityInstanceId"
+              [submitWorkRequestTitle]="submitWorkRequestTitle">
+            </app-acceptation-process>
+          </div>
+
+
+
+        <div class="col-md-12 text-left px-0">
+          <ng-container>
+            <button type="button" class="btn btn-sm btn-cancel-back" (click)="backToList()">بستن</button>
+          </ng-container>
+        </div>
+
+
+
+
+
+  </div>
+</nbw-modal>

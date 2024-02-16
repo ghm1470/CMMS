@@ -1,0 +1,72 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+        <ng-container *ngIf="mode === actionMode.ADD">
+          <i class="fa fa-plus"></i>&nbsp;
+          افزودن واحد پولی
+        </ng-container>
+        <ng-container *ngIf="mode === actionMode.EDIT">
+          <i class="fa fa-edit"></i>&nbsp;
+          ویرایش واحد پولی</ng-container>
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+        <button (click)="cancel()"
+                class="btn btn-cancel-back btn-sm">
+          بازگشت
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <form #userForm="ngForm" (submit)="checkIfTitleAndIsoCodeExist(userForm)">
+    <div class="card-body card-body-content">
+      <div class="row">
+        <div class="col-md-4 form-group required col-sm-12">
+          <label class="for-label">عنوان واحد پولی:</label>
+          <label style="color: red">*</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="عنوان واحد پولی" [(ngModel)]="currency.title"
+                   class="form-control" minlength="1" maxlength="80" name="name"
+                   id="name"
+                   (change)="trim()"
+                   nbvRequired #name="ngModel"
+                   autocomplete="off"
+                   nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."
+                   nbvPattern="{{myPattern.TITLEFa}}"
+                   [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvPattern)"
+                   [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvPattern) && (name.touched || doSave)"
+                   dest="nameValidation">
+          </div>
+          <div id="nameValidation"></div>
+        </div>
+        <div class="col-md-4 form-group required col-sm-12">
+          <label class="for-label">نماد واحد پولی:</label>
+          <label style="color: red">*</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="نماد واحد پولی" [(ngModel)]="currency.isoCode"
+                   class="form-control" minlength="1" maxlength="20"
+                   name="isoCode"
+                   id="isoCode"
+                   autocomplete="off"
+                   nbvRequired #isoCode="ngModel"
+                   (change)="currency.isoCode = currency.isoCode.trim()"
+                   [class.is-valid]="!(isoCode?.errors?.nbvRequired)"
+                   [class.is-invalid]="(isoCode?.errors?.nbvRequired) && (isoCode.touched || doSave) "
+                   dest="isoCodeValidation">
+          </div>
+          <div id="isoCodeValidation"></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="card-footer text-left">
+      <button class="btn btn-action btn-sm" type="submit">
+        <span *ngIf="mode === actionMode.ADD">ثبت</span>
+        <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+        <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+      </button>
+    </div>
+  </form>
+</div>

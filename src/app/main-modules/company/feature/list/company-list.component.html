@@ -1,0 +1,180 @@
+<!--////////// Search input //////////-->
+
+<div class="collapse" id="company-search">
+    <div class="card" style="margin-bottom: 10px">
+        <div class="card-body card-body-filter">
+            <div class="row" style="margin-bottom: 10px">
+                <div class="col-md-3 form-group required col-12 col-sm-4">
+                    <label class="for-label">نام شرکت:</label>
+                    <input class="form-control form-control-sm" [(ngModel)]="companySearchDTO.companyName"
+                           name="companyName"
+                           [placeholder]="'جستجو براساس نام شرکت'"
+                           style="font-size: 12px">
+                </div>
+                <div class="col-md-3 form-group required col-12 col-sm-4">
+                    <label class="for-label">کد شرکت:</label>
+                    <input class="form-control form-control-sm" [(ngModel)]="companySearchDTO.companyCode"
+                           name="companyCode"
+                           [placeholder]="'جستجو براساس کد شرکت'"
+                           style="font-size: 12px">
+                </div>
+                <div class="col-md-3 form-group required col-12 col-sm-4">
+                    <label class="for-label">استان:</label>
+                    <div class="input-group input-group-sm">
+                        <ng-select dir="rtl" [(ngModel)]="companySearchDTO.provinceId"
+                                   placeholder="استان" name="provinceId" id="provinceId"
+                                   style="width: 100%; margin-bottom: 15px ; font-size: 13px"
+                                   dropdownPosition="bottom" (change)="getCityList()">
+                            <ng-option value="-1" disabled="">انتخاب استان</ng-option>
+                            <ng-option *ngFor="let item of provinceList; let i = index"
+                                       [value]="item.id">{{item.name}}</ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-md-3 form-group required col-12 col-sm-4">
+                    <label class="for-label">شهر:</label>
+                    <div class="input-group input-group-sm">
+                        <ng-select dir="rtl" [(ngModel)]="companySearchDTO.cityId"
+                                   placeholder="شهر" name="cityId" id="cityId"
+                                   style="width: 100%; margin-bottom: 15px ; font-size: 13px"
+                                   dropdownPosition="bottom">
+                            <ng-option value="-1" disabled="">انتخاب شهر</ng-option>
+                            <ng-option *ngFor="let item of cityList; let i = index"
+                                       [value]="item.id">{{item.name}}</ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-4 text-left col-12 mt-1">
+                    <button class="btn btn-sm btn-search" (click)="search()"
+                    >
+                        جستجو
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+<!--/////////empety List ////////////////-->
+<div class="col-md -12" *ngIf="entityList.length === 0 && loading === false">
+    <div class="text-center" style="color: #6d6d6e">
+        هیچ اطلاعاتی یافت نشد
+    </div>
+</div>
+
+<!--///////// Table ////////////////-->
+
+
+<div *ngIf="!loading " class="tab-pane fade show active" id="pills-home" role="tabpanel"
+     aria-labelledby="pills-home-tab">
+    <ng-container *ngIf=" entityList.length > 0">
+        <table class="table table-bordered table-responsive-md table-striped ">
+            <thead>
+            <tr style="text-align: center">
+                <th class="text-center" style="width: 5%">ردیف</th>
+                <th class="text-center">نام شرکت</th>
+                <th class="text-center">کد شرکت</th>
+                <th class="text-center">نوع شرکت</th>
+                <th class="text-center">استان</th>
+                <th class="text-center">شهر</th>
+                <th class="text-center" style="width: 5%">مشاهده</th>
+                <th class="text-center" style="width: 5%">ویرایش</th>
+                <th class="text-center" style="width: 5%">حذف</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let item of entityList; let i = index">
+                <tr class="text-center">
+                    <td>
+                        {{(i + 1 + (pageIndex * pageSize))}}
+                    </td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.code}}</td>
+                    <td>
+                        <ng-container *ngIf="item?.type;else noDataTemp">
+                            {{item?.type}}
+                        </ng-container>
+                    </td>
+                    <td>
+
+                        <ng-container *ngIf="item?.address?.provinceName;else noDataTemp">
+                            {{item?.address?.provinceName}}
+                        </ng-container>
+                    </td>
+                    <td>
+                        <ng-container *ngIf="item?.address?.cityName;else noDataTemp">
+                            {{item.address?.cityName}}
+                        </ng-container>
+                    </td>
+
+
+                    <td>
+                        <ng-container *ngIf="roleList.Company_see;else notSeeAccessTemp">
+
+                            <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                               (click)="chooseSelectedItemForSee(item)" style="cursor: pointer ; font-weight: bold">
+                                <i class="fa fa-eye" title="مشاهده"></i>
+                            </a>
+                        </ng-container>
+                        <ng-template #notSeeAccessTemp>
+                            <i class="fa fa-eye" title="مشاهده" style="cursor: not-allowed;color: #b7b7b7"></i>
+
+                        </ng-template>
+                    </td>
+                    <td>
+                        <ng-container *ngIf="roleList.Company_update;else notEditAccessTemp">
+
+                            <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                               (click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">
+                                <i class="fa fa-edit" title="ویرایش"></i>
+                            </a>
+                        </ng-container>
+                        <ng-template #notEditAccessTemp>
+                            <i class="fa fa-edit" title="ویرایش" style="cursor: not-allowed;color: #b7b7b7"></i>
+
+                        </ng-template>
+                    </td>
+                    <td>
+                        <ng-container *ngIf="roleList.Company_delete;else notDeleteAccessTemp">
+                            <a class="btn btn-sm btn-outline-lightning rounded-0"
+                               style="cursor: pointer"
+                               (click)="showModalDelete( item ,i)"
+                            >
+                                <i class="fa fa-trash" title="حذف"></i>
+                            </a>
+                        </ng-container>
+                        <ng-template #notDeleteAccessTemp>
+                            <i class="fa fa-trash" style="cursor: not-allowed;color: #b7b7b7" title="حذف"></i>
+
+                        </ng-template>
+                    </td>
+                </tr>
+            </ng-container>
+
+            </tbody>
+        </table>
+    </ng-container>
+
+    <!--    pagination-->
+    <app-paginator
+            [totalElements]="length"
+            [pageSize]="pageSize"
+            [pageIndex]="pageIndex"
+            [pageSizeOptions]="[]"
+            [showFirstLastButtons]="true"
+            (page)=" changePage($event)"
+    ></app-paginator>
+
+
+    <!--    pagination-->
+</div>
+<!--**************************************************************************-->
+<app-conferm-delete
+        [title]="selectedItemForDelete.title"
+        [loading]="selectedItemForDelete.loading"
+        [modalId]="'modalId'+selectedItemForDelete.id"
+        (value)="deleteItem($event)"
+></app-conferm-delete>
+<ng-template #noDataTemp> ----</ng-template>

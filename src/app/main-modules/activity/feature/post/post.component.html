@@ -1,0 +1,290 @@
+<div *ngIf="mode === 'edit'">
+  <form class="form-group" [formGroup]="editForm" (ngSubmit)="doEditPost()">
+    <fieldset class="scheduler-border" id="determine-access">
+      <legend class="scheduler-border"><h4 style="color: #51575d">ویرایش پست</h4></legend>
+      <div class="form-inline">
+
+
+        <div class="col-md-6" dir="ltr">
+          <div class="w-100 input-group">
+            <label class="placeholder active">عنوان</label>
+            <input class="form-control text-right" name="title" [(ngModel)]="newPost.title"
+                   #titleEdit [formControl]="editForm.controls['titleEdit']"/>
+            <div class="input-group-append">
+                <span class="input-group-text">
+                  <span class="fa fa-address-card" style="color: #8086a3;"></span>
+                </span>
+            </div>
+
+          </div>
+          <div class="alert-validation">
+            <p *ngIf="!editForm.controls['titleEdit'].valid && editForm.controls['titleEdit'].touched"
+               class="alert alert-danger"> اطلاعات وارد شده صحیح نمی باشد</p>
+          </div>
+        </div>
+        <!--<div class="col-md-12">-->
+          <!--<fieldset class="scheduler-border determine-access" style="margin-top: 1em!important;">-->
+            <!--<legend class="scheduler-border"><h4 style="color: #51575d">تعیین دسترسی برای مشاهده اطلاعات متقاضی-->
+              <!--(استقرار)</h4></legend>-->
+            <!--<div class="checkbox form-inline determine-access">-->
+              <!--<div class="col-md-4 form-inline mb-2">-->
+                <!--<div class="d-flex">-->
+                  <!--<input class="colored-primary" id="inputFirstStep"-->
+                         <!--[ngModelOptions]="{standalone: true}" name="inCityInsurance"-->
+                         <!--[(ngModel)]="newPost.firstStep" type="checkbox">-->
+                  <!--<label for="inputFirstStep">-->
+                    <!--اطلاعات متقاضی-->
+                  <!--</label>-->
+                <!--</div>-->
+
+              <!--</div>-->
+              <!--<div class="col-md-4 form-inline mb-2">-->
+                <!--<div class="d-flex">-->
+                  <!--<input class="colored-primary" id="inputSecondStep"-->
+                         <!--[ngModelOptions]="{standalone: true}" name="inCityInsurance"-->
+                         <!--[(ngModel)]="newPost.secondStep" type="checkbox">-->
+                  <!--<label for="inputSecondStep">-->
+                    <!--اطلاعات واحد-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</div>-->
+
+              <!--<div class="col-md-4 form-inline mb-2">-->
+                <!--<div class="d-flex">-->
+                  <!--<input class="colored-primary" id="inputThirdStep"-->
+                         <!--[ngModelOptions]="{standalone: true}" name="inCityInsurance"-->
+                         <!--[(ngModel)]="newPost.thirdStep" type="checkbox">-->
+                  <!--<label for="inputThirdStep">-->
+                    <!--مشخصات تیم کاری-->
+                  <!--</label>-->
+                <!--</div>-->
+
+              <!--</div>-->
+
+              <!--<div class="col-md-4 form-inline mb-2">-->
+                <!--<div class="d-flex">-->
+                  <!--<input class="colored-primary" id="inputFourthStep"-->
+                         <!--[ngModelOptions]="{standalone: true}" name="inCityWeight"-->
+                         <!--[(ngModel)]="newPost.fourthStep" type="checkbox">-->
+                  <!--<label for="inputFourthStep">-->
+                    <!--ایده محوری-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</div>-->
+
+              <!--<div class="col-md-4 form-inline mb-2">-->
+                <!--<div class="d-flex">-->
+                  <!--<input class="colored-primary" id="inputFifthStep"-->
+                         <!--[ngModelOptions]="{standalone: true}" name="inCityWeight"-->
+                         <!--[(ngModel)]="newPost.fifthStep" type="checkbox">-->
+                  <!--<label for="inputFifthStep">-->
+                    <!--کلیات برنامه کاری-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</div>-->
+
+              <!--<div class="col-md-4 form-inline mb-2">-->
+                <!--<div class="d-flex">-->
+                  <!--<input class="colored-primary" id="inputSixthStep"-->
+                         <!--[ngModelOptions]="{standalone: true}" name="inCityPayType"-->
+                         <!--[(ngModel)]="newPost.sixthStep" type="checkbox">-->
+                  <!--<label for="inputSixthStep">-->
+                    <!--انگیزه‌های تیم-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</fieldset>-->
+        <!--</div>-->
+        <div class="col-md-6">
+          <div class="input-group">
+            <button class="btn btn-action btn-sm ml-3" [disabled]="!editForm.valid" type="submit">ویرایش</button>
+            <button class="btn btn-cancel-back btn-md" (click)="cancelOperation()">انصراف</button>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
+<div>
+  <div *ngIf="mode === 'new'">
+    <form class="form-group" [formGroup]="newForm" (ngSubmit)="doAddPost()">
+      <fieldset class="scheduler-border">
+        <legend class="scheduler-border"><h4 style="color: #51575d">افزودن پست</h4></legend>
+        <div class="form-inline">
+          <!--          <div class="col-lg-12">-->
+          <!--            <div class="form-group registerbox-textbox">-->
+          <!--              <div class="input-group">-->
+          <!--                <label class="placeholder active">عنوان</label>-->
+          <!--                <input class="form-control text-right" name="title" [(ngModel)]="newPost.title"-->
+          <!--                       #titleEdit [formControl]="newForm.controls['titleNew']"/>-->
+          <!--                <p *ngIf="!newForm.controls['titleNew'].valid && newForm.controls['titleNew'].touched"-->
+          <!--                   class="alert alert-danger"> اطلاعات وارد شده صحیح نمی باشد</p>-->
+
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--          </div>-->
+
+
+          <div class="col-md-6" dir="ltr">
+            <div class="w-100 input-group">
+              <label class="placeholder active">عنوان</label>
+              <input class="form-control text-right" name="title" [(ngModel)]="newPost.title"
+                     #titleEdit [formControl]="newForm.controls['titleNew']"/>
+              <div class="input-group-append">
+                          <span class="input-group-text">
+                            <span class="fa fa-address-card" style="color: #8086a3;"></span>
+                          </span>
+              </div>
+            </div>
+            <div class="alert-validation">
+              <p *ngIf="!newForm.controls['titleNew'].valid && newForm.controls['titleNew'].touched"
+                 class="alert alert-danger"> اطلاعات وارد شده صحیح نمی باشد</p>
+            </div>
+          </div>
+
+
+          <!--<div class="col-md-12">-->
+            <!--<fieldset class="scheduler-border determine-access" style="margin-top: 1em!important;">-->
+              <!--<legend class="scheduler-border"><h4 style="color: #51575d">تعیین دسترسی برای مشاهده اطلاعات متقاضی-->
+                <!--(استقرار)</h4></legend>-->
+              <!--<div class="checkbox form-inline determine-access">-->
+                <!--<div class="col-md-4 form-inline mb-2">-->
+                  <!--<div class="d-flex">-->
+                    <!--<input class="colored-primary" id="inputFirstStepEdit"-->
+                           <!--[ngModelOptions]="{standalone: true}" name="inCityInsurance"-->
+                           <!--[(ngModel)]="newPost.firstStep" type="checkbox">-->
+                    <!--<label for="inputFirstStepEdit">-->
+                      <!--اطلاعات متقاضی-->
+                    <!--</label>-->
+                  <!--</div>-->
+
+                <!--</div>-->
+                <!--<div class="col-md-4 form-inline mb-2">-->
+                  <!--<div class="d-flex">-->
+                    <!--<input class="colored-primary" id="inputSecondStepEdit"-->
+                           <!--[ngModelOptions]="{standalone: true}" name="inCityInsurance"-->
+                           <!--[(ngModel)]="newPost.secondStep" type="checkbox">-->
+                    <!--<label for="inputSecondStepEdit">-->
+                      <!--اطلاعات واحد-->
+                    <!--</label>-->
+                  <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="col-md-4 form-inline mb-2">-->
+                  <!--<div class="d-flex">-->
+                    <!--<input class="colored-primary" id="inputThirdStepEdit"-->
+                           <!--[ngModelOptions]="{standalone: true}" name="inCityInsurance"-->
+                           <!--[(ngModel)]="newPost.thirdStep" type="checkbox">-->
+                    <!--<label for="inputThirdStepEdit">-->
+                      <!--مشخصات تیم کاری-->
+                    <!--</label>-->
+                  <!--</div>-->
+
+                <!--</div>-->
+
+                <!--<div class="col-md-4 form-inline mb-2">-->
+                  <!--<div class="d-flex">-->
+                    <!--<input class="colored-primary" id="inputFourthStepEdit"-->
+                           <!--[ngModelOptions]="{standalone: true}" name="inCityWeight"-->
+                           <!--[(ngModel)]="newPost.fourthStep" type="checkbox">-->
+                    <!--<label for="inputFourthStepEdit">-->
+                      <!--ایده محوری-->
+                    <!--</label>-->
+                  <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="col-md-4 form-inline mb-2">-->
+                  <!--<div class="d-flex">-->
+                    <!--<input class="colored-primary" id="inputFifthStepEdit"-->
+                           <!--[ngModelOptions]="{standalone: true}" name="inCityWeight"-->
+                           <!--[(ngModel)]="newPost.fifthStep" type="checkbox">-->
+                    <!--<label for="inputFifthStepEdit">-->
+                      <!--کلیات برنامه کاری-->
+                    <!--</label>-->
+                  <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="col-md-4 form-inline mb-2">-->
+                  <!--<div class="d-flex">-->
+                    <!--<input class="colored-primary" id="inputSixthStepEdit"-->
+                           <!--[ngModelOptions]="{standalone: true}" name="inCityPayType"-->
+                           <!--[(ngModel)]="newPost.sixthStep" type="checkbox">-->
+                    <!--<label for="inputSixthStepEdit">-->
+                      <!--انگیزه‌های تیم-->
+                    <!--</label>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</fieldset>-->
+          <!--</div>-->
+
+          <div class="col-md-6">
+            <div class="input-group">
+              <button class="btn btn-action btn-sm ml-3" [disabled]="!newForm.valid" type="submit">ذخیره</button>
+              <button class="btn btn-cancel-back btn-sm btn-md" (click)="cancelOperation()">انصراف</button>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+    <button class="btn btn-action btn-sm" (click)="cancelOperation()">انصراف</button>
+    <button class="btn btn-warning btn-sm mr-3" [routerLink]="['/panel/organization']">
+      بازگشت به لیست سازمان ها
+    </button>
+  </div>
+  <div *ngIf="mode === ''">
+    <button class="btn btn-action btn-sm" (click)="addPost()">افزودن پست</button>
+    <button class="btn btn-warning btn-sm mr-3" [routerLink]="['/panel/organization']">
+      بازگشت به لیست سازمان ها
+    </button>
+  </div>
+  <hr/>
+  <h4 class="tables_header mt-2">لیست پست های {{organizationTitle}}</h4>
+</div>
+
+
+<div style="margin: 20px">
+  <app-smart-table-test
+    [config]="config"
+    [rowTemplate]="rowTemplate"
+    [expanderTemplate]="expanderTemplate">
+  </app-smart-table-test>
+  <ng-template #rowTemplate let-i="i" let-row="row"
+               let-toggleRow="toggleRow" let-isRowExpanded="isRowExpanded">
+    <tr class="table-bordered">
+      <td>{{i + 1 | perNumber}}</td>
+      <td>{{row?.title}}</td>
+      <!--      <td>-->
+      <!--        (-->
+      <!--        <span *ngIf="row?.accountingAccess">حسابداری،</span>-->
+      <!--        <span *ngIf="row?.statisticsAccess">آمار،</span>-->
+      <!--        <span *ngIf="row?.manageEmployeeAccess">مدیریت کاربران،</span>-->
+      <!--        <span *ngIf="row?.activityAccess">فرآیندساز،</span>-->
+      <!--        <span *ngIf="row?.formBuilderAccess">فرم ساز،</span>-->
+      <!--        <span *ngIf="row?.createRequestAccess">ثبت درخواست خودرو-->
+      <!--          <span *ngIf="row?.tripsAccess || row?.requestAccess || row?.hallAccess">،</span>-->
+      <!--        </span>-->
+      <!--        <span *ngIf="row?.tripsAccess">سفرها-->
+      <!--          <span *ngIf="row?.requestAccess || row?.hallAccess">،</span>-->
+      <!--        </span>-->
+      <!--        <span *ngIf="row?.requestAccess">درخواست های خودرو-->
+      <!--          <span *ngIf="row?.hallAccess">،</span>-->
+      <!--        </span>-->
+      <!--        <span *ngIf="row?.hallAccess">تالار بار</span>-->
+      <!--        )-->
+      <!--      </td>-->
+      <td>
+        <a (click)="editPost(row?.id)">
+          <i class="fa fa-edit" style="padding: 0 3px; cursor: pointer; color: #53565d;"></i>
+        </a>
+      </td>
+      <td>
+        <a (click)="deletePost(row?.id)">
+          <i class="fa fa-trash" style="padding: 0 3px; cursor: pointer; color: #53565d;"></i>
+        </a>
+      </td>
+    </tr>
+  </ng-template>
+</div>
+

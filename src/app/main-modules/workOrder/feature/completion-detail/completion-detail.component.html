@@ -1,0 +1,197 @@
+<div class="card"  *ngIf="formStatus === 'pending' || formStatus === 'workOrder'">
+  <form #completionDetailForm="ngForm" (submit)="action(completionDetailForm)">
+    <div class="card-body card-body-content">
+
+    <div class="row">
+      <div class="col-md-6 form-group required col-sm-12">
+        <label class="for-label">بودجه تخصیص یافته:</label>
+        <div class="input-group input-group-sm">
+          <ng-select dir="rtl" [(ngModel)]="completionDetail.budgetId"
+                     placeholder="بودجه تخصیص یافته" name="budgetId" style="width: 100%;"
+                     dropdownPosition="bottom" [disabled]="modeW===actionMode.VIEW">
+            <ng-option *ngFor="let item of budgetList; let i = index"
+                       [value]="item.id">
+              {{item.title}}
+<!--              ({{item.code}})-->
+            </ng-option>
+          </ng-select>
+<!--          <select [(ngModel)]="completionDetail.budgetId" name="budgetId" class="form-control"-->
+<!--                  #budgetId="ngModel" nbvRequired nbvPattern="{{myPattern.OBJECT_ID}}"-->
+<!--                  nbvPatternMsgHtml=""-->
+<!--                  [class.is-valid]="!(budgetId?.errors?.nbvRequired || budgetId?.errors?.nbvPattern)"-->
+<!--                  [class.is-invalid]="(budgetId?.errors?.nbvPattern) && (budgetId.touched || doSave)"-->
+<!--                  dest="budgetIdValidation">-->
+<!--            <option value="-1" disabled>انتخاب بودجه</option>-->
+<!--            <option *ngFor="let item of budgetList" [value]="item.id">{{item.title}} ({{item.code}})</option>-->
+<!--          </select>-->
+        </div>
+        <div id="budgetIdValidation" style="opacity: 0; height: 0"></div>
+      </div>
+      <div class="col-md-6 form-group required col-sm-12">
+        <label class="for-label"> دپارتمان مسئول:</label>
+        <div class="input-group input-group-sm">
+          <ng-select dir="rtl" [(ngModel)]="completionDetail.chargeDepartmentId"
+                     placeholder="انتخاب دپارتمان مسئول" name="chargeDepartmentId" style="width: 100%;"
+                     dropdownPosition="bottom" [disabled]="modeW===actionMode.VIEW">
+            <ng-option *ngFor="let item of chargeDepartmentList; let i = index"
+                       [value]="item.id">
+              {{item.title}}
+<!--              ({{item.code}})-->
+            </ng-option>
+          </ng-select>
+<!--          <select [(ngModel)]="completionDetail.chargeDepartmentId" name="chargeDepartmentId" class="form-control"-->
+<!--                  #chargeDepartmentId="ngModel" nbvRequired nbvPattern="{{myPattern.OBJECT_ID}}"-->
+<!--                  nbvPatternMsgHtml=""-->
+<!--                  [class.is-valid]="!(chargeDepartmentId?.errors?.nbvRequired || chargeDepartmentId?.errors?.nbvPattern)"-->
+<!--                  [class.is-invalid]="(chargeDepartmentId?.errors?.nbvRequired || chargeDepartmentId?.errors?.nbvPattern) && (chargeDepartmentId.touched || doSave)"-->
+<!--                  dest="chargeDepartmentIdValidation">-->
+<!--            <option value="-1" disabled>انتخاب دپارتمان مسئول</option>-->
+<!--            <option *ngFor="let item of chargeDepartmentList" [value]="item.id">{{item.title}}({{item.code}})</option>-->
+<!--          </select>-->
+        </div>
+        <div id="chargeDepartmentIdValidation" style="opacity: 0; height: 0"></div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">یادداشت:</label>
+        <div class="input-group input-group-sm">
+        <textarea type="text" placeholder="یادداشت" [(ngModel)]="completionDetail.note"
+                  class="form-control" maxlength="620" name="note"></textarea>
+<!--          dest="noteValidation"-->
+<!--          nbvRequired #note="ngModel"-->
+<!--          [class.is-valid]="!(note?.errors?.nbvRequired)"-->
+<!--          [class.is-invalid]="(note?.errors?.nbvRequired) && (note.touched || doSave)"-->
+        </div>
+<!--        <div id="noteValidation"></div>-->
+      </div>
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">مشکل:</label>
+        <div class="input-group input-group-sm">
+        <textarea type="text" placeholder="مشکل" [(ngModel)]="completionDetail.problem"
+                  class="form-control" maxlength="620" name="problem"></textarea>
+<!--          nbvRequired #problem="ngModel"-->
+<!--          [class.is-valid]="!(problem?.errors?.nbvRequired)"-->
+<!--          [class.is-invalid]="(problem?.errors?.nbvRequired) && (problem.touched || doSave)"-->
+<!--          dest="problemValidation"-->
+        </div>
+        <div id="problemValidation"></div>
+      </div>
+
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">علت:</label>
+        <div class="input-group input-group-sm">
+        <textarea type="text" placeholder="علت" [(ngModel)]="completionDetail.rootCause"
+                  class="form-control" maxlength="620" name="rootCause"></textarea>
+<!--          nbvRequired #rootCause="ngModel"-->
+<!--          [class.is-valid]="!(rootCause?.errors?.nbvRequired)"-->
+<!--          [class.is-invalid]="(rootCause?.errors?.nbvRequired) && (rootCause.touched || doSave)"-->
+<!--          dest="rootCauseValidation"-->
+        </div>
+        <div id="rootCauseValidation"></div>
+      </div>
+
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">راه حل:</label>
+        <div class="input-group input-group-sm">
+        <textarea type="text" placeholder="راه حل" [(ngModel)]="completionDetail.solution"
+                  class="form-control" maxlength="620" name="solution"></textarea>
+<!--          nbvRequired #solution="ngModel"-->
+<!--          [class.is-valid]="!(solution?.errors?.nbvRequired)"-->
+<!--          [class.is-invalid]="(solution?.errors?.nbvRequired) && (solution.touched || doSave)"-->
+<!--          dest="solutionValidation"-->
+        </div>
+        <div id="solutionValidation"></div>
+      </div>
+
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">یادداشت مدیر:</label>
+        <div class="input-group input-group-sm">
+        <textarea type="text" placeholder="یادداشت مدیر" [(ngModel)]="completionDetail.adminNote"
+                  class="form-control" maxlength="620" name="adminNote"></textarea>
+<!--          nbvRequired #adminNote="ngModel"-->
+<!--          [class.is-valid]="!(adminNote?.errors?.nbvRequired)"-->
+<!--          [class.is-invalid]="(adminNote?.errors?.nbvRequired) && (adminNote.touched || doSave)"-->
+<!--          dest="adminNoteValidation"-->
+        </div>
+        <div id="adminNoteValidation"></div>
+      </div>
+
+    </div>
+    </div>
+<!--    <div class="form-group required col-sm-12 text-left" *ngIf="modeW !== actionMode.VIEW">-->
+    <div class="card-footer text-left" *ngIf="modeW !== actionMode.VIEW">
+
+    <button class="btn btn-action btn-sm" type="submit" >
+        <span>ثبت </span>
+      </button>
+    </div>
+  </form>
+</div>
+
+<!--=================================================workTableView=====-->
+<div class="col-md-12" style="padding: 10px" *ngIf="formStatus !== 'pending' && formStatus !== 'workOrder'">
+    <div class="row">
+      <div class="col-md-6 form-group required col-sm-12">
+        <label class="for-label">تخصیص بودجه:</label>
+        <div class="input-group input-group-sm">
+          <input dir="rtl" [(ngModel)]="budget.budgetAmount"
+                 class="form-control"   name="budgetId" style="width: 100%;"
+                 disabled>
+        </div>
+      </div>
+      <div class="col-md-6 form-group required col-sm-12">
+        <label class="for-label">تخصیص دپارتمان مسئول:</label>
+        <div class="input-group input-group-sm">
+          <input dir="rtl" [(ngModel)]="chargeDepartment.title"
+                 class="form-control" name="chargeDepartmentId" style="width: 100%;"
+                   disabled>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">یادداشت:</label>
+        <div class="input-group input-group-sm">
+        <textarea type="text"  [(ngModel)]="completionDetail.note"
+                  class="form-control" name="note"  disabled></textarea>
+        </div>
+<!--        <div id="noteValidation"></div>-->
+      </div>
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">مشکل:</label>
+        <div class="input-group input-group-sm">
+        <textarea type="text"  [(ngModel)]="completionDetail.problem"
+                  class="form-control" name="problem" disabled></textarea>
+        </div>
+      </div>
+
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">علت:</label>
+        <div class="input-group input-group-sm">
+        <textarea type="text" [(ngModel)]="completionDetail.rootCause"
+                  class="form-control"  name="rootCause" disabled></textarea>
+        </div>
+      </div>
+
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">راه حل:</label>
+        <div class="input-group input-group-sm">
+        <textarea type="text" [(ngModel)]="completionDetail.solution"
+                  class="form-control" name="solution" disabled></textarea>
+        </div>
+      </div>
+
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">یادداشت مدیر:</label>
+        <div class="input-group input-group-sm">
+        <textarea type="text"  [(ngModel)]="completionDetail.adminNote"
+                  class="form-control" name="adminNote" disabled></textarea>
+        </div>
+      </div>
+
+    </div>
+</div>

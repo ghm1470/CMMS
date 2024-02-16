@@ -1,0 +1,174 @@
+<!--////////// Search input //////////-->
+
+
+<div class="collapse" id="budget-search">
+  <div class="card" style="margin-bottom: 10px">
+    <div class="card-body card-body-filter">
+      <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-2 form-group">
+            <label class="for-label">عنوان بودجه:</label>
+            <input [(ngModel)]="budgetFilter.title"  [placeholder]="'عنوان بودجه'" class="form-control form-control-sm">
+          </div>
+          <div class="col-md-2 form-group">
+            <label class="for-label">کد بودجه:</label>
+            <input [(ngModel)]="budgetFilter.code"  [placeholder]="'کد بودجه'"  class="form-control form-control-sm">
+          </div>
+          <div class="col-md-2 form-group">
+            <label class="for-label">واحد پول:</label>
+            <!--        <input [(ngModel)]="budgetFilter.currency"  [placeholder]="'واحد پول'"  class="form-control form-control-sm">-->
+            <ng-select dir="rtl"  [(ngModel)]="budgetFilter.currency"
+                       placeholder="واحد پولی" name="currencyId" id="currencyId" style="width: 100%; margin-bottom: 15px ; font-size: 13px"
+                       nbvRequired
+                       dropdownPosition="bottom">
+              <ng-option value="-1" disabled="">انتخاب واحد پولی</ng-option>
+              <ng-option *ngFor="let item of currencyList; let i = index"
+                         [value]="item.id">
+                {{item.title}}
+              </ng-option>
+            </ng-select>
+
+          </div>
+          <div class="col-md-2 form-group">
+            <label class="for-label">از مبلغ :</label>
+            <input [(ngModel)]="budgetFilter.primaryBudgetAmount"
+                   [dest]="'pb'"
+                   #pb=ngModel
+                   nbvNumber  min="0" maxlength="18" (change)="checkAmount('a')"  [placeholder]="' از مبلغ'"  class="form-control form-control-sm">
+            <div id="pb"></div>
+          </div>
+          <div class="col-md-2 form-group">
+            <label class="for-label">تا مبلغ:</label>
+            <input [(ngModel)]="budgetFilter.finalBudgetAmount"
+                   [dest]="'fb'"
+                   #fb=ngModel
+                   nbvNumber min="0" maxlength="18"   [placeholder]="'تا مبلغ '" (change)="checkAmount('b')"  class="form-control form-control-sm">
+            <div id="fb"></div>
+
+          </div>
+          <div class="col-md-2 " style="margin-top: 30px">
+            <button class="btn btn-sm btn-search" (click)="search()"
+            >
+              <!--<i class="fa fa-search"></i>-->
+              جستجو
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+
+<!--/////// loading /////////-->
+<app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+
+<!--/////////empety List ////////////////-->
+ <div class="col-md -12" *ngIf="!entityList.length && !loading ">
+  <br>
+  <br>
+  <div class="text-center" style="color: #6d6d6e">
+<!--    <a *ngIf="!dataOfBudgetList.term">هیچ اطلاعاتی ثبت نشده!</a>-->
+<!--    <a *ngIf="dataOfBudgetList.term">هیچ اطلاعاتی یافت نشد!</a>-->
+  </div>
+</div>
+
+
+<!--///////// Table ////////////////-->
+<!--<ng-container *ngIf="entityList.length > 0">-->
+
+  <div *ngIf="!loading && entityList.length " class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+  <table   class="table table-bordered table-responsive-md table-striped">
+    <thead>
+    <tr style="text-align: center">
+      <th class="text-center" style="width: 5%">ردیف</th>
+      <th class="text-center" >عنوان بودجه</th>
+      <th class="text-center" >کد بودجه</th>
+      <th class="text-center" >مبلغ بودجه</th>
+      <th class="text-center" >واحد پولی</th>
+      <th class="text-center" style="width: 5%">ویرایش</th>
+      <th class="text-center" style="width: 5%">حذف</th>
+    </tr>
+    </thead>
+    <ng-container *ngIf="entityList.length > 0">
+
+    <tbody>
+    <ng-container *ngFor="let item of entityList; let i = index">
+      <tr class="text-center">
+        <td>
+          {{(i + 1 + (pageIndex * entityList.length))}}
+        </td>
+        <td>{{item.title}}</td>
+        <td>{{item.code}}</td>
+        <td>{{item.budgetAmount}}</td>
+        <td>{{item.currencyName}}</td>
+        <td>
+          <ng-container *ngIf="roleList.Budget_update;else notEditAccessTemp">
+
+            <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+               (click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">
+              <i class="fa fa-edit" title="ویرایش"></i>
+            </a>
+          </ng-container>
+          <ng-template #notEditAccessTemp>
+            <i class="fa fa-edit" title="ویرایش" style="cursor: no-drop"></i>
+
+          </ng-template>
+        </td>
+        <td>
+          <ng-container *ngIf="roleList.Budget_delete;else notDeleteAccessTemp">
+            <a class="btn btn-sm btn-outline-lightning rounded-0"
+               style="cursor: pointer"
+               (click)="showModalDelete(item,i)"
+            >
+              <i class="fa fa-trash" title="حذف"></i>
+            </a>
+          </ng-container>
+          <ng-template #notDeleteAccessTemp>
+            <i class="fa fa-trash" style="cursor: no-drop" title="حذف"></i>
+
+          </ng-template>
+        </td>
+
+      </tr>
+    </ng-container>
+
+    </tbody>
+    </ng-container>
+  </table>
+
+
+    <!--    pagination-->
+    <app-paginator
+            [totalElements]="length"
+            [pageSize]="pageSize"
+            [pageIndex]="pageIndex"
+            [pageSizeOptions]="[1,5,10,15]"
+            [showFirstLastButtons]="true"
+            (page)=" changePage($event)"
+    ></app-paginator>
+
+
+    <!--    pagination-->
+<!--{{dataOfBudgetList.queryParamReal.paging.page}}-->
+<!--  <shr-pagination-->
+<!--    (click)="d()"-->
+<!--    *ngIf="dataOfBudgetList.itemPage !== null && dataOfBudgetList.itemPage !== undefined"-->
+<!--    [indicatorCount]="dataOfBudgetList.indicatorCount"-->
+<!--    [totalPages]="dataOfBudgetList.itemPage.totalPages"-->
+<!--    [currentPage]="dataOfBudgetList.queryParamReal.paging.page"-->
+<!--    (selectedPage)="setCurrentPage($event)"-->
+<!--    class="class1"></shr-pagination>-->
+</div>
+<!--</ng-container>-->
+<!--**************************************************************************-->
+<app-conferm-delete
+  [title]="selectedItemForDelete.title"
+  [loading]="selectedItemForDelete.loading"
+  [modalId]="'modalId'+selectedItemForDelete.id"
+  (value)="deleteItem($event)"
+></app-conferm-delete>

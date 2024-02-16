@@ -1,0 +1,66 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+        <ng-container *ngIf="mode === actionMode.ADD">
+          <i class="fa fa-plus"></i>&nbsp;
+          افزودن وضعیت درخواست کار
+        </ng-container>
+        <ng-container *ngIf="mode === actionMode.EDIT">
+          <i class="fa fa-edit"></i>&nbsp;
+          ویرایش وضعیت درخواست کار</ng-container>
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+        <button (click)="cancel()"
+                class="btn btn-cancel-back btn-sm">
+          بازگشت
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <form #userForm="ngForm" (submit)="checkIfNameExists(userForm)">
+    <div class="card-body card-body-content">
+      <div class="row">
+        <div class="col-md-4 form-group required col-sm-12">
+          <label class="for-label">عنوان:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="عنوان" [(ngModel)]="workOrderStatus.name"
+                   class="form-control"  maxlength="80" name="name"
+                   nbvRequired #name="ngModel"
+                   nbvMinlength="1"
+                   nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."
+                   nbvPattern="{{myPattern.TITLEFa}}"
+                   [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvPattern|| name?.errors?.nbvMinlength)"
+                   [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvPattern || name?.errors?.nbvMinlength) && (name.touched || doSave)"
+                   dest="nameValidation">
+          </div>
+          <div id="nameValidation"></div>
+        </div>
+        <div class="col-md-4 form-group required col-sm-12">
+          <label class="for-label">وضعیت:</label>
+          <div class="input-group input-group-sm">
+            <select [(ngModel)]="workOrderStatus.status" name="status" class="form-control"
+                    #status="ngModel" nbvRequired
+                    [class.is-valid]="!(status?.errors?.nbvRequired || status?.errors?.nbvPattern)"
+                    [class.is-invalid]="(status?.errors?.nbvRequired || status?.errors?.nbvPattern) && (status.touched || doSave)"
+                    dest="statusValidation">
+              <option value="-1" disabled>وضعیت</option>
+              <option *ngFor="let item of statusList" [value]="item.value">{{item.title}}</option>
+            </select>
+          </div>
+          <div id="statusValidation" style="opacity: 0; height: 0"></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="card-footer text-left">
+      <button class="btn btn-action btn-sm" type="submit">
+        <span *ngIf="mode === actionMode.ADD">ثبت</span>
+        <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+        <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+      </button>
+    </div>
+  </form>
+</div>

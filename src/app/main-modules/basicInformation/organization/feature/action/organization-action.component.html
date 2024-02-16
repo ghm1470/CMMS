@@ -1,0 +1,230 @@
+<!--/////// loading /////////-->
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+        <ng-container *ngIf="mode === actionMode.ADD">
+          <i class="fa fa-plus"></i>&nbsp;
+          افزودن سازمان
+        </ng-container>
+        <ng-container *ngIf="mode === actionMode.EDIT">
+          <i class="fa fa-edit"></i>&nbsp;
+          ویرایش سازمان
+        </ng-container>
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+        <button (click)="cancel()"
+                class="btn btn-cancel-back btn-sm">
+          بازگشت
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <form #userForm="ngForm" >
+    <div class="card-body card-body-content">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group required col-sm-12">
+            <label class="for-label">نام سازمان:<span style="color: red">*</span></label>
+            <div class="input-group input-group-sm">
+              <input type="text" placeholder="نام سازمان" [(ngModel)]="organization.name"
+                     class="form-control" maxlength="80" name="name"
+                     nbvRequired #name="ngModel"
+                     nbvPattern="{{myPattern.faText}}"
+                     nbvMinlength="3"
+                     (change)="trimName()"
+                     nbvPatternMsgHtml="نام سازمان باید به صورت کاراکتر های فارسی وارد گردد."
+                     [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvPattern || name?.errors?.nbvMinlength)"
+                     [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvPattern) && (name.touched || doSave)"
+                     dest="nameValidation">
+            </div>
+            <div id="nameValidation"></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group required col-sm-12">
+            <label class="for-label">کد سازمانی:<span style="color: red">*</span></label>
+            <div class="input-group input-group-sm">
+              <input type="text" placeholder="کد سازمانی"
+                     [(ngModel)]="organization.organCode"
+                     class="form-control"
+                     minlength="3"
+                     maxlength="20"
+                     name="organCode"
+                     nbvRequired #organCode="ngModel" (change)="changeOrganizationCode()"
+                     nbvPattern="{{myPattern.number}}"
+                     nbvPatternMsgHtml="کد سازمانی باید به صورت عددی وارد گردد."
+                     [class.is-valid]="!(organCode?.errors?.nbvRequired || organCode?.errors?.nbvPattern)"
+                     [class.is-invalid]="(organCode?.errors?.nbvRequired || organCode?.errors?.nbvPattern) && (organCode.touched || doSave)"
+                     dest="organCodeValidation">
+            </div>
+            <div id="organCodeValidation"></div>
+          </div>
+
+        </div>
+        <div class="col-md-4">
+          <div class="form-group required col-sm-12" *ngIf="parentOrganizationList.length">
+            <label class="for-label">سازمان والد:</label>
+            <ng-select style="text-align: right;direction: rtl"
+                       id="parentOrganId"
+                       name="parentOrganId"
+                       title="parentOrganId"
+                       [clearable]="false"
+                       [(ngModel)]="organization.parentOrganId"
+            >
+              <ng-option value="PARENT">سازمان والد</ng-option>
+              <ng-container *ngFor="let item of parentOrganizationList">
+                <ng-option style="text-align: right;direction: rtl" *ngIf="item.id !== organization.id"
+                           value="{{item.id}}">
+                  {{item.name}}
+                </ng-option>
+              </ng-container>
+            </ng-select>
+            <!--====================================================-->
+            <!--<label class="for-label">سازمان والد:</label>-->
+            <!--<div class="input-group input-group-sm">-->
+            <!--<select [(ngModel)]="organization.parentOrganId" name="parentOrganId" class="form-control">-->
+            <!--<option value="PARENT">سازمان والد</option>-->
+            <!--<option *ngFor="let item of parentOrganizationList" [value]="item.id">{{item.name}}</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--====================================================-->
+          </div>
+
+        </div>
+        <div class="col-md-4">
+          <div class="form-group required col-sm-12" *ngIf="provinceList.length">
+            <label class="for-label">استان:<span style="color: red">*</span></label>
+            <ng-select style="text-align: right;direction: rtl"
+                       id="province"
+                       name="province"
+                       title="province"
+                       nbvRequired
+                       [clearable]="false"
+                       nbvPattern="{{myPattern.OBJECT_ID}}"
+                       #provinceId="ngModel"
+                       (change)="getCityList(true)"
+                       nbvRequiredMsgHtml=" استان را انتخاب کنید "
+                       [class.is-valid]="!(provinceId?.errors?.nbvRequired || provinceId?.errors?.nbvPattern)"
+                       [class.is-invalid]="(provinceId?.errors?.nbvRequired || provinceId?.errors?.nbvPattern) && (provinceId.touched || doSave)"
+                       [(ngModel)]="organization.provinceId"
+                       dest="provinceIdValidation">
+              <ng-option value="-1">استان</ng-option>
+              <ng-option style="text-align: right;direction: rtl" *ngFor="let item of provinceList" value="{{item.id}}">
+                {{item.name}}
+              </ng-option>
+            </ng-select>
+            <!--===============================================-->
+            <!--<label class="for-label">استان:</label>-->
+            <!--<div class="input-group input-group-sm">-->
+            <!--<select [(ngModel)]="organization.provinceId" name="provinceId" class="form-control"-->
+            <!--#provinceId="ngModel" nbvRequired nbvPattern="{{myPattern.OBJECT_ID}}"-->
+            <!--nbvPatternMsgHtml="" (change)="getCityList(true)"-->
+            <!--[class.is-valid]="!(provinceId?.errors?.nbvRequired || provinceId?.errors?.nbvPattern)"-->
+            <!--[class.is-invalid]="(provinceId?.errors?.nbvRequired || provinceId?.errors?.nbvPattern) && (provinceId.touched || doSave)"-->
+            <!--dest="provinceIdValidation">-->
+            <!--<option value="-1" disabled>استان</option>-->
+            <!--<option *ngFor="let item of provinceList" [value]="item.id">{{item.name}}</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--=============================================-->
+            <div id="provinceIdValidation" style="opacity: 0; height: 0"></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group required col-sm-12">
+
+            <label class="for-label">شهر:<span style="color: red">*</span></label>
+            <ng-select style="text-align: right;direction: rtl"
+                       id="cityId"
+                       name="cityId"
+                       title="cityId"
+                       nbvRequired
+                       [clearable]="false"
+                       nbvPattern="{{myPattern.OBJECT_ID}}"
+                       #cityId="ngModel"
+                       (change)="changeCity()"
+                       nbvRequiredMsgHtml=" شهر را انتخاب کنید "
+                       [class.is-valid]="!(cityId?.errors?.nbvRequired || cityId?.errors?.nbvPattern)"
+                       [class.is-invalid]="(cityId?.errors?.nbvRequired || cityId?.errors?.nbvPattern) && (cityId.touched || doSave)"
+                       [(ngModel)]="organization.cityId"
+                       dest="cityIdValidation">
+              <ng-option value="-1">شهر</ng-option>
+              <ng-option style="text-align: right;direction: rtl" *ngFor="let item of cityList" value="{{item.id}}">
+                {{item.name}}
+              </ng-option>
+            </ng-select>
+            <!--==========================================-->
+            <!--<label class="for-label">شهر:</label>-->
+            <!--<div class="input-group input-group-sm">-->
+            <!--<select [(ngModel)]="organization.cityId" name="cityId" class="form-control"-->
+            <!--#cityId="ngModel" nbvRequired nbvPattern="{{myPattern.OBJECT_ID}}"-->
+            <!--nbvPatternMsgHtml="" (change)="changeCity()"-->
+            <!--[class.is-valid]="!(cityId?.errors?.nbvRequired || cityId?.errors?.nbvPattern)"-->
+            <!--[class.is-invalid]="(cityId?.errors?.nbvRequired || cityId?.errors?.nbvPattern) && (cityId.touched || doSave)"-->
+            <!--dest="cityIdValidation">-->
+            <!--<option value="-1" disabled>شهر</option>-->
+            <!--<option *ngFor="let item of cityList" [value]="item.id">{{item.name}}</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--============================================-->
+            <div id="cityIdValidation" style="opacity: 0; height: 0"></div>
+          </div>
+
+        </div>
+        <div class="col-md-12">
+          <div class="form-group required col-sm-12">
+            <label class="for-label">پست های سازمان:</label>
+            <!--              <div class="input-group input-group-sm">-->
+            <ng-select [items]="userTypeList$ | async"
+                       id="userType"
+                       name="userType"
+                       bindLabel="name"
+                       bindValue="id"
+                       [(ngModel)]="organization.userTypeList"
+                       [addTag]="false"
+                       [multiple]="true"
+                       [hideSelected]="true"
+                       [loading]="userTypeLoading"
+                       [typeahead]="userTypeInput"
+                       placeholder=" پست های سازمان را انتخاب کنید. "
+                       dest="userTypeDest">
+              <!--                  nbvRequired-->
+              <!--                  nbvRequiredMsgHtml="انتخاب پست های سازمان الزامی می باشد"-->
+              <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                <div class="ng-option disabled" style="color: #a8a6a5">
+                  نتیجه یافت نشد...
+                </div>
+              </ng-template>
+
+              <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+                <div class="ng-option disabled" style="color: #a8a6a5">
+                  در حال جستجو...
+                </div>
+              </ng-template>
+              <ng-template ng-typetosearch-tmp let-searchTerm="searchTerm">
+                <div class="ng-option disabled" style="color: #a8a6a5">
+                  متن برای جستجو...
+                </div>
+              </ng-template>
+            </ng-select>
+            <div id="userTypeDest"></div>
+            <!--              </div>-->
+            <!--              <div id="organCodeValidation"></div>-->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="card-footer text-left">
+      <button class="btn btn-action btn-sm" type="submit" [disabled]="disabledButton && !codeCheck" (click)="action(userForm)">
+        <span *ngIf="mode === actionMode.ADD">ذخیره</span>
+        <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+      </button>
+    </div>
+  </form>
+</div>

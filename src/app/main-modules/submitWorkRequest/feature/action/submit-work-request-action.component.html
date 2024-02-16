@@ -1,0 +1,516 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                درخواست تعمیر
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <button (click)="backToList()"
+                        class="btn btn-cancel-back btn-sm">
+                    بازگشت
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <form #submitWorkRequestForm="ngForm" (submit)="action(submitWorkRequestForm)">
+        <div class="card-body card-body-content">
+            <!--      <ng-container *ngIf="activityId">-->
+            <!--        <div class="card-title">-->
+            <!--          &lt;!&ndash;    <div class="card-body">&ndash;&gt;-->
+
+            <!--          <div class="col-md-12">-->
+            <!--            <app-acceptation-process-->
+            <!--              [activityInstanceId]="activityInstanceId"-->
+            <!--              [submitWorkRequestTitle]="submitWorkRequest.title">-->
+            <!--            </app-acceptation-process>-->
+            <!--          </div>-->
+            <!--          &lt;!&ndash;    </div>&ndash;&gt;-->
+            <!--        </div>-->
+            <!--      </ng-container>-->
+
+
+            <ng-container *ngIf="!workRequestId">
+                <div class="col-md-12">
+                    <div class="row">
+                        <!--                        <div class="col-md-4 form-group required col-sm-12">-->
+                        <!--                            <label class="for-label" for="titleWorkRequest" style="margin-right: 5px; color: #8a8f94">-->
+                        <!--                                عنوان درخواست:-->
+                        <!--                                <span style="color: red">*</span>-->
+                        <!--                            </label>-->
+                        <!--                            <input type="text" [(ngModel)]="submitWorkRequest.title" name="titleWorkRequest"-->
+                        <!--                                   class="form-control form-control-sm"-->
+                        <!--                                   id="titleWorkRequest"-->
+                        <!--                                   #WorkRequestTitle1="ngModel" nbvRequired-->
+                        <!--                                   [class.is-valid]="!(WorkRequestTitle1?.errors?.nbvRequired)"-->
+                        <!--                                   [class.is-invalid]="(WorkRequestTitle1?.errors?.nbvRequired) && (WorkRequestTitle1.touched || doSave)"-->
+                        <!--                                   dest="titleWorkRequestValidation">-->
+
+
+                        <!--                            <div id="titleWorkRequestValidation" style="opacity: 0; height: 0"></div>-->
+                        <!--                        </div>-->
+
+
+                        <div class="col-md-4 form-group required col-sm-12">
+                            <label class="for-label" for="assetId" style="margin-right: 5px; color: #8a8f94">نام دستگاه:
+                                <span style="color: red">*</span>
+                            </label>
+                            <ng-select dir="rtl" [(ngModel)]="submitWorkRequest.assetId"
+                                       name="assetId"
+                                       id="assetId"
+                                       clearable="false"
+
+                                       placeholder="نام دستگاه" style="width: 100%; border-radius: 4px"
+                                       dropdownPosition="bottom"
+                                       [ngStyle]="notEAssetId === true && { 'border' : '1px solid red'} "
+                                       (change)="getAllActivity()"
+                            >
+                                <ng-option *ngFor="let item of assetList; let i = index"
+                                           [value]="item.id">
+                                    {{item.name}}
+                                </ng-option>
+                            </ng-select>
+                            <!--<div class="input-group input-group-sm">-->
+                            <!--<select [(ngModel)]="submitWorkRequest.assetId"-->
+                            <!--name="assetId"-->
+                            <!--id="assetId"-->
+                            <!--class="form-control"-->
+                            <!--#assetId="ngModel" nbvRequired-->
+                            <!--[class.is-valid]="!(assetId?.errors?.nbvRequired ) && submitWorkRequest.assetId"-->
+                            <!--[class.is-invalid]="(assetId?.errors?.nbvRequired) && (assetId.touched || doSave)"-->
+                            <!--dest="assetIdValidation">-->
+                            <!--<option *ngFor="let item of assetList" [value]="item.id">{{item.name}}</option>-->
+                            <!--</select>-->
+                            <!--</div>-->
+
+
+                            <div id="assetIdValidation" style="opacity: 0; height: 0"></div>
+                        </div>
+                        <div class="col-md-4 form-group required col-sm-12">
+                            <ng-container *ngIf="submitWorkRequest.assetId">
+                                <ng-container *ngIf="activityList.length > 1">
+                                    <label class="for-label" for="assetId" style="margin-right: 5px; color: #8a8f94">جریان
+                                        تعمیر:
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <ng-select dir="rtl" [(ngModel)]="submitWorkRequest.activityId"
+                                               name="activityId"
+                                               id="activityIdView"
+                                               [disabled]="workRequestId"
+                                               placeholder="جریان تعمیر :" style="width: 100%;"
+                                               dropdownPosition="bottom"
+                                    >
+                                        <ng-option *ngFor="let item of activityList; let i = index"
+                                                   [value]="item.id">
+                                            {{item.title}}
+                                        </ng-option>
+                                    </ng-select>
+                                </ng-container>
+                                <ng-container *ngIf="activityList.length ===1">
+                                    <label class="for-label" for="assetId"
+                                           style="margin-right: 5px; color: #8a8f94">جریان تعمیر:</label>
+                                    <div class="form-control form-control-sm"> {{activityName}}</div>
+                                </ng-container>
+                                <ng-container *ngIf="activityList.length ===0">
+                                    <label class="for-label" for="assetId" style="margin-right: 5px; color: #f59b9b">*
+                                        دارایی انتخاب شده جریان تعمیر ندارد و نمیتوان درخواست ثبت نموند.</label>
+
+                                </ng-container>
+                            </ng-container>
+                            <ng-container *ngIf="!submitWorkRequest.assetId">
+                                <label class="for-label" for="assetId" style="margin-right: 5px; color: #8a8f94">جریان
+                                    تعمیر:
+                                    <span style="color: red">*</span>
+                                </label>
+                                <div class="form-control form-control-sm"> دستگاه انتخاب شود</div>
+
+
+                            </ng-container>
+
+                            <!--<div class="input-group input-group-sm">-->
+                            <!--<select [(ngModel)]="submitWorkRequest.activityId" name="activityId" id="activityId"-->
+                            <!--class="form-control"-->
+                            <!--#activityId="ngModel" nbvRequired-->
+                            <!--[class.is-valid]="!(activityId?.errors?.nbvRequired) && submitWorkRequest.activityId"-->
+                            <!--[class.is-invalid]="(activityId?.errors?.nbvRequired) && (activityId.touched || doSave)"-->
+                            <!--dest="activityIdValidation">-->
+                            <!--<option *ngFor="let item of activityList" [value]="item.id">{{item.title}}</option>-->
+                            <!--</select>-->
+                            <!--</div>-->
+
+
+                            <div id="activityIdValidation" style="opacity: 0; height: 0"></div>
+                        </div>
+                        <div class="col-md-4 form-group required col-sm-12">
+                            <label for="emSheetCode"> شماره برگه em</label>
+                            <span style="color: red">*</span>
+                            <input type="text" class=" form-control"
+                                   [(ngModel)]="emSheetCode"
+                                   placeholder=" شماره برگه em"
+                                   style="direction: ltr"
+                                   required="required"
+                                   id="emSheetCode"
+                                   name="emSheetCode"
+                                   disabled
+                                   autocomplete="off">
+                        </div>
+
+                        <div class="col-md-4 form-group required col-sm-12">
+                            <label for="inputFailureDate"> تاریخ و ساعت وقوع خرابی </label>
+                            <span style="color: red">*</span>
+                            <input type="text" class=" form-control"
+                                   style="direction: ltr"
+                                   id="inputFailureDate"
+                                   autocomplete="off">
+                        </div>
+
+                        <!--                        <div class="col-md-4 form-group required col-sm-12">-->
+                        <!--                            <label class="for-label" for="maintenanceType" style="margin-right: 5px; color: #8a8f94">نوع-->
+                        <!--                                نگهداری:-->
+                        <!--                            </label>-->
+                        <!--                            <ng-select dir="rtl" [(ngModel)]="submitWorkRequest.maintenanceType"-->
+                        <!--                                       name="maintenanceType"-->
+                        <!--                                       id="maintenanceType"-->
+
+                        <!--                                       placeholder="نوع نگهداری:" style="width: 100%;"-->
+                        <!--                                       dropdownPosition="bottom"-->
+                        <!--                            >-->
+                        <!--                                <ng-option *ngFor="let item of maintenanceTypeList; let i = index"-->
+                        <!--                                           [value]="item.value">-->
+                        <!--                                    {{item.title}}-->
+                        <!--                                </ng-option>-->
+                        <!--                            </ng-select>-->
+                        <!--                            &lt;!&ndash;<div class="input-group input-group-sm">&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;<select [(ngModel)]="submitWorkRequest.maintenanceType"&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;name="maintenanceType"&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;id="maintenanceType"&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;class="form-control"&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;nbvRequired&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;#maintenanceType="ngModel"&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;[class.is-valid]="!(maintenanceType?.errors?.nbvRequired )&&submitWorkRequest.maintenanceType"&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;[class.is-invalid]="(maintenanceType?.errors?.nbvRequired ) && (maintenanceType.touched || doSave)"&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;&gt;&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;<option *ngFor="let item of maintenanceTypeList" [value]="item.value">{{item.title}}</option>&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;</select>&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;</div>&ndash;&gt;-->
+
+
+                        <!--                        </div>-->
+
+
+                    </div>
+                </div>
+                <!--                <div class="col-md-12">-->
+                <!--                    <div class="row">-->
+
+
+                <!--                        <div class="col-md-4 form-group required col-sm-12">-->
+                <!--                            <label class="for-label" for="priority" style="margin-right: 5px; color: #8a8f94">اولویت:-->
+                <!--                            </label>-->
+                <!--                            <ng-select dir="rtl" [(ngModel)]="submitWorkRequest.priority"-->
+                <!--                                       name="priority"-->
+                <!--                                       id="priority"-->
+
+                <!--                                       placeholder="اولویت:" style="width: 100%;"-->
+                <!--                                       dropdownPosition="bottom"-->
+                <!--                            >-->
+                <!--                                <ng-option *ngFor="let item of priorityList; let i = index"-->
+                <!--                                           [value]="item.value">-->
+                <!--                                    {{item.title}}-->
+                <!--                                </ng-option>-->
+                <!--                            </ng-select>-->
+                <!--                            &lt;!&ndash;<div class="input-group input-group-sm">&ndash;&gt;-->
+                <!--                            &lt;!&ndash;<select [(ngModel)]="submitWorkRequest.priority" name="priority" class="form-control" id="priority"&ndash;&gt;-->
+                <!--                            &lt;!&ndash;#priority="ngModel" nbvRequired&ndash;&gt;-->
+                <!--                            &lt;!&ndash;[class.is-valid]="!(priority?.errors?.nbvRequired ) && submitWorkRequest.priority"&ndash;&gt;-->
+                <!--                            &lt;!&ndash;[class.is-invalid]="(priority?.errors?.nbvRequired ) && (priority.touched || doSave)"&ndash;&gt;-->
+                <!--                            &lt;!&ndash;dest="priorityValidation">&ndash;&gt;-->
+                <!--                            &lt;!&ndash;<option value="-1" disabled>انتخاب اولویت</option>&ndash;&gt;-->
+                <!--                            &lt;!&ndash;<option *ngFor="let item of priorityList" [value]="item.value">{{item.title}}</option>&ndash;&gt;-->
+                <!--                            &lt;!&ndash;</select>&ndash;&gt;-->
+                <!--                            &lt;!&ndash;</div>&ndash;&gt;-->
+                <!--                            <div id="priorityValidation" style="opacity: 0; height: 0"></div>-->
+                <!--                        </div>-->
+
+
+                <!--                                    </div>-->
+                <!--                                </div>-->
+
+
+                <br>
+
+                <div class=" col-md-12 md-form">
+                    <i class="fas fa-pencil-alt prefix grey-text"></i>
+                    <label for="message" class="for-label" style="margin-right: 5px; color: #8a8f94"> شرح
+                        درخواست :</label>
+                    <span style="color: red">*</span>
+                    <textarea id="message" class="md-textarea form-control" rows="3"
+                              [(ngModel)]="submitWorkRequest.description"
+                              name="message"></textarea>
+
+                </div>
+                <br>
+            </ng-container>
+
+            <ng-container *ngIf="workRequestId">
+
+
+                <fieldset class="scheduler-border">
+
+
+                    <div class="col-md-12 mt-2">
+                        <div class="row">
+
+
+                            <div class="col-md-4 form-group required col-sm-12">
+                                <label class="for-label" for="assetId"
+                                       style="margin-right: 5px; color: #8a8f94">نام دستگاه :</label>
+
+                                <ng-select dir="rtl" [(ngModel)]="submitWorkRequest.assetId"
+                                           name="assetIdViesw"
+                                           id="assetIdView"
+                                           [disabled]="workRequestId"
+                                           placeholder="نام دستگاه :" style="width: 100%;"
+                                           dropdownPosition="bottom"
+                                >
+                                    <ng-option *ngFor="let item of assetList; let i = index"
+                                               [value]="item.id">
+                                        {{item.name}}
+                                    </ng-option>
+                                </ng-select>
+                                <!--<div class="input-group input-group-sm">-->
+                                <!--<select [(ngModel)]="submitWorkRequest.assetId"-->
+                                <!--name="assetIdView"-->
+                                <!--id="assetIdView"-->
+                                <!--class="form-control"-->
+                                <!--[disabled]="workRequestId"-->
+                                <!--&gt;-->
+                                <!--<option *ngFor="let item of assetList" [value]="item.id">{{item.name}}</option>-->
+                                <!--</select>-->
+                                <!--</div>-->
+
+                            </div>
+                            <div class="col-md-4 form-group required col-sm-12">
+                                <label for="emSheetCode"> شماره برگه em</label>
+                                <span style="color: red">*</span>
+                                <input type="text" class=" form-control"
+                                       placeholder=" شماره برگه em"
+                                       style="direction: ltr"
+                                       required="required"
+                                       id="emSheetCode"
+                                       name="emSheetCode" disabled
+                                       [(ngModel)]="emSheetCode"
+                                       autocomplete="off">
+                            </div>
+                            <div class="col-md-4 form-group required col-sm-12">
+                                <label for="inputFailureDate"> تاریخ و ساعت وقوع خرابی </label>
+                                <input type="text" class=" form-control"
+                                       style="direction: ltr"
+                                       id="inputFailureDate"
+                                       [disabled]="workRequestId"
+                                       autocomplete="off">
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <br>
+
+                    <div class=" col-md-12 md-form">
+                        <label for="message" class="for-label" style="margin-right: 5px; color: #8a8f94">
+                            شرح درخواست :
+                        </label>
+                        <textarea id="messageView" class="md-textarea form-control" rows="3"
+                                  [(ngModel)]="submitWorkRequest.description"
+                                  [disabled]="workRequestId"
+
+                                  name="message"></textarea>
+
+                    </div>
+                    <br>
+
+                </fieldset>
+                <!--                <fieldset class="scheduler-border">-->
+                <!--                    <legend class="scheduler-border"><h4>اطلاعات درخواست :</h4></legend>-->
+
+                <!--                    <div class="col-md-12">-->
+                <!--                        <div class="row">-->
+                <!--                            &lt;!&ndash;<div>&ndash;&gt;-->
+                <!--                            &lt;!&ndash;<span class="for-label" style="margin-right: 5px;color: #8a8f94">وضعیت:</span>&ndash;&gt;-->
+                <!--                            &lt;!&ndash;<span&ndash;&gt;-->
+                <!--                            &lt;!&ndash;style="font-size: 12px;margin-top: 7px; margin-right: 15px"></span>&ndash;&gt;-->
+
+                <!--                            &lt;!&ndash;</div>&ndash;&gt;-->
+                <!--                            &lt;!&ndash;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&ndash;&gt;-->
+
+
+                <!--                            &lt;!&ndash;<div>&ndash;&gt;-->
+                <!--                            <span class="for-label"-->
+                <!--                                  style="margin-right: 5px;color: #8a8f94">درخواست ارسال شده است به:</span>-->
+                <!--                            <span style="font-size: 12px; margin-bottom: 20px; margin-right: 15px;">{{recipientOfTheRequest.name}} {{recipientOfTheRequest.family}}{{recipientOfTheRequest.userTypeName}}</span>-->
+
+
+                <!--                            &lt;!&ndash;</div>&ndash;&gt;-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                    <div class="col-md-12">-->
+                <!--                        <div class="row">-->
+
+                <!--                            <div class="col-md-4 form-group required col-sm-12">-->
+                <!--                                <label class="for-label" for="title" style="margin-right: 5px; color: #8a8f94">-->
+                <!--                                    عنوان درخواست:</label>-->
+                <!--                                <input type="text" [(ngModel)]="submitWorkRequest.title" name="titleWorkRequest"-->
+                <!--                                       id="title"-->
+                <!--                                       class="form-control"-->
+                <!--                                       [disabled]="workRequestId"-->
+                <!--                                >-->
+
+                <!--                            </div>-->
+
+                <!--                            <div class="col-md-4 form-group required col-sm-12">-->
+                <!--                                <label class="for-label" for="assetId"-->
+                <!--                                       style="margin-right: 5px; color: #8a8f94">دارایی:</label>-->
+
+                <!--                                <ng-select dir="rtl" [(ngModel)]="submitWorkRequest.assetId"-->
+                <!--                                           name="assetIdViesw"-->
+                <!--                                           id="assetIdView"-->
+
+                <!--                                           [disabled]="workRequestId"-->
+                <!--                                           placeholder="دارایی:" style="width: 100%;"-->
+                <!--                                           dropdownPosition="bottom"-->
+                <!--                                >-->
+                <!--                                    <ng-option *ngFor="let item of assetList; let i = index"-->
+                <!--                                               [value]="item.id">-->
+                <!--                                        {{item.name}}-->
+                <!--                                    </ng-option>-->
+                <!--                                </ng-select>-->
+                <!--                                &lt;!&ndash;<div class="input-group input-group-sm">&ndash;&gt;-->
+                <!--                                &lt;!&ndash;<select [(ngModel)]="submitWorkRequest.assetId"&ndash;&gt;-->
+                <!--                                &lt;!&ndash;name="assetIdView"&ndash;&gt;-->
+                <!--                                &lt;!&ndash;id="assetIdView"&ndash;&gt;-->
+                <!--                                &lt;!&ndash;class="form-control"&ndash;&gt;-->
+                <!--                                &lt;!&ndash;[disabled]="workRequestId"&ndash;&gt;-->
+                <!--                                &lt;!&ndash;&gt;&ndash;&gt;-->
+                <!--                                &lt;!&ndash;<option *ngFor="let item of assetList" [value]="item.id">{{item.name}}</option>&ndash;&gt;-->
+                <!--                                &lt;!&ndash;</select>&ndash;&gt;-->
+                <!--                                &lt;!&ndash;</div>&ndash;&gt;-->
+
+                <!--                            </div>-->
+
+                <!--                            <div class="col-md-4 form-group required col-sm-12">-->
+                <!--                                <label class="for-label" for="assetId" style="margin-right: 5px; color: #8a8f94">فرایند-->
+                <!--                                    تعمیر:-->
+                <!--                                    <span style="color: red">*</span>-->
+                <!--                                </label>-->
+                <!--                                <ng-container *ngIf="activityList.length > 0">-->
+                <!--                                    <ng-select dir="rtl" [(ngModel)]="activityId"-->
+                <!--                                               name="activitydId"-->
+                <!--                                               id="activityIdViewd"-->
+                <!--                                               [disabled]="workRequestId"-->
+
+                <!--                                               placeholder="فرایند تعمیر:" style="width: 100%;"-->
+                <!--                                               dropdownPosition="bottom"-->
+                <!--                                    >-->
+                <!--                                        <ng-option *ngFor="let item of activityList; let i = index"-->
+                <!--                                                   [value]="item.id">-->
+                <!--                                            {{item.title}}-->
+                <!--                                        </ng-option>-->
+                <!--                                    </ng-select>-->
+
+                <!--                                </ng-container>-->
+                <!--                            </div>-->
+
+
+                <!--                        </div>-->
+
+                <!--                        <div class="row">-->
+                <!--                            <div class="col-md-4 form-group required col-sm-12">-->
+                <!--                                <label class="for-label" for="maintenanceType"-->
+                <!--                                       style="margin-right: 5px; color: #8a8f94">نوع-->
+                <!--                                    نگهداری:</label>-->
+                <!--                                <ng-select dir="rtl" [(ngModel)]="submitWorkRequest.maintenanceType"-->
+                <!--                                           name="maintenanceType"-->
+                <!--                                           id="maintenanceTypeView"-->
+
+                <!--                                           [disabled]="workRequestId"-->
+                <!--                                           placeholder="نوع نگهداری:" style="width: 100%;"-->
+                <!--                                           dropdownPosition="bottom"-->
+                <!--                                >-->
+                <!--                                    <ng-option *ngFor="let item of maintenanceTypeList; let i = index"-->
+                <!--                                               [value]="item.value">-->
+                <!--                                        {{item.title}}-->
+                <!--                                    </ng-option>-->
+                <!--                                </ng-select>-->
+                <!--                                &lt;!&ndash;<div class="input-group input-group-sm">&ndash;&gt;-->
+                <!--                                &lt;!&ndash;<select [(ngModel)]="submitWorkRequest.maintenanceType"&ndash;&gt;-->
+                <!--                                &lt;!&ndash;name="maintenanceType"&ndash;&gt;-->
+                <!--                                &lt;!&ndash;id="maintenanceTypeView"&ndash;&gt;-->
+                <!--                                &lt;!&ndash;class="form-control"&ndash;&gt;-->
+                <!--                                &lt;!&ndash;[disabled]="workRequestId"&ndash;&gt;-->
+
+                <!--                                &lt;!&ndash;&gt;&ndash;&gt;-->
+                <!--                                &lt;!&ndash;<option *ngFor="let item of maintenanceTypeList" [value]="item.value">{{item.title}}</option>&ndash;&gt;-->
+                <!--                                &lt;!&ndash;</select>&ndash;&gt;-->
+                <!--                                &lt;!&ndash;</div>&ndash;&gt;-->
+
+
+                <!--                                <div id="maintenanceTypeValidation" style="opacity: 0; height: 0"></div>-->
+                <!--                            </div>-->
+
+                <!--                            <div class="col-md-4 form-group required col-sm-12">-->
+                <!--                                <label class="for-label" for="priority" style="margin-right: 5px; color: #8a8f94">اولویت:</label>-->
+                <!--                                <ng-select dir="rtl" [(ngModel)]="submitWorkRequest.priority"-->
+                <!--                                           name="priority"-->
+                <!--                                           id="priorityView"-->
+                <!--                                           [disabled]="workRequestId"-->
+
+                <!--                                           placeholder="اولویت:" style="width: 100%;"-->
+                <!--                                           dropdownPosition="bottom"-->
+                <!--                                >-->
+                <!--                                    <ng-option *ngFor="let item of priorityList; let i = index"-->
+                <!--                                               [value]="item.value">-->
+                <!--                                        {{item.title}}-->
+                <!--                                    </ng-option>-->
+                <!--                                </ng-select>-->
+                <!--                                &lt;!&ndash;<div class="input-group input-group-sm">&ndash;&gt;-->
+                <!--                                &lt;!&ndash;<select [(ngModel)]="submitWorkRequest.priority" name="priority" class="form-control"&ndash;&gt;-->
+                <!--                                &lt;!&ndash;id="priorityView"&ndash;&gt;-->
+                <!--                                &lt;!&ndash;[disabled]="workRequestId"&ndash;&gt;-->
+                <!--                                &lt;!&ndash;&gt;&ndash;&gt;-->
+                <!--                                &lt;!&ndash;<option value="-1" disabled>انتخاب اولویت</option>&ndash;&gt;-->
+                <!--                                &lt;!&ndash;<option *ngFor="let item of priorityList" [value]="item.value">{{item.title}}</option>&ndash;&gt;-->
+                <!--                                &lt;!&ndash;</select>&ndash;&gt;-->
+                <!--                                &lt;!&ndash;</div>&ndash;&gt;-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+
+                <!--                    </div>-->
+                <!--                    <br>-->
+
+                <!--                    <div class=" col-md-12 md-form">-->
+                <!--                        <label for="message" class="for-label" style="margin-right: 5px; color: #8a8f94">پیام-->
+                <!--                            شما:</label>-->
+                <!--                        <textarea id="messageView" class="md-textarea form-control" rows="3"-->
+                <!--                                  [(ngModel)]="submitWorkRequest.description"-->
+                <!--                                  [disabled]="workRequestId"-->
+
+                <!--                                  name="message"></textarea>-->
+
+                <!--                    </div>-->
+                <!--                    <br>-->
+
+                <!--                </fieldset>-->
+
+
+            </ng-container>
+
+        </div>
+        <div class="card-footer text-left" *ngIf="!workRequestId">
+            <button type="submit" class="btn btn-action btn-sm">
+                ارسال
+                <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-1x"></i>
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,280 @@
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [dataBackdrop]="false"
+        [modalSize]="MyModalSize.CUSTOM_WIDTH"
+        [customWidthPercent]="{xs: 100, md:65}"
+        autoShow="false"
+        [myId]="'AssetConsumingReferenceViewModal'">
+    <div modal-header>
+        <span>تجهیز ها</span>
+    </div>
+
+    <div modal-body style="display: flow-root">
+        <table class="table table-responsive-md table-bordered table-striped">
+            <thead>
+            <tr>
+                <th style="text-align: right">نام تجهیز</th>
+                <th style="text-align: center">کد تجهیز</th>
+                <th style="text-align: center">وضعیت تجهیز</th>
+                <th style="text-align: center"></th>
+                <!--<th class="text-right" style="width: 5%"></th>-->
+                <!--<th class="text-right" style="width: 5%"></th>-->
+                <!--(click)="treeMethod(item)"-->
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let assetOfAssetList of assetList; let i = index">
+                <tr>
+                    <td style="text-align: right">
+                        <ng-container *ngIf="assetOfAssetList.hasChild">
+
+                            <ng-container
+                                    *ngIf="assetOfAssetList.categoryType=== categoryType[categoryType.BUILDING.toString()]">
+                                <i *ngIf="loadingForGetChild&&selectedParentIdForGetChild===assetOfAssetList.id"
+                                   class="fa fa-spinner fa-pulse fa-1x"></i>
+                                <img *ngIf="!assetOfAssetList.openPlus " width="20"
+                                     src="assets/images/asset-tree/expand.png"
+                                     [ngStyle]="{marginRight:assetOfAssetList.marginRight +'px'}"
+                                     (click)="getChildList(assetOfAssetList)"
+                                     style="cursor: pointer"
+                                     alt="...">
+
+
+                                <img *ngIf="assetOfAssetList.openPlus" width="20"
+                                     src="assets/images/asset-tree/navigate.png"
+                                     [ngStyle]="{marginRight:assetOfAssetList.marginRight +'px'}"
+                                     (click)="methodTow(assetOfAssetList)"
+                                     style="cursor: pointer"
+                                     alt="...">
+                            </ng-container>
+                            <!--<i class="far fa-minus-square" ></i>-->
+                            <!--(click)="methodTow(asset.id)"-->
+
+                            &nbsp;&nbsp;&nbsp;
+                            <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                                 width="20"
+                                 src="assets/images/asset-tree/equipment-16.png"
+                                 style="margin-right: 2px"
+                                 alt="...">
+                            <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                                 width="20"
+                                 style="margin-right: 2px"
+                                 src="assets/images/asset-tree/facilities-16.png"
+                                 alt="...">
+                            <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                                 width="20"
+                                 style="margin-right: 2px"
+                                 src="assets/images/asset-tree/tools-16.png"
+                                 alt="...">
+                            &nbsp;&nbsp;
+                            <span style="font-size: 12px; margin-right: 2px"> {{assetOfAssetList.name}} </span>
+
+                        </ng-container>
+                        <ng-container *ngIf="!assetOfAssetList.hasChild">
+                            <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                                 width="20"
+                                 src="assets/images/asset-tree/equipment-16.png"
+                                 [ngStyle]="{marginRight:assetOfAssetList.marginRight + 35 +'px'}"
+                                 alt="...">
+                            <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                                 width="20"
+                                 src="assets/images/asset-tree/facilities-16.png"
+                                 [ngStyle]="{marginRight:assetOfAssetList.marginRight + 35 +'px'}"
+                                 alt="...">
+                            <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                                 width="20"
+                                 src="assets/images/asset-tree/tools-16.png"
+                                 [ngStyle]="{marginRight:assetOfAssetList.marginRight + 35 +'px'}"
+                                 alt="...">
+                            &nbsp;&nbsp;
+                            <span style="font-size: 12px; margin-right: 2px"> {{assetOfAssetList.name}}</span>
+                        </ng-container>
+                        <!--                        -->
+                        <!--                        <ng-container *ngIf="item.hasChild === true">-->
+
+
+                        <!--                            &lt;!&ndash;<span *ngIf="item.openPlus === false"  [ngStyle]="{marginRight:item.marginRight+'px'}">&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;<i class="far fa-plus-square" (click)="getChildList(item, i)"></i>&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;</span>&ndash;&gt;-->
+                        <!--                            <ng-container *ngIf="item.categoryType=== categoryType[categoryType.BUILDING.toString()]">-->
+                        <!--                                <i *ngIf="loadingForGetChild&&selectedParentIdForGetChild===item.id"-->
+                        <!--                                   class="fa fa-spinner fa-pulse fa-1x"></i>-->
+                        <!--                                <img *ngIf="item.openPlus === false" width="20"-->
+                        <!--                                     src="assets/images/asset-tree/expand.png"-->
+                        <!--                                     [ngStyle]="{marginRight:item.marginRight +'px'}"-->
+                        <!--                                     (click)="getChildList(item)"-->
+                        <!--                                     alt="...">-->
+
+
+                        <!--                                <img *ngIf="item.openPlus === true" width="20"-->
+                        <!--                                     src="assets/images/asset-tree/navigate.png"-->
+                        <!--                                     [ngStyle]="{marginRight:item.marginRight +'px'}"-->
+                        <!--                                     (click)="methodTow(item)"-->
+                        <!--                                     alt="...">-->
+                        <!--                            </ng-container>-->
+                        <!--                            &lt;!&ndash;<i class="far fa-minus-square" ></i>&ndash;&gt;-->
+                        <!--                            &lt;!&ndash;(click)="methodTow(item.id)"&ndash;&gt;-->
+                        <!--                            &nbsp;&nbsp;&nbsp;-->
+                        <!--                            <img *ngIf="item.categoryType === categoryType[categoryType.FACILITY.toString()]" width="20"-->
+                        <!--                                 src="assets/images/asset-tree/equipment-16.png"-->
+                        <!--                                 style="margin-right: 2px"-->
+                        <!--                                 alt="...">-->
+                        <!--                            <img *ngIf="item.categoryType === categoryType[categoryType.BUILDING.toString()]" width="20"-->
+                        <!--                                 style="margin-right: 2px"-->
+                        <!--                                 src="assets/images/asset-tree/facilities-16.png"-->
+                        <!--                                 alt="...">-->
+                        <!--                            <img *ngIf="item.categoryType === categoryType[categoryType.TOOLS.toString()]" width="20"-->
+                        <!--                                 style="margin-right: 2px"-->
+                        <!--                                 src="assets/images/asset-tree/tools-16.png" alt="...">-->
+
+
+                        <!--                            &nbsp;&nbsp;-->
+                        <!--                            <span style="font-size: 12px; margin-right: 2px"-->
+                        <!--                                  (click)="treeMethod(item)"> {{item.name}} </span>-->
+
+                        <!--                        </ng-container>-->
+                        <!--                        <ng-container *ngIf="item.hasChild === false">-->
+                        <!--                            <img *ngIf="item.categoryType === categoryType[categoryType.FACILITY.toString()]" width="20"-->
+                        <!--                                 src="assets/images/asset-tree/equipment-16.png"-->
+                        <!--                                 [ngStyle]="{marginRight:item.marginRight + 35 +'px'}"-->
+                        <!--                                 alt="...">-->
+                        <!--                            <img *ngIf="item.categoryType === categoryType[categoryType.BUILDING.toString()]" width="20"-->
+                        <!--                                 src="assets/images/asset-tree/facilities-16.png"-->
+                        <!--                                 [ngStyle]="{marginRight:item.marginRight + 35 +'px'}"-->
+                        <!--                                 alt="...">-->
+                        <!--                            <img *ngIf="item.categoryType === categoryType[categoryType.TOOLS.toString()]" width="20"-->
+                        <!--                                 src="assets/images/asset-tree/tools-16.png"-->
+                        <!--                                 [ngStyle]="{marginRight:item.marginRight + 35 +'px'}"-->
+                        <!--                                 alt="...">-->
+                        <!--                            &nbsp;&nbsp;-->
+                        <!--                            <span style="font-size: 12px; margin-right: 2px"-->
+                        <!--                                  (click)="treeMethod(item)"> {{item.name}}</span>-->
+                        <!--                        </ng-container>-->
+                    </td>
+
+                    <td style="text-align: center; font-size: 12px">{{assetOfAssetList.code}}</td>
+                    <td style="text-align: center; font-size: 12px">
+                        <ng-container *ngIf="assetOfAssetList.status===true">فعال</ng-container>
+                        <ng-container *ngIf="assetOfAssetList.status===false"> غیرفعال</ng-container>
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-action btn-sm" (click)="treeMethod(assetOfAssetList)">انتخاب</button>
+                    </td>
+                </tr>
+
+                <ng-container *ngIf="assetOfAssetList.hasChild">
+                    <ng-template [ngTemplateOutlet]="childListTemp"
+                                 [ngTemplateOutletContext]="{$implicit:assetOfAssetList.childAssetList,
+                                               stepIn:1,index:i+1,parent:assetOfAssetList }">
+                    </ng-template>
+                </ng-container>
+            </ng-container>
+            </tbody>
+        </table>
+    </div>
+</nbw-modal>
+
+
+<!--childList-->
+<ng-template #childListTemp let-childList let-stepIn='stepIn' let-index='index' let-parent='parent'>
+    <ng-container *ngFor="let child of childList; let i = index">
+        <tr>
+            <!--            <td style="text-align: right; width: 5%">-->
+            <!--                {{index + ' - ' + (i + 1)|EnToFa}}-->
+            <!--            </td>-->
+            <td style="text-align: right; width: 25%">
+
+                <ng-container *ngIf="child.hasChild">
+                    <span [style.margin-right.px]="10*stepIn">
+
+
+
+                            <ng-container *ngIf="child.categoryType=== categoryType[categoryType.BUILDING.toString()]">
+
+                            <i *ngIf="loadingForGetChild&&selectedParentIdForGetChild===child.id"
+                               class="fa fa-spinner fa-pulse fa-1x"></i>
+                        <img *ngIf="!child.openPlus " width="20"
+                             src="assets/images/asset-tree/expand.png"
+                             [ngStyle]="{marginRight:child.marginRight +'px'}"
+                             (click)="getChildList(child)"
+                             style="cursor: pointer"
+                             alt="...">
+
+
+                        <img *ngIf="child.openPlus" width="20"
+                             src="assets/images/asset-tree/navigate.png"
+                             [ngStyle]="{marginRight:child.marginRight +'px'}"
+                             (click)="methodTow(child)"
+                             style="cursor: pointer"
+                             alt="...">
+                            </ng-container>
+
+
+                        <!--<i class="far fa-minus-square" ></i>-->
+                        <!--(click)="methodTow(child.id)"-->
+                        &nbsp;&nbsp;&nbsp;
+                        <img *ngIf="child.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                             width="20"
+                             src="assets/images/asset-tree/equipment-16.png"
+                             style="margin-right: 2px"
+                             alt="...">
+                        <img *ngIf="child.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                             width="20"
+                             style="margin-right: 2px"
+                             src="assets/images/asset-tree/facilities-16.png"
+                             alt="...">
+                        <img *ngIf="child.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                             width="20"
+                             style="margin-right: 2px"
+                             src="assets/images/asset-tree/tools-16.png"
+                             alt="...">
+                        &nbsp;&nbsp;
+                        <span style="font-size: 12px; margin-right: 2px"> {{child.name}} </span>
+                    </span>
+                </ng-container>
+                <ng-container *ngIf="!child.hasChild">
+                        <span [style.margin-right.px]=" 10*(stepIn+1)">
+
+                        <img *ngIf="child.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                             width="20"
+                             src="assets/images/asset-tree/equipment-16.png"
+                             [ngStyle]="{marginRight:child.marginRight + 35 +'px'}"
+                             alt="...">
+                        <img *ngIf="child.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                             width="20"
+                             src="assets/images/asset-tree/facilities-16.png"
+                             [ngStyle]="{marginRight:child.marginRight + 35 +'px'}"
+                             alt="...">
+                        <img *ngIf="child.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                             width="20"
+                             src="assets/images/asset-tree/tools-16.png"
+                             [ngStyle]="{marginRight:child.marginRight + 35 +'px'}"
+                             alt="...">
+                        &nbsp;&nbsp;
+                        <span style="font-size: 12px; margin-right: 2px"> {{child.name}}</span>
+                    </span>
+                </ng-container>
+
+            </td>
+
+            <td style="text-align: center; font-size: 12px">{{child.code}}</td>
+            <td style="text-align: center; font-size: 12px">
+                <ng-container *ngIf="child.status===true">فعال</ng-container>
+                <ng-container *ngIf="child.status===false"> غیرفعال</ng-container>
+            </td>
+            <td class="text-center">
+                <button class="btn btn-action btn-sm" (click)="treeMethod(child)">انتخاب</button>
+            </td>
+
+
+        </tr>
+        <ng-container *ngIf="child.hasChild">
+            <ng-template [ngTemplateOutlet]="childListTemp"
+                         [ngTemplateOutletContext]="{$implicit:child.childAssetList,
+                                          stepIn:stepIn+1,index:index  + ' - ' +( i + 1) ,parent:child}">
+            </ng-template>
+        </ng-container>
+    </ng-container>
+</ng-template>
+<!--childList-->

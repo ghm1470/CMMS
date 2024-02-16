@@ -1,0 +1,192 @@
+<br>
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-body backShadow">
+                <form class="form-horizontal" [formGroup]="textFieldForm">
+
+                    <div class="row">
+                        <input type="text" style="display: none" [placeholder]="txtField.id" [(ngModel)]="txtField.id"
+                               formControlName="id">
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-md-12 text-right">
+                            <label class="control-label" *ngIf="data != null">{{data.formQuestion.questionTitle}}
+                                <span style="color: red">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-12 text-right">
+                <textarea *ngIf="editingItem.newElement" rows="3" type="text" class="form-control"
+                          [placeholder]="editingItem.item.label"
+                          (keyup)="changeLabel($event.target.value)" #label formControlName="label">
+                </textarea>
+                            <textarea *ngIf="!editingItem.newElement" rows="3" type="text" class="form-control"
+                                      [(ngModel)]="txtField.label"
+                                      #label formControlName="label">
+                </textarea>
+                            <p style="color: red"
+                               *ngIf="(saveButton || textFieldForm.controls['label'].touched) && txtField.label == '' ">
+                                {{data.errorMessages.labelRequired}}
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                        <div class="col-md-12 text-right">
+                            <label class="control-label" *ngIf="data != null">{{data.formQuestion.questionHelpText}}
+                            </label>
+                        </div>
+                        <div class="col-md-12 text-right">
+                            <input *ngIf="editingItem.newElement" type="text" class="form-control"
+                                   [placeholder]="editingItem.item.helpText"
+                                   (keyup)="changeHelpText($event.target.value)" #helpText formControlName="helpText">
+                            <input *ngIf="!editingItem.newElement" type="text" class="form-control"
+                                   [(ngModel)]="txtField.helpText"
+                                   #helpText formControlName="helpText">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                        <div class="col-md-4 text-left">
+                            <label class="control-label default font-size-15"
+                                   *ngIf="data != null">{{data.formQuestion.questionRequired}}
+
+                            </label>
+                        </div>
+                        <div class="col-md-8 text-center">
+                            <div class="col-md-6 col-md-offset-3">
+                                <input type="checkbox" formControlName="required" [(ngModel)]="txtField.required"
+                                       #required>
+
+                                <!--<input type="checkbox" class="form-control" [(ngModel)]="txtField.required"-->
+                                <!--#required formControlName="required" id="required">-->
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                        <div class="col-md-12 text-right">
+                            <label class="control-label" *ngIf="data != null">{{data.formQuestion.answerPlaceholder}}
+
+                            </label>
+                        </div>
+                        <div class="col-md-12 text-right">
+                            <input *ngIf="editingItem.newElement" type="text" class="form-control"
+                                   [placeholder]="editingItem.item.placeHolder"
+                                   (keyup)="changePlaceHolder($event.target.value)" #placeHolder
+                                   formControlName="placeHolder">
+                            <input *ngIf="!editingItem.newElement" type="text" class="form-control"
+                                   [(ngModel)]="txtField.placeHolder"
+                                   #placeHolder formControlName="placeHolder">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                        <div class="col-md-6 text-right">
+                            <label class="control-label default " style="font-size: 13px"
+                                   *ngIf="data != null">{{data.formQuestion.txtFieldMinChar}}
+                                <span style="color: red">*</span>
+
+                            </label>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <label class="control-label default " style="font-size: 13px"
+                                   *ngIf="data != null">{{data.formQuestion.txtFieldMaxChar}}
+                                <span style="color: red">*</span>
+                            </label>
+                        </div>
+
+                        <div class="col-md-6 text-left">
+                            <input type="number" min="0" [max]="txtField.maxLength" class="form-control"
+                                   [(ngModel)]="txtField.minLength" formControlName="minLength"
+                                   (change)="changeTFMinLength($event.target.value)">
+                            <p style="color: red"
+                               *ngIf="(saveButton || textFieldForm.controls['minLength'].touched) && !textFieldForm.controls['minLength'].valid">
+                                {{data.errorMessages.textFieldMinLengthRequired}}
+                            </p>
+                        </div>
+                        <div class="col-md-6 text-left">
+                            <input type="number" min="1" class="form-control"
+                                   [(ngModel)]="txtField.maxLength" formControlName="maxLength"
+                                   (change)="changeTFMaxLength($event.target.value)">
+                            <p style="color: red"
+                               *ngIf="(saveButton || textFieldForm.controls['maxLength'].touched) && !textFieldForm.controls['maxLength'].valid">
+                                {{data.errorMessages.textFieldMaxLengthRequired}}
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                        <div class="col-md-12 text-right">
+                            <label class="control-label" *ngIf="data != null">{{data.formQuestion.txtFieldType}}
+                                <span style="color: red">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-12 text-right">
+                            <ng-select dir="rtl" [(ngModel)]="txtField.textFieldType"
+                                       formControlName="textFieldType"
+                                       style="width: 100%;"
+                                       dropdownPosition="bottom">
+                                <ng-option *ngFor="let item of textFieldTypeEnum; let i = index"
+                                           [value]="item">{{data.textFieldType[item]}}
+                                </ng-option>
+                            </ng-select>
+                            <!--<select class="form-control" name="txtType" (click)="onChangeRadio($event.target.value)"-->
+                            <!--[(ngModel)]="txtField.textFieldType" #txtType formControlName="txtType">-->
+                            <!--<option class="col-md-6" *ngFor="let item of textFieldTypeEnum" [value]="item">{{data.textFieldType[item]}}-->
+                            <!--</option>-->
+                            <!--</select>-->
+                        </div>
+                    </div>
+                    <hr>
+                    <br>
+                    <div class="row form-group">
+                        <div class="w-100">
+                            <!--<button class="btn closeButton" (click)="close()" *ngIf="data != null">{{data.public.close}}</button>-->
+                            <button class="btn btn-sm btn-cancel-back" style="margin-top: 10px!important;"
+                                    (click)="close()" *ngIf="data != null">
+                                <span>{{data.public.close}}</span>
+                            </button>
+                            <button class="btn btn-sm btn-action" style="margin-top: 10px!important;" (click)="save()"
+                                    *ngIf="data != null">
+                                <span>{{data.public.save}}</span>
+                            </button>
+                            <!--<button class="btn saveButton" (click)="save()" *ngIf="data != null">{{data.public.save}}</button>-->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-body backShadow">
+
+                <div class="col-md-12 text-right" *ngIf="data != null">
+                    <h4>{{data.formQuestion.questionTitle}}:</h4>
+                    <span>{{txtField.label}}</span>
+                    <span *ngIf="txtField.required" style="color: red">*</span>
+                    <a class="toolTipColor" [title]="txtField.helpText">
+                        <i class="fa fa-info-circle"></i>
+                    </a>
+                </div>
+
+                <br>
+
+                <!--questionTitle image-->
+                <!--<div class="col-md-12">-->
+                <!--<br>-->
+                <!--<div class="col-md-6">-->
+                <!--<input type="file" accept="image/*" id="image" class="upload" (change)="settingQuestionImage($event)"/>-->
+                <!--</div>-->
+                <!--<div class="col-md-6" *ngIf="txtField.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE">-->
+                <!--<img style="width:200px; border-radius: 7px" [attr.src]="txtField.picture.imageData">-->
+                <!--<i class="fa fa-times" aria-hidden="true" style="color: red " (click)="deleteQuestionImage()"></i>-->
+                <!--</div>-->
+                <!--</div>-->
+
+            </div>
+        </div>
+    </div>
+</div>

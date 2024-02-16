@@ -1,0 +1,391 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 card-title">
+                <i class="fa fa-eye"></i>&nbsp;
+                مشاهده پروژه
+            </div>
+            <div class="col-md-6 text-left">
+                <button (click)="cancel()"
+                        class="btn btn-cancel-back btn-sm">
+                    بازگشت
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body card-body-content">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group required col-md-12">
+                    <label class="for-label">عنوان:</label>
+                    <div class="input-group input-group-sm">
+                        <input type="text" placeholder="عنوان" [(ngModel)]="project.name" disabled
+                               class="form-control" name="name"
+                        >
+                    </div>
+                </div>
+                <div class="col-md-12 form-group required">
+                    <label class="for-label">کد پروژه:</label>
+                    <div class="input-group input-group-sm">
+                        <input type="text" placeholder="کد پروژه" [(ngModel)]="project.code" disabled
+                               class="form-control" name="code"
+                        >
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="col-md-12 form-group required">
+                    <label class="for-label">توضیحات پروژه:</label>
+                    <div class="input-group input-group-sm">
+                <textarea type="text" placeholder="توضیحات پروژه" [(ngModel)]="project.description" disabled
+                          class="form-control" name="description" rows="6" style="resize: vertical"
+
+                ></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <!--<div class="col-md-3">-->
+                <!--<label class="for-label">تخمین زمان شروع: </label>-->
+                <!--<input class="form-control" id="startDate" #startDate placeholder="تخمین زمان شروع">-->
+                <!--</div>-->
+                <!--<div class="col-md-3">-->
+                <!--<label class="for-label">تخمین زمان پایان: </label>-->
+                <!--<input class="form-control" id="endDate" #endDate placeholder="تخمین زمان پایان">-->
+                <!--</div>-->
+
+                <div class="col-md-4">
+                    <label class="for-label">آخرین مهلت: </label>
+                    <span class="form-control form-control-sm" *ngIf="project.requiredCompletionDate">
+
+                                                                {{myMoment.convertIsoToJDateWithTime(project?.requiredCompletionDate) | perNumber}}
+
+            </span>
+                    <!--            <input class="form-control form-control-sm " id="requiredCompletionDate" #requiredCompletionDate placeholder="آخرین مهلت" disabled>-->
+                </div>
+                <div class="col-md-4">
+                    <label class="for-label">زمان شروع : </label>
+                    <span class="form-control form-control-sm" *ngIf="project.startDate">
+<!--              {{project.startDate | convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                        {{myMoment.convertIsoToJDate(project?.startDate) | perNumber}}
+
+            </span>
+                    <!--            <input class="form-control form-control-sm" id="startDate" #startDate placeholder="زمان شروع " disabled>-->
+                </div>
+                <div class="col-md-4">
+                    <label class="for-label">زمان پایان : </label>
+                    <span class="form-control form-control-sm" *ngIf="project.endDate">
+<!--              {{project.endDate | convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                        {{myMoment.convertIsoToJDate(project?.endDate) | perNumber}}
+
+            </span>
+                    <!--            <input class="form-control form-control-sm" id="endDate" #endDate placeholder="زمان پایان "-->
+                    <!--                   disabled>-->
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="col-md-12">
+            <ul class="nav nav-tabs" role="navigation" style="text-align: right; margin:0;width: 100%;padding: 0;">
+                <li class="nav-item">
+                    <a href="#SMProject" class="nav-link active" data-toggle="tab" role="tab" aria-controls="SMProject"
+                       style="font-size: 14px">لیست زمان بندی نت</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#WOProject" class="nav-link" data-toggle="tab" role="tab" aria-controls="WOProject"
+                       style="font-size: 14px">لیست سفارش
+                        کار</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#personnelProject" class="nav-link" data-toggle="tab" role="tab"
+                       aria-controls="personnelProject"
+                       (click)="getPersonnelGroupOfProject();getPersonnelOfProject()"
+                       style="font-size: 14px">تکنسین</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#filesProject" class="nav-link" data-toggle="tab" role="tab" aria-controls="filesProject"
+                       (click)="showFileDocument=true"
+                       style="font-size: 14px">مستندات</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <!--جدول مربوط به لیست زمانبندی نت -->
+                <div class="tab-pane fade active show" id="SMProject" role="tabpanel">
+                    <div class="card">
+                        <div class="card-body card-body-content">
+                            <table class="table table-striped table-bordered table-responsive-md"
+                                   *ngIf="scheduleMaintenanceList.length > 0">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">ردیف</th>
+                                    <th class="text-center">دارایی</th>
+                                    <th class="text-center">اولویت</th>
+                                    <th class="text-center">نوع بازدید</th>
+                                    <th class="text-center">وضعیت</th>
+                                    <th class="text-center" style="width: 5%"></th>
+                                    <!--<th class="text-center" style="width: 5%"></th>-->
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ng-container *ngFor="let item of scheduleMaintenanceList; let i = index">
+                                    <tr class="text-center">
+                                        <td>{{i + 1}}</td>
+                                        <td>{{item.asset?.name}}</td>
+                                        <td>{{priorityL[i]?._title}}</td>
+                                        <td>{{maintenanceTypeL[i]?._title}}</td>
+                                        <td>{{item.workOrderStatus?.name}}</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                               (click)="chooseSelectedItemForViewScheduleMaintenance(item)"
+                                               style="cursor: pointer ; font-weight: bold">
+                                                <i class="fa fa-eye" title="نمایش"></i>
+                                            </a>
+
+                                            <!--<td>-->
+                                            <!--<a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+                                            <!--(click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">-->
+                                            <!--<i class="fa fa-edit" title="ویرایش"></i>-->
+                                            <!--</a>-->
+                                            <!--</td>-->
+                                    </tr>
+                                </ng-container>
+
+                                </tbody>
+                            </table>
+                            <div class="col-md-12 text-center" *ngIf="scheduleMaintenanceList.length === 0">
+                                موردی یافت نشد
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--جدول مربوط به لیست دستور کار -->
+                <div class="tab-pane fade" id="WOProject" role="tabpanel">
+                    <div class="card">
+                        <div class="card-body card-body-content">
+                            <table class="table table-striped table-bordered table-responsive-md"
+                                   *ngIf="workOrderList.length > 0">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">ردیف</th>
+                                    <th class="text-center">عنوان</th>
+                                    <th class="text-center">کد</th>
+                                    <th class="text-center">اولویت</th>
+                                    <th class="text-center">نوع بازدید</th>
+                                    <!--<th class="text-center">دارایی</th>-->
+                                    <th class="text-center">وضعیت</th>
+                                    <th class="text-center" style="width: 5%"></th>
+                                    <!--<th class="text-center" style="width: 5%"></th>-->
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ng-container *ngFor="let item of workOrderList; let i = index">
+                                    <tr class="text-center">
+                                        <td>{{i + 1}}</td>
+                                        <td>{{item.title}}</td>
+                                        <td>{{item.code}}</td>
+                                        <td>
+                                            <ng-container *ngFor="let priority of priorityList">
+                                                <ng-container *ngIf="priority._value === item.priority">
+                                                    {{priority._title}}
+                                                </ng-container>
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngFor="let maintenanceType of maintenanceTypeList">
+                                                <ng-container *ngIf="maintenanceType._value === item.maintenanceType">
+                                                    {{maintenanceType._title}}
+                                                </ng-container>
+                                            </ng-container>
+                                        </td>
+                                        <!--<td>{{item?.asset?.name}}</td>-->
+                                        <td>{{item?.status?.name}}
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                               (click)="chooseSelectedItemForVieWorkOrder(item)"
+                                               style="cursor: pointer ; font-weight: bold">
+                                                <i class="fa fa-eye" title="نمایش"></i>
+                                            </a>
+                                        </td>
+                                        <!--<td>-->
+                                        <!--<a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+                                        <!--(click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">-->
+                                        <!--<i class="fa fa-edit" title="ویرایش"></i>-->
+                                        <!--</a>-->
+                                        <!--</td>-->
+                                        <!--<td>-->
+                                        <!--<a class="btn btn-sm btn-outline-lightning rounded-0"-->
+                                        <!--style="cursor: pointer" nbdAreYouSure (then)="deleteItem(item)">-->
+                                        <!--<i class="fa fa-trash" title="حذف"></i>-->
+                                        <!--</a>-->
+                                        <!--</td>-->
+                                    </tr>
+                                </ng-container>
+
+                                </tbody>
+                            </table>
+                            <div class="col-md-12 text-center" *ngIf="workOrderList.length === 0">
+                                موردی یافت نشد
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--مربوط به انتخاب تکنسین ها-->
+                <div class="tab-pane fade" id="personnelProject" role="tabpanel">
+                    <!--            <div class="card">-->
+                    <!--              <div class="card-body card-body-content">-->
+                    <!--                <table class="table table-striped table-bordered table-responsive-md " *ngIf="projectUsers.length > 0">-->
+                    <!--                  <thead>-->
+                    <!--                  <tr>-->
+                    <!--                    <td class="text-center" style="width: 10%">ردیف</td>-->
+                    <!--                    <td class="text-center" style="width: 40%">نام</td>-->
+                    <!--                    <td class="text-center" style="width: 40%">نام خانوادگی</td>-->
+                    <!--                    <td class="text-center" style="width: 40%">پست</td>-->
+                    <!--                    &lt;!&ndash;<td class="text-center" style="width: 10%"></td>&ndash;&gt;-->
+                    <!--                  </tr>-->
+                    <!--                  </thead>-->
+                    <!--                  <tbody>-->
+
+
+                    <!--                  <tr *ngFor="let item of projectUsers;let i = index">-->
+                    <!--                    <th class="text-center" style="width: 10%">{{i + 1}}</th>-->
+                    <!--                    <td class="text-center" style="width: 40%">{{item.name}}</td>-->
+                    <!--                    <td class="text-center" style="width: 40%">{{item.family}}</td>-->
+                    <!--                    <td class="text-center" style="width: 40%">{{item?.userType?.name}}</td>-->
+                    <!--                    &lt;!&ndash;<td class="text-center" style="width: 5%">&ndash;&gt;-->
+                    <!--                    &lt;!&ndash;<i class="fa fa-trash" (click)="deleteUser(item.id)" style="cursor: pointer;"></i>&ndash;&gt;-->
+                    <!--                    &lt;!&ndash;</td>&ndash;&gt;-->
+                    <!--                  </tr>-->
+
+                    <!--                  </tbody>-->
+                    <!--                </table>-->
+                    <!--                <div class="col-md-12 text-center" *ngIf="projectUsers.length === 0">-->
+                    <!--                  هنوزتکنسین انتخاب نشده است-->
+                    <!--                </div>-->
+                    <!--              </div>-->
+                    <!--            </div>-->
+                    <div class="card">
+                        <div class="card-body card-body-content">
+                            <div class="col-md-12" style="margin-bottom: 20px; margin-top: 15px;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <mat-radio-button [checked]="assignedToUser"
+                                                          (change)="openAssignedToUserCard($event)">
+                                            <strong style="font-size: 15px; color: #4c4c4c">
+                                                تخصیص به شخص
+                                            </strong>
+                                        </mat-radio-button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <mat-radio-button [checked]="assignedToGroup"
+                                                          (change)="openAssignedToGroupCard($event)">
+                                            <strong style="font-size: 15px; color: #4c4c4c">
+                                                تخصیص به گروه
+                                            </strong>
+                                        </mat-radio-button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!--////////////////////////////////////////////////////////////////////////////////-->
+                            <div class="card card-body">
+                                <br>
+                                <ng-container *ngIf="assignedToUser">
+                                    <div class="col-md-12 text-center" *ngIf="projectUsers?.length === 0">
+                                        موردی یافت نشد
+                                    </div>
+                                    <div class="col-md-12">
+                                        <table class="table table-striped table-bordered table-responsive-md">
+                                            <thead>
+                                            <tr>
+                                                <td class="text-center" style="width: 10%">ردیف</td>
+                                                <td class="text-center" style="width: 40%">نام</td>
+                                                <td class="text-center" style="width: 40%">نام خانوادگی</td>
+                                                <td class="text-center" style="width: 40%">پست</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            <ng-container *ngIf="projectUsers?.length > 0">
+                                                <tr *ngFor="let item of projectUsers;let i = index">
+                                                    <th class="text-center" style="width: 10%">{{i + 1}}</th>
+                                                    <td class="text-center"
+                                                        style="width: 40%">{{item.name}}</td>
+                                                    <td class="text-center"
+                                                        style="width: 40%">{{item.family}}</td>
+                                                    <td class="text-center"
+                                                        style="width: 40%">{{item?.userTypeName}}</td>
+
+                                                </tr>
+                                            </ng-container>
+                                            </tbody>
+                                        </table>
+                                        <div class="col-md-12 text-center" *ngIf="projectUsers?.length === 0">
+                                            موردی افزوده نشده است
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="assignedToGroup">
+                                    <div class="col-md-12 text-center" *ngIf="projectGroup?.length === 0">
+                                        موردی یافت نشد
+                                    </div>
+                                    <div class="col-md-12">
+                                        <table class="table table-striped table-bordered table-responsive-md">
+                                            <thead>
+                                            <tr>
+                                                <td class="text-center" style="width: 10%">ردیف</td>
+                                                <td class="text-center" style="width: 40%">پست</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            <ng-container *ngIf="projectGroup?.length > 0">
+                                                <tr *ngFor="let item of projectGroup;let i = index">
+                                                    <th class="text-center" style="width: 10%">{{i + 1}}</th>
+                                                    <td class="text-center"
+                                                        style="width: 40%">{{item.userTypeName}}</td>
+
+
+                                                </tr>
+                                            </ng-container>
+                                            </tbody>
+                                        </table>
+                                        <div class="col-md-12 text-center" *ngIf="projectUsers?.length === 0">
+                                            موردی افزوده نشده است
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--انتخاب فایل-->
+                <div class="tab-pane fade" id="filesProject" role="tabpanel">
+                    <div class="card">
+                        <div class="card-body card-body-content">
+                            <app-document *ngIf="showFileDocument" [extraId]="project.id"
+                                          [mode]="mode"></app-document>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+

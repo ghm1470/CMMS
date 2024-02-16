@@ -1,0 +1,395 @@
+<!--<div class="container-company-details">-->
+  <!--<fieldset class="scheduler-border" *ngIf="firstStepAllow" style="padding-bottom: 2px !important;">-->
+    <!--<legend class="scheduler-border">-->
+      <!--<h5 style="color: #51575d">اطلاعات فردی</h5>-->
+    <!--</legend>-->
+    <!--<div class="row">-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">نام</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{accountForUpdate.firstName}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">نام خانوادگی</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{accountForUpdate.lastName}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">مسئولیت در واحد</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{accountForUpdate.responsibility}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">کد ملی</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{accountForUpdate.identity}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">تلفن همراه</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{accountForUpdate.phone}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">ایمیل</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{accountForUpdate.email}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">شماره تماس ثابت</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{accountForUpdate.fixedPhone}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">تماس جایگزین</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{accountForUpdate.exchangePhone}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">کد پستی</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{accountForUpdate.postalCode}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-12 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">آدرس کامل</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{accountForUpdate.fullAddress}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</fieldset>-->
+  <!--<fieldset class="scheduler-border" *ngIf="secondStepAllow" style="padding-bottom: 2px !important;">-->
+    <!--<legend class="scheduler-border">-->
+      <!--<h5 style="color: #51575d">اطلاعات واحد</h5>-->
+    <!--</legend>-->
+    <!--<div class="row">-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">نام واحد</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.name}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">نام مسئول واحد</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.ceoName}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">مسئولیت نماینده در تیم کاری یا واحد</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.ceoResponsibility}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr" *ngIf="secondStepForUpdate.activityDomain==='OTHER'">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">سایر زمینه فعالیت</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.otherActivityDomain}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr" *ngIf="secondStepForUpdate.unitType" [hidden]="secondStepForUpdate.unitType === 'INDUSTRIAL_R_AND_D' ||-->
+                             <!--secondStepForUpdate.unitType === 'CORPORATION_OTHER_LEGAL' && secondStepForUpdate.registrationStatus.length <= 1">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">وضعیت ثبتی واحد</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.registrationStatus}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr" *ngIf="secondStepForUpdate.registrationStatus===registrationStatusList[1].value">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">وضعیت در حال ثبت</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.onRegisteringStatus}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr" *ngIf="secondStepForUpdate.registrationStatus===registrationStatusList[2].value">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">نوع واحد ثبت شده</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.companyType}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">شماره ثبت</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.registrationNumber}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-4 col-12" dir="ltr" *ngIf="secondStepForUpdate.companyType==='OTHER'">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">سایر نوع واحد ثبت شده</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.otherCompanyType}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">تاریخ ثبت</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.registrationDate}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">شناسه ملی</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.nationalId}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">زمینه فعالیت</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.activityDomain}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">نوع واحد</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.unitType}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">آیا مالکیت فکری طرح با نهاد یا فرد دیگری است؟</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.unitIsOthersIdea}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr" *ngIf="secondStepForUpdate.unitIsOthersIdea">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">مالکیت فکری طرح با چه نهاد یا شخصی است؟</label>-->
+          <!--<p class="form-control text-right placeholder-input">-->
+            <!--{{secondStepForUpdate.whosIdeaIsIt}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+
+  <!--</fieldset>-->
+  <!--<fieldset class="scheduler-border" *ngIf="thirdStepAllow" style="padding-bottom: 2px !important;">-->
+    <!--<legend class="scheduler-border">-->
+      <!--<h5 style="color: #51575d">مشخصات تیم کاری</h5>-->
+    <!--</legend>-->
+    <!--<div class="row">-->
+      <!--<div class="table-responsive" style="padding: 0 15px;">-->
+        <!--<table class="table border rounded">-->
+          <!--<thead>-->
+          <!--<tr>-->
+            <!--<td colspan="0">ردیف</td>-->
+            <!--<td>نام و نام خانوادگی</td>-->
+            <!--<td>شماره ملی</td>-->
+            <!--<td>شماره ی تلفن</td>-->
+            <!--<td>سطح تحصیلات</td>-->
+            <!--<td>رشته</td>-->
+
+
+          <!--</tr>-->
+          <!--</thead>-->
+          <!--<tbody>-->
+          <!--<ng-container *ngFor="let item of thirdStepList, let i = index">-->
+            <!--<tr>-->
+              <!--<td colspan="0">{{i + 1}}</td>-->
+              <!--<td>{{item.fullName}}</td>-->
+              <!--<td>{{item.nationalCode}}</td>-->
+              <!--<td>{{item.mobile}}</td>-->
+              <!--<td>-->
+
+                <!--<ng-container *ngFor="let item1 of lastCertificateLevelList">-->
+                  <!--<ng-container *ngIf="item1.value===item.lastCertificateLevel">-->
+                    <!--{{item1.title}}-->
+                  <!--</ng-container>-->
+                <!--</ng-container>-->
+              <!--</td>-->
+              <!--<td>{{item.fieldOfStudy}}</td>-->
+            <!--</tr>-->
+
+          <!--</ng-container>-->
+          <!--</tbody>-->
+        <!--</table>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</fieldset>-->
+  <!--<fieldset class="scheduler-border" *ngIf="fourthStepAllow" style="padding-bottom: 2px !important;">-->
+    <!--<legend class="scheduler-border">-->
+      <!--<h5 style="color: #51575d">ایده محوری</h5>-->
+    <!--</legend>-->
+    <!--<div class="row">-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">خلاصه ای از ایده و زمینه کاری</label>-->
+          <!--<p class="form-control text-right placeholder-input textarea-style">-->
+            <!--{{fourthStepForUpdate.ideaBenefit}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">توصیف ایده</label>-->
+          <!--<p class="form-control text-right placeholder-input textarea-style">-->
+            <!--{{fourthStepForUpdate.ideaDescription}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">تاریخچه ایده</label>-->
+          <!--<p class="form-control text-right placeholder-input textarea-style">-->
+            <!--{{fourthStepForUpdate.teamIdeaRelatedHistory}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">دستاورد فنی</label>-->
+          <!--<p class="form-control text-right placeholder-input textarea-style">-->
+            <!--{{fourthStepForUpdate.technicalAchivment}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</fieldset>-->
+  <!--<fieldset class="scheduler-border" *ngIf="fifthStepAllow" style="padding-bottom: 2px !important;">-->
+    <!--<legend class="scheduler-border">-->
+      <!--<h5 style="color: #51575d">کلیات برنامه کاری</h5>-->
+    <!--</legend>-->
+    <!--<div class="row">-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">مزیت اصلی واحد نسبت به رقبا</label>-->
+          <!--<p class="form-control text-right placeholder-input textarea-style">-->
+            <!--{{fifthStepForUpdate.mainBenefitToOpponents}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">مأموریت های اصلی واحد</label>-->
+          <!--<p class="form-control text-right placeholder-input textarea-style">-->
+            <!--{{fifthStepForUpdate.mainMission}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">بازار فروش بالقوه و بالفعل محصول/ خدمات</label>-->
+          <!--<p class="form-control text-right placeholder-input textarea-style">-->
+            <!--{{fifthStepForUpdate.market}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">روش دستیابی به اهداف</label>-->
+          <!--<p class="form-control text-right placeholder-input textarea-style">-->
+            <!--{{fifthStepForUpdate.methodToAchieveGoals}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">رقبای اصلی داخلی و خارجی</label>-->
+          <!--<p class="form-control text-right placeholder-input textarea-style">-->
+            <!--{{fifthStepForUpdate.opponents}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">اهداف اصلی علمی، فنی و... در افق شش ماهه</label>-->
+          <!--<p class="form-control text-right placeholder-input textarea-style">-->
+            <!--{{fifthStepForUpdate.sixMonthGoal}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">خلاصه مطالعات امکان سنجی فنی و اقتصادی</label>-->
+          <!--<p class="form-control text-right placeholder-input textarea-style">-->
+            <!--{{fifthStepForUpdate.studySummery}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-6 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">اهداف اصلی علمی، فنی و... در افق سه ساله</label>-->
+          <!--<p class="form-control text-right placeholder-input textarea-style">-->
+            <!--{{fifthStepForUpdate.threeYearGoal}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="mb-4 col-md-12 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">چشم اندازکلی واحد</label>-->
+          <!--<p class="form-control text-right placeholder-input textarea-style">-->
+            <!--{{fifthStepForUpdate.vision}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</fieldset>-->
+  <!--<fieldset class="scheduler-border" *ngIf="sixStepAllow" style="padding-bottom: 2px !important;">-->
+    <!--<legend class="scheduler-border">-->
+      <!--<h5 style="color: #51575d">انگیزه های تیم</h5>-->
+    <!--</legend>-->
+    <!--<div class="row">-->
+      <!--<div class="mb-4 col-12" dir="ltr">-->
+        <!--<div class="w-100 input-group">-->
+          <!--<label class="placeholder active">انگیزه های اصلی استقرار در پارک علم و فناوری به ترتیب اولویت</label>-->
+          <!--<p class="form-control text-right placeholder-input textarea-style">-->
+            <!--{{sixthStepForUpdate.motive}}-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</fieldset>-->
+<!--</div>-->

@@ -1,0 +1,249 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                <ng-container *ngIf="mode === actionMode.ADD">
+                    <i class="fa fa-plus"></i>&nbsp;
+                    افزودن انبار
+                </ng-container>
+                <ng-container *ngIf="mode === actionMode.EDIT">
+                    <i class="fa fa-edit"></i>&nbsp;
+                    ویرایش انبار
+                </ng-container>
+                <ng-container *ngIf="mode === actionMode.VIEW">
+                    <i class="fa fa-eye"></i>&nbsp;
+                    مشاهده انبار
+                </ng-container>
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <button (click)="cancel()"
+                        class="btn btn-cancel-back btn-sm">
+                    بازگشت
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <form #storageForm="ngForm" (submit)="action(storageForm)">
+        <div class="card-body card-body-content">
+
+            <fieldset class="scheduler-border" id="storasdfgke-address"
+                      style="margin-top: 35px ;background-color: #f7f7f7">
+                <legend class="scheduler-border"><h6 style="color: #51575d">اطلاعات پایه</h6></legend>
+                <div class="row">
+
+                    <div class="col-md-6 form-group required col-sm-12">
+                        <label class="for-label"> نام انبار:</label>
+                        <span style="color: red">*</span>
+                        <div class="input-group input-group-sm">
+                            <input type="text" placeholder="نام انبار" [(ngModel)]="storage.title"
+                                   (change)="stringLength(storage.title,'title')"
+                                   class="form-control" maxlength="80" name="name"
+                                   id="title"
+                                   nbvRequired #name="ngModel"
+                                   nbvMinlength="1"
+                                   [disabled]="mode===actionMode.VIEW"
+                                   nbvPattern="{{myPattern.TITLEFa}}"
+                                   nbvPatternMsgHtml="نام انبار باید به صورت حروف و اعداد باشد."
+                                   [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvMinlength || name?.errors?.nbvPattern) && stringLength(storage.title,'title')"
+                                   [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvMinlength || name?.errors?.nbvPattern) && (name.touched || doSave)"
+                                   dest="nameValidation">
+                        </div>
+                        <div id="nameValidation"></div>
+                    </div>
+
+                    <div class="col-md-6 form-group required col-sm-12">
+                        <label class="for-label"> کد انبار:</label>
+                        <span style="color: red">*</span>
+
+                        <div class="input-group input-group-sm">
+                            <input type="text" placeholder="کد انبار" [(ngModel)]="storage.code"
+                                   (change)="changeStorageCode()"
+                                   class="form-control" minlength="1" maxlength="80" name="code"
+                                   nbvRequired #code="ngModel"
+                                   id="code"
+                                   [disabled]="mode===actionMode.VIEW"
+                                   nbvPattern="{{myPattern.EnNumberAndAlphabetic}}"
+                                   nbvPatternMsgHtml="کد انبار باید به صورت کاراکتر های انگلیسی وارد گردد."
+                                   [class.is-valid]="!(code?.errors?.nbvRequired || code?.errors?.nbvPattern) && stringLength(storage.code,'code')"
+                                   [class.is-invalid]="(code?.errors?.nbvRequired || code?.errors?.nbvPattern) && (code.touched || doSave)"
+                                   dest="codeValidation">
+                        </div>
+                        <div id="codeValidation"></div>
+                    </div>
+
+
+                </div>
+
+            </fieldset>
+
+
+            <fieldset class="scheduler-border" id="storagke-address"
+                      style="margin-top: 35px ;background-color: #f7f7f7">
+                <legend class="scheduler-border"><h6 style="color: #51575d">وضعیت محل انبار</h6></legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body card-body-content">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <input type="checkbox"
+                                               (click)="dependentStorage($event)" id="dependentStorage"
+                                               *ngIf="mode!==actionMode.VIEW"
+                                        >
+                                        <label class="for-label" for="dependentStorage" style="margin-right: 7px">
+                                            انبار دراین مکان قرار دارد:
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6" *ngIf="independent === false &&
+                                    !(asset.name && asset.code)&&mode!==actionMode.VIEW">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                [disabled]="mode===actionMode.VIEW"
+                                                (click)="openGetAllModal()">
+                                            انتخاب مکان انبار
+                                        </button>
+                                    </div>
+                                </div>
+                                <ng-container *ngIf="independent === false">
+                                    <ng-container *ngIf="asset.name && asset.code">
+                                        <div class="col-md-12" style="margin-top: 20px">
+                                            <div class="row">
+                                                <label>مکان انتخاب شده:</label>
+                                                &nbsp;&nbsp;
+                                                <strong>
+                                                    {{asset.name}}
+                                                    <!--                                                    {{asset.code}}-->
+                                                </strong>
+                                                &nbsp;&nbsp;
+                                                <i class="fa fa-trash" style="color: red; cursor: pointer" title="حذف"
+                                                   *ngIf="mode!==actionMode.VIEW"
+                                                   (click)="deleteSelectedPlace()"></i>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                </ng-container>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body card-body-content">
+                                <div class="col-md-6 form-group required col-sm-12">
+                                    <input type="checkbox"
+                                           *ngIf="mode!==actionMode.VIEW"
+                                           (click)="independentStorage($event)" id="independentStorage">
+                                    <label class="for-label" for="independentStorage" style="margin-right: 7px">این
+                                        انبار مستقل است:</label>
+                                </div>
+
+                                <fieldset *ngIf="independent === true" class="scheduler-border" id="storage-address"
+                                          style="margin-top: 35px;background-color: white">
+                                    <legend class="scheduler-border"><h6 style="color: #51575d">آدرس انبار</h6></legend>
+                                    <div class="row">
+                                        <div class="form-group required col-sm-12">
+                                            <label class="for-label">استان:</label>
+                                            <!--<div class="input-group input-group-sm">-->
+                                            <ng-select dir="rtl" [(ngModel)]="storage.address.provinceId"
+                                                       [disabled]="mode===actionMode.VIEW"
+                                                       (change)="getCityList(true,'html')"
+                                                       placeholder="استان" name="provinceId" style="width: 100%;"
+                                                       dropdownPosition="bottom">
+                                                <ng-option *ngFor="let item of provinceList; let i = index"
+                                                           [value]="item.id">
+                                                    {{item.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                            <!--<select [(ngModel)]="storage.address.province.id" name="provinceId" class="form-control"-->
+                                            <!--#provinceId="ngModel" nbvRequired nbvPattern="{{myPattern.OBJECT_ID}}"-->
+                                            <!--nbvPatternMsgHtml="" (change)="getCityList(true)"-->
+                                            <!--[class.is-valid]="!(provinceId?.errors?.nbvRequired || provinceId?.errors?.nbvPattern)"-->
+                                            <!--[class.is-invalid]="(provinceId?.errors?.nbvRequired || provinceId?.errors?.nbvPattern) && (provinceId.touched || doSave)"-->
+                                            <!--dest="provinceIdValidation">-->
+                                            <!--<option value="-1" disabled>استان</option>-->
+                                            <!--<option *ngFor="let item of provinceList" [value]="item.id">{{item.name}}</option>-->
+                                            <!--</select>-->
+                                            <!--</div>-->
+                                            <div id="provinceIdValidation" style="opacity: 0; height: 0"></div>
+                                        </div>
+
+                                        <div class="form-group required col-sm-12">
+                                            <label class="for-label">
+                                                <ng-container
+                                                        *ngIf="cityList.length===0&&storage.address.provinceId;else cityLabelTemp">
+                                <span style="color: #fc5050">
+                                * شهری برای این استان ثبت نشده است.
+                                </span>
+                                                </ng-container>
+                                                <ng-template #cityLabelTemp>
+                                                    شهر:
+                                                </ng-template>
+                                            </label>
+                                            <ng-select dir="rtl" [(ngModel)]="storage.address.cityId"
+                                                       [loading]="loadingCityList"
+                                                       (change)="changeCity()"
+                                                       [disabled]="mode===actionMode.VIEW"
+                                                       placeholder="شهر" name="cityId" style="width: 100%;"
+                                                       dropdownPosition="bottom">
+                                                <ng-option *ngFor="let item of cityList; let i = index"
+                                                           [value]="item.id">
+                                                    {{item.name}}
+                                                </ng-option>
+                                            </ng-select>
+                                            <!--<div class="input-group input-group-sm">-->
+                                            <!--<select [(ngModel)]="storage.address.city.id" name="cityId" class="form-control"-->
+                                            <!--#cityId="ngModel" nbvRequired nbvPattern="{{myPattern.OBJECT_ID}}"-->
+                                            <!--nbvPatternMsgHtml="" (change)="changeCity()"-->
+                                            <!--[class.is-valid]="!(cityId?.errors?.nbvRequired || cityId?.errors?.nbvPattern)"-->
+                                            <!--[class.is-invalid]="(cityId?.errors?.nbvRequired || cityId?.errors?.nbvPattern) && (cityId.touched || doSave)"-->
+                                            <!--dest="cityIdValidation">-->
+                                            <!--<option value="-1" disabled>شهر</option>-->
+                                            <!--<option *ngFor="let item of cityList" [value]="item.id">{{item.name}}</option>-->
+                                            <!--</select>-->
+                                            <!--</div>-->
+                                            <div id="cityIdValidation" style="opacity: 0; height: 0"></div>
+                                        </div>
+
+                                        <div class="form-group required col-sm-12">
+                                            <label class="for-label"> آدرس انبار:</label>
+                                            <span style="color: red">*</span>
+
+                                            <div class="input-group input-group-sm">
+                  <textarea type="text" placeholder="آدرس انبار" [(ngModel)]="storage.address.description"
+                            class="form-control" minlength="3" maxlength="620" name="addressDescription"
+                            [disabled]="mode===actionMode.VIEW"
+                            (change)="stringLength(storage.address.description,'description')"
+                            id="description"
+                            nbvRequired #addressDescription="ngModel"
+                            [class.is-valid]="!(addressDescription?.errors?.nbvRequired || addressDescription?.errors?.minlength) && stringLength(storage.address.description,'description')"
+                            [class.is-invalid]="(addressDescription?.errors?.nbvRequired || addressDescription?.errors?.minlength) && (addressDescription.touched || doSave) "
+                            dest="addressDescriptionValidation"></textarea>
+                                            </div>
+                                            <div id="addressDescriptionValidation"></div>
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </fieldset>
+        </div>
+        <div class="card-footer text-left">
+            <button class="btn btn-action btn-sm" type="submit" *ngIf="mode!==actionMode.VIEW">
+                <span *ngIf="mode === actionMode.ADD">ثبت</span>
+                <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+            </button>
+        </div>
+    </form>
+</div>
+
+
+<app-tree-view [sendTypeGetAll]="sendTypeGetAll" (parentAsset)="receiveParentAsset($event)"></app-tree-view>

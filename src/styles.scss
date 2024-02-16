@@ -1,0 +1,191 @@
+/* You can add global styles to this file, and also import other style files */
+@import "@styles/external-styles";
+@import "@styles/font-face";
+@import "@styles/angular-boot/angular-boot-styles";
+@import "@styles/custom/custom-styles";
+@import "@styles/common-styles";
+@import "../src/assets/css/checkbox-switch.scss";
+
+.fa, .far, .fas {
+  font-family: "Font Awesome 5 Free" !important;
+}
+
+html , body {
+  overflow-x: hidden;
+}
+
+fieldset.scheduler-border {
+  border: 1px solid #ced4da !important;
+  padding: 0 1.4em 1.4em 1.4em !important;
+  margin: 0 0 1.5em 0 !important;
+  -webkit-box-shadow: 0 0 0 0 #00677f;
+  box-shadow: 0 0 0 0 #00677f;
+  //background-color: white;
+  border-radius: .25rem;
+}
+
+legend.scheduler-border {
+  font-size: 1.8em !important;
+  font-weight: bold !important;
+  text-align: right !important;
+  width: auto;
+  padding: 0 10px;
+  border-bottom: none;
+  color: #1c1c1d!important;
+  h6 {
+    color: #1c1c1d!important;
+  }
+}
+
+agm-map {
+  height: 400px;
+  width: 900px;
+}
+
+
+.for-label {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.for-label-view {
+  font-size: 18px;
+  color: #92939c;
+}
+
+.for-th {
+  height: 5px
+}
+
+.for-label-small {
+  font-size: 12px;
+  //font-weight: 800;
+}
+
+.form-control.is-invalid, .was-validated .form-control:invalid {
+  background-position: center left calc(.375em + .1875rem);
+}
+
+.form-control.is-valid, .was-validated .form-control:valid {
+  background-position: center left calc(.375em + .1875rem);
+}
+
+
+
+
+
+.card-header {
+  padding-top: 0.65rem!important;
+  padding-bottom: 0.35rem!important;
+  background-color: #e0e7ed;
+  color: rgb(86,92,108);
+}
+
+input::-webkit-input-placeholder {
+  font-size: 9pt;
+}
+
+//th {
+//  font-size: 11pt!important;
+//}
+//td {
+//  font-size: 10pt!important;
+//}
+
+
+.card-body-content {
+  padding: 0.5rem;
+}
+.card-body-filter {
+  padding: 0.5rem;
+  background-color: #f3f3f3;
+}
+
+.btn-search {
+  background-color: gray;
+  color: white;
+}
+
+
+.ng-select.ng-select-single .ng-select-container  {
+  min-height: 31px!important;
+  height: 31px!important;
+}
+.ng-select .ng-select-container {
+  min-height: 31px!important;
+  height: 31px!important;
+}
+
+.ng-value-label {
+  font-size: 10pt!important;
+}
+
+
+
+.tab-content {
+  //border-bottom: 1px solid hotpink;
+  margin-top: 5px;
+}
+
+.nav-tabs .nav-item .nav-link,
+.nav-tabs .nav-link:focus,
+.nav-tabs .nav-link:hover {
+  border-color: #faf6fb #faf6fb #FFF;
+  color: #6a6f74;
+  background: #ededed;
+}
+
+.nav-tabs .nav-link.active {
+  background: #FFF!important;
+  border-top-width: 3px!important;
+  border-color: #1976d2 #faf6fb #FFF!important;
+  color: #4889c4 !important;
+  font-size: 13px!important;
+}
+
+
+@media (max-width:650px) {
+  .nav-tabs {
+    display: block;
+  }
+  body, div, table, label, button, span, a, p, legend, input, strong, text,tr , th , select, textarea {
+font-size: 8pt!important;
+  }
+  .basicInformation{
+    //min-height: 120vh!important;height: 120vh!important;
+  }
+
+  .btn-action {
+    margin-left: 2px!important;
+  }
+}
+
+
+.ng-option  , .ng-placeholder{
+  font-size: 10pt!important;
+}
+
+
+.btn-action {
+  color: white;
+  background-color: #28547b;
+  border-color: #13293e;
+}
+.btn-action:hover {
+  color: white;
+  background-color: #13293e;
+  border-color: #28547b;
+}
+
+
+.btn-cancel-back {
+  color:#28547b ;
+  background-color:#f9f9f9 ;
+  border-color: #13293e;
+}
+.btn-cancel-back:hover {
+  color:#28547b ;
+  background-color:white ;
+  border-color: #13293e;
+}
+

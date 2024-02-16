@@ -1,0 +1,157 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                <i class="fa fa-list"></i>&nbsp;&nbsp;
+                <span>لیست پیام های دریافت شده</span>
+
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <button title="جستجو" data-toggle="collapse" href="#activity-search" (click)="getAllUser()"
+                        class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">
+                    <i class="fa fa-search"></i>
+                </button>
+                <!--&lt;!&ndash;  ****************  باگ گزارش شده: نباید تو لیست دریافتی امکان ثبت پیام جدید باشه *************&ndash;&gt;-->
+
+                <!--        <ng-container *ngIf="roleList.formBuilder_create">-->
+                <!--          <button-->
+                <!--            [routerLink]="['/panel/activity/create']"-->
+                <!--            class="btn btn-secondary btn-sm">-->
+                <!--            <i class="fa fa-plus"></i>&nbsp;&nbsp;-->
+                <!--            افزودن-->
+                <!--          </button>-->
+                <!--        </ng-container>-->
+            </div>
+        </div>
+    </div>
+    <div class="card-body card-body-content">
+        <div class="collapse" id="activity-search">
+            <div class="card" style="margin-bottom: 10px">
+                <div class="card-body card-body-filter">
+                    <div class="row">
+                        <div class="col-md-3  form-group">
+                            <label class="for-label">فرستنده</label>
+                            <ng-select dir="rtl" [(ngModel)]="senderInfo.senderUserId"
+                                       placeholder="فرستنده" name="recipient"
+                                       style="width: 100%; margin-bottom: 15px ; font-size: 13px"
+                                       dropdownPosition="bottom"
+                                       id="recipient"
+
+                            >
+                                <ng-option value="-1" disabled=""> فرستنده ی پیام</ng-option>
+                                <ng-option *ngFor="let item of userList; let i = index"
+                                           [value]="item.id">
+                                    {{item.name}} {{item.family}}
+                                </ng-option>
+                            </ng-select>
+
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="for-label">از تاریخ:</label>
+                            <input class="form-control form-control-sm" id="startDate" #startDate
+                                   placeholder="از تاریخ">
+                            <!--<ng-select bindLabel="_title" bindValue="_value" [(ngModel)]="getAllByFilterAndPagination.startDate"-->
+                            <!--[items]="schedulingList" [placeholder]="'از تاریخ:'"></ng-select>-->
+                        </div>
+                        <div class="col-md-3">
+                            <label class="for-label">تا تاریخ:</label>
+                            <input class="form-control form-control-sm" id="endDate" #endDate placeholder="تا تاریخ">
+                            <!--<ng-select bindLabel="_title" bindValue="_value" [(ngModel)]="getAllByFilterAndPagination.startDate"-->
+                            <!--[items]="schedulingList" [placeholder]="'تا تاریخ:'"></ng-select>-->
+                        </div>
+
+
+                        <div class="col-md-1">
+                            <button class="btn btn-sm  btn-search" style=" margin-top: 30px;"
+                                    (click)="getListByFilter()">
+                                جستجو
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+        <ng-container *ngIf="! dataOfjInboxList.itemPage.content.length && loading === false">
+            <div style="text-align: center">نتیجه ای یافت نشد.</div>
+        </ng-container>
+        <ng-container *ngIf=" dataOfjInboxList.itemPage.content.length">
+            <table class="table table-bordered table-striped table-responsive-md">
+                <thead>
+
+                <tr style="text-align: center">
+                    <th class="text-center" style="width: 5%">ردیف</th>
+                    <th class="text-center">فرستنده</th>
+                    <!--      <th class="text-center">گیرنده</th>-->
+                    <th class="text-center">عنوان پیام</th>
+                    <th class="text-center">تاریخ دریافت
+                        &nbsp;
+                        <i class="fas fa-sort-up" style="font-size: 15pt; cursor: pointer"
+                           title="مرتب سازی به صورت صعودی" (click)="changeSort(false)"></i>&nbsp;
+                        <i class="fas fa-sort-down" style="font-size: 15pt ; cursor: pointer"
+                           title="مرتب سازی به صورت نزولی" (click)="changeSort(true)"></i>
+                    </th>
+                    <th class="text-center" style="width: 5%">نمایش</th>
+                    <th class="text-center" style="width: 5%">حذف</th>
+
+
+                </tr>
+
+
+                </thead>
+                <ng-container *ngIf=" dataOfjInboxList.itemPage.content.length">
+                    <tbody>
+
+                    <ng-container *ngFor="let item of dataOfjInboxList.itemPage.content; let i = index">
+                        <tr class="text-center">
+                            <td>{{toolkit2.Common.En2Fa(((((dataOfjInboxList.queryParamReal.paging.page) * dataOfjInboxList.queryParamReal.paging.size)) + (i + 1)))}}</td>
+                            <td>{{item.senderName}} {{item.senderFamilyName}}</td>
+                            <td>{{item.subject }}</td>
+                            <td>
+<!--                                {{item.creationDate| convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                                {{myMoment.convertIsoToJDate(item?.creationDate) | perNumber}}
+
+                            </td>
+
+                            <td>
+                                <a class="btn btn-sm btn-outline-lightning rounded-0"
+                                   style="cursor: pointer" (click)="showNotification(item) ">
+                                    <i class="fa fa-eye" title="نمایش"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-lightning rounded-0"
+                                   style="cursor: pointer" (click)="showModalDelete(item,i)">
+                                    <i class="fa fa-trash" title="حذف"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </ng-container>
+
+
+                    </tbody>
+                </ng-container>
+            </table>
+        </ng-container>
+
+        <shr-pagination
+                *ngIf="dataOfjInboxList.itemPage.content.length"
+                [indicatorCount]="dataOfjInboxList.indicatorCount"
+                [totalPages]="dataOfjInboxList.itemPage.totalPages"
+                [currentPage]="dataOfjInboxList.queryParamReal.paging.page"
+                (selectedPage)="setCurrentPage($event)"
+                class="class1"></shr-pagination>
+    </div>
+</div>
+
+<!--**************************************************************************-->
+<app-conferm-delete
+        [title]="selectedItemForDelete.title"
+        [loading]="selectedItemForDelete.loading"
+        [modalId]="'modalId'+selectedItemForDelete.id"
+        (value)="deleteItem($event)"
+></app-conferm-delete>
+

@@ -1,0 +1,23 @@
+.form-control.is-invalid, .was-validated .form-control:invalid {
+  background-position: center left calc(.375em + .1875rem);
+}
+
+.form-control.is-valid, .was-validated .form-control:valid {
+  background-position: center left calc(.375em + .1875rem);
+}
+
+//.ng-select {
+//  min-height: 31px !important;
+//}
+//.ng-select.ng-select-single ::ng-deep .ng-select-container {
+//  min-height: 31px !important;
+//}
+.ng-select .ng-select-container {
+  min-height: 20px;
+}
+
+.ng-select.ng-select-single ::ng-deep  .ng-select-container {
+  height: 10px
+  }
+ng-select ::ng-deep .ng-select-container {
+}

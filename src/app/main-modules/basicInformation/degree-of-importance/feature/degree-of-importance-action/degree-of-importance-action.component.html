@@ -1,0 +1,56 @@
+<div class="card">
+
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                <ng-container *ngIf="mode === actionMode.ADD">
+                    <i class="fa fa-plus"></i>&nbsp;
+                    افزودن درجه اهمیت
+                </ng-container>
+                <ng-container *ngIf="mode === actionMode.EDIT">
+                    <i class="fa fa-edit"></i>&nbsp;
+                    ویرایش درجه اهمیت
+                </ng-container>
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <button (click)="back()"
+                        class="btn btn-cancel-back btn-sm">
+                    بازگشت
+                </button>
+            </div>
+        </div>
+    </div>
+    <ng-container *ngIf="loadingGetOne">
+        <div class="row justify-content-center">
+
+            <i class="fa fa-spinner fa-pulse fa-3x"></i>
+
+        </div>
+    </ng-container>
+    <form class=" form" [formGroup]="htmlForm" (ngSubmit)="onSubmit()" *ngIf="!loadingGetOne">
+        <div class="col-md-12">
+            <div class="row">
+                <!--            name -->
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="title">نام درجه اهمیت</label>
+                        <input class=" form-control" id="title" type="text"
+                               formControlName="title"
+                               placeholder="نام درجه اهمیت" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div modal-footer class="row justify-content-between"
+                 style="padding-right: 10px;padding-left:10px">
+                <button type="submit" class="btn btn-action btn-sm"
+                        style="    margin: 5px 5px;  min-width: 45px;text-align: center;">
+                    <span> ثبت  </span>
+                    <i class="fa fa-spinner fa-pulse fa-1x" aria-hidden="true" *ngIf="loadingAction"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+

@@ -1,0 +1,25 @@
+@font-face {
+  font-family: IRANSansWeb;
+  font-style: normal;
+  font-weight: normal;
+  src: url('/assets/fonts/iransans/IRANSansWeb.eot');
+  src: url('/assets/fonts/iransans/IRANSansWeb.eot?#iefix') format('embedded-opentype'),
+  url('/assets/fonts/iransans/IRANSansWeb.woff2') format('woff2'),
+  url('/assets/fonts/iransans/IRANSansWeb.woff') format('woff'),
+  url('/assets/fonts/iransans/IRANSansWeb.ttf') format('truetype');
+}
+@font-face {
+  font-family: IRANSansWeb-farsi;
+  font-style: normal;
+  font-weight: normal;
+  src: url('/assets/fonts/milad/IRANSansWeb(FaNum).eot');
+  src: url('/assets/fonts/milad/IRANSansWeb(FaNum).eot?#iefix') format('embedded-opentype'),
+  url('/assets/fonts/milad/IRANSansWeb(FaNum).woff2') format('woff2'),
+  url('/assets/fonts/milad/IRANSansWeb(FaNum).woff') format('woff'),
+  url('/assets/fonts/milad/IRANSansWeb(FaNum).ttf') format('truetype');
+}
+body, div, table, label, button, span, a, p, legend, input, strong, text,
+h1, h2, h3, h4, h5, h6 {
+  font-family: IRANSansWeb !important;
+  text-decoration: none;
+}

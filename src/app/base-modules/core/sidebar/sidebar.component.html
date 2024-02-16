@@ -1,0 +1,28 @@
+<!-- Sidebar Holder -->
+<nav id="sidebar">
+    <div class="sidebar-header">
+        <i class="fa fa-arrow-right "
+           (click)="openCloseNav()"
+           style="color: #4c4c4c ; float: left ; margin: 5px 0 0 5px;font-size: x-large;cursor: pointer"></i>
+        <div class="text-center pt-3 " style="margin-right: 30px">
+            <ng-container *ngIf="user?.image?.fileByte ; else  noProfileTemp">
+                <img class="rounded-circle cursor-pointer" width="60px" height="60px"
+                     (click)="selectedImageForShow()"
+                     src="data:image/png;base64,{{ user.image.fileByte }}"/>
+            </ng-container>
+            <ng-template #noProfileTemp>
+                <img src="assets/images/profile/no-profile.jpg"
+                     class="rounded-circle" width="60px" height="60px">
+            </ng-template>
+        </div>
+        <div class="text-center" style="color: #020202;">
+            <a (click)="editProfile()"><p class="text-center">{{user.name }} {{ user.family}}</p></a>
+            <small>{{userType?.name}}</small>
+        </div>
+    </div>
+
+    <div class="sidebar-body">
+        <app-vertical-menu></app-vertical-menu>
+    </div>
+</nav>
+<app-show-profile-image *ngIf="user" [user]="user"></app-show-profile-image>

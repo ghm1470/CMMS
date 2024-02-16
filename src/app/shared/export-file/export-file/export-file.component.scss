@@ -1,0 +1,28 @@
+@mixin mq($from) {
+  @media (max-width: $from) {
+    @content;
+  }
+}
+
+.myTable table thead, .myTable table tbody {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+
+  @include mq('1105px') {
+    width: 150%;
+
+  }
+  @include mq('755px') {
+    width: 250%;
+
+  }
+  @include mq('400px') {
+    width: 320%;
+
+  }
+}
+
+::ng-deep .card {
+
+}

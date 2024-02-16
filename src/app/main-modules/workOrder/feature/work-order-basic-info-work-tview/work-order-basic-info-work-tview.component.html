@@ -1,0 +1,72 @@
+<div class="col-md-12" style="padding: 10px">
+    <form #workOrderBasicInformationForm="ngForm">
+
+            <div class="row" style="margin: 0">
+                <!--=================================-->
+                <div class="col-md-4 form-group required col-sm-12">
+                    <label class="for-label">تکمیل شده توسط:</label>
+
+                    <div class="form-control form-control-sm"
+                         style="width: 100%;height: 31px;  background-color: #e9ecef; "
+                    >
+                        <!--          {{user?.name}} {{user?.family}}{{user?.userType?.name}}-->
+                        {{sendUser?.username}} {{sendUser?.userFamilyName}} -  {{sendUser?.userTypeTitle}}
+                    </div>
+                </div>
+                <!--=================================-->
+                <div class="col-md-4 form-group required col-sm-12">
+                    <label class="for-label">تخمین نفر ساعت:</label>
+                    <div class="input-group input-group-sm">
+                        <input disabled type="text" placeholder="تخمین نفر ساعت"
+                               [(ngModel)]="workOrderBasicInformation.laborHour"
+                               class="form-control form-control-sm" name="laborHour"
+                        >
+                    </div>
+                </div>
+
+                <div class="col-md-4 form-group required col-sm-12">
+                    <label class="for-label">نفر ساعت کار انجام شده:</label>
+                    <div class="input-group input-group-sm">
+                        <input disabled type="text"
+                               [(ngModel)]="workOrderBasicInformation.actualLaborHour"
+                               class="form-control form-control-sm"
+                               name="actualLaborHour">
+                    </div>
+                </div>
+
+            </div>
+            <div class="row"  style="margin: 0">
+                <div class="col-md-12 form-group required col-sm-12">
+                    <label class="for-label">خلاصه کار:</label>
+                    <div class="input-group input-group-sm">
+        <textarea disabled type="text" placeholder="خلاصه کار" [(ngModel)]="workOrderBasicInformation.issueSummary"
+                  class="form-control" maxlength="620" name="issueSummary"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12 form-group required col-sm-12">
+                    <label class="for-label">دستور العمل کار:</label>
+                    <div class="input-group input-group-sm">
+        <textarea disabled type="text" placeholder="دستور العمل کار"
+                  [(ngModel)]="workOrderBasicInformation.workInstruction"
+                  class="form-control" maxlength="620" name="workInstruction"></textarea>
+                    </div>
+                </div>
+            </div>
+
+<!--        <div class="form-group required col-sm-12 text-left">-->
+<!--            <ng-container-->
+<!--                    *ngIf="sendInformationNumberOfTabs.numberOfFormIdList < sendInformationNumberOfTabs.lengthFormIdList - 1 || sendInformationNumberOfTabs.hasForm">-->
+
+<!--                <button (click)="nextOrPrev('next')" class="btn btn-sm btn-warning" type="button">-->
+
+<!--                    <span>بعدی</span>-->
+<!--                </button>-->
+<!--            </ng-container>-->
+<!--            <button (click)="nextOrPrev('prev')" class="btn btn-sm btn-cancel-back" type="button" style="float: right">-->
+
+<!--                <span>قبلی</span>-->
+<!--            </button>-->
+<!--        </div>-->
+    </form>
+</div>
+

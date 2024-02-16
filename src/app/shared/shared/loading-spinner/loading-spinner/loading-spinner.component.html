@@ -1,0 +1,56 @@
+<!--<div-->
+<!--  style="    background-color: rgba(226, 226, 226, 0.57);-->
+<!--    position: fixed;-->
+<!--    top: 0;-->
+<!--    right: 0;-->
+<!--    bottom: 0;-->
+<!--    left: 0;-->
+<!--    z-index: 1000;-->
+<!--    display: none;-->
+<!--    overflow: hidden;-->
+<!--    -webkit-overflow-scrolling: touch;-->
+<!--    outline: 0;-->
+<!--    display: block;-->
+<!--    text-align: center;">-->
+
+
+<!--  <div class="loading">-->
+<!--    <div class="col-md-12 ">-->
+<!--        <span>-->
+<!--          {{title}}-->
+<!--       </span>-->
+<!--    </div>-->
+
+<!--    <div class="text-center  " style="padding: 10px" >-->
+
+<!--        <span-->
+<!--          class="loading-dot" *ngFor="let i of f ">-->
+
+<!--        </span>-->
+<!--    </div>-->
+
+
+
+<!--  </div>-->
+
+
+<!--</div>-->
+
+<div  class="loader" *ngIf="!loadingList">
+<!--    <i class="fa fa-spinner fa-pulse fa-2x"></i>-->
+  <div class="text-center">
+    <div class="spinner-border-big" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</div>
+
+
+<!--    ////////////LOADING For List/////-->
+<div class="text-center">
+  <div class="spinner-border" role="status" *ngIf="loadingList"  style="color: #66737e;">
+    <span class="sr-only"  >Loading...</span>
+  </div>
+</div>
+
+

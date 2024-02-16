@@ -1,0 +1,33 @@
+.form-builder-group {
+  display: flex;
+  direction: ltr;
+  position: relative;
+  & > .form-control {
+    border-radius: 3px 0 0 3px;
+  }
+  & > .input-group-append .input-group-text {
+    border-radius: 0 3px 3px 0;
+  }
+}
+.placeholder {
+  position: absolute;
+  right: 54px;
+  top:-7px;
+  font-size: 13px;
+  z-index: 15;
+  background: #fff;
+  padding: 0 5px;
+  display: inline-block;
+  color: #8a8f94;
+  transition: all 0.2s ease;
+  &.active {
+    top: -10px;
+    z-index: 999;
+    font-size: 14px;
+
+  }
+}
+
+.input-group-append .input-group-text .fa {
+  color: #8086a3
+}

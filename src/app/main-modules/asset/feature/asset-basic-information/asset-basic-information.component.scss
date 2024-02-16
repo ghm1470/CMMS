@@ -1,0 +1,13 @@
+agm-map {
+  height: 220px!important;
+  width: 440px!important;
+}
+.form-control.is-invalid, .was-validated .form-control:invalid {
+  background-position: center left calc(.375em + .1875rem);
+}
+
+.form-control.is-valid, .was-validated .form-control:valid {
+  background-position: center left calc(.375em + .1875rem);
+}
+
+

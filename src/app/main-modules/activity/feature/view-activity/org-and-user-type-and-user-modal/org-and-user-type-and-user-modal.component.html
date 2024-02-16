@@ -1,0 +1,92 @@
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="false"
+  [modalSize]="MyModalSize"
+  autoShow="false"
+  [myId]="modalId">
+  <div modal-header>
+    <h6>
+      انتخاب کاربر برای مرحله
+      ({{activityLevel.title}})
+    </h6>
+  </div>
+  <div modal-body>
+
+
+    <div class="col-md-12 col-sm-6 col-xs-12 mb-4">
+      <div class="input-group">
+        <label class="placeholder active style-3">سازمان: <span style="color: red">*</span>
+        </label>
+        <!--(change)="getPostByOrganizationId($event)"-->
+        <select class="form-control"
+                placeholder="سازمان"
+                name="selectedOrg"
+                [disabled]="true"
+                [(ngModel)]="organizationId"
+                >
+          <option *ngFor="let organization of allOrganization; let i= index"
+                  [value]="organization.id">
+            {{organization.name}}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!--              <ng-container *ngIf="userTypeListByOrg.length>0">-->
+    <div class="col-md-12 col-sm-4 col-xs-12 mb-4">
+      <div class="input-group">
+        <label class="placeholder active style-3"> پست: <span style="color: red">*</span>
+        </label>
+        <!--(change)="setUserTypeDetails(userTypeId,organizationId)"-->
+        <select
+          class="form-control"
+          placeholder="پست"
+          [disabled]="true"
+          name="selectedPost"
+          [(ngModel)]="userTypeId"
+        >
+          <option *ngFor="let userType of userTypeListByOrg; let i= index"
+                  [value]="userType.id">
+            {{userType.name}}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-12 col-sm-4 col-xs-12 mb-4" *ngIf="!checkNextLevels();else infoUser">
+      <div class="input-group">
+        <label class="placeholder active style-3">گیرنده: <span style="color: red">*</span>
+        </label>
+        <!--                    (change)="setUserTypeDetails(activityLevel.userType.id)"-->
+        <select
+          class="form-control valid-error"
+          name="selectedUser"
+          [disabled]="true"
+          [(ngModel)]="userId">
+          <option *ngFor="let user of userByUserTypeIdAndOrganizationId; let i= index"
+                  [value]="user.id">
+            {{user.name}} {{user.family}}
+          </option>
+        </select>
+      </div>
+    </div>
+
+
+    <ng-template #infoUser>
+      <div class="col-md-12">
+        <i class="fa fa-info"></i>
+        <a style="color: #2D80B2">
+          کاربر این مرحله متغییر می باشد و در اجرای فرآیند تعیین خواهد شد
+        </a>
+        <div class="col-md-12">
+          <ng-container *ngFor="let user of userByUserTypeIdAndOrganizationId">
+            <a style="background: #f0f0f0;color: #929292;border-radius: 12px">
+              {{user.name}} {{user.family}}
+            </a>-
+          </ng-container>
+        </div>
+      </div>
+    </ng-template>
+
+
+  </div>
+</nbw-modal>

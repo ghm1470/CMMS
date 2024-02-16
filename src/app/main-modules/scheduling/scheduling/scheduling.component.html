@@ -1,0 +1,606 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-3 col-8 col-sm-6 card-title">
+                {{actionMode === ActionMode.ADD ? 'ایجاد ' : ''}}
+                {{actionMode === ActionMode.VIEW ? 'مشاهده ' : ''}}
+                {{actionMode === ActionMode.EDIT ? 'ویرایش ' : ''}}
+                زمانبندی
+            </div>
+            <div class="col-md-9 col-4 col-sm-6 text-left">
+                <button (click)="cancel()"
+                        class="btn btn-cancel-back btn-sm">
+                    بازگشت
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body card-body-content">
+        <form class=" form" [formGroup]="htmlForm" (ngSubmit)="onSubmit()">
+            <div class="col-md-12">
+                <div class="row">
+                    <ng-container *ngIf="actionMode!==ActionMode.VIEW">
+                        <!--                 نام دستگاه -->
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="form-group">
+                                <label style="color: red">*</label>
+                                <label> نام دستگاه </label>
+                                <ng-select
+                                        [items]="assetList"
+                                        [multiple]="false"
+                                        [closeOnSelect]="true"
+                                        [loading]="loadingAllAsset"
+                                        id="assetId"
+                                        name="assetId"
+                                        formControlName="assetId"
+                                        bindValue="id"
+                                        bindLabel="name"
+                                        (change)="changeAssetIdList($event)"
+                                >
+                                    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                        <!--                            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"-->
+                                        <!--                                   [formControlName]="item.id"/>-->
+                                        {{item.name}}
+                                    </ng-template>
+                                </ng-select>
+
+                            </div>
+                        </div>
+
+                        <!--                 قطعه اصلی -->
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="form-group">
+                                <label> قطعه اصلی </label>
+                                <ng-select
+                                        [items]="majorPartList"
+                                        [multiple]="false"
+                                        [closeOnSelect]="true"
+                                        [loading]="loadingMajorPart"
+                                        id="majorPart"
+                                        name="majorPart"
+                                        bindValue="id"
+                                        bindLabel="name"
+                                        formControlName="majorPart"
+                                        (change)="changeMajorPartList($event)">
+                                    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+
+                                        {{item.name}}
+                                    </ng-template>
+                                </ng-select>
+
+                            </div>
+                        </div>
+
+                        <!--                 قطعه جزئی -->
+                        <div class="col-lg-2 col-sm-6">
+                            <div class="form-group">
+                                <label> قطعه جزئی </label>
+
+                                <input
+                                        class=" form-control "
+                                        id="minorPart"
+                                        name="minorPart"
+                                        formControlName="minorPart"
+                                        type="text"
+                                        style="text-align: center; font-family: IRANSansWeb-farsi!important;padding: 0"
+                                        autocomplete="off">
+
+
+                            </div>
+                        </div>
+                        <!--           فرآیند        -->
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="form-group">
+                                <label style="color: red">*</label>
+                                <label> فرآیند </label>
+                                <ng-select
+                                        [items]="activityList"
+                                        [multiple]="false"
+                                        [closeOnSelect]="true"
+                                        [loading]="loadingActivityList"
+                                        id="activityId"
+                                        name="activityId"
+                                        bindValue="id"
+                                        bindLabel="title"
+                                        formControlName="activityId">
+                                    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+
+                                        {{item.title}}
+                                    </ng-template>
+                                </ng-select>
+
+                            </div>
+                        </div>
+
+                        <div class="col-lg-1 col-sm-6">
+                            <div class="form-group text-start align-items-start justify-content-start">
+                       <span class="cursor-pointer " (click)="addAsset()">
+                        <i class="fa fa-arrow-down mt-4 " style="color: #2D80B2;font-size: 24px"> </i>
+                        </span>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <!--        // دستگاهها-->
+                    <div class="col-md-12 mb-2">
+
+                        <ng-container *ngTemplateOutlet="assetListTemp"></ng-container>
+                    </div>
+
+
+                    <!--            نوع فعالیت-->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <label> نوع فعالیت </label>
+                            <!--                    <label style="color: red">*</label>-->
+                            <ng-select
+                                    [closeOnSelect]="true"
+                                    [loading]="loadingTypeOfActivityList"
+                                    [items]="typeOfActivityList"
+                                    id="typeOfActivity"
+                                    name="typeOfActivity"
+                                    bindValue="id"
+                                    bindLabel="name"
+                                    formControlName="typeOfActivity">
+                                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                    {{item.name}}
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <!--            وضعیت تجهیز -->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <label> وضعیت تجهیز </label>
+                            <!--                    <label style="color: red">*</label>-->
+                            <ng-select
+                                    [closeOnSelect]="true"
+                                    id="assetStatus"
+                                    name="assetStatus"
+                                    bindValue="id"
+                                    bindLabel="name"
+                                    formControlName="assetStatus">
+                                <ng-option [value]="AssetStatus.STOP"> متوقف</ng-option>
+                                <ng-option [value]="AssetStatus.RUN"> درحال کار</ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <!--            عنوان رسته کاری-->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <label> عنوان رسته کاری </label>
+                            <!--                    <label style="color: red">*</label>-->
+
+                            <ng-select
+                                    [closeOnSelect]="true"
+                                    [loading]="loadingWorkingFieldList"
+                                    [items]="workingFieldList"
+                                    id="workingField"
+                                    name="workingField"
+                                    bindValue="id"
+                                    bindLabel="name"
+                                    formControlName="workingField">
+                                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                    {{item.name}}
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <!--            درجه اهمیت-->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <label> درجه اهمیت </label>
+                            <!--                    <label style="color: red">*</label>-->
+                            <ng-select
+                                    [closeOnSelect]="true"
+                                    [loading]="loadingDegreeOfImportanceList"
+                                    [items]="degreeOfImportanceList"
+                                    id="degreeOfImportance"
+                                    name="degreeOfImportance"
+                                    bindValue="id"
+                                    bindLabel="name"
+                                    formControlName="degreeOfImportance">
+                                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                    {{item.name}}
+                                </ng-template>
+                            </ng-select>
+
+                        </div>
+                    </div>
+                    <!--وضعیت اجرا-->
+
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group text-center pt-4">
+                            <label>
+                                وضعیت اجرا
+                            </label>
+                            <!--                    <label style="color: red">*</label>-->
+
+                            <label class="switch mx-2 ">
+                                <input type="checkbox" [checked]="status"
+                                       (change)="status=!status"
+                                       id="runStatus"
+                                       name="runStatus"
+                                       formControlName="runStatus"
+                                >
+                                <span class="slider round"></span>&nbsp;&nbsp;
+                            </label>
+                            <label style="color: green" *ngIf="status">فعال</label>
+                            <label style="color: #990000" *ngIf="!status">غیر فعال</label>
+
+                        </div>
+                    </div>
+                    <!--                  مدت زمان فعالیت(دقیقه)-->
+
+                    <div class="col-lg-3 col-sm-6 ">
+                        <div class="form-group  text-center">
+                            <label for="activityTime"> مدت زمان فعالیت(دقیقه)</label>
+                            <!--                    <label style="color: red">*</label>-->
+                            <div class="row justify-content-center">
+                                <input
+                                        class=" form-control "
+                                        id="activityTime"
+                                        name="activityTime"
+                                        formControlName="activityTime"
+                                        type="text"
+                                        style="text-align: center;
+                                        font-family: IRANSansWeb-farsi!important;
+                                        padding: 0;
+                                        width: 25%"
+                                        appNumeric
+                                        autocomplete="off">
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--               تخمین زمان تکمیل پس از ساخت دستور کار (عدد ... روز )-->
+
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group text-center">
+                            <label style="color: red">*</label>
+                            <label for="estimateCompletionDate">تخمین زمان تکمیل پس از ساخت دستور کار ( روز )</label>
+                            <!--                    <label style="color: red">*</label>-->
+                            <div class="row justify-content-center">
+                                <!--                                <div class="col-lg-6 col-sm-6">-->
+                                <input
+                                        class=" form-control "
+                                        id="estimateCompletionDate"
+                                        name="estimateCompletionDate"
+                                        formControlName="estimateCompletionDate"
+                                        type="text"
+                                        style="text-align: center;
+                                    font-family: IRANSansWeb-farsi!important;
+                                    padding: 0;
+                                    width: 25%"
+                                        appNumeric
+                                        autocomplete="off">
+                                <!--                                </div>-->
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!--            شرح فعالیت -->
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label> شرح فعالیت </label>
+                            <textarea class="form-control"
+                                      placeholder=" شرح فعالیت"
+                                      id="requestDescription"
+                                      name="requestDescription"
+                                      formControlName="requestDescription"
+                                      style="max-height: 80px;min-height: 80px;max-width: 100%;min-width: 100%"
+                                      [id]="'requestDescription'"
+                            ></textarea>
+                        </div>
+                    </div>
+                    <!--            تکنسین انجام دهنده-->
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label> تکنسین انجام دهنده </label>
+                            <ng-select
+                                    [items]="userList"
+                                    [multiple]="true"
+                                    [selectableGroup]="true"
+                                    [closeOnSelect]="false"
+                                    [loading]="loadingGetUsers"
+                                    id="userIdList"
+                                    name="userIdList"
+                                    bindValue="id"
+                                    bindLabel="nameForShow"
+                                    formControlName="userIdList">
+                                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                    <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"
+                                           [formControlName]="item.id"/>
+                                    {{item.nameForShow}}
+                                </ng-template>
+                            </ng-select>
+
+                        </div>
+                    </div>
+
+                </div>
+                <!--        // قطعات-->
+                <ng-container *ngTemplateOutlet="partsTemp"></ng-container>
+
+                <div class="row">
+
+                    <!--            /// برحسب -->
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label style="color: red">*</label>
+                            <label> بر حسب </label>
+                            <ng-select
+                                    [closeOnSelect]="true"
+                                    [clearable]="false"
+                                    id="inTermsOf"
+                                    name="inTermsOf"
+                                    bindValue="id"
+                                    bindLabel="name"
+                                    formControlName="inTermsOf">
+                                <ng-option value="time"> زمان</ng-option>
+                                <!--                                <ng-option value="meter"> متراژ</ng-option>-->
+                            </ng-select>
+                        </div>
+
+                    </div>
+                    <ng-container *ngIf="htmlForm.controls.inTermsOf.value==='time'">
+                        <div class="col-sm-12">
+                            <label style="color: red">*</label>
+                            تناوب
+                        </div>
+                        <div class="col-sm-4">
+                            <mat-radio-group
+                                    aria-labelledby="example-radio-group-label"
+                                    formControlName="alternation"
+                                    name="alternation"
+                                    id="alternation"
+                                    class="example-radio-group"
+                                    [(ngModel)]="alternation">
+                                <mat-radio-button class="example-radio-button" [value]="Frequency.DAILY">روزانه
+                                </mat-radio-button>
+                                <mat-radio-button class="example-radio-button" [value]="Frequency.WEEKLY">هفتگی
+                                </mat-radio-button>
+                                <mat-radio-button class="example-radio-button" [value]="Frequency.MONTHLY">ماهانه
+                                </mat-radio-button>
+                                <mat-radio-button class="example-radio-button" [value]="Frequency.YEARLY">سالانه
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <div class="col-2">
+                                    <label style="color: red">*</label>
+                                    هر
+                                </div>
+                                <div class="col-5">
+                                    <input
+                                            class=" form-control "
+                                            id="everyNumber"
+                                            name="everyNumber"
+                                            formControlName="everyNumber"
+                                            type="text"
+                                            [(ngModel)]="everyNumber"
+                                            (keydown)="keydownEveryNumber($event)"
+                                            style="text-align: center; font-family: IRANSansWeb-farsi!important;padding: 0"
+                                            appNumeric
+                                            autocomplete="off">
+                                </div>
+                                <div class="col-2">
+                                    <ng-container [ngSwitch]="alternation" class="w-100">
+                                        <ng-container class="row" *ngSwitchCase="Frequency.DAILY">روز</ng-container>
+                                        <ng-container class="row" *ngSwitchCase="Frequency.WEEKLY">هفته</ng-container>
+                                        <ng-container class="row" *ngSwitchCase="Frequency.MONTHLY">ماه</ng-container>
+                                        <ng-container class="row" *ngSwitchCase="Frequency.YEARLY">سال</ng-container>
+                                    </ng-container>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-5">
+                                    <mat-radio-group
+                                            aria-labelledby="example-radio-group-label"
+                                            formControlName="alternationMode"
+                                            name="alternationMode"
+                                            id="alternationMode"
+                                            [(ngModel)]="selectedMode"
+                                            class="example-radio-group">
+                                        <mat-radio-button class="example-radio-button" [value]="Mode.FLOAT">
+                                            جاری
+                                        </mat-radio-button>
+                                        <mat-radio-button class="example-radio-button" [value]="Mode.FIXED">ثابت
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                    <!--            از تاریخ -->
+                            <div class="col-lg-6 col-sm-6">
+                                <div class="form-group">
+                                    <label style="color: red">*</label>
+                                    <label> از تاریخ </label>
+                                    <input type="text" class="form-control"
+                                           style="direction: ltr"
+                                           id="inputStartDate"
+                                           formControlName="startDate"
+                                           name="startDate"
+                                           autocomplete="off">
+
+                                </div>
+                            </div>
+                            <!--            تا تاریخ -->
+
+                            <div class="col-lg-6 col-sm-6">
+                                <div class="form-group">
+                                    <label style="color: red">*</label>
+                                    <label> تا تاریخ </label>
+                                    <input type="text" class="form-control"
+                                           style="direction: ltr"
+                                           id="inputEndDate"
+                                           formControlName="endDate"
+                                           name="endDate"
+                                           autocomplete="off">
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </ng-container>
+
+                </div>
+
+                <ng-container *ngIf="actionMode!==ActionMode.VIEW">
+                    <div modal-footer class="row justify-content-end"
+                         style="padding-right: 10px;padding-left:10px">
+                        <button type="submit" class="btn btn-action btn-sm"
+                                style="    margin: 5px 5px;  min-width: 45px;text-align: center;">
+                            <span>
+                                {{actionMode === ActionMode.ADD ? ' ثبت و بازگشت به لیست ' : 'ویرایش '}}
+                            </span>
+
+                            <i class="fa fa-spinner fa-pulse fa-1x" aria-hidden="true" *ngIf="loadingAction"></i>
+                        </button>
+                        <ng-container *ngIf="actionMode===ActionMode.ADD">
+                            <button type="button" class="btn btn-action btn-sm"
+                                    (click)="onSubmit('createAndNew')"
+                                    style="    margin: 5px 5px;  min-width: 45px;text-align: center;">
+                                <span> ثبت و ایجاد زمانبندی جدید </span>
+                                <i class="fa fa-spinner fa-pulse fa-1x" aria-hidden="true" *ngIf="loadingAction"></i>
+                            </button>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+<!--        // قطعات-->
+
+<ng-template #partsTemp>
+    <table class="table table-responsive-md table-bordered table-striped">
+        <thead>
+
+        <tr>
+            <th class="text-center" style="width: 5%">ردیف</th>
+            <th class="text-center">عنوان قطعه</th>
+            <th class="text-center" style="width: 10%">تعداد</th>
+            <ng-container *ngIf="actionMode!==ActionMode.VIEW">
+                <th class="text-center" style="width: 5%">حذف</th>
+            </ng-container>
+        </tr>
+        </thead>
+        <tbody>
+
+        <ng-container *ngFor="let item of getOneUsedPartList; let i = index">
+            <tr class="text-center">
+                <td>{{i + 1}}</td>
+                <td>
+
+                    {{item?.partName }}
+
+                </td>
+                <td style="width: 10%">
+                    <!--                    <input *ngIf="mode=== actionMode.VIEW"-->
+                    <!--                           class=" form-control" id="usedNumberView" type="text"-->
+                    <!--                           [value]="item.usedNumber"-->
+                    <!--                           disabled-->
+                    <!--                           style="text-align: center"-->
+                    <!--                           autocomplete="off">-->
+                    <input
+                            class=" form-control " id="usedNumber" type="text"
+                            [(ngModel)]="item.usedNumber"
+                            [disabled]="actionMode===ActionMode.VIEW"
+                            (keydown)="keydownUsedNumber($event,item)"
+                            style="text-align: center; font-family: IRANSansWeb-farsi!important;padding: 0"
+                            appNumeric
+                            autocomplete="off">
+                </td>
+                <ng-container *ngIf="actionMode!==ActionMode.VIEW">
+                    <td>
+                        <a class="btn btn-sm btn-outline-lightning rounded-0"
+                           style="cursor: pointer" nbdAreYouSure
+                           (then)="deletePart(item,i)">
+                            <i class="fa fa-trash" title="حذف"></i>
+                        </a>
+                    </td>
+                </ng-container>
+
+            </tr>
+        </ng-container>
+        <ng-container *ngIf="actionMode!==ActionMode.VIEW">
+            <tr class="text-center">
+                <td colspan="4" style="background-color: #e0f5ff;padding-right: 5%;padding-left:15% ">
+                        <span class="cursor-pointer" (click)="openViewPartModal()">
+                        <i class="fa fa-plus-circle " style="color: #2D80B2;font-size: 24px"></i>
+                        </span>
+                </td>
+            </tr>
+        </ng-container>
+        </tbody>
+    </table>
+
+
+    <app-view-part-modal *ngIf="showModalBody" [partWithUsageCountListIn]="getOneUsedPartList"
+                         (selectedPart)="receiveSelectedPart($event)"></app-view-part-modal>
+</ng-template>
+
+<!--        // دستگاهها-->
+
+<ng-template #assetListTemp>
+    <table class="table table-responsive-md table-bordered table-striped">
+        <thead>
+
+        <tr>
+            <th class="text-center" style="width: 5%">ردیف</th>
+            <th class="text-center">عنوان دستگاه</th>
+            <th class="text-center">قطعه اصلی</th>
+            <th class="text-center">قطعه جزئی</th>
+            <th class="text-center"> فرآیند</th>
+            <ng-container *ngIf="actionMode!==ActionMode.VIEW">
+                <th class="text-center" style="width: 5%">حذف</th>
+            </ng-container>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="text-center" style="height: 50px;" *ngIf="selectedAssetList.length===0">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <ng-container *ngIf="actionMode!==ActionMode.VIEW">
+                <td></td>
+            </ng-container>
+        </tr>
+        <ng-container *ngFor="let SelectedAsset of selectedAssetList; let i = index">
+
+            <tr class="text-center">
+                <td>{{i + 1}}</td>
+                <td>{{SelectedAsset?.title }}</td>
+                <td>{{SelectedAsset?.selectedMajorPart?.title }}</td>
+                <td>{{SelectedAsset?.selectedMinorPart }}</td>
+                <td>{{SelectedAsset?.selectedActivity?.title }}</td>
+                <ng-container *ngIf="actionMode!==ActionMode.VIEW">
+                    <td>
+                        <a class="btn btn-sm btn-outline-lightning rounded-0"
+                           style="cursor: pointer" nbdAreYouSure
+                           (then)="deleteSelectedAsset(SelectedAsset,i)">
+                            <i class="fa fa-trash" title="حذف"></i>
+                        </a>
+                    </td>
+                </ng-container>
+            </tr>
+        </ng-container>
+
+        </tbody>
+    </table>
+
+
+</ng-template>

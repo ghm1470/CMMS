@@ -1,0 +1,210 @@
+  <form #workOrderBasicInformationForm="ngForm" (submit)="action(workOrderBasicInformationForm)">
+    <div class="card-body card-body-content">
+<!--      <label class="for-label">تکمیل شده توسط:</label>-->
+      <div class="card card-body">
+        <div class="row">
+<!--          <div class="col-md-4 form-group required col-sm-12">-->
+<!--            <label class="for-label"> سازمان:</label>-->
+<!--            <ng-select-->
+<!--              [items]="organizationList"-->
+<!--              (change)="getAllUserType()"-->
+<!--              id="organization"-->
+<!--              name="organization"-->
+<!--              bindLabel="name"-->
+<!--              bindValue="id"-->
+<!--              dropdownPosition="bottom"-->
+<!--              #organization="ngModel"-->
+<!--              nbvRequired-->
+<!--              [(ngModel)]="workOrderBasicInformation.completedUserOrgId"-->
+<!--              [addTag]="false"-->
+<!--              [multiple]="false"-->
+<!--              placeholder="  سازمان را انتخاب کنید. "-->
+<!--            >-->
+<!--              <ng-template ng-notfound-tmp let-searchTerm="searchTerm">-->
+<!--                <div class="ng-option disabled" style="color: #a8a6a5">-->
+<!--                  نتیجه یافت نشد...-->
+<!--                </div>-->
+<!--              </ng-template>-->
+
+<!--              <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">-->
+<!--                <div class="ng-option disabled" style="color: #a8a6a5">-->
+<!--                  در حال جستجو...-->
+<!--                </div>-->
+<!--              </ng-template>-->
+<!--              <ng-template ng-typetosearch-tmp let-searchTerm="searchTerm">-->
+<!--                <div class="ng-option disabled" style="color: #a8a6a5">-->
+<!--                  متن برای جستجو...-->
+<!--                </div>-->
+<!--              </ng-template>-->
+<!--            </ng-select>-->
+<!--            <div id="organizationDest"></div>-->
+<!--            <div id="organizationIdValidation" style="opacity: 0; height: 0"></div>-->
+<!--          </div>-->
+<!--          <div class="col-md-8" *ngIf="withoutUserType">-->
+<!--            <div class="alert alert-warning" style="margin-top: -8px">-->
+<!--              <p style="font-size: 12px"  >پستی برای این سازمان ثبت نشده است.</p>-->
+<!--            </div>-->
+<!--          </div>-->
+          <ng-container *ngIf="!withoutUserType">
+            <div class="col-md-4 form-group required col-sm-12">
+              <label class="for-label"> پست:</label>
+              <ng-select
+                [items]="userTypeList2"
+                (change)="changeUserType($event)"
+                id="userType"
+                name="userType"
+                bindLabel="name"
+                bindValue="id"
+                dropdownPosition="bottom"
+                #userType="ngModel"
+                nbvRequired
+                [(ngModel)]="workOrderBasicInformation.completedUserUserTypeId"
+                [addTag]="false"
+                [multiple]="false"
+                placeholder="پست را انتخاب کنید"
+              >
+                <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                  <div class="ng-option disabled" style="color: #a8a6a5">
+                    نتیجه یافت نشد...
+                  </div>
+                </ng-template>
+
+                <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+                  <div class="ng-option disabled" style="color: #a8a6a5">
+                    در حال جستجو...
+                  </div>
+                </ng-template>
+                <ng-template ng-typetosearch-tmp let-searchTerm="searchTerm">
+                  <div class="ng-option disabled" style="color: #a8a6a5">
+                    متن برای جستجو...
+                  </div>
+                </ng-template>
+              </ng-select>
+              <div id="userTypeDest"></div>
+              <div id="userTypeIdValidation" style="opacity: 0; height: 0"></div>
+            </div>
+            <div class="col-md-4 form-group required col-sm-12" *ngIf="!withoutUser">
+              <label class="for-label" >انتخاب کاربران:</label>
+              <ng-select dir="rtl" [(ngModel)]="workOrderBasicInformation.completedUserId"
+                         placeholder="تکمیل شده توسط" name="completedUserId" style="width: 100%;"
+                         dropdownPosition="bottom" [disabled]="modeW===actionMode.VIEW">
+                <ng-option *ngFor="let item of userList2; let i = index"
+                           [value]="item.id">
+                  {{item?.name + ' ' + item?.family}}
+                </ng-option>
+              </ng-select>
+            </div>
+            <div class="col-md-4" *ngIf="withoutUser">
+              <div class="alert alert-warning" style="margin-top: 15px;">
+                <p style="font-size: 12px"  >کاربری برای این نقش انتخاب نشده است.</p>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <label class="for-label" >تخصیص یافته به:</label>
+      <div class="card card-body">
+        <div class="row">
+<!--          <div class="col-md-4 form-group required col-sm-12">-->
+<!--            <label class="for-label"> سازمان:</label>-->
+<!--            <div-->
+<!--            >{{workOrderBasicInformation.userAssignedOrgName}}</div>-->
+<!--            </div>-->
+
+            <div class="col-md-4 form-group required col-sm-12">
+              <label class="for-label"> پست:</label>
+              <div
+              > {{workOrderBasicInformation.userAssignedUserTypeName}}</div>
+            </div>
+            <div class="col-md-4 form-group required col-sm-12" *ngIf="!withoutUser">
+              <label class="for-label" >کاربر:</label>
+              <div >
+                {{workOrderBasicInformation.userAssignedName}} {{workOrderBasicInformation.userAssignedFamily}}
+            </div>
+            </div>
+        </div>
+      </div>
+    <div class="row" style="    margin-top: 20px;">
+      <!--<div class="col-md-4 form-group required col-sm-12">-->
+        <!--<label class="for-label">تکمیل شده توسط:</label>-->
+        <!--<div class="input-group input-group-sm">-->
+          <!--<ng-select dir="rtl" [(ngModel)]="workOrderBasicInformation.completedUserId"-->
+                     <!--placeholder="تکمیل شده توسط" name="completedUserId" style="width: 100%;"-->
+                     <!--dropdownPosition="bottom" [disabled]="modeW===actionMode.VIEW">-->
+            <!--<ng-option *ngFor="let item of userList; let i = index"-->
+                       <!--[value]="item.id">-->
+              <!--{{item?.name + ' ' + item?.family}}-->
+            <!--</ng-option>-->
+          <!--</ng-select>-->
+        <!--</div>-->
+        <!--<div id="completedUserIdValidation" style="opacity: 0; height: 0"></div>-->
+      <!--</div>-->
+
+      <div class="col-md-4 form-group required col-sm-12">
+        <label class="for-label">تخمین نفر ساعت:</label>
+        <div class="input-group input-group-sm">
+          <input [disabled]="modeW===actionMode.VIEW"  type="text" placeholder="تخمین نفر ساعت"
+                 [(ngModel)]="workOrderBasicInformation.laborHour"
+                 class="form-control form-control-sm" minlength="1" maxlength="80" name="laborHour"
+                 nbvPattern="{{myPattern.number}}"
+                 nbvPatternMsgHtml="تخمین نفر ساعت باید به صورت عددی وارد گردد." Persian2English
+                 dest="laborHourValidation">
+<!--          [class.is-invalid]="(laborHour?.errors?.nbvPattern) && (laborHour.touched || doSave)"-->
+<!--          laborHour?.errors?.nbvRequired ||-->
+<!--          [class.is-valid]="!(laborHour?.errors?.nbvRequired || laborHour?.errors?.nbvPattern)"-->
+<!--          nbvRequired-->
+        </div>
+        <div id="laborHourValidation"></div>
+      </div>
+
+      <div class="col-md-4 form-group required col-sm-12">
+        <label class="for-label">نفر ساعت کار انجام شده:</label>
+        <div class="input-group input-group-sm">
+          <input type="text" placeholder="نفر ساعت کار انجام شده"
+                 [(ngModel)]="workOrderBasicInformation.actualLaborHour"
+                 class="form-control form-control-sm" minlength="1" maxlength="80" name="actualLaborHour"
+                 [disabled]="modeW===actionMode.VIEW"
+                 nbvPattern="{{myPattern.number}}"
+                 nbvPatternMsgHtml="نفر ساعت کار انجام شده باید به صورت عددی وارد گردد." Persian2English
+                 dest="actualLaborHourValidation">
+          <!--#actualLaborHour="ngModel"-->
+                 <!--[class.is-invalid]="(actualLaborHour?.errors?.nbvPattern) && (actualLaborHour.touched || doSave)"-->
+
+<!--          actualLaborHour?.errors?.nbvRequired ||-->
+<!--          nbvRequired-->
+<!--          [class.is-valid]="!(actualLaborHour?.errors?.nbvRequired || actualLaborHour?.errors?.nbvPattern)"-->
+        </div>
+        <div id="actualLaborHourValidation"></div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">خلاصه کار:</label>
+        <div class="input-group input-group-sm">
+        <textarea
+          [disabled]="modeW===actionMode.VIEW"
+          type="text" placeholder="خلاصه کار" [(ngModel)]="workOrderBasicInformation.issueSummary"
+                  class="form-control" maxlength="620" name="issueSummary"></textarea>
+        </div>
+      </div>
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">دستور العمل کار:</label>
+        <div class="input-group input-group-sm">
+        <textarea
+          [disabled]="modeW===actionMode.VIEW"
+          type="text" placeholder="دستور العمل کار" [(ngModel)]="workOrderBasicInformation.workInstruction"
+                  class="form-control" maxlength="620" name="workInstruction"></textarea>
+        </div>
+      </div>
+    </div>
+    </div>
+<!--    <div class="form-group required col-sm-12 text-left" *ngIf="modeW !== actionMode.VIEW">-->
+      <div class="card-footer text-left" *ngIf="modeW !== actionMode.VIEW">
+
+      <button class="btn btn-action  btn-sm"  type="submit">
+        <span>ثبت </span>
+      </button>
+    </div>
+  </form>

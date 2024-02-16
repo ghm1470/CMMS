@@ -1,0 +1,89 @@
+<div class="card">
+    <div class="card-body card-body-content">
+      <div  class="row" >
+        <div class=" col-md-12 " style="margin-top: 5px ; margin-bottom: 25px ;float: right" *ngIf="(TMode === actionMode.ADD || (TMode === actionMode.EDIT && !scheduleTime.per)) && !loading ">
+          <button class="btn btn-secondary btn-sm" (click)="setService()">
+            افزودن
+          </button>
+        </div>
+        <div class="col-md-12 text-center " *ngIf="!scheduleTime.per && !loading" >
+          بازدید زمانی مشخص نشده است
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" *ngIf="scheduleTime.per && !loading">
+            <table class="table table-bordered table-responsive-md table-striped">
+              <thead>
+              <tr>
+                <th class="text-center" style="width: 5%">ردیف</th>
+                <th class="text-center" >تاریخ ثبت</th>
+                <th class="text-center" >دوره زمانی</th>
+                <th class="text-center" > مشاهده تاریخ سررسید  بعدی</th>
+                <th class="text-center" style="width: 5%">مشاهده</th>
+<!--                <th class="text-center" style="width: 5%" *ngIf="TMode!== actionMode.VIEW">ویرایش</th>-->
+                <th class="text-center" style="width: 5%" *ngIf="TMode!== actionMode.VIEW">حذف</th>
+              </tr>
+              </thead>
+
+              <tbody>
+              <tr class="text-center">
+                <td>{{1}}</td>
+                <td>
+                  {{myMoment.convertIsoToJDate(scheduleTime?.lastModify) | perNumber}}
+                </td>
+
+                <td>
+                  هر
+                  {{scheduleTime.per}} {{cycle}}</td>
+                <td>
+                  <a
+                    (click)="openShowScheduledTimeModal()" style="cursor: pointer ; color: #007ad9">
+                    مشاهده تاریخ سررسید  بعدی
+                  </a>
+                </td>
+                <td>
+                  <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                     (click)="chooseSelectedItemForView(scheduleTime)" style="cursor: pointer ; font-weight: bold">
+                    <i class="fa fa-eye" title="نمایش"></i>
+                  </a>
+                </td>
+<!--                <td *ngIf="TMode!== actionMode.VIEW">-->
+<!--                  <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+<!--                     (click)="chooseSelectedItemForEdit(scheduleTime)" style="cursor: pointer ; font-weight: bold">-->
+<!--                    <i class="fa fa-edit" title="ویرایش"></i>-->
+<!--                  </a>-->
+<!--                </td>-->
+                <td  *ngIf="TMode!== actionMode.VIEW">
+                  <a class="btn btn-sm btn-outline-lightning rounded-0"
+                     style="cursor: pointer" nbdAreYouSure (then)="deleteItem()">
+                    <i class="fa fa-trash" title="حذف"></i>
+                  </a>
+                </td>
+
+              </tr>
+
+              </tbody>
+            </table>
+
+
+        </div>
+      </div>
+
+      <div class="col-md-12" style="text-align: center" *ngIf="loading">
+        <i class="fa fa-spinner fa-pulse fa-3x "></i>
+      </div>
+    </div>
+</div>
+
+
+
+
+
+<ng-container *ngIf="viewTimeModal">
+  <app-time-modal [modeView]="modeView" [scheduleMaintenanceId]="scheduleMaintenanceId" (sendScheduleWithTime)="receive($event)" [receiveItemForEdit]="sendItemForEdit" [mode]="mode" (changeViewTimeModal)="changeViewTimeModal($event)" >
+    <!--[againGetSWTAMBSMI]="againGetT"-->
+  </app-time-modal>
+</ng-container>
+
+<app-show-scheduled-time [readService]="readService" [scheduleWithTimeAndMetering]="scheduleTime" [scheduleMaintenanceId]="scheduleMaintenanceId" [view]="view" [mode]="mode"></app-show-scheduled-time>
+

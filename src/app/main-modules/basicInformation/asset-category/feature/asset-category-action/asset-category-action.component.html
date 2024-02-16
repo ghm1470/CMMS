@@ -1,0 +1,70 @@
+<div class="card">
+
+<div class="card-header">
+    <div class="row">
+        <div class="col-md-6 col-8 col-sm-6 card-title">
+            <ng-container *ngIf="mode === actionMode.ADD">
+                <i class="fa fa-plus"></i>&nbsp;
+                افزودن خانواده گروه
+            </ng-container>
+            <ng-container *ngIf="mode === actionMode.EDIT">
+                <i class="fa fa-edit"></i>&nbsp;
+                ویرایش خانواده گروه</ng-container>
+        </div>
+        <div class="col-md-6 col-4 col-sm-6 text-left">
+            <button (click)="back()"
+                    class="btn btn-cancel-back btn-sm">
+                بازگشت
+            </button>
+        </div>
+    </div>
+</div>
+
+<form class=" form" [formGroup]="htmlForm" (ngSubmit)="onSubmit()">
+    <div class="col-md-12">
+        <div class="row">
+            <!--            name -->
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="name">نام خانواده گروه</label>
+                    <input class=" form-control" id="name" type="text"
+                           formControlName="name"
+                           placeholder="نام خانواده گروه" autocomplete="off">
+
+                </div>
+            </div>
+
+            <!--            Description -->
+            <div class="col-12">
+                <div class="form-group">
+                    <label> توضیحات  </label>
+                    <textarea class="form-control"
+                              placeholder="توضیحات "
+                              formControlName="description"
+                              style="max-height: 80px;min-height: 80px;max-width: 100%;min-width: 100%"
+                              [id]="'description'"
+                    ></textarea>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <div modal-footer class="row justify-content-between"
+             style="padding-right: 10px;padding-left:10px">
+
+
+            <button type="submit" class="btn btn-action btn-sm"
+                    style="    margin: 5px 5px;  min-width: 45px;text-align: center;">
+                <span> ثبت  </span>
+                <i class="fa fa-spinner fa-pulse fa-1x" aria-hidden="true" *ngIf="loadingSubmit"></i>
+            </button>
+
+        </div>
+
+    </div>
+
+
+</form>
+</div>

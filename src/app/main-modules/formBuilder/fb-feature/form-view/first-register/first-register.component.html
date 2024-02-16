@@ -1,0 +1,122 @@
+<div class="w-100 text-center backShadow">
+  <div>
+    <br>
+    <br>
+    <div class="row">
+      <form class="form-horizontal w-100" [formGroup]="htmlForm">
+
+        <div class="row">
+          <!--right col-->
+          <div class="col-md-9">
+
+            <!--form title-->
+            <div class="form-builder-group mb-4">
+              <label class="placeholder"
+                     *ngIf="data != null">
+                {{data.firstFormRegister.formTitle}}
+                <span style="color: red">*</span>
+              </label>
+              <input id="title"
+                     class="form-control"
+                     [(ngModel)]="form.title" name="title"
+                     (change)="saveOnStorage()"
+                     formControlName="title">
+
+              <p style="color: red"
+                 *ngIf="!htmlForm.controls['title'].valid && htmlForm.controls['title'].touched && data!=null &&
+                          !resetForm">
+                {{data.firstFormRegister.titleError}}
+              </p>
+              <div class="input-group-append">
+                          <span class="input-group-text">
+                            <i class="fa fa-cogs"></i>
+                          </span>
+              </div>
+            </div>
+
+<!--=====================================================================-->
+            <div class="form-builder-group mb-4">
+            <label class="placeholder" *ngIf="data != null">
+            {{data.firstFormRegister.formCategory}} <span style="color: red"  style="color: red">*</span>
+            </label>
+
+            <select dir="rtl" id="grouping" class="form-control" [(ngModel)]="form.formCategoryId"
+            (change)="saveOnStorage()" name="grouping" formControlName="grouping">
+            <!--<ng-container *ngFor="let category of categories">-->
+            <!--<ng-container *ngFor="let title of category.titleList">-->
+            <option *ngFor="let category of categories" [value]="category.id">{{category.title}}</option>
+            <!--</ng-container>-->
+            <!--</ng-container>-->
+            </select>
+
+            <p style="color: red"
+            *ngIf="!htmlForm.controls['grouping'].valid && htmlForm.controls['grouping'].touched && data!=null">
+            {{data.firstFormRegister.categoryError}}
+            </p>
+              <div class="input-group-append">
+            <span class="input-group-text">
+            <span class="fa fa-cogs"></span>
+            </span>
+              </div>
+
+            </div>
+
+<!--==========================================================================-->
+            <div class="form-builder-group mb-4">
+              <label class="placeholder"
+                     *ngIf="data != null">
+                {{data.firstFormRegister.formDescription}}
+              </label>
+              <textarea rows="2" class="form-control"
+                        [(ngModel)]="form.description"
+                        id="description"
+                        (change)="saveOnStorage()"
+                        name="description" #description
+                        formControlName="description" style="text-align: right">
+
+              </textarea>
+              <div class="input-group-append">
+                          <span class="input-group-text">
+                            <i class="fa fa-cogs">
+                            </i>
+                          </span>
+              </div>
+            </div>
+<!--{{templateForms.length}}-->
+            <!--template forms-->
+<!--            این قسمت کجاست؟؟؟ -->
+            <div class="row form-group" *ngIf="templateForms.length > 0">
+              <div class="col-md-12">
+                <span *ngIf="data != null">{{data.firstFormRegister.templateForms}}</span>
+              </div>
+
+              <div class="col-md-3 col-sm-6 col-xs-6" *ngFor="let template of templateForms;let j=index;">
+                <img src="../../../../../../assets/images/{{pictures[j%8]}}" height="50px" width="50px">
+                <input type="radio" name="template" (click)="templateSelection(template.id)"
+                       [value]="template.id">&nbsp;{{template.title | slice:0:8}}<span
+                *ngIf="template.title.length>8">...</span>
+              </div>
+            </div>
+          </div>
+
+          <!--<div class="col-md-1"></div>-->
+
+          <!--left col-->
+          <!--<div class="col-md-3">-->
+          <!--<div class="col-sm-12">-->
+          <!--<input type="file" accept="image/*" id="image" class="upload" (change)="settingImage($event)"/>-->
+          <!--</div>-->
+          <!--<div *ngIf="form.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE">-->
+          <!--<img style="width:200px; border-radius: 7px" [attr.src]="form.picture.imageData">-->
+          <!--<i class="fa fa-times" aria-hidden="true" style="color: red " (click)="deleteImage()"></i>-->
+          <!--</div>-->
+          <!--</div>-->
+        </div>
+
+      </form>
+    </div>
+    <br>
+    <br>
+  </div>
+</div>
+

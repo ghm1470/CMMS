@@ -1,0 +1,343 @@
+<ng-container *ngIf="listMode">
+
+    <div class="card">
+        <div class="card-header">
+            <div class="row m-0">
+                <div class="col-md-6 col-8 col-sm-6 card-title">
+                    <i class="fa fa-list"></i>
+                    <span>  فرایند در انتظار تایید - تصادفی </span>
+
+                </div>
+                <div class="col-md-6 col-4 col-sm-6 text-left">
+<!--                    <app-export-file-->
+<!--                            [fileDataTableList]="fileDataTableList"-->
+<!--                            [entityListForReport]="entityListForReport"-->
+<!--                            [titleForFile]="'  فرایند در انتظار تایید - PM  '"-->
+<!--                            (emitTypeForReport)="EmActivityGetPageForExcel()"-->
+<!--                    ></app-export-file>-->
+                    <button title="بارگزاری مجدد"
+                            (click)="getPage()"
+                            class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">
+                        <i class="fa fa-redo"></i>
+                    </button>
+                    <button title="جستجو" data-toggle="collapse" href="#workTable-search"
+                            class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card-body card-body-content">
+            <div class="collapse showers" id="workTable-search">
+                <div class="card" style="margin-bottom: 10px">
+                    <div class="card-body card-body-filter">
+                        <div class="row m-0">
+                            <!--                        <div class="col-md-3   form-group">-->
+                            <!--                            <label class="for-label" style="color: #191b1c">عنوان درخواست</label>-->
+                            <!--                            <input type="text" class="form-control form-control-sm" placeholder="عنوان درخواست"-->
+                            <!--                                   style="width: 100%"-->
+                            <!--                                   [(ngModel)]="getAllByFilterAndPagination.requestTitle">-->
+                            <!--                        </div>-->
+                            <div class="col-md-3" *ngIf=" assetList.length>0">
+                                <label class="for-label" style="color: #191b1c">نام دستگاه</label>
+                                <ng-select bindLabel="name" bindValue="id"
+                                           [(ngModel)]="getAllByFilterAndPagination.assetId"
+                                           [items]="assetList" [placeholder]="'نام دستگاه'"></ng-select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="for-label" style="color: #191b1c">شماره برگه em</label>
+                                <input class="form-control form-control-sm"
+                                       [(ngModel)]="getAllByFilterAndPagination.pmSheetCode"
+                                       style="direction: ltr" id="pmSheetCode" name="pmSheetCode"
+                                       maxlength="5"
+                                       placeholder="em شماره برگه   "
+                                       appNumeric
+                                       autocomplete="off">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="for-label">از تاریخ </label>
+                                <input class="form-control form-control-sm"
+                                       style="direction: ltr" id="from" #requestTime placeholder="از تاریخ"
+                                       autocomplete="off">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="for-label">تا تاریخ </label>
+                                <input class="form-control form-control-sm"
+                                       style="direction: ltr" id="until" #requestTime placeholder="تا تاریخ"
+                                       autocomplete="off">
+                            </div>
+                            <!--                        <div *ngIf=" priorityList.length>0" class="col-md-3">-->
+                            <!--                            <label class="for-label" style="color: #191b1c"> اولویت درخواست</label>-->
+                            <!--                            <ng-select bindLabel="_title" bindValue="_value"-->
+                            <!--                                       [(ngModel)]="getAllByFilterAndPagination.priority"-->
+                            <!--                                       [items]="priorityList" [placeholder]="'اولویت'"></ng-select>-->
+                            <!--                        </div>-->
+
+                            <!--                        <div *ngIf=" maintenanceTypeList.length>0" class="col-md-3">-->
+                            <!--                            <label class="for-label" style="color: #191b1c"> نوع بازدید </label>-->
+                            <!--                            <ng-select bindLabel="_title" bindValue="_value"-->
+                            <!--                                       [(ngModel)]="getAllByFilterAndPagination.maintenanceType"-->
+                            <!--                                       [items]="maintenanceTypeList" [placeholder]="'نوع بازدید'"></ng-select>-->
+                            <!--                        </div>-->
+
+                            <div class="col-md-3" *ngIf=" assetList.length>0">
+                                <label class="for-label" style="color: #191b1c">درخواست دهنده </label>
+                                <ng-select bindLabel="name" bindValue="id"
+                                           [(ngModel)]="getAllByFilterAndPagination.userId"
+                                           [placeholder]="'درخواست دهنده '">
+                                    <ng-container *ngFor="let user of userList">
+                                        <ng-option
+                                                [value]="user.id">{{user.name + ' ' + user.family + ' - ' + user.userTypeName}}</ng-option>
+                                    </ng-container>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="for-label" style="color: #191b1c">نوع درخواست </label>
+                                <ng-select [(ngModel)]="getAllByFilterAndPagination.fromSchedule"
+                                           name="fromSchedule"
+                                           [placeholder]="'نوع درخواست'">
+                                    <ng-option [value]="true">پیشگیرانه</ng-option>
+                                    <ng-option [value]="false"> اضطراری</ng-option>
+                                </ng-select>
+                            </div>
+                            <!--                        <div class="col-md-3">-->
+                            <!--                            <label class="for-label" style="color: #191b1c">نوع درخواست </label>-->
+                            <!--                            <ng-select bindLabel="_title" bindValue="_value"-->
+                            <!--                                       [(ngModel)]="getAllByFilterAndPagination.requestType"-->
+                            <!--                                       [items]="requestTypeList" [placeholder]="'نوع درخواست'"></ng-select>-->
+                            <!--                        </div>-->
+                            <div class="col-md-6 text-left" style="margin-top: 25px;">
+                                <button class="btn btn-sm  btn-search" (click)="search()">
+                                    جستجو
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="loading-get-one text-center" *ngIf="loading">
+                <span class="mt-5 px-4  align-items-center d-inline-flex">
+                  <span class="fa fa-spinner fa-spin ml-2"></span>
+                  درحال بارگذاری
+                </span>
+            </div>
+
+            <ng-container *ngIf="!loading && !entityList.length">
+                <div class="row justify-content-center">
+                    <span> درخواستی وجود ندارد.</span>
+                </div>
+
+            </ng-container>
+
+            <div class="tab-content" id="pills-tabContent" *ngIf="!loading && entityList.length">
+                <div class="tab-pane fade show active myTable overflow-auto" id="pills-home" role="tabpanel"
+                     aria-labelledby="pills-home-tab">
+                    <!--تمامی درخواست ها-->
+                    <ng-container *ngIf="entityList.length">
+
+                        <table [ngStyle]="!closeNav1 && {'margin-top' : '150px'} || closeNav1 && {'margin-top' : '0'}"
+                               class="table table-striped table-bordered table-responsive-md"
+                        >
+                            <thead>
+                            <tr style="text-align: center">
+                                <th>ردیف</th>
+                                <!--                            <th>عنوان</th>-->
+                                <th>نام دستگاه</th>
+                                <th>شماره برگه em</th>
+                                <th> تاریخ درخواست تعمیر</th>
+                                <th>درخواست کننده</th>
+                                <!--                            <th>اولویت</th>-->
+                                <!--                            <th>نوع بازدید</th>-->
+                                <!--                            <th>وضعیت</th>-->
+                                <th> وضعیت</th>
+                                <th> نوع درخواست</th>
+                                <!--                            <th> وضعیت زمان بندی</th>-->
+                                <th>تعیین وضعیت</th>
+                                <!--<th></th>-->
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <ng-container *ngFor="let request of entityList;let i=index">
+                                <tr style="text-align: center">
+                                    <td>
+                                        {{(i + 1 + (pageIndex * pageSize))}}
+                                    </td>
+                                    <!--                                <td> {{request?.workRequestTitle}}</td>-->
+                                    <td>{{request?.assetName}}</td>
+                                    <td>{{request?.pmSheetCode}}
+                                        <!--                                    {{request?.assetCode}}-->
+                                    </td>
+                                    <td class="text-center" style="direction: ltr">
+                                        {{myMoment.convertIsoToJDateWithTime(request?.workRequestTime) | perNumber}}
+                                    </td>
+                                    <td>{{ request?.requesterName }} {{ request?.requesterFamily }}</td>
+                                    <!--                                <td>-->
+                                    <!--                                    <ng-container [ngSwitch]="request?.priority">-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="priority[priority.HIGHEST]">{{priority.HIGHEST}}</ng-container>-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="priority[priority.HIGH]">{{priority.HIGH}}</ng-container>-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="priority[priority.MEDIUM]">{{priority.MEDIUM}}</ng-container>-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="priority[priority.LOW]">{{priority.LOW}}</ng-container>-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="priority[priority.LOWEST]">{{priority.LOWEST}}</ng-container>-->
+                                    <!--                                    </ng-container>-->
+                                    <!--                                </td>-->
+
+
+                                    <!--                                <td>-->
+                                    <!--                                    <ng-container [ngSwitch]="request?.maintenanceType">-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="maintenanceType[maintenanceType.PREVENTIVE]">{{maintenanceType.PREVENTIVE}}</ng-container>-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="maintenanceType[maintenanceType.DAMAGE]">{{maintenanceType.DAMAGE}}</ng-container>-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="maintenanceType[maintenanceType.CORRECTIVE]">{{maintenanceType.CORRECTIVE}}</ng-container>-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="maintenanceType[maintenanceType.SAFETY]">{{maintenanceType.SAFETY}}</ng-container>-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="maintenanceType[maintenanceType.UPGRADE]">{{maintenanceType.UPGRADE}}</ng-container>-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="maintenanceType[maintenanceType.ELECTRICAL]">{{maintenanceType.ELECTRICAL}}</ng-container>-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="maintenanceType[maintenanceType.PROJECT]">{{maintenanceType.PROJECT}}</ng-container>-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="maintenanceType[maintenanceType.INSPECTION]">{{maintenanceType.INSPECTION}}</ng-container>-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="maintenanceType[maintenanceType.METERREADING]">{{maintenanceType.METERREADING}}</ng-container>-->
+                                    <!--                                        <ng-container-->
+                                    <!--                                                *ngSwitchCase="maintenanceType[maintenanceType.OTHER]">{{maintenanceType.OTHER}}</ng-container>-->
+                                    <!--                                    </ng-container>-->
+
+                                    <!--                                </td>-->
+                                    <!--                                <td>-->
+
+                                    <!--                                    <ng-container *ngIf="request.requestStatus === requestStatus.NEW_REQUEST">-->
+                                    <!--                <span style="color: green">-->
+                                    <!--                جدید-->
+                                    <!--                </span>-->
+                                    <!--                                    </ng-container>-->
+                                    <!--                                    <ng-container *ngIf="request.requestStatus === requestStatus.REJECTED_REQUEST">-->
+                                    <!--                                <span style="color: red">-->
+
+                                    <!--                رد شده-->
+                                    <!--                                </span>-->
+                                    <!--                                    </ng-container>-->
+                                    <!--                                </td>-->
+                                    <!--                                -->
+                                    <!--                                -->
+                                    <td>
+                                        <span style="color: #4CAF50"
+                                              *ngIf="request.requestStatus === requestStatus.NEW_REQUEST"> جدید </span>
+                                        <span style="color: #fa4949;cursor: pointer"
+                                              (click)="selectForRejectionReason(request)"
+                                              *ngIf="request.requestStatus === requestStatus.REJECTED_REQUEST"> رد شده</span>
+                                    </td>
+
+                                    <td>
+                                        <span *ngIf="request.schedule === true"> پیشگیرانه </span>
+                                        <span *ngIf="request.schedule === false"> اضطراری</span>
+                                    </td>
+                                    <!--                                <td>-->
+                                    <!--                                    {{request?.requestType === requestType.SENDFORYOU ? 'ارسال شده به من' : 'ارسال شده به گروه'}}-->
+                                    <!--                                </td>-->
+
+                                    <td>
+                                        <a style="cursor: pointer ; font-weight: bold" (click)="routerToAction(request)"
+                                           [ngStyle]="loadingRouterToAction && {'color' : '#aeaeae'} "
+                                        >
+
+                                            <i *ngIf="loadingRouterToAction&&request.instanceId===
+                                        selectedEntityForCheckIfActivityLevelIsPending.instanceId"
+                                               class="fa fa-spinner fa-pulse fa-1x"></i>
+                                            <!--                                        تعیین وضعیت-->
+                                            <i [hidden]="request.seen" class="fa fa-envelope"
+                                               style="    color: #70a2fc;font-size: 30px;"></i>
+                                            <i class="fa fa-envelope-open"
+                                               [hidden]="!request.seen"
+                                               style="    color: #70a2fc;font-size: 20px;"></i>
+                                            <!--                                            <i class="fa fa-check-circle" style="    color: #70a2fc;font-size: 20px;"></i>-->
+                                        </a>
+
+                                    </td>
+                                    <!--<td></td>-->
+                                </tr>
+                            </ng-container>
+
+                            </tbody>
+                        </table>
+                    </ng-container>
+
+
+                </div>
+            </div>
+            <!--    pagination-->
+            <app-paginator
+                    [totalElements]="length"
+                    [pageSize]="pageSize"
+                    [pageIndex]="pageIndex"
+                    [pageSizeOptions]="[]"
+                    [showFirstLastButtons]="true"
+                    (page)=" changePage($event)"
+            ></app-paginator>
+
+
+            <!--    pagination-->
+
+        </div>
+    </div>
+</ng-container>
+<ng-container *ngIf="!listMode">
+    <app-worktable-action
+            [workOrderId]="activityWorkOrderId"
+            [activityLevelId]="activityActivityLevelId"
+            [activityInstanceId]="activityInstanceIdAction"
+            [selectedRequestType]="selectedRequestType"
+            [workRequestAcceptor]="workRequestAcceptor"
+            [isView]="isViewAction"
+            (back)="backEmit()"
+            (edit)="getPage()"
+    >
+
+    </app-worktable-action>
+</ng-container>
+
+<!--/ نمایش علت رد /-->
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.DEFAULT"
+        autoShow="false"
+        [myId]="'rejectionReason_workTable_Modal'">
+    <div modal-header>
+
+        علت رد
+    </div>
+    <div modal-body>
+        <div class="col-md-12 p-0">
+            <p>
+                {{selectedRejectionReason?.rejectionReason}}
+            </p>
+        </div>
+        <br>
+        <br>
+        <!--        <div class="col-md-12">-->
+        <!--            <div class="row justify-content-end">-->
+        <!--                <button class="btn btn-save"-->
+        <!--                        [disabled]="loading"-->
+        <!--                        style="background-color: #eeeeee"-->
+        <!--                        (click)="saveAssessment()">-->
+
+        <!--                    ثبت-->
+        <!--                    <i class="fa fa-spinner fa-pulse " *ngIf="loading"></i>-->
+        <!--                </button>-->
+
+        <!--            </div>-->
+        <!--        </div>-->
+    </div>
+</nbw-modal>

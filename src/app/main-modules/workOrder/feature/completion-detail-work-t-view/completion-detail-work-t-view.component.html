@@ -1,0 +1,82 @@
+<div class="col-md-12" style="padding: 10px" >
+
+  <form #completionDetailWorkTableForm="ngForm" >
+
+    <div class="row" style="margin: 0">
+        <!--=================================-->
+        <div class="col-md-6 form-group required col-sm-12"  >
+          <label class="for-label">تخصیص بودجه:</label>
+          <div class="form-control form-control-sm"
+                 style="width: 100%;height: 31px; background-color: #e9ecef; "
+          > {{budget.title }}{{ budget.code}} </div>
+        </div>
+      <div class="col-md-6 form-group required col-sm-12" >
+        <label class="for-label">تخصیص دپارتمان مسئول:</label>
+        <div  class="form-control form-control-sm"
+                style="width: 100%;height: 31px; background-color: #e9ecef; "
+        >  {{chargeDepartment.title }}
+<!--          {{ chargeDepartment.code}}-->
+        </div>
+      </div>
+      <!--=================================-->
+
+    </div>
+    <div class="row"  style="margin: 0">
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">یادداشت:</label>
+        <div class="input-group input-group-sm">
+        <textarea disabled type="text" placeholder="یادداشت" [(ngModel)]="completionDetail.note"
+                  class="form-control" maxlength="620" name="note"></textarea>
+        </div>
+      </div>
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">مشکل:</label>
+        <div class="input-group input-group-sm">
+        <textarea  disabled type="text" placeholder="مشکل" [(ngModel)]="completionDetail.problem"
+                  class="form-control" maxlength="620" name="problem"></textarea>
+        </div>
+        <div id="problemValidation"></div>
+      </div>
+
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">علت:</label>
+        <div class="input-group input-group-sm">
+        <textarea disabled type="text" placeholder="علت" [(ngModel)]="completionDetail.rootCause"
+                  class="form-control" maxlength="620" name="rootCause"></textarea>
+        </div>
+        <div id="rootCauseValidation"></div>
+      </div>
+
+      <div class="col-md-12 form-group required col-sm-12">
+        <label  class="for-label">راه حل:</label>
+        <div class="input-group input-group-sm">
+        <textarea disabled type="text" placeholder="راه حل" [(ngModel)]="completionDetail.solution"
+                  class="form-control" maxlength="620" name="solution"></textarea>
+        </div>
+        <div id="solutionValidation"></div>
+      </div>
+
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">یادداشت مدیر:</label>
+        <div class="input-group input-group-sm">
+        <textarea disabled type="text" placeholder="یادداشت مدیر" [(ngModel)]="completionDetail.adminNote"
+                  class="form-control" maxlength="620" name="adminNote"></textarea>
+        </div>
+        <div id="adminNoteValidation"></div>
+      </div>
+
+    </div>
+    <div class="form-group required col-sm-12 mt-2 text-left" >
+<!--      <ng-container *ngIf="sendInformationNumberOfTabs.numberOfFormIdList < sendInformationNumberOfTabs.lengthFormIdList - 1  || sendInformationNumberOfTabs.hasForm">-->
+<!--        <button class="btn btn-sm btn-warning" type="button" style=" margin-right: 5px"  (click)="nextOrPrev('next')">-->
+<!--          <span >بعدی</span>-->
+<!--        </button>-->
+<!--      </ng-container>-->
+<!--      <button class="btn btn-sm btn-cancel-back" type="button" style="float: right"  (click)="nextOrPrev('prev')">-->
+<!--        <span >قبلی</span>-->
+<!--      </button>-->
+    </div>
+  </form>
+</div>
+
+

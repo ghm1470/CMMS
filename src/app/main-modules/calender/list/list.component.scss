@@ -1,0 +1,48 @@
+.emptyDay {
+  background-color: #dfe3dc !important;
+  //cursor: pointer;
+
+  //cursor: not-allowed;
+  //pointer-events: none;
+
+}
+
+.meetingEmptyDay {
+  //background-color: #e8f8d7;
+  background-color: #ffffff ;
+  //cursor: pointer;
+}
+
+.selectedWeek {
+  background-color: #4598d2 !important;
+  color: white !important;
+  //cursor: pointer;
+}
+
+.selectedMeetingForDay {
+  background-color: #d59df5;
+  //cursor: pointer;
+}
+
+.selectedDay {
+  background-color: #c2fd90;
+  //cursor: pointer;
+}
+
+.currentDay {
+  //background-color: #66fdf2 !important;
+  color: #f36e21 ;
+  //cursor: pointer;
+}
+
+.fryDay {
+  //background-color: #fab3b9;
+  background-color: #ffffff;
+  //cursor: pointer;
+}
+.selectIcon{
+}
+.selectIcon :hover {
+  color: white;
+  background: #6e6e6e;
+}

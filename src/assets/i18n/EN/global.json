@@ -1,0 +1,169 @@
+{
+  "header":{
+    "returnButton":"Return",
+    "account":"Account",
+    "language":"Language",
+    "login":"Login",
+    "logout":"Logout"
+  },
+  "firstPage":{
+    "myForms":"My forms",
+    "test":"Test",
+    "createForm":"Create new form",
+    "analysis":"Total analysis"
+  },
+  "createForm":{
+    "formProperty":"Form Properties",
+    "formQuestion":"Question",
+    "formRelation":"Relations",
+    "formPreDisplay":"Preview",
+    "formSubmit":"Submit",
+    "temporalSave":"temporal save"
+  },
+  "firstFormRegister":{
+    "formTitle":"Form title",
+    "formCategory":"Form category",
+    "formDescription":"Form description",
+    "choosepic":"Choose Picture",
+    "templateForms":"Template forms",
+    "titleError":"Please enter title of form.",
+    "categoryError":"Please select a category."
+  },
+  "formQuestion":{
+    "questionTitle":"Question title",
+    "questionHelpText":"Question help text",
+    "questionRequired":"Required",
+    "questionOption":"Options",
+    "addOption":"Add option",
+    "option1Caption":"Option 1",
+    "question1Title":"Question 1",
+    "maxItemSelectable":"Max item selectable",
+    "minItemSelectable":"Min item selectable",
+    "comboPlaceholder":"Choose an option...",
+    "comboPlaceholderTitle":"Placeholder for combo box",
+    "date":"date",
+    "startDate":"Start date of time interval",
+    "endDate":"End date of time interval",
+    "matrixOption":"Options(columns)",
+    "matrixQuestion":"Questions (rows)",
+    "addMatrixQuestion": "Add question",
+    "singleSelect":"Radio button",
+    "multiSelect":"Check box",
+    "numericalMin":"Minimum",
+    "numericalMax":"Maximum",
+    "numericalEndLabel":"End label",
+    "numericalStartLabel":"Start label",
+    "starCount":"Star counts",
+    "initialStarCount":"Initial star count",
+    "starColorStatus":"Color status",
+    "starColorChanging":"Changing",
+    "starColorGreen":"Green",
+    "starColorYellow":"Yellow",
+    "starColorRed":"Red",
+    "starColorGray":"Gray",
+    "starDirection":"Star direction",
+    "directionLTR":"Left to right",
+    "directionRTL":"Right to left",
+    "answerPlaceholder":"Sample answer",
+    "txtFieldMaxChar":"Maximum character size",
+    "txtFieldMinChar":"Minimum character size",
+    "txtFieldType":"Text field type",
+    "time":"Time",
+    "samplePlaceholder":"Placeholder"
+  },
+  "questionRelation":{
+    "subQuestionCommit":"Commit sub question",
+    "subQuestions":"Sub questions"
+  },
+  "formComplete":{
+    "completeForm":"Complete Form"
+  },
+  "myForms":{
+    "formTitle":"Form title",
+    "editForm": "Edit",
+    "finishForm": "Finished",
+    "runningForm": "Done",
+    "deleteForm": "Delete",
+    "answers": "Answers",
+    "analysis": "Analysis "
+  },
+  "formSubmit":{
+    "noteOne":"After submission, you cant edit form.",
+    "noteTwo":"After successful submission, you can use the returned link.",
+    "noteThree":"I accept the conditions.",
+    "submitButton":"Submit",
+    "responder":"Total responder"
+  },
+  "imageCropper":{
+    "image":"image"
+  },
+  "textFieldType":{
+    "TEXT": "Text",
+    "EMAIL":"Email",
+    "NUMBER":"Number",
+    "PASSWORD":"Password"
+  },
+  "public":{
+    "choosePic":"Choose Picture",
+    "edit":"Edit",
+    "delete":"Delete",
+    "up":"Up element",
+    "down":"Down element",
+    "duplicate":"Duplicate",
+    "close":"Close",
+    "save":"Save",
+    "search":"Search",
+    "date":"Date",
+    "time":"Time",
+    "enterDate":"Enter Date."
+
+  },
+  "publicMessage":{
+    "deleteMessage":"Are you sure??",
+    "yes":"Yes",
+    "no":"No"
+  },
+  "errorMessages":{
+    "labelRequired":"Please add title of question.",
+    "helpTextRequired":"Please add help text of question.",
+    "optionRequired":"Please add options for question.",
+    "questionRequired":"Please add questions.",
+    "minItemSelectedRequired":"Please define minimum item could be selected.",
+    "maxItemSelectedRequired":"Please define maximum item could be selected.",
+    "itemRequiredMaxZero":"Maximum selectable items should not be zero",
+    "placeHolderRequired":"Please add the first option for combo box.",
+    "startDateGreater":"Start date is greater than end date.",
+    "numericalMinRequired":"Please enter minimum.",
+    "numericalMaxRequired":"Please enter maximum.",
+    "numericalBeginLabelRequired":"Please add begin label.",
+    "numericalEndLabelRequired":"Please add end label.",
+    "starCountRequired":"Please enter the star count.",
+    "initialStarCountRequired":"Please define the initial rate of stars.",
+    "textAreaPlaceholderRequired":"Please add the placeholder for answer.",
+    "textFieldMinLengthRequired":"Please add the minimum length of answer.",
+    "textFieldMaxLengthRequired":"Please add the maximum length of answer.",
+    "formStatusFinish":"This form is finished.",
+    "formStatusNotRunning":"This form is not published.",
+    "answerRequired":"Answer is required.",
+    "wordsOnly":"Answer should be just words.",
+    "minimumCharacter":"Minimum character",
+    "maximumCharacter":"Maximum character",
+    "minimumOption":"Minimum option",
+    "maximumOption":"Maximum option",
+    "timeError":"Please enter time.",
+    "selectOption":"Please select one of the options.",
+    "startDateShould":"Start date should be",
+    "greaterThan":"greater than",
+    "endDateShould":"End date should be ",
+    "lessThan":"less than"
+  },
+  "formSubmitMessages": {
+    "noElement":"Please add question to form.",
+    "noResponder":"Please add number of responders.",
+    "noTitle":"There is no title for this form.",
+    "noCategory":"Please select a category for this form."
+  },
+  "successfulMessages":{
+    "formSubmitted":"Form is submitted successfully. For completing form, use the bellow link"
+  }
+}

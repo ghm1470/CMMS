@@ -1,0 +1,128 @@
+<!--<button type="button"-->
+<!--        (click)="openModal()"-->
+<!--        class="btn btn-action"-->
+<!--&gt;-->
+
+<!--  افزودن فایل-->
+<!--  &lt;!&ndash;  <label [for]="id">&ndash;&gt;-->
+<!--  <i class="fa fa-paperclip" style="font-weight: bold"-->
+<!--     [title]="'افزودن فایل- حجم فایل باید کمتر از ۱۰ مگابایت باشد'"></i>-->
+<!--  &lt;!&ndash;  </label>&ndash;&gt;-->
+<!--</button>-->
+
+
+<!--<div class="center" id="parentOfButton">-->
+<!--  <button (click)="loadingBarMethoud()">-->
+<!--    <p>  افزودن فایل-->
+<!--      <i class=" fa-paperclip"-->
+<!--      ></i></p>-->
+<!--    <div class="loading"></div>-->
+<!--    <div class="fa fa-check"></div>-->
+<!--  </button>-->
+
+<!--  <script>-->
+<!--    $(document).ready(function () {-->
+<!--        $('button').click(function () {-->
+<!--            $('button').parent().addClass('active');-->
+<!--        })-->
+<!--    })-->
+<!--  </script>-->
+<!--</div>-->
+
+
+<input
+  [id]="id"
+  type="file"
+  accept=".zip,.rar,.tar,.7zip
+       ,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf,.odt, .fodt. , .ZIP,.RAR,.TAR,.7ZIP
+       ,.DOC,.DOCX,.XLS,.XLSX,.PPT,.PPTX,.PDF,.ODT, .FODT."
+  (change)="selectFiles(input)" #input>
+<label *ngIf="!uploading" [for]="id" class="btn-2" [title]="' حجم فایل باید کمتر از ۱۰ مگابایت باشد'">
+  <!--        <button class="btn btn-info" [id]="id">-->
+  افزودن فایل
+  <i class="fa fa-paperclip" style="font-weight: bold"
+  ></i>
+  <!--        </button>-->
+</label>
+
+
+<!--<div class="meter animate" *ngIf="uploading">-->
+<!--  <span style="width: 50%"><span></span></span>-->
+<!--</div>-->
+
+<label *ngIf="uploading" class="btn-2" style="cursor: not-allowed">
+  <a style="color: white; font-size: 10px;">
+    <i class="fa fa-spinner fa-spin fa-2x"></i>
+    در حال آپلود لطفا صبرکنید
+  </a>
+</label>
+<div class="file-name"><span><i class="fa fa-eye"></i>مشاهده فایلهای آپلود شده</span></div>
+<!--//////////////////////////////  modal  /////////////////////////////-->
+<!--<nbw-modal-->
+<!--  [hasHeader]="true"-->
+<!--  [hasFooter]="false"-->
+<!--  [modalSize]="MyModalSize"-->
+<!--  autoShow="false"-->
+<!--  [myId]="modalId">-->
+<!--  <div modal-header>-->
+<!--    <h6>-->
+<!--      افزودن فایل-->
+<!--    </h6>-->
+<!--  </div>-->
+<!--  <div modal-body>-->
+<!--    <form #showNameForm="ngForm">-->
+<!--      <div class="col-md-12">-->
+<!--        <label class="for-label">نام فایل:</label>-->
+<!--        <span style="color: red">*</span>-->
+<!--        <div class="input-group input-group-sm">-->
+<!--          <input type="text" placeholder="نام فایل را وارد کنید" [(ngModel)]="showName"-->
+<!--                 class="form-control" maxlength="80" name="fileName"-->
+<!--                 nbvRequired #name="ngModel" nbvMinlength="3"-->
+<!--                 id="name"-->
+<!--                 (change)="stringLength(showName,'name')"-->
+<!--                 [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvMinlength) && stringLength(showName,'name')"-->
+<!--                 [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvMinlength) && (name.touched)"-->
+<!--                 dest="fileNameValidation">-->
+<!--        </div>-->
+<!--        <div id="fileNameValidation"></div>-->
+<!--      </div>-->
+<!--    </form>-->
+
+<!--    <br>-->
+<!--    <br>-->
+<!--    <div class="col-md-12 text-center">-->
+<!--      <label style="width: 180px; height: 30px; margin: 30px -50px 15px 10px; text-align: center" *ngIf="showNameForm.valid">-->
+<!--        <a class="btn btn-action btn-sm" style="font-size: 14px;color: white">-->
+<!--          <i class="fa fa-paperclip " aria-hidden="true"-->
+<!--             style="font-size: larger"></i>-->
+<!--          انتخاب فایل-->
+<!--        </a>-->
+<!--        <input type="file" style="display: none;" #input-->
+<!--               (change)="onChangeUploader(input)">-->
+<!--      </label>-->
+
+
+<!--      <input-->
+<!--             [id]="id"-->
+<!--             type="file"-->
+<!--             accept=".zip,.rar,.tar,.7zip-->
+<!--       ,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf,.odt, .fodt. , .ZIP,.RAR,.TAR,.7ZIP-->
+<!--       ,.DOC,.DOCX,.XLS,.XLSX,.PPT,.PPTX,.PDF,.ODT, .FODT."-->
+<!--             (change)="selectFiles(input)" #input>-->
+<!--      <label *ngIf="!uploading" [for]="id" class="btn-2"  [title]="' حجم فایل باید کمتر از ۱۰ مگابایت باشد'">-->
+<!--&lt;!&ndash;        <button class="btn btn-info" [id]="id">&ndash;&gt;-->
+<!--        افزودن فایل-->
+<!--        <i class="fa fa-paperclip" style="font-weight: bold"-->
+<!--          ></i>-->
+<!--&lt;!&ndash;        </button>&ndash;&gt;-->
+<!--      </label>-->
+<!--      <label *ngIf="uploading" class="btn-2"  style="cursor: not-allowed" disabled="uploading">-->
+<!--        <a style="color: white; font-size: 15px;">-->
+<!--          <i class="fa fa-spinner fa-spin fa-2x"></i>-->
+<!--          لطفا صبرکنید در حال آپلود-->
+<!--        </a>-->
+<!--      </label>-->
+
+<!--    </div>-->
+<!--  </div>-->
+<!--</nbw-modal>-->

@@ -1,0 +1,18 @@
+<div class="container-fluid">
+<!--  {{formElement}}-->
+  <div class="row" *ngIf="formElement == 0">
+    <app-question-create class="w-100"
+                         [resetForm]="resetForm"
+                         (editedItemReturn)="editing($event)">
+
+    </app-question-create>
+  </div>
+
+  <div class="row" *ngIf="formElement == 1">
+    <app-question-edit class="w-100"
+                       [editingItem]="editingQuestion"
+                       (onUpdate)="updating()">
+
+    </app-question-edit>
+  </div>
+</div>

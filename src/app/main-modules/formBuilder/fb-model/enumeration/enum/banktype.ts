@@ -1,0 +1,4 @@
+export enum BankType {
+  GOVERNMENTAL= <any> 'GOVERNMENTAL',
+  NON_GOVERNMENTAL =<any> 'NON_GOVERNMENTAL'
+}

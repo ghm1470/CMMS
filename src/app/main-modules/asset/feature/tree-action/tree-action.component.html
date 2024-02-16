@@ -1,0 +1,1047 @@
+<div id="assetCreate" class="carousel slide" data-interval="false">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6 col-8 col-sm-6 card-title">
+                            <ng-container *ngIf="mode === actionMode.ADD">
+                                <i class="fa fa-plus"></i>&nbsp;
+                                افزودن دارایی
+                            </ng-container>
+                            <ng-container *ngIf="mode === actionMode.EDIT">
+                                <i class="fa fa-edit"></i>&nbsp;
+                                ویرایش دارایی
+                            </ng-container>
+                            <ng-container *ngIf="mode === actionMode.VIEW">
+                                <i class="fa fa-eye"></i>&nbsp;
+                                مشاهده اطلاعات دارایی
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6 col-4 col-sm-6 text-left">
+                            <button (click)="cancel()"
+                                    class="btn btn-cancel-back btn-sm">
+                                بازگشت
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center" *ngIf="loadingGetOne">
+                    <i class="fa fa-spinner fa-pulse fa-2x mx-2"></i>
+                    در حال دریافت
+                </div>
+
+                <form #assetForm="ngForm" (submit)="action(assetForm)">
+                    <div class="card-body card-body-content">
+                        <div class="row">
+                            <div class="col-md-9" style="margin-top: 15px">
+                                <fieldset class="scheduler-border" id="comapvny-documents"
+                                          style="background-color: #f5f5f5">
+                                    <div class="row">
+
+                                        <div class="col-md-6 form-group required col-sm-12">
+                                            <label class="for-label">نام دارایی:</label>
+                                            <span style="color: red">*</span>
+                                            <div class="input-group input-group-sm">
+                                                <!--                                                       nbvPattern="{{myPattern.TITLEFa}}"-->
+                                                <input type="text" placeholder="نام دارایی"
+                                                       [(ngModel)]="assetEntity.name"
+                                                       class="form-control" maxlength="80" name="name"
+                                                       nbvRequired
+                                                       nbvPatternMsgHtml="نام باید به صورت حروف و اعداد باشد."
+                                                       #name="ngModel" nbvMinlength="1"
+                                                       [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvMinlength)"
+                                                       [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvMinlength) && (name.touched || doSave)"
+                                                       dest="nameValidation" [disabled]="mode===actionMode.VIEW">
+                                            </div>
+                                            <div id="nameValidation"></div>
+                                        </div>
+                                        <div class="col-md-6 form-group required col-sm-12">
+                                            <label class="for-label"> فرایند تعمیر:</label>
+                                            <span style="color: red">*</span>
+                                            <ng-select dir="rtl" [(ngModel)]="assetEntity.activityIdList"
+                                                       [multiple]="true"
+                                                       placeholder=" فرایند تعمیر"
+                                                       style="padding: 0"
+                                                       #activityId="ngModel"
+                                                       id="activityId"
+                                                       name="activityId"
+                                                       class="form-control"
+                                                       nbvRequired
+                                                       [class.is-valid]="!(activityId?.errors?.nbvRequired || activityId?.errors?.nbvPattern)"
+                                                       [class.is-invalid]="(activityId?.errors?.nbvRequired || activityId?.errors?.nbvPattern)
+                                                        && (activityId.touched || doSave)"
+                                                       dropdownPosition="bottom">
+                                                <ng-option *ngFor="let item of activityList; let i = index"
+                                                           [value]="item.id">
+                                                    {{item.title}}
+                                                </ng-option>
+                                            </ng-select>
+                                            <!--<div class="input-group input-group-sm">-->
+                                            <!--<select [(ngModel)]="asset.categoryType" id="categoryType" name="categoryType" class="form-control"-->
+                                            <!--#categoryType="ngModel" nbvRequired-->
+                                            <!--(change)="getAllAssetTemplate()"-->
+                                            <!--[class.is-valid]="!(categoryType?.errors?.nbvRequired || categoryType?.errors?.nbvPattern)"-->
+                                            <!--[class.is-invalid]="(categoryType?.errors?.nbvRequired || categoryType?.errors?.nbvPattern) && (categoryType.touched || doSave)"-->
+                                            <!--dest="categoryTypeValidation" [disabled]="mode===actionMode.VIEW">-->
+                                            <!--<option value="-1" disabled>نوع دارایی</option>-->
+                                            <!--<option *ngFor="let item of categoryTypeList" [value]="item.value">{{item.title}}</option>-->
+                                            <!--</select>-->
+                                            <!--</div>-->
+                                            <div id="activityIdListValidation" style="opacity: 0; height: 0"></div>
+                                        </div>
+
+                                        <div class="col-md-4 form-group required col-sm-12">
+                                            <label class="for-label">کد دارایی:</label>
+                                            <span style="color: red">*</span>
+                                            <div class="input-group input-group-sm">
+                                                <!--                                                       [nbvPattern]="myPattern.EnNumberAndAlphabetic"-->
+                                                <input type="text" placeholder="کد دارایی"
+                                                       [(ngModel)]="assetEntity.code"
+                                                       class="form-control" minlength="1" maxlength="80" name="code"
+                                                       nbvRequired #code="ngModel" (change)="changeAssetCode()"
+                                                       nbvPatternMsgHtml="کد دارایی باید به صورت اعداد و حروف انگلیسی وارد گردد."
+                                                       [class.is-valid]="!(code?.errors?.nbvRequired || code?.errors?.nbvPattern)"
+                                                       [class.is-invalid]="(code?.errors?.nbvRequired || code?.errors?.nbvPattern) && (code.touched || doSave)"
+                                                       dest="codeValidation" [disabled]="mode===actionMode.VIEW">
+                                            </div>
+                                            <div id="codeValidation"></div>
+                                        </div>
+
+                                        <div class="col-md-4 form-group required col-sm-12">
+                                            <label class="for-label" for="categoryType">نوع دارایی:</label>
+                                            <span style="color: red">*</span>
+                                            <ng-select dir="rtl" [(ngModel)]="assetEntity.categoryType"
+                                                       (change)="getAllAssetTemplate()"
+                                                       placeholder="نوع دارایی"
+                                                       id="categoryType"
+                                                       name="categoryType"
+                                                       style="padding: 0"
+                                                       #categoryType="ngModel"
+                                                       class="form-control"
+                                                       nbvRequired
+                                                       [disabled]="assetEntity.id"
+                                                       [class.is-valid]="!(categoryType?.errors?.nbvRequired || categoryType?.errors?.nbvPattern)"
+                                                       [class.is-invalid]="(categoryType?.errors?.nbvRequired || categoryType?.errors?.nbvPattern)
+                                                                                                && (categoryType.touched || doSave)"
+                                                       dropdownPosition="bottom">
+                                                <ng-option *ngFor="let item of categoryTypeList; let i = index"
+                                                           [value]="item.value">
+                                                    {{item.title}}
+                                                </ng-option>
+                                            </ng-select>
+                                            <!--<div class="input-group input-group-sm">-->
+                                            <!--<select [(ngModel)]="asset.categoryType" id="categoryType" name="categoryType" class="form-control"-->
+                                            <!--#categoryType="ngModel" nbvRequired-->
+                                            <!--(change)="getAllAssetTemplate()"-->
+                                            <!--[class.is-valid]="!(categoryType?.errors?.nbvRequired || categoryType?.errors?.nbvPattern)"-->
+                                            <!--[class.is-invalid]="(categoryType?.errors?.nbvRequired || categoryType?.errors?.nbvPattern) && (categoryType.touched || doSave)"-->
+                                            <!--dest="categoryTypeValidation" [disabled]="mode===actionMode.VIEW">-->
+                                            <!--<option value="-1" disabled>نوع دسته</option>-->
+                                            <!--<option *ngFor="let item of categoryTypeList" [value]="item.value">{{item.title}}</option>-->
+                                            <!--</select>-->
+                                            <!--</div>-->
+                                            <div id="categoryTypeValidation" style="opacity: 0; height: 0"></div>
+                                        </div>
+                                        <!--                                        <div class="col-md-6 form-group required col-sm-12">-->
+                                        <!--                                            <label class="for-label" for="assetTemplate">قالب دارایی:</label>-->
+                                        <!--                                            <span style="color: red">*</span>-->
+                                        <!--                                            &lt;!&ndash;                                                       (change)="getAllAssetTemplate()"&ndash;&gt;-->
+                                        <!--                                            <ng-select dir="rtl" [(ngModel)]="asset.assetTemplateId"-->
+                                        <!--                                                       placeholder="قالب دارایی"-->
+                                        <!--                                                       id="assetTemplate"-->
+                                        <!--                                                       name="assetTemplateId"-->
+                                        <!--                                                       style="padding: 0"-->
+                                        <!--                                                       #assetTemplate="ngModel"-->
+                                        <!--                                                       (change)="getPropertyOfAssetTemplate()"-->
+                                        <!--                                                       class="form-control"-->
+                                        <!--                                                       nbvRequired-->
+
+                                        <!--                                                       [class.is-valid]="!(assetTemplate?.errors?.nbvRequired || assetTemplate?.errors?.nbvPattern)"-->
+                                        <!--                                                       [class.is-invalid]="(assetTemplate?.errors?.nbvRequired || assetTemplate?.errors?.nbvPattern)-->
+                                        <!--                                                        && (assetTemplate.touched || doSave)" dropdownPosition="bottom"-->
+                                        <!--                                                       [disabled]="mode===actionMode.VIEW">-->
+                                        <!--                                                <ng-option *ngFor="let item of assetTemplateList; let i = index"-->
+                                        <!--                                                           [value]="item.id">-->
+                                        <!--                                                    {{item.name}}-->
+                                        <!--                                                </ng-option>-->
+                                        <!--                                            </ng-select>-->
+                                        <!--                                            &lt;!&ndash;<div class="input-group input-group-sm">&ndash;&gt;-->
+                                        <!--                                            &lt;!&ndash;<select [(ngModel)]="asset.assetTemplateId" name="assetTemplateId" class="form-control"&ndash;&gt;-->
+                                        <!--                                            &lt;!&ndash;#assetTemplateId="ngModel"&ndash;&gt;-->
+                                        <!--                                            &lt;!&ndash;id="assetTemplate"&ndash;&gt;-->
+                                        <!--                                            &lt;!&ndash;[class.is-valid]="!(assetTemplateId?.errors?.nbvRequired || assetTemplateId?.errors?.nbvPattern)"&ndash;&gt;-->
+                                        <!--                                            &lt;!&ndash;[class.is-invalid]="(assetTemplateId?.errors?.nbvRequired || assetTemplateId?.errors?.nbvPattern) && (assetTemplateId.touched || doSave)"&ndash;&gt;-->
+                                        <!--                                            &lt;!&ndash;[disabled]="mode===actionMode.VIEW">&ndash;&gt;-->
+
+                                        <!--                                            &lt;!&ndash;<option *ngFor="let item of assetTemplateList" [value]="item.id">{{item.name}}</option>&ndash;&gt;-->
+                                        <!--                                            &lt;!&ndash;</select>&ndash;&gt;-->
+                                        <!--                                            &lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--                                            <div id="assetTemplateIdValidation" style="opacity: 0; height: 0"></div>-->
+                                        <!--                                        </div>-->
+                                        <!--                                        اولویت دارایی:-->
+                                        <div class="col-md-4 form-group required col-sm-12">
+                                            <label class="for-label" for="assetTemplate">اولویت دارایی:</label>
+                                            <span style="color: red">*</span>
+                                            <!--                                                       (change)="getAllAssetTemplate()"-->
+                                            <ng-select dir="rtl" [(ngModel)]="assetEntity.assetPriority"
+                                                       placeholder="اولویت دارایی"
+                                                       id="assetTemplate"
+                                                       name="priority"
+                                                       style="padding: 0"
+                                                       #assetPriority="ngModel"
+                                                       class="form-control"
+                                                       nbvRequired
+
+                                                       [class.is-valid]="!(assetPriority?.errors?.nbvRequired || assetPriority?.errors?.nbvPattern)"
+                                                       [class.is-invalid]="(assetPriority?.errors?.nbvRequired || assetPriority?.errors?.nbvPattern)
+                                                        && (assetPriority.touched || doSave)" dropdownPosition="bottom"
+                                                       [disabled]="mode===actionMode.VIEW">
+                                                <ng-option *ngFor="let item of assetPriorityList; let i = index"
+                                                           [value]="item.value">
+                                                    {{item.title}}
+                                                </ng-option>
+                                            </ng-select>
+                                            <!--<div class="input-group input-group-sm">-->
+                                            <!--<select [(ngModel)]="asset.assetTemplateId" name="assetTemplateId" class="form-control"-->
+                                            <!--#assetTemplateId="ngModel"-->
+                                            <!--id="assetTemplate"-->
+                                            <!--[class.is-valid]="!(assetTemplateId?.errors?.nbvRequired || assetTemplateId?.errors?.nbvPattern)"-->
+                                            <!--[class.is-invalid]="(assetTemplateId?.errors?.nbvRequired || assetTemplateId?.errors?.nbvPattern) && (assetTemplateId.touched || doSave)"-->
+                                            <!--[disabled]="mode===actionMode.VIEW">-->
+
+                                            <!--<option *ngFor="let item of assetTemplateList" [value]="item.id">{{item.name}}</option>-->
+                                            <!--</select>-->
+                                            <!--</div>-->
+                                            <div id="assetTemplateIdValidation" style="opacity: 0; height: 0"></div>
+                                        </div>
+                                        <!--                                        خانواده گروه دارایی-->
+                                        <div class="col-md-4 form-group required col-sm-12">
+                                            <label class="for-label" for="assetCategory">خانواده گروه دارایی:</label>
+                                            <!--                                            <span style="color: red">*</span>-->
+                                            <!--                                                       (change)="getAllAssetTemplate()"-->
+                                            <ng-select dir="rtl" [(ngModel)]="assetEntity.categoryId"
+                                                       placeholder="خانواده گروه  دارایی"
+                                                       id="assetCategory"
+                                                       name="category"
+                                                       style="padding: 0"
+                                                       #assetCategory="ngModel"
+                                                       class="form-control"
+                                                       [disabled]="mode===actionMode.VIEW">
+                                                <ng-option
+                                                        *ngFor="let assetCategory of assetCategoryList; let i = index"
+                                                        [value]="assetCategory.id">
+                                                    {{assetCategory.title }}
+                                                </ng-option>
+                                            </ng-select>
+                                            <!--<div class="input-group input-group-sm">-->
+                                            <!--<select [(ngModel)]="asset.assetTemplateId" name="assetTemplateId" class="form-control"-->
+                                            <!--#assetTemplateId="ngModel"-->
+                                            <!--id="assetTemplate"-->
+                                            <!--[class.is-valid]="!(assetTemplateId?.errors?.nbvRequired || assetTemplateId?.errors?.nbvPattern)"-->
+                                            <!--[class.is-invalid]="(assetTemplateId?.errors?.nbvRequired || assetTemplateId?.errors?.nbvPattern) && (assetTemplateId.touched || doSave)"-->
+                                            <!--[disabled]="mode===actionMode.VIEW">-->
+
+                                            <!--<option *ngFor="let item of assetTemplateList" [value]="item.id">{{item.name}}</option>-->
+                                            <!--</select>-->
+                                            <!--</div>-->
+                                            <!--                                            <div id="assetCategoryIdValidation" style="opacity: 0; height: 0"></div>-->
+                                        </div>
+                                        <!--                                        سازنده-->
+                                        <div class="col-md-4 form-group required col-sm-12">
+                                            <label class="for-label"> سازنده :</label>
+                                            <div class="input-group input-group-sm">
+                                                <!--                                                       nbvPattern="{{myPattern.TITLEFa}}"-->
+                                                <input type="text" placeholder=" سازنده"
+                                                       [(ngModel)]="assetEntity.manufacturer"
+                                                       class="form-control" maxlength="80" name="manufacturer"
+                                                       nbvPatternMsgHtml="سازنده  باید به صورت حروف و اعداد باشد."
+                                                       #manufacturer="ngModel" nbvMinlength="1"
+                                                       [class.is-valid]="!(manufacturer?.errors?.nbvRequired || manufacturer?.errors?.nbvMinlength)"
+                                                       [class.is-invalid]="(manufacturer?.errors?.nbvRequired || manufacturer?.errors?.nbvMinlength) && (manufacturer.touched || doSave)"
+                                                       dest="manufacturerDest" [disabled]="mode===actionMode.VIEW">
+                                            </div>
+                                            <div id="manufacturerDest"></div>
+                                        </div>
+
+                                        <!--                                        سال ساخت -->
+                                        <div class="col-md-4 form-group required col-sm-12">
+                                            <label class="for-label"> سال ساخت :</label>
+                                            <div class="input-group input-group-sm">
+                                                <!--                                                       nbvPattern="{{myPattern.TITLEFa}}"-->
+                                                <input type="text" placeholder=" سال ساخت "
+                                                       [(ngModel)]="assetEntity.constructionYear"
+                                                       class="form-control" maxlength="4" minlength="4"
+                                                       name="constructionYear"
+                                                       nbvPatternMsgHtml="سال ساخت   باید به صورت اعداد باشد."
+                                                       #constructionYear="ngModel" nbvMinlength="1"
+                                                       [class.is-valid]="!(constructionYear?.errors?.nbvRequired || constructionYear?.errors?.nbvMinlength)"
+                                                       [class.is-invalid]="(constructionYear?.errors?.nbvRequired || constructionYear?.errors?.nbvMinlength)
+                                                        && (constructionYear.touched || doSave)"
+                                                       appNumeric
+                                                       autocomplete="off" style="text-align: center;
+                                                       font-family: IRANSansWeb-farsi!important;
+                                                            padding: 0;"
+                                                       dest="constructionYear" [disabled]="mode===actionMode.VIEW">
+                                            </div>
+                                            <div id="constructionYear"></div>
+                                        </div>
+
+                                        <!--                                        سال نصب -->
+                                        <div class="col-md-4 form-group required col-sm-12">
+                                            <label class="for-label"> سال نصب :</label>
+                                            <div class="input-group input-group-sm">
+                                                <!--                                                       nbvPattern="{{myPattern.TITLEFa}}"-->
+                                                <input type="text" placeholder=" سال نصب "
+                                                       [(ngModel)]="assetEntity.installYear"
+                                                       class="form-control" maxlength="4" minlength="4"
+                                                       name="installYear"
+                                                       nbvPatternMsgHtml="سال نصب   باید به صورت اعداد باشد."
+                                                       #installYear="ngModel" nbvMinlength="1"
+                                                       [class.is-valid]="!(installYear?.errors?.nbvRequired || installYear?.errors?.nbvMinlength)"
+                                                       [class.is-invalid]="(installYear?.errors?.nbvRequired || installYear?.errors?.nbvMinlength)
+                                                        && (installYear.touched || doSave)"
+                                                       appNumeric
+                                                       style="text-align: center;
+                                                       font-family: IRANSansWeb-farsi!important;
+                                                            padding: 0;"
+                                                       dest="installYear" [disabled]="mode===actionMode.VIEW">
+                                            </div>
+                                            <div id="installYear"></div>
+                                        </div>
+                                        <!--                                        شماره سریال -->
+                                        <div class="col-md-4 form-group required col-sm-12">
+                                            <label class="for-label"> شماره سریال :</label>
+                                            <div class="input-group input-group-sm">
+                                                <!--                                                       nbvPattern="{{myPattern.TITLEFa}}"-->
+                                                <input type="text" placeholder=" شماره سریال "
+                                                       [(ngModel)]="assetEntity.serialNumber"
+                                                       class="form-control" maxlength="16" minlength="1"
+                                                       name="serialNumber"
+                                                       nbvPatternMsgHtml="شماره سریال   باید به صورت اعداد باشد."
+                                                       #serialNumber="ngModel" nbvMinlength="1"
+                                                       [class.is-valid]="!(serialNumber?.errors?.nbvRequired || serialNumber?.errors?.nbvMinlength)"
+                                                       [class.is-invalid]="(serialNumber?.errors?.nbvRequired || serialNumber?.errors?.nbvMinlength)
+                                                        && (serialNumber.touched || doSave)"
+                                                       style="text-align: center;
+                                                       font-family: IRANSansWeb-farsi!important;
+                                                            padding: 0;"
+                                                       dest="serialNumber" [disabled]="mode===actionMode.VIEW">
+                                            </div>
+                                            <div id="serialNumber"></div>
+                                        </div>
+
+                                        <!--                                        ظرفیت اسمی-->
+                                        <div class="col-md-4 form-group required col-sm-12">
+                                            <label class="for-label"> ظرفیت اسمی :</label>
+                                            <div class="input-group input-group-sm">
+                                                <!--                                                       nbvPattern="{{myPattern.TITLEFa}}"-->
+                                                <input type="text" placeholder=" ظرفیت اسمی"
+                                                       [(ngModel)]="assetEntity.nominalCapacity"
+                                                       class="form-control" maxlength="80" name="nominalCapacity"
+                                                       nbvPatternMsgHtml="ظرفیت اسمی  باید به صورت حروف و اعداد باشد."
+                                                       #nominalCapacity="ngModel" nbvMinlength="1"
+                                                       [class.is-valid]="!(nominalCapacity?.errors?.nbvRequired || nominalCapacity?.errors?.nbvMinlength)"
+                                                       [class.is-invalid]="(nominalCapacity?.errors?.nbvRequired || nominalCapacity?.errors?.nbvMinlength) && (nominalCapacity.touched || doSave)"
+                                                       dest="nominalCapacity" [disabled]="mode===actionMode.VIEW">
+                                            </div>
+                                            <div id="nominalCapacity"></div>
+                                        </div>
+                                        <!--                                        تیپ-->
+                                        <div class="col-md-4 form-group required col-sm-12">
+                                            <label class="for-label"> نوع/تیپ :</label>
+                                            <div class="input-group input-group-sm">
+                                                <!--                                                       nbvPattern="{{myPattern.TITLEFa}}"-->
+                                                <input type="text" placeholder=" نوع/تیپ"
+                                                       [(ngModel)]="assetEntity.style"
+                                                       class="form-control" maxlength="80" name="style"
+                                                       nbvPatternMsgHtml="نوع/تیپ  باید به صورت حروف و اعداد باشد."
+                                                       #style="ngModel" nbvMinlength="1"
+                                                       [class.is-valid]="!(style?.errors?.nbvRequired || style?.errors?.nbvMinlength)"
+                                                       [class.is-invalid]="(style?.errors?.nbvRequired || style?.errors?.nbvMinlength) && (style.touched || doSave)"
+                                                       dest="style" [disabled]="mode===actionMode.VIEW">
+                                            </div>
+                                            <div id="style"></div>
+                                        </div>
+                                        <!--                                        دستگاه جایگزین دارد-->
+                                        <div class="col-md-4 form-group required col-sm-12">
+                                            <label class="for-label" for="categoryType">دستگاه جایگزین :</label>
+                                            <ng-select dir="rtl" [(ngModel)]="assetEntity.hasExchange"
+                                                       placeholder="دستگاه جایگزین "
+                                                       id="hasExchange"
+                                                       name="hasExchange"
+                                                       style="padding: 0"
+                                                       #hasExchange="ngModel"
+                                                       class="form-control"
+                                                       [disabled]="mode===actionMode.VIEW"
+                                                       [class.is-valid]="!(hasExchange?.errors?.nbvRequired || hasExchange?.errors?.nbvPattern)"
+                                                       [class.is-invalid]="(hasExchange?.errors?.nbvRequired || hasExchange?.errors?.nbvPattern)
+                                                                                                && (hasExchange.touched || doSave)"
+                                                       dropdownPosition="bottom">
+                                                <ng-option [value]="true"> دارد</ng-option>
+                                                <ng-option [value]="false"> ندارد</ng-option>
+                                            </ng-select>
+                                            <!--<div class="input-group input-group-sm">-->
+                                            <!--<select [(ngModel)]="asset.hasExchange" id="hasExchange" name="hasExchange" class="form-control"-->
+                                            <!--#hasExchange="ngModel" nbvRequired-->
+                                            <!--(change)="getAllAssetTemplate()"-->
+                                            <!--[class.is-valid]="!(hasExchange?.errors?.nbvRequired || hasExchange?.errors?.nbvPattern)"-->
+                                            <!--[class.is-invalid]="(hasExchange?.errors?.nbvRequired || hasExchange?.errors?.nbvPattern) && (hasExchange.touched || doSave)"-->
+                                            <!--dest="hasExchangeValidation" [disabled]="mode===actionMode.VIEW">-->
+                                            <!--<option value="-1" disabled>نوع دسته</option>-->
+                                            <!--<option *ngFor="let item of hasExchangeList" [value]="item.value">{{item.title}}</option>-->
+                                            <!--</select>-->
+                                            <!--</div>-->
+                                            <div id="hasExchangeValidation" style="opacity: 0; height: 0"></div>
+                                        </div>
+
+
+                                        <!--                    <ng-container *ngIf="showInput">-->
+                                        <!--                    </ng-container>-->
+                                        <div class="col-md-4 form-group required col-sm-12" style="margin-top: 30px">
+                                            <label>وضعیت : </label>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <label class="switch mx-2">
+                                                <input type="checkbox" [checked]="assetEntity.status"
+                                                       (change)="changeAssetStatus($event)">
+                                                <span class="slider round"></span>&nbsp;&nbsp;
+                                            </label>
+                                            <label style="color: green" *ngIf="assetEntity.status">فعال</label>
+                                            <label style="color: #990000" *ngIf="!assetEntity.status">غیر فعال</label>
+                                        </div>
+                                        <div class="col-md-12 form-group required">
+                                            <label class="for-label">توضیحات </label>
+                                            <div class="input-group input-group-sm">
+              <textarea type="text" placeholder="توضیحات " [(ngModel)]="assetEntity.description"
+                        class="form-control" minlength="1" maxlength="620" name="description" style="resize: none"
+              ></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-3 form-group required col-sm-12">
+                                <fieldset class="scheduler-border" id="comapny-documents"
+                                          style="background-color: #f5f5f5">
+                                    <legend class="scheduler-border"><h6>تصویر دارایی</h6></legend>
+                                    <ng-container *ngIf="!loadingGetOne">
+
+                                        <div class="col-md-12"
+                                             *ngIf="!assetEntity.image || !assetEntity.image.fileByte">
+                                            <label>
+                                                <a class="btn btn-outline-secondary btn-sm "
+                                                   [ngStyle]="loadingUpload  && { 'cursor' : 'wait'} "
+                                                >
+                                                    <i *ngIf="!loadingUpload" class="fa fa-paperclip "
+                                                       aria-hidden="true"></i>
+                                                    <i *ngIf="loadingUpload" class="fa fa-spinner fa-pulse fa-1x"></i>
+
+                                                    انتخاب تصویر
+                                                </a>
+                                                <input type="file" style="display: none;" #input id="file"
+                                                       [disabled]=" loadingUpload "
+                                                       (change)="onChangeUploader(input)">
+                                            </label>
+                                        </div>
+                                        <ng-container *ngIf="assetEntity.image && assetEntity.image.fileByte">
+                                            <div class="col-md-12">
+                                                <label (click)="deleteImage()">
+                                                    <a class="btn btn-outline-secondary btn-sm ">
+                                                        <i class="fa fa-trash " aria-hidden="true"></i>
+                                                        حذف تصویر
+                                                    </a>
+
+                                                </label>
+                                            </div>
+
+                                            <div class="col-md-12 img-fluid img-thumbnail p-2">
+                                                <img [src]="'data:image/jpg;base64,' + assetEntity.image.fileByte"
+                                                     (click)="showImageModalAsset()"
+                                                     class="img img-responsive cursor-pointer"
+                                                     style="width: 100%;height: 100%">
+                                            </div>
+
+                                        </ng-container>
+                                    </ng-container>
+
+                                </fieldset>
+                            </div>
+
+                            <div class="col-md-12">
+                                <fieldset class="scheduler-border" id="comapdny-documents"
+                                          style="background-color: #f5f5f5">
+                                    <legend class="scheduler-border"><h6>محل استقرار</h6></legend>
+                                    <div class="row">
+                                        <!--                                        سالن-->
+                                        <ng-container *ngIf="modeOfCategoryType === 'B' ">
+                                            <div class="col-md-4 col-sm-12">
+                                                <div class="card">
+                                                    <div class="card-body card-body-content ">
+                                                        <input type="checkbox" (click)="otherAssetSubset($event)"
+                                                               class="cursor-pointer"
+                                                               id="rootBuilding">
+                                                        <label class="for-label cursor-pointer" for="rootBuilding"
+                                                               style="margin-right: 7px"> این سالن مستقل است </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card">
+                                                    <div class="card-body card-body-content">
+                                                        <div class="row">
+                                                            <div class="col-md-5 ">
+                                                                <input type="checkbox" class="cursor-pointer"
+                                                                       (click)="hasParents($event)"
+                                                                       id="hasParent">
+                                                                <label class="for-label cursor-pointer " for="hasParent"
+                                                                       style="margin-right: 7px">
+                                                                    این سالن بخشی از سالن دیگر است
+                                                                </label>
+                                                            </div>
+                                                            <ng-container *ngIf="!rootBuilding">
+                                                                <div class="col-md-12">
+                                                                    <button type="button"
+                                                                            *ngIf="!parentAssetB.name"
+                                                                            class="btn btn-secondary btn-sm"
+                                                                            (click)="openGetAllModal()">
+                                                                        انتخاب سالن
+                                                                    </button>
+                                                                    <hr>
+                                                                    <ng-container *ngIf="parentAssetB.name">
+                                                                        <div class="col-md-12">
+                                                                            <div class="row">
+                                                                                <div class="col-md-6">
+                                                                                    <label>سالن انتخاب شده:</label>
+
+                                                                                </div>
+                                                                                <div class="col-md-6">
+                                                                                    <p> {{parentAssetB.name}}
+                                                                                        <!--                                                                                        {{parentAssetB.code}}-->
+
+                                                                                        <i class="fa fa-trash"
+                                                                                           style="color: red;cursor: pointer"
+                                                                                           title="حذف"
+                                                                                           (click)="deleteParentAssetB()">
+
+                                                                                        </i>
+                                                                                    </p>
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </ng-container>
+
+                                                                </div>
+
+                                                            </ng-container>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <!--                                        تجهیز-->
+                                        <ng-container *ngIf="modeOfCategoryType === 'F' ">
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="card">
+                                                            <div class="card-body card-body-content">
+                                                                <div class="col-md-12 col-sm-12">
+                                                                    <input type="checkbox"
+                                                                           class=" cursor-pointer"
+                                                                           id="hasBuildingParentForFacility"
+                                                                           (click)="otherAssetSubset($event)">
+                                                                    <label class="for-label cursor-pointer"
+                                                                           for="hasBuildingParentForFacility"
+                                                                           style="margin-right: 7px">
+                                                                        این تجهیز در این سالن قرار دارد
+                                                                    </label>
+                                                                </div>
+                                                                <ng-container *ngIf=" hasBuildingParentForFacility ">
+                                                                    <div class="col-md-12">
+                                                                        <button class="btn-sm btn-secondary btn"
+                                                                                type="button"
+                                                                                (click)="openGetAllModal()"
+                                                                                *ngIf="!parentAssetB.name && !parentAssetB.code">
+                                                                            انتخاب سالن
+                                                                        </button>
+                                                                        <hr>
+                                                                        <ng-container
+                                                                                *ngIf="parentAssetB.name && parentAssetB.code">
+                                                                            <div class="col-md-12">
+                                                                                <div class="row">
+                                                                                    <div class="col-md-6">
+                                                                                        <label>سالن انتخاب
+                                                                                            شده:</label>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <p> {{parentAssetB.name}}
+                                                                                            <!--                                                                                            {{parentAssetB.code}}-->
+                                                                                            &nbsp;&nbsp;
+                                                                                            <i class="fa fa-trash"
+                                                                                               style="color: red;cursor: pointer"
+                                                                                               title="حذف"
+                                                                                               (click)="deleteParentAssetB()"></i>
+                                                                                        </p>
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                    </div>
+                                                                </ng-container>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="card">
+                                                            <div class="card-body card-body-content">
+                                                                <div class="col-md-12 col-sm-12">
+                                                                    <input type="checkbox"
+                                                                           class=" cursor-pointer"
+                                                                           id="hasFacilityParentForFacility"
+                                                                           (click)="hasParents($event)">
+                                                                    <label class="for-label cursor-pointer"
+                                                                           for="hasFacilityParentForFacility"
+                                                                           style="margin-right: 7px">
+                                                                        این تجهیز بخشی از تجهیز دیگر است
+                                                                    </label>
+                                                                </div>
+                                                                <ng-container *ngIf=" hasFacilityParentForFacility  ">
+                                                                    <div class="col-md-12">
+
+                                                                        <button class="btn btn-secondary btn-sm"
+                                                                                type="button"
+                                                                                (click)="openGetAllModal()"
+                                                                                *ngIf="!parentAssetF.name && !parentAssetF.code">
+                                                                            انتخاب تجهیز
+                                                                        </button>
+                                                                        <hr>
+                                                                        <ng-container
+                                                                                *ngIf="parentAssetF.name && parentAssetF.code">
+                                                                            <div class="col-md-12">
+                                                                                <div class="row">
+                                                                                    <div class="col-md-6">
+                                                                                        <label>تجهیز انتخاب شده:</label>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <p> {{parentAssetF.name}}
+                                                                                            <!--
+                                                                                                                   {{parentAssetB.code}}&nbsp;&nbsp;-->
+                                                                                            <i class="fa fa-trash"
+                                                                                               style="color: red;cursor: pointer"
+                                                                                               title="حذف"
+                                                                                               (click)="deleteParentAssetB()"></i>
+                                                                                        </p>
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                    </div>
+                                                                </ng-container>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <!--                                        ابزار-->
+                                        <ng-container *ngIf="modeOfCategoryType === 'T' ">
+
+                                            <!--دارایی دراین مکان قرار دارد:-->
+                                            <div class="col-md-6">
+                                                <div class="card">
+                                                    <div class="card-body card-body-content">
+                                                        <div class="row">
+                                                            <div class="col-md-12  col-sm-12">
+                                                                <input type="checkbox" id="hasBuildingParentForTools"
+                                                                       class="cursor-pointer"
+                                                                       (click)="otherAssetSubset($event)">
+                                                                <label class="for-label cursor-pointer"
+                                                                       for="hasBuildingParentForTools"
+                                                                       style="margin-right: 7px">
+
+                                                                    این ابزار دراین سالن قرار دارد
+                                                                </label>
+                                                            </div>
+                                                            <ng-container *ngIf=" hasBuildingParentForTools ">
+                                                                <div class="col-md-12">
+                                                                    <button class="btn-sm btn-secondary btn"
+                                                                            type="button" (click)="openGetAllModal()"
+                                                                            *ngIf="!parentAssetB.name && !parentAssetB.code">
+                                                                        انتخاب سالن
+                                                                    </button>
+                                                                    <hr>
+                                                                    <ng-container
+                                                                            *ngIf="parentAssetB.name && parentAssetB.code">
+                                                                        <div class="col-md-12">
+                                                                            <div class="row">
+                                                                                <div class="col-md-6">
+                                                                                    <label>سالن انتخاب شده:</label>
+                                                                                </div>
+                                                                                <div class="col-md-6">
+                                                                                    <p> {{parentAssetB.name}}
+                                                                                        <!--
+                                                                                                             {{parentAssetB.code}}-->
+                                                                                        <i class="fa fa-trash"
+                                                                                           style="color: red;cursor: pointer"
+                                                                                           title="حذف"
+                                                                                           (click)="deleteParentAssetB()"></i>
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </ng-container>
+                                                                </div>
+                                                            </ng-container>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <!--این دارایی  قسمتی از این دستگاه است -->
+                                            <div class="col-md-6">
+                                                <div class="card">
+                                                    <div class="card-body card-body-content">
+                                                        <div class="row">
+                                                            <div class="col-md-12  col-sm-12">
+                                                                <input type="checkbox" id="hasFacilityParentForTools"
+                                                                       class="cursor-pointer"
+                                                                       (click)="hasParents($event)">
+                                                                <label class="for-label cursor-pointer"
+                                                                       for="hasFacilityParentForTools"
+                                                                       style="margin-right: 7px">
+                                                                    این ابزار بخشی از این تجهیز است
+                                                                </label>
+                                                            </div>
+                                                            <ng-container *ngIf=" hasFacilityParentForTools ">
+                                                                <div class="col-md-12">
+                                                                    <button class="btn-sm btn-secondary btn"
+                                                                            type="button" (click)="openGetAllModal()"
+                                                                            *ngIf="!parentAssetT.name && !parentAssetT.code">
+                                                                        انتخاب تجهیز
+                                                                    </button>
+                                                                    <hr>
+                                                                    <ng-container
+                                                                            *ngIf="parentAssetT.name && parentAssetT.code">
+                                                                        <div class="col-md-12">
+                                                                            <div class="row">
+                                                                                <div class="col-md-6">
+                                                                                    <label>دستگاه انتخاب شده:</label>
+                                                                                </div>
+                                                                                <div class="col-md-6">
+                                                                                    <p> {{parentAssetT.name}}
+                                                                                        <!--                                                                                        {{parentAssetB.code}}-->
+                                                                                        &nbsp;&nbsp;
+                                                                                        <i class="fa fa-trash"
+                                                                                           style="color: red;cursor: pointer"
+                                                                                           title="حذف"
+                                                                                           (click)="deleteParentAssetB()">
+                                                                                        </i>
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </ng-container>
+                                                                </div>
+                                                            </ng-container>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+
+                                </fieldset>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-left">
+                        <button class="btn btn-action btn-sm" type="submit">
+                            <span *ngIf="mode === actionMode.ADD">ثبت</span>
+                            <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                            <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-1x"></i>
+                        </button>
+                        <button class="btn btn-warning btn-sm" style="margin: 0 5px" type="button"
+                                *ngIf="mode === actionMode.EDIT"
+                                (click)="action(assetForm,'next')">
+                            مرحله بعد - تکمیل اطلاعات دارایی
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6 col-8 col-sm-6 card-title">
+                            تکمیل اطلاعات دارایی   {{assetEntity.name}}
+                        </div>
+                        <div class="col-md-6 col-4 col-sm-6 text-left">
+                            <button (click)="prev()"
+                                    class="btn btn-cancel-back btn-sm">
+                                بازگشت به مرحله قبل
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body card-body-content">
+                    <div class="col-md-12" style="padding: 0" *ngIf="menuStatus">
+                        <ul class="nav nav-tabs" role="navigation" style="text-align: right;padding-right: 0">
+                            <li class="nav-item  ">
+                                <!--                                اطلاعات پایه-->
+                                <!--                                <a href="#assetBaseInfo" style="color: #a0a0a0;font-size: 14px" class="nav-link active"-->
+                                <!--                                   data-toggle="tab" role="tab" aria-controls="assetBaseInfo"-->
+                                <!--                                   (click)="tabTitle='assetBaseInfo'">اطلاعات پایه</a>-->
+                                <!--                            </li>-->
+                                <!--                            منابع مصرفی-->
+                            <li class="nav-item">
+                                <a href="#ConsumedResources" style="color: #a0a0a0;font-size: 14px"
+                                   class="nav-link active"
+                                   data-toggle="tab" role="tab" aria-controls="ConsumedResources"
+                                   (click)="tabTitle='ConsumedResources';tabList[0]=true">منابع مصرفی</a>
+                            </li>
+                            <!--                            اطلاعات فنی -->
+                            <li class="nav-item">
+                                <a href="#TechnicalInformation" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab" role="tab" aria-controls="TechnicalInformation"
+                                   (click)="tabTitle='TechnicalInformation';tabList[1]=true">اطلاعات فنی </a>
+                            </li>
+                            <!--                            مشخصات فروشنده/سازنده-->
+                            <li class="nav-item">
+                                <a href="#Manufacturer" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab" role="tab" aria-controls="Manufacturer"
+                                   (click)="tabTitle='Manufacturer';tabList[2]=true">مشخصات فروشنده/سازنده</a>
+                            </li>
+                            <!--                           گارانتی-->
+                            <li class="nav-item">
+                                <a href="#warranty" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab" role="tab" aria-controls="warranty"
+                                   (click)="tabTitle='warranty';tabList[6]=true">گارانتی</a>
+                            </li>
+
+                            <!--                            قطعات یدکی-->
+                            <li class="nav-item">
+                                <a href="#BOM" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab" role="tab" aria-controls="BOM"
+                                   (click)="tabTitle='BOM';tabList[3]=true">قطعات یدکی</a>
+                            </li>
+                            <!--                            روانکارها-->
+                            <li class="nav-item">
+                                <a href="#Lubricant" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab" role="tab" aria-controls="Lubricant"
+                                   (click)="tabTitle='Lubricant';tabList[4]=true">روانکارها</a>
+                            </li>
+                            <!--                            مشخصات-->
+                            <!--                            <li class="nav-item">-->
+                            <!--                                <a href="#property" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+                            <!--                                   data-toggle="tab" role="tab" aria-controls="property"-->
+                            <!--                                   (click)="tabTitle='property'">مشخصات-->
+                            <!--                                </a>-->
+                            <!--                            </li>-->
+                            <!--                            پرسنل-->
+                            <!--                            <li class="nav-item">-->
+                            <!--                                <a href="#personel" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+                            <!--                                   data-toggle="tab" role="tab" aria-controls="personel"-->
+                            <!--                                   (click)="tabTitle='personel'">پرسنل</a>-->
+                            <!--                            </li>-->
+
+                            <!--                            کارکرد-->
+                            <!--                            <li class="nav-item">-->
+                            <!--                                <a href="#metering" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+                            <!--                                   data-toggle="tab" role="tab" aria-controls="metering"-->
+                            <!--                                   (click)="tabTitle='metering'">کارکرد</a>-->
+                            <!--                            </li>-->
+                            <!--                            گارانتی-->
+                            <!--                            <li class="nav-item">-->
+                            <!--                                <a href="#warranty" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+                            <!--                                   data-toggle="tab" role="tab" aria-controls="warranty"-->
+                            <!--                                   (click)="tabTitle='warranty'">گارانتی</a>-->
+                            <!--                            </li>-->
+
+                            <!--                            کسب و کار ها-->
+                            <!--                            <li class="nav-item">-->
+                            <!--                                <a href="#businessSupport" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+                            <!--                                   data-toggle="tab" role="tab" aria-controls="businessSupport"-->
+                            <!--                                   (click)="tabTitle='businessSupport'"> کسب و کار ها </a>-->
+                            <!--                            </li>-->
+                            <!--                            مستندات-->
+                            <li class="nav-item">
+                                <a href="#filed" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab"
+                                   role="tab" aria-controls="file"
+                                   (click)="tabTitle='filed';tabList[5]=true">مستندات</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <!--اطلاعات پایه-->
+                            <!--                            <div class="tab-pane fade active show" id="assetBaseInfo" role="tabpanel">-->
+                            <!--                                <app-asset-basic-information *ngIf="tabTitle==='assetBaseInfo'"-->
+                            <!--                                                             [assetId]="assetId"></app-asset-basic-information>-->
+                            <!--                            </div>-->
+
+                            <!--منابع مصرفی-->
+                            <div class="tab-pane fade  active show" id="ConsumedResources" role="tabpanel">
+                                <!--                                <ng-container *ngIf="tabTitle==='ConsumedResources'">-->
+                                <ng-container *ngIf="tabList[0]===true">
+                                    <app-consumed-resources [assetId]="assetId"
+                                                            [actionMode]="mode"></app-consumed-resources>
+                                </ng-container>
+                                <!--                                </ng-container>-->
+                            </div>
+                            <!--                            اطلاعات فنی -->
+                            <div class="tab-pane fade" id="TechnicalInformation" role="tabpanel">
+                                <!--                                <ng-container *ngIf="tabTitle==='TechnicalInformation'">-->
+                                <ng-container *ngIf="tabList[1]===true">
+                                    <app-technical-information [assetId]="assetId"
+                                                               [actionMode]="mode">
+                                    </app-technical-information>
+                                </ng-container>
+                                <!--                                </ng-container>-->
+                            </div>
+                            <!--                            مشخصات فروشنده/سازنده-->
+                            <div class="tab-pane fade" id="Manufacturer" role="tabpanel">
+                                <!--                                <ng-container *ngIf="tabTitle==='Manufacturer'">-->
+                                <ng-container *ngIf="tabList[2]===true">
+                                    <app-manufacturer [assetId]="assetId" [actionMode]="mode"></app-manufacturer>
+                                </ng-container>
+                                <!--                                </ng-container>-->
+                            </div>
+                            <!--                            گارانتی-->
+                            <div class="tab-pane fade" id="warranty" role="tabpanel">
+                                <!--                                <ng-container *ngIf="tabTitle==='Manufacturer'">-->
+                                <ng-container *ngIf="tabList[6]===true">
+                                    <app-warranty-tab [warrantyDate]="assetEntity.warrantyDate" [assetId]="assetId" [mode]="mode"></app-warranty-tab>
+                                </ng-container>
+                                <!--                                </ng-container>-->
+                            </div>
+                            <!--                            قطعات یدکی-->
+                            <div class="tab-pane fade" id="BOM" role="tabpanel">
+                                <!--                                <ng-container *ngIf="tabTitle==='BOM'">-->
+                                <ng-container *ngIf="tabList[3]===true">
+                                    <app-part-list-for-asset [assetId]="assetId"></app-part-list-for-asset>
+                                </ng-container>
+                                <!--                                </ng-container>-->
+                            </div>
+                            <!--                            روانکارها-->
+                            <div class="tab-pane fade" id="Lubricant" role="tabpanel">
+                                <!--                                <ng-container *ngIf="tabTitle==='BOM'">-->
+                                <ng-container *ngIf="tabList[4]===true">
+                                    <app-lubricant-tab [assetId]="assetId"
+                                                       [mode]="mode"></app-lubricant-tab>
+                                </ng-container>
+                                <!--                                </ng-container>-->
+                            </div>
+                            <!--                            مستندات-->
+                            <ng-container *ngIf="tabList[5]===true">
+                                <div class="tab-pane fade" id="filed" role="tabpanel">
+                                    <!--                                <ng-container *ngIf="tabTitle==='filed'">-->
+
+                                    <app-document [extraId]="assetId"
+                                                  (documents)="changeDocumentList($event)"></app-document>
+                                    <!--                                </ng-container>-->
+                                    <!--<div class="col-md-12 text-left">-->
+                                    <!--<button class="btn btn-action btn-sm" type="button" (click)="doSaveDocumentList()"-->
+                                    <!--style="margin-top: 10px; margin-left: -15px">-->
+                                    <!--ثبت اطلاعات-->
+                                    <!--</button>-->
+                                    <!--</div>-->
+                                    <!--                  <app-document-list-for-asset *ngIf="showDocumentList" [assetId]="assetId"></app-document-list-for-asset>-->
+                                </div>
+
+                            </ng-container>
+                            <ng-container>
+<!--                                -->
+<!--                            &lt;!&ndash;مشخصات&ndash;&gt;-->
+<!--                            <div class="tab-pane fade" id="property" role="tabpanel">-->
+<!--                                &lt;!&ndash;                                <ng-container *ngIf="tabTitle==='property'">&ndash;&gt;-->
+<!--                                <app-property-list-for-asset-->
+<!--                                        [assetId]="assetId"-->
+<!--                                        [assetPropertyListIn]="assetPropertyList"-->
+<!--                                        (assetPropertyListOut)="assetPropertyList=$event"-->
+<!--                                ></app-property-list-for-asset>-->
+<!--                                &lt;!&ndash;                                </ng-container>&ndash;&gt;-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash;پرسنل&ndash;&gt;-->
+<!--                            <div class="tab-pane fade" id="personel" role="tabpanel">-->
+<!--                                &lt;!&ndash;                                <ng-container *ngIf="tabTitle==='personel'">&ndash;&gt;-->
+<!--                                <app-user-list-for-asset [mode]="'asset'"-->
+<!--                                                         [entityId]="assetId"></app-user-list-for-asset>-->
+<!--                                &lt;!&ndash;                                </ng-container>&ndash;&gt;-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash;کارکرد&ndash;&gt;-->
+<!--                            <div class="tab-pane fade" id="metering" role="tabpanel">-->
+<!--                                &lt;!&ndash;                                <ng-container *ngIf="tabTitle==='metering'">&ndash;&gt;-->
+<!--                                <app-metering-list [refId]="assetId"></app-metering-list>-->
+<!--                                &lt;!&ndash;                                </ng-container>&ndash;&gt;-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash;گارانتی&ndash;&gt;-->
+<!--                            <div class="tab-pane fade" id="warranty" role="tabpanel">-->
+<!--                                &lt;!&ndash;                                <ng-container *ngIf="tabTitle==='warranty'">&ndash;&gt;-->
+<!--                                <app-warranty-list [type]="'asset'"-->
+<!--                                                   [assetId]="assetId"></app-warranty-list>-->
+<!--                                &lt;!&ndash;                                </ng-container>&ndash;&gt;-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash;شرکت های پشتیبان&ndash;&gt;-->
+<!--                            <div class="tab-pane fade" id="businessSupport" role="tabpanel">-->
+<!--                                &lt;!&ndash;                                <ng-container *ngIf="tabTitle==='businessSupport'">&ndash;&gt;-->
+<!--                                <app-company-list-for-asset-->
+<!--                                        [assetId]="assetId"></app-company-list-for-asset>-->
+<!--                                &lt;!&ndash;                                </ng-container>&ndash;&gt;-->
+<!--                            </div>-->
+                            </ng-container>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<app-tree-view [sendTypeGetAll]=" sendTypeGetAll" [mainAssetId]="assetEntity.id"
+               (parentAsset)="receiveParentAsset($event)"></app-tree-view>
+
+
+<!--/// مدال نمایش عکس//-->
+<nbw-modal
+        [hasHeader]="false"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.LARGE"
+        modalDialogCentered="true"
+        autoShow="false"
+        [myId]="'showImageModalAsset'">
+
+    <div modal-body class="row justify-content-center" style="padding: 0;margin: 0;">
+        <div class="col-5 text-center p-0 m-0"></div>
+        <div class="col-2 text-center p-0 m-0"
+             data-dismiss="modal"
+             style="    margin-top: 0; z-index: 1; position: fixed">
+            <span class="fa fa-times px-2 cursor-pointer"
+                  style="background-color: #ffffff99;
+                         color: #383030;
+                         padding: 6px;
+                         border-radius: 50%;">
+
+            </span>
+        </div>
+        <div class="col-5 text-center p-0 m-0"></div>
+        <div class="col-12 text-center p-0 m-0">
+
+            <img *ngIf="assetEntity?.image?.fileByte"
+                 style="border-radius: 4%;width: 100%"
+                 [src]="'data:image/jpg;base64,' + assetEntity.image.fileByte">
+        </div>
+    </div>
+</nbw-modal>
+<!--/// مدال نمایش عکس//-->

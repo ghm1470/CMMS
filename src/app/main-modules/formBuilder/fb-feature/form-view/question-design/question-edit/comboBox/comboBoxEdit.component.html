@@ -1,0 +1,180 @@
+<br>
+<div class="row">
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-body backShadow">
+          <form class="form-horizontal" [formGroup]="comboBoxForm">
+            <div class="row">
+              <input type="text" style="display: none" [placeholder]="comboBox.id" [(ngModel)]="comboBox.id"
+                     formControlName="id">
+            </div>
+            <div class="row form-group">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.questionTitle}}
+                  <span style="color: red">*</span>
+                </label>
+              </div>
+              <div class="col-md-12 text-left">
+                <textarea *ngIf="editingItem.newElement" rows="3" type="text" class="form-control"
+                          [placeholder]="editingItem.item.label"
+                          (keyup)="changeLabel($event.target.value)" #label formControlName="label">
+                </textarea>
+                <textarea *ngIf="!editingItem.newElement" rows="3" type="text" class="form-control"
+                          [(ngModel)]="comboBox.label" #label formControlName="label">
+                </textarea>
+                <p style="color: red" *ngIf="(saveButton || comboBoxForm.controls['label'].touched) && comboBox.label == '' ">
+                  {{data.errorMessages.labelRequired}}
+                </p>
+              </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.questionHelpText}}
+                </label>
+              </div>
+              <div class="col-md-12 text-left">
+                <input *ngIf="editingItem.newElement" type="text" class="form-control"
+                       [placeholder]="editingItem.item.helpText"
+                       (keyup)="changeHelpText($event.target.value)" #helpText formControlName="helpText">
+                <input *ngIf="!editingItem.newElement" type="text" class="form-control"
+                       [(ngModel)]="comboBox.helpText"
+                       #helpText formControlName="helpText">
+              </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="col-md-4 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.questionRequired}}</label>
+              </div>
+              <div class="col-md-8 text-left">
+                <div class="col-md-6 col-md-offset-3">
+                  <input type="checkbox" formControlName="required"  [(ngModel)]="comboBox.required" #required>
+
+                  <!--<input type="checkbox" class="form-control" [placeholder]="comboBox.required"-->
+                         <!--[(ngModel)]="comboBox.required" #required formControlName="required">-->
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="col-md-4 text-left">
+                <label class="control-label mt-3" *ngIf="data != null">{{data.formQuestion.questionOption}}</label>
+              </div>
+              <div class="col-md-6 text-left">
+                <button class="btn btn-sm btn-outline-secondary" (click)="createNewOption()" *ngIf="data != null">
+                  <i class="material-icons " ></i>&nbsp;&nbsp;
+                  <span>{{data.formQuestion.addOption}}</span>
+                </button>
+                <!--<button class="btn btn-block addButton" (click)="createNewOption()"-->
+                        <!--*ngIf="data != null">{{data.formQuestion.addOption}}-->
+                <!--</button>-->
+              </div>
+              <div class="col-md-2"></div>
+              <div *ngFor="let ch of optTest; let i = index" class="w-100">
+                <div class="col-md-12">
+                  <div class="w-100" *ngIf="i!=0">
+                    <input *ngIf="editingItem.newElement" type="text" class="form-control"
+                           [placeholder]="optTest[i].value" (change)="onChange($event.target.value,i)"
+                           name="value" #value>
+                    <input *ngIf="!editingItem.newElement" type="text" class="form-control"
+                           [value]="optTest[i].value" (change)="onChange($event.target.value,i)"
+                           name="value" #value>
+                    <img src="../../../../../../../../assets/images/close.png" class="btn-remove-img" *ngIf="i!=0" (click)="deleteOption(i)">
+                  </div>
+                </div>
+                <br>
+              </div>
+              <div class="col-md-12 text-left" *ngIf="!checkOptions() && saveButton">
+                <p style="color: red">
+                  {{data.errorMessages.optionRequired}}
+                </p>
+              </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.comboPlaceholderTitle}}
+                </label>
+              </div>
+              <div class="col-md-12 text-left">
+                <input type="text" class="form-control" [placeholder]="editingItem.item.placeHolder"
+                       (ngModelChange)="changePlaceHolder($event)"
+                       formControlName="placeHolder" #placeHolder>
+              </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="w-100">
+                <button class="btn btn-sm btn-cancel-back" style="margin-top: 10px!important;" (click)="close()" *ngIf="data != null">
+                  <span>{{data.public.close}}</span>
+                </button>
+              <button class="btn btn-sm btn-action"  style="margin-top: 10px!important;" (click)="save()" *ngIf="data != null">
+                  <span>{{data.public.save}}</span>
+                </button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-body backShadow">
+          <div class="col-md-12 text-right" *ngIf="data != null">
+            <h4>{{data.formQuestion.questionTitle}}:</h4>
+            <span>{{comboBox.label}}</span>
+            <span style="color: red" *ngIf="comboBox.required">*</span>
+            <a class="toolTipColor" [title]="comboBox.helpText">
+              <i class="fa fa-info-circle"></i>
+            </a>
+          </div>
+
+          <!--questionTitle image-->
+          <!--<div class="col-md-12">-->
+            <!--<br>-->
+            <!--<div class="col-md-6">-->
+              <!--<input type="file" accept="image/*" id="image" class="upload" (change)="settingQuestionImage($event)"/>-->
+            <!--</div>-->
+            <!--<div class="col-md-6" *ngIf="comboBox.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE">-->
+              <!--<img style="width:200px; border-radius: 7px" [attr.src]="comboBox.picture.imageData">-->
+              <!--<i class="fa fa-times" aria-hidden="true" style="color: red " (click)="deleteQuestionImage()"></i>-->
+            <!--</div>-->
+          <!--</div>-->
+          <div class="col-md-12">
+            <hr>
+          </div>
+
+          <div class="col-md-12 text-right">
+            <h4 *ngIf="data != null">{{data.formQuestion.questionOption}}</h4>
+          </div>
+          <div class="col-md-6 text-right">
+            <select class="form-control">
+              <option *ngFor="let opt of optTest" [value]="opt.value"> {{opt.value}}</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+<!--<div class="row form-group">-->
+<!--<div class="col-md-12 text-right">-->
+<!--<label class="control-label">نوع چندگزینه ای</label>-->
+<!--</div>-->
+<!--<div class="col-md-6 text-center">-->
+<!--<input type="radio" value="MULTIPLE" name="radiogroup"-->
+<!--(click)="onChangeRadio($event.target.value)"-->
+<!--[checked]="comboBox.optionType === multiple">&nbsp;&nbsp;چند انتخابی-->
+<!--</div>-->
+<!--<div class="col-md-6 text-center">-->
+<!--<input type="radio" value="SINGLE" name="radiogroup" (click)="onChangeRadio($event.target.value)"-->
+<!--[checked]="comboBox.optionType === single">&nbsp;&nbsp;تک انتخابی-->
+<!--</div>-->
+<!--</div>-->
+<!--<hr>-->

@@ -1,0 +1,145 @@
+<ng-container>
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6 col-8 col-sm-6 card-title">
+                    <i class="fa fa-list"></i>&nbsp;&nbsp;
+                    ارزیابی پرسنل
+                </div>
+            </div>
+        </div>
+        <div class="card-body card-body-content">
+
+            <div class="collapse active show" id="work-search">
+                <div class="card" style="margin-bottom: 10px">
+                    <div class="card-body card-body-filter">
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <label class="for-label">نام کاربر </label>
+                                <ng-select bindLabel="name" bindValue="id"
+                                           [items]="userList"
+                                           [clearable]="false"
+                                           (change)="averagePointOfPersonnel($event.id)"
+                                           [(ngModel)]="selectedUserId"
+                                           [loading]="loadingGetUsers"
+                                           [placeholder]="'نام کاربر'"></ng-select>
+                            </div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-5">
+                                <div class="row justify-content-end m-0">
+
+                                    <ng-container *ngIf=" entityList.length>0">
+                                        <div class="col-md-1 col-6 text-left" style="margin-top: 30px;">
+                                            <ng-container *ngIf="!loadingOpenPdf">
+                                                <img src="assets/images/pdf-download.png" class=" cursor-pointer"
+                                                     (click)="openPDF()"
+                                                     matTooltip="دانلود گزارش به صورت pdf"
+                                                     style="    width: 30px;border-radius: 20%; height: 30px;">
+                                            </ng-container>
+                                            <ng-container *ngIf="loadingOpenPdf">
+                                                <span class="fa fa-spinner fa-spin ml-2"
+                                                      matTooltip="درحال ایجاد فایل pdf"
+                                                ></span>
+                                            </ng-container>
+
+                                        </div>
+                                        <div class="col-md-1 col-6 text-right" style="margin-top: 30px;">
+                                            <img src="assets/images/excel.PNG" class=" cursor-pointer"
+                                                 (click)="fireEvent()"
+                                                 matTooltip="دانلود گزارش به صورت excel"
+                                                 style="    width: 30px;border-radius: 20%; height: 30px;">
+
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="loading-get-one text-center" *ngIf="loading">
+                <span class="mt-5 px-4  align-items-center d-inline-flex">
+                  <span class="fa fa-spinner fa-spin ml-2"></span>
+                  درحال بارگذاری
+                </span>
+            </div>
+
+            <ng-container>
+                <table class="table table-bordered table-striped " id="htmlData"
+                       style=" word-wrap: normal!important;">
+                    <thead>
+                    <tr style="text-align: center">
+                        <th class="text-center">ردیف</th>
+                        <th class="text-center cursor-pointer" (click)="sort('name')"> نام کاربر
+                            <i class="fa fa-sort"></i>
+                        </th>
+                        <th class="text-center cursor-pointer" (click)="sort('average')"> امتیاز
+                            <i class="fa fa-sort"></i>
+                        </th>
+                        <!--                        <th class="text-center" style="width: 15%">مشاهده جزئیات</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngIf="!entityList.length&&loading===false">
+                        <td colspan="5">
+
+                            <div class="col-md-12 text-center">
+                                <a style="color: #7884a7;    margin: 20px;">نتیجه ای یافت نگردید.</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <ng-container *ngFor="let item of entityList; let i = index">
+                        <tr class="text-center">
+                            <td class="text-center">
+                                {{i + 1}}
+                            </td>
+                            <td class="text-center" style="direction: ltr" >
+                                {{item?.userName + ' ' + item?.userFamily}}
+                            </td>
+
+                            <td class="text-center" >
+                                {{item.average |EnToFa}}
+                            </td>
+
+                            <!--                            <td class="text-center">-->
+                            <!--                                <i class="fa fa-eye cursor-pointer" title="مشاهده جزئیات تغییر"-->
+                            <!--                                   (click)="showDetail(item)"-->
+                            <!--                                ></i>-->
+                            <!--                            </td>-->
+                        </tr>
+                    </ng-container>
+                    </tbody>
+                </table>
+
+
+            </ng-container>
+
+
+        </div>
+    </div>
+
+</ng-container>
+
+
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="true"
+        [dataBackdrop]="true"
+        (onClose)="showModalBody=false"
+        [modalSize]="MyModalSize.CUSTOM_WIDTH"
+        [customWidthPercent]="{xs: 120, md:65}"
+        autoShow="true"
+        [myId]="modalId">
+    <div modal-header>
+        جزئیات
+    </div>
+    <div modal-body style="display: flow-root" *ngIf="showModalBody">
+
+
+    </div>
+
+</nbw-modal>

@@ -1,0 +1,260 @@
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.X_LARGE"
+        autoShow="false"
+        (onClose)="onCloseModal()"
+        [myId]="'taskModal'">
+    <div modal-header>
+        <div class="col-lg-12">
+            <div class="modal-title">
+                <ng-container>
+                    <span *ngIf="mode === actionMode.ADD"> افزودن کار</span>
+                    <span *ngIf="mode === actionMode.EDIT"> ویرایش کار</span>
+                    <span *ngIf="mode === actionMode.VIEW"> مشاهده کار</span>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+    <div modal-body>
+        <form id="formsTask" #taskForm="ngForm">
+            <div class="modal-body" style="display: flow-root; padding: 15px;border-radius: 5px" *ngIf="showModalBody">
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3 form-group required col-sm-12">
+                            <label class="for-label"> عنوان کار:</label>
+                            <label style="color: red">*</label>
+                            <div class="input-group input-group-sm">
+<!--                                       nbvPattern="{{myPattern.TITLEFa}}"-->
+                                <input type="text" placeholder="عنوان مجموعه دستور کار" [(ngModel)]="task.title"
+                                       [disabled]="mode === actionMode.VIEW"
+                                       class="form-control" maxlength="80" name="name1" #name1="ngModel"
+                                       nbvRequired nbvMinlength="1"
+                                       nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."
+                                       (change)="task.title = task.title.trim()"
+                                       [class.is-valid]="!(name1?.errors?.nbvRequired || name1?.errors?.nbvMinlength || name1?.errors?.nbvPattern)"
+                                       [class.is-invalid]="(name1?.errors?.nbvRequired || name1?.errors?.nbvMinlength || name1?.errors?.nbvPattern) && (name1.touched || doSave)"
+                                       dest="name1Validation">
+                            </div>
+                            <div id="name1Validation"></div>
+                        </div>
+
+                        <div class="col-md-3 form-group required col-sm-12">
+                            <label class="for-label"> کد کار:</label>
+<!--                            <label style="color: red">*</label>-->
+                            <div class="input-group input-group-sm">
+<!--                                       (change)="changeAssetCode()"-->
+<!--                                       [class.is-valid]="!(code?.errors?.nbvRequired || code?.errors?.nbvPattern)"-->
+                                <input type="text" placeholder="کد کار" [(ngModel)]="task.code"
+                                       [disabled]="mode === actionMode.VIEW"
+                                       class="form-control" minlength="1" maxlength="80" name="code"
+                                        #code="ngModel"
+                                       nbvPattern="{{myPattern.EnNumberAndAlphabetic}}"
+                                       nbvPatternMsgHtml="کد کار باید به صورت کاراکتر های انگلیسی وارد گردد."
+                                       [class.is-invalid]="(code?.errors?.nbvRequired || code?.errors?.nbvPattern) && (code.touched || doSave)"
+                                       dest="taskCodeValidation">
+                            </div>
+                            <div id="taskCodeValidation"></div>
+                        </div>
+                        <div class="col-md-3 form-group required col-sm-12">
+                            <label class="control-label" style="font-size: 12px">نوع کار :</label>
+                            <div class="input-group input-group-sm">
+                                <ng-select dir="rtl" [(ngModel)]="task.taskType" name="projectId"
+                                           placeholder="انتخاب نوع کار " style="width: 100%;"
+                                           [disabled]="mode === actionMode.VIEW"
+                                           dropdownPosition="bottom">
+                                    <ng-option value="-1" disabled>نوع کار</ng-option>
+                                    <ng-option *ngFor="let item of taskTypeList; let i = index"
+                                               [value]="item._value">
+                                        {{item._title}}
+                                    </ng-option>
+                                </ng-select>
+                                <!--<ng-select *ngIf="modeView === actionMode.VIEW || mode !== actionMode.VIEW" dir="rtl" [(ngModel)]="task.taskType" name="projectId"-->
+                                <!--[disabled]="true"-->
+                                <!--placeholder="انتخاب پروژه" style="width: 100%;"-->
+                                <!--dropdownPosition="bottom">-->
+                                <!--<ng-option value="-1" disabled>پروژه</ng-option>-->
+                                <!--<ng-option *ngFor="let item of taskTypeList; let i = index"-->
+                                <!--[value]="item._value">-->
+                                <!--{{item._title}}-->
+                                <!--</ng-option>-->
+                                <!--</ng-select>-->
+
+                            </div>
+                            <div id="taskTypeValidation" style="opacity: 0; height: 0"></div>
+                        </div>
+
+                        <div class="col-md-3 form-group required col-sm-12">
+                            <label class="control-label" style="font-size: 12px">
+                                تخمین نفر ساعت :
+                                <label style="color: red"></label>
+
+                            </label>
+                            <div class="input-group input-group-sm">
+<!--                                       [class.is-valid]="!(timeEstimate?.errors?.nbvRequired || timeEstimate?.errors?.nbvPattern)"-->
+                                <input class="form-control form-control-sm" type="text"
+                                       [disabled]="mode === actionMode.VIEW" placeholder="تخمین نفر ساعت"
+                                       nbvPattern="{{myPattern.number}}"
+                                       #timeEstimate="ngModel"
+                                       [(ngModel)]="task.timeEstimate"
+                                       id="timeEstimate"
+                                       name="timeEstimate"
+                                       nbvPatternMsgHtml="تخمین نفر ساعت باید به صورت عدد وارد گردد."
+                                       [class.is-invalid]="(timeEstimate?.errors?.nbvRequired || timeEstimate?.errors?.nbvPattern) && (timeEstimate.touched || doSave)"
+                                       dest="amountValidation">
+                            </div>
+                            <div id="amountValidation"></div>
+                        </div>
+
+                    </div>
+                    <!--            <div class="row">-->
+                    <!--             -->
+                    <!--            </div>-->
+                </div>
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12 form-group required">
+                            <label class="control-label" style="font-size: 12px">توضیحات :</label>
+                            <textarea class="form-control form-control-sm" placeholder="توضیحات کار"
+                                      [disabled]="mode === actionMode.VIEW"
+                                      [(ngModel)]="task.description"
+                                      name="description">
+                </textarea>
+                        </div>
+                        <div id="descriptionValidation"></div>
+                    </div>
+                </div>
+                <!--[typeahead]="postTypeInput"-->
+
+                <fieldset class="scheduler-border" id="comapny-documents" style="background-color: #f5f5f5">
+                    <legend class="scheduler-border"><h6>
+                        {{modeView !== actionMode.VIEW ? 'انتخاب' : ''}}
+
+                        کاربران</h6></legend>
+
+                    <!--            <app-loading-spinner [loadingList]="true" *ngIf="loading" ></app-loading-spinner>-->
+
+                    <div class="col-md-12">
+                        <ng-container *ngIf="modeView!== actionMode.VIEW">
+                            <!--////////////////////////////////////////////////////////////////////////////////-->
+                            <div class="row">
+                                <!--                        ///پست-->
+
+                                <div class="col-md-4 form-group required col-sm-12">
+                                    <label class="for-label">انتخاب پست </label>
+                                    <span style="color: red">*</span>
+                                    <div class="input-group input-group-sm">
+                                        <ng-select
+                                                style="width: 100%"
+                                                [loading]="loadingUserTypeList2"
+                                                class="auto-grow"
+                                                bindLabel="name"
+                                                bindValue="id"
+                                                (change)="changeUserType($event)"
+                                                [items]="userTypeList2"
+                                                [placeholder]="'عنوان پست'">
+
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <!--                        ///کاربر-->
+                                <div class="col-md-4 form-group required col-sm-12">
+                                    <label class="for-label">انتخاب کاربر </label>
+                                    <span style="color: red">*</span>
+                                    <div class="input-group input-group-sm">
+
+                                        <!--                                <ng-container *ngIf="!loadingUserList">-->
+                                        <ng-select
+                                                style="width: 100%"
+                                                [(ngModel)]="parentUserId2"
+                                                name="parentUserId"
+                                                class="auto-grow"
+                                                (scrollToEnd)="getAllUsersOfUserType()"
+                                                [loading]="loadingUserList2"
+                                                [placeholder]="'انتخاب کاربر'">
+                                            <ng-container *ngFor="let user of userList2; let i= index ">
+
+                                                <ng-option
+                                                        [value]="user.id">
+                                                    {{user.name + '  ' + user?.family}}
+                                                    <!--                                            {{' ( ' + user.userTypeName + ' )  ' }}-->
+                                                </ng-option>
+                                            </ng-container>
+
+                                        </ng-select>
+                                    </div>
+                                    <div id="parentUserIdValidation" style="opacity: 0; height: 0"></div>
+                                </div>
+                                <div class="col-md-2" style="margin-top: 30px">
+                                    <button class="btn  btn-sm" style="background-color: #042C76; color: white;"
+                                            (click)="selectUser()"
+                                    >
+                                        <span>ثبت</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!--////////////////////////////////////////////////////////////////////////////////-->
+
+                            <br>
+                        </ng-container>
+                        <div class="col-md-12" *ngIf="users.length===0">
+                            <div style="text-align: center">کاربری انتخاب نشده است.
+                            </div>
+                        </div>
+                        <i *ngIf="loadingGetUsers" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+                        <div class="col-md-12" *ngIf="users.length && users.length>0">
+                            <table class="table table-striped table-bordered table-responsive-md">
+                                <thead>
+                                <tr>
+                                    <td class="text-center" style="width: 5%">ردیف</td>
+                                    <td class="text-center" style="width: 30%">نام</td>
+                                    <td class="text-center" style="width: 30%">نام خانوادگی</td>
+                                    <td class="text-center" style="width: 30%">پست</td>
+                                    <td class="text-center" style="width: 5%"
+                                        *ngIf="modeView!== actionMode.VIEW  &&  mode!== actionMode.VIEW">حذف
+                                    </td>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr *ngFor="let item of users;let i = index">
+                                    <th class="text-center" style="width: 5%">{{i + 1}}</th>
+                                    <td class="text-center" style="width: 30%">{{item?.name}}</td>
+                                    <td class="text-center" style="width: 30%">{{item?.family}}</td>
+                                    <td class="text-center" style="width: 30%">{{item?.userTypeName}}</td>
+                                    <td class="text-center" style="width: 5%"
+                                        *ngIf="modeView!== actionMode.VIEW &&  mode!== actionMode.VIEW">
+                                        <i class="fa fa-trash" (click)="deleteUser2(item.id)"
+                                           style="cursor: pointer;"></i>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </fieldset>
+
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group-sm">
+                    <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal"
+                            style="margin :0 5px "
+                            (click)="cancelModal()">
+                        بستن
+                    </button>
+                    <button *ngIf="modeView!== actionMode.VIEW &&   mode!== actionMode.VIEW" type="button"
+                            class="btn btn-action btn-sm"
+                            (click)="changeTaskCode(taskForm)">
+                        <span *ngIf="mode === actionMode.ADD">ثبت</span>
+                        <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                        <i *ngIf="loading||loadingChangeTaskCode" class="fa fa-spinner fa-pulse fa-1x"></i>
+
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</nbw-modal>

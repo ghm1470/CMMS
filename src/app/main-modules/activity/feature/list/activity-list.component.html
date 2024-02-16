@@ -1,0 +1,160 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                <i class="fa fa-list"></i>&nbsp;&nbsp;
+                <span>مدیریت فرایند ها</span>
+
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <button title="جستجو" data-toggle="collapse" href="#activity-search"
+                        class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">
+                    <i class="fa fa-search"></i>
+                </button>
+
+                <!--///// افزودن-->
+                <ng-container>
+                    <ng-container *ngIf="roleList.processBuilder_create;else notAccessCreateTemp">
+                        <button
+                                [routerLink]="['/panel/activity/create']"
+                                class="btn btn-secondary btn-sm">
+                            <i class="fa fa-plus"></i>
+                            <span class="d-none d-sm-inline d-sm-inline">
+            &nbsp;&nbsp;
+            افزودن
+            </span>
+                        </button>
+                    </ng-container>
+                    <ng-template #notAccessCreateTemp>
+                        <button style="cursor: not-allowed"
+                                class="btn btn-secondary btn-sm">
+                            <i class="fa fa-plus"></i>
+                            <span class="d-none d-sm-inline d-sm-inline">
+            &nbsp;&nbsp;            افزودن
+            </span>
+                        </button>
+                    </ng-template>
+                </ng-container>
+                <!--///// افزودن!!!!-->
+
+            </div>
+        </div>
+    </div>
+    <div class="card-body card-body-content">
+        <div class="collapse" id="activity-search">
+            <div class="card" style="margin-bottom: 10px">
+                <div class="card-body card-body-filter">
+                    <div class="row">
+                        <div class=" col-md-5 form-group">
+                            <label class="for-label">عنوان:</label>
+                            <div class=" input-group input-group-sm">
+                                <input type="text" placeholder="عنوان" [(ngModel)]="term"
+                                       class="form-control" minlength="3" maxlength="20" name="name"
+                                >
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-sm  btn-search" style=" margin-top: 30px;"
+                                    (click)="search()">
+                                جستجو
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+        <ng-container *ngIf="! entityList.length && loading === false">
+            <div style="text-align: center">نتیجه ای یافت نشد.</div>
+        </ng-container>
+        <ng-container *ngIf=" entityList.length">
+            <table class="table table-bordered table-striped table-responsive-md">
+                <thead>
+                <tr style="text-align: center">
+                    <th class="text-center" style="width: 15%">ردیف</th>
+                    <th class="text-center">عنوان فرایند</th>
+                    <th class="text-center" style="width: 15%">ویرایش</th>
+                    <th class="text-center" style="width: 10%">مشاهده</th>
+                    <th class="text-center" style="width: 15%">حذف</th>
+                </tr>
+                </thead>
+                <tbody>
+                <ng-container *ngFor="let item of entityList; let i = index">
+                    <tr class="text-center">
+                        <td>
+                            {{(i + 1 + (pageIndex * pageSize))}}
+                        </td>
+                        <td>{{tools.Fa2En(item?.title)}}</td>
+                        <td>
+                            <ng-container *ngIf="roleList.processBuilder_edit;else notEditAccessTemp">
+                                <a
+                                   [class]="loadingChooseSelectedItemForEdit?'btn btn-sm btn-outline-lightning rounded-0 mr-2 disabled':
+                                   'btn btn-sm btn-outline-lightning rounded-0 mr-2'"
+                                   (click)="chooseSelectedItemForEdit(item)"
+                                   style="cursor: pointer ; font-weight: bold">
+                                    <i class="fa fa-edit" title="ویرایش"></i>
+                                    <i *ngIf="loadingChooseSelectedItemForEdit&&
+                                    SelectedItemForEditId===item.id" class="fa fa-spinner fa-pulse fa-1x"></i>
+
+                                </a>
+                            </ng-container>
+                            <ng-template #notEditAccessTemp>
+                                <i class="fa fa-edit" title="ویرایش" style="cursor: no-drop"></i>
+                            </ng-template>
+                        </td>
+                        <td>
+                            <ng-container *ngIf="roleList.processBuilder_detail;else notSeeAccessTemp">
+                                <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                   [routerLink]="['/panel/activity/view', item.id]" style="cursor: pointer ">
+                                    <i class="fa fa-eye" title="مشاهده"></i>
+                                </a>
+                            </ng-container>
+                            <ng-template #notSeeAccessTemp>
+                                <i class="fa fa-eye" title="مشاهده" style="cursor: no-drop"></i>
+                            </ng-template>
+                        </td>
+                        <td>
+                            <ng-container *ngIf="roleList.processBuilder_delete;else notDeleteAccessTemp">
+                                <a class="btn btn-sm btn-outline-lightning rounded-0"
+                                   style="cursor: pointer"
+                                   (click)="showModalDelete(item,i)"
+                                >
+                                    <i class="fa fa-trash" title="حذف"></i>
+                                    <i *ngIf="loadingChooseSelectedItemForDelete&&
+                                    SelectedItemForEditId===item.id" class="fa fa-spinner fa-pulse fa-1x"></i>
+                                </a>
+                            </ng-container>
+                            <ng-template #notDeleteAccessTemp>
+                                <i class="fa fa-trash" style="cursor: no-drop" title="حذف"></i>
+                            </ng-template>
+                        </td>
+                    </tr>
+                </ng-container>
+
+                </tbody>
+            </table>
+        </ng-container>
+
+        <!--    pagination-->
+        <app-paginator
+                [totalElements]="length"
+                [pageSize]="pageSize"
+                [pageIndex]="pageIndex"
+                [pageSizeOptions]="[]"
+                [showFirstLastButtons]="true"
+                (page)=" changePage($event)"
+        ></app-paginator>
+        <!--    pagination-->
+
+    </div>
+</div>
+
+
+<app-conferm-delete
+        [title]="selectedItemForDelete.title"
+        [loading]="selectedItemForDelete.loading"
+        [modalId]="'modalId'+selectedItemForDelete.id"
+        (value)="deleteItem($event)"
+></app-conferm-delete>

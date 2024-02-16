@@ -1,0 +1,28 @@
+<!--<div class="pagination" *ngIf="count > 0">-->
+  <!--<div>-->
+    <!--<ul class="breadcrumb">-->
+      <!--<li>-->
+        <!--<button class="paginationBtnPrev" (click)="onPrev()" [disabled]="page === 1 || loading">-->
+          <!--<i class="fa fa-angle-double-right fa-1x" aria-hidden="true"></i>-->
+          <!--قبلی-->
+        <!--</button>-->
+      <!--</li>-->
+      <!--<li>-->
+        <!--<button class="paginationBtn" *ngFor="let pageNum of getPages()" (click)="onPage(pageNum)">{{pageNum | perNumber}}</button>-->
+      <!--</li>-->
+      <!--<li>-->
+        <!--<button class="paginationBtnNext" (click)="onNext()" [disabled]="lastPage() || loading">-->
+          <!--بعدی-->
+          <!--<i class="fa fa-angle-double-left fa-1x" aria-hidden="true"></i>-->
+        <!--</button>-->
+      <!--</li>-->
+    <!--</ul>-->
+  <!--</div>-->
+  <!--<div>-->
+  <!--<span class="paginationExplanation">-->
+    <!--&lt;!&ndash;از{{ getMin() }}&ndash;&gt;-->
+    <!--&lt;!&ndash;تا {{ getMax() }} &ndash;&gt;-->
+    <!--تعداد کل {{count | perNumber }} صفحه {{page| perNumber}} از-->
+    <!--{{totalPages() | perNumber}}</span>-->
+  <!--</div>-->
+<!--</div>-->

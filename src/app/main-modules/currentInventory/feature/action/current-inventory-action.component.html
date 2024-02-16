@@ -1,0 +1,395 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                <ng-container *ngIf="mode === actionMode.ADD">
+                    <i class="fa fa-plus"></i>&nbsp;
+                    افزودن موجودی
+                </ng-container>
+                <ng-container *ngIf="mode === actionMode.EDIT">
+                    <i class="fa fa-edit"></i>&nbsp;
+                    ویرایش موجودی
+                    {{ inventory.partName }}
+                </ng-container>
+
+                <ng-container *ngIf="mode === actionMode.VIEW">
+                    <i class="fa fa-eye"></i>&nbsp;
+                    نمایش موجودی
+                    {{ inventory.partName }}
+
+                </ng-container>
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <button (click)="cancel()"
+                        class="btn btn-cancel-back btn-sm">
+                    بازگشت
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <form #InventoryS="ngForm" (submit)="checkInventoryCode(InventoryS)">
+        <div class="card-body card-body-content">
+            <ng-container *ngIf="existLocation === true">
+                <hr style="margin: 0">
+                <p style="margin-top: 25px ; font-size: 12px ; background-color: #ff3e4c">شما در حال تلاش برای ذخیره
+                    مکان موجودی
+                    جدید {{inventory.inventoryLocationName}} (راهرو: {{inventory.corridor}} ، ردیف: {{inventory.row}}
+                    ،
+                    انبارک: {{inventory.warehouse}}) هستید که در حال حاضر برای این قسمت وجود دارد. شما می توانید به شرح
+                    زیر اقدام
+                    کنید:<br>
+                    1) یک راهرو / سطر / سطل متفاوت اضافه کنید تا این مکان مشخص شود<br>
+                    2) یک مکان متفاوت را انتخاب کنید<br>
+                    3) این فرم را ببندید و اصل را به روز کنید....<br>
+                <hr style="margin: 0">
+            </ng-container>
+
+            <div class="row">
+                <div class="col-md-12" *ngIf="mode === actionMode.ADD">
+                    <fieldset class="scheduler-border" id="comapny-documents-add" style="background-color: #f5f5f5">
+                        <legend class="scheduler-border"><h6>قطعه</h6></legend>
+
+                        <div class="col-md-3  form-group">
+                            <label class="for-label">نام قطعه</label>
+                            <ng-select bindLabel="name" bindValue="id"
+                                       name="partId"
+                                       [disabled]="mode !== actionMode.ADD"
+                                       [items]="partList"
+                                       (search)="execSearch($event)"
+                                       (change)="execSearch($event)"
+                                       [loading]="loadingExecSearch"
+                                       [(ngModel)]="inventory.partId"
+                                       (scrollToEnd)="getAllPart()"
+                                       [placeholder]="'نام قطعه'">
+
+
+                                <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                                    <div class="ng-option disabled" *ngIf="searchTerm">
+                                        قطعه ای با عنوان
+                                        " {{searchTerm}} "
+                                        یافت نشد.
+                                    </div>
+                                </ng-template>
+                                <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+                                    <div class="ng-option disabled" *ngIf="searchTerm">
+                                        جستجو برای عنوان
+                                        "   {{searchTerm}} "
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+
+
+                        <!--                        <legend class="scheduler-border"><h6>قطعه</h6></legend>-->
+                        <!--                        <div class="row">-->
+                        <!--                            <div class="col-md-2 col-sm-2 col-12"-->
+                        <!--                                 *ngIf="mode === actionMode.ADD || mode === actionMode.EDIT ">-->
+                        <!--                                <button type="button" class="btn btn-outline-secondary btn-sm"-->
+                        <!--                                        *ngIf="!inventory.partName" (click)="openModal()">انتخاب قطعه-->
+                        <!--                                </button>-->
+                        <!--                            </div>-->
+                        <!--                            <div class="col-md-5 col-sm-5 col-12" *ngIf="inventory.partName">-->
+                        <!--                                <div class="form-group ">-->
+                        <!--                                    <label style="font-size: 12px">نام قطعه:</label>-->
+                        <!--                                    &nbsp;&nbsp;-->
+                        <!--                                    <strong>-->
+                        <!--                                        {{inventory.partName}}-->
+                        <!--                                    </strong>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                            <div class="col-md-5 col-sm-5 col-12" *ngIf="inventory.partName">-->
+                        <!--                                <div class="form-group ">-->
+                        <!--                                    <label style="font-size: 12px">کدقطعه:</label>-->
+                        <!--                                    &nbsp;&nbsp;-->
+                        <!--                                    <strong>-->
+                        <!--                                        {{inventory.partCode}}-->
+                        <!--                                    </strong>-->
+                        <!--                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+                        <!--                                    <i class="fa fa-trash" style="color: red ; cursor: pointer"-->
+                        <!--                                       *ngIf="mode === actionMode.ADD" (click)="deleteInventory()"></i>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                    </fieldset>
+                </div>
+                <ng-container *ngIf="inventory.partId">
+                    <div class="col-md-12" style="    max-height: 65vh;overflow: auto;">
+                        <fieldset class="scheduler-border" id="comapny-documents" style="background-color: #f5f5f5">
+                            <legend class="scheduler-border"><h6>موجودی</h6></legend>
+                            <div class="row">
+                                <!--                            شماره رسید-->
+
+                                <div class=" col-md-3 col-sm-3">
+                                    <div class="form-group ">
+                                        <label for="receiptNumber" style="font-size: 12px">شماره رسید</label>
+                                        <i class="fa fa-spinner  fa-pulse fa-1x loadingSearch"
+                                           *ngIf="checkInventoryCodeLoading"></i>
+
+                                        <ng-container *ngIf="mode!== actionMode.VIEW">
+                                            <input type="text" class="form-control form-control-sm input-p"
+                                                   id="receiptNumber"
+                                                   placeholder="شماره رسید" #receiptNumber="ngModel"
+                                                   [(ngModel)]="inventory.receiptNumber" name="receiptNumber"
+                                                   autocomplete="off"
+                                                   nbvRequiredMsgHtml="تکمیل فیلد الزامی است"
+                                                   [nbvPattern]="myPattern.EnNumberAndAlphabetic"
+                                                   nbvPatternMsgHtml="کد موجودی باید به صورت اعداد و حروف انگلیسی وارد گردد."
+                                                   [class.is-valid]="!(receiptNumber?.errors?.nbvRequired ||
+                                               receiptNumber?.errors?.nbvPattern)"
+                                                   [class.is-invalid]="(receiptNumber?.errors?.nbvRequired ||
+                                               receiptNumber?.errors?.nbvPattern) && (receiptNumber.touched || doSave)"
+                                                   dest="receiptNumberValidation">
+                                        </ng-container>
+                                        <ng-container *ngIf="mode=== actionMode.VIEW">
+                                            <p style="background-color: rgb(229, 225, 216)"
+                                               class="form-control form-control-sm"
+                                            > {{inventory.receiptNumber}}
+                                            </p>
+                                        </ng-container>
+                                    </div>
+                                    <div id="receiptNumberValidation" style="opacity: 0; height: 0"></div>
+                                </div>
+                                <!--                            ورودی / خروجی-->
+                                <ng-container *ngIf="mode!== actionMode.VIEW">
+                                    <div class=" col-md-3 col-sm-3">
+                                        <div class="form-group mb-0 ">
+                                            <label for="quantity" style="font-size: 12px"> ورودی / خروجی </label>
+
+                                            <!--                                                   nbvPattern="{{myPattern.number}}"-->
+                                            <div class="row">
+                                                <div class=" col-10">
+                                                    <input type="number" class="form-control form-control-sm input-p"
+                                                           id="newCurrentQuantity"
+                                                           autocomplete="off" placeholder="ورودی / خروجی  "
+                                                           [disabled]="mode===actionMode.VIEW"
+                                                           name="newCurrentQuantity"
+                                                           [(ngModel)]="newCurrentQuantity"
+                                                    >
+                                                </div>
+                                                <div class=" col-2">
+                                                    <i class="fa fa-arrow-left cursor-pointer"
+                                                       matTooltip="افزودن به موجودی"
+                                                       (click)="changeNewCurrentQuantity()"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+                                <!--                            موجودی در دسترس-->
+                                <div class=" col-md-3 col-sm-3">
+                                    <div class="form-group mb-0 ">
+                                        <label for="quantity" style="font-size: 12px"> موجودی در دسترس </label>
+                                        <label style="color: red">*</label>
+                                        <ng-container *ngIf="mode!== actionMode.VIEW">
+                                            <input type="number" class="form-control form-control-sm input-p"
+                                                   id="quantity"
+                                                   autocomplete="off" placeholder="موجودی در دسترس  "
+                                                   [ngModel]="inventory.currentQuantity"
+                                                   disabled
+                                                   name="quantity"
+                                                   #currentQuantity="ngModel"
+                                                   nbvRequired
+                                                   nbvRequiredMsgHtml="تکمیل فیلد الزامی است."
+                                                   nbvPattern="{{myPattern.number}}"
+                                                   nbvPatternMsgHtml="ورودی به صورت عدد صحیح می باشد."
+                                                   [class.is-valid]="!(currentQuantity?.errors?.nbvRequired || currentQuantity?.errors?.nbvPattern) && inventory.currentQuantity"
+                                                   [class.is-invalid]="(currentQuantity?.errors?.nbvRequired || currentQuantity?.errors?.nbvPattern) && (currentQuantity.touched || doSave)"
+                                                   dest="currentQuantityValidation"
+                                            >
+                                        </ng-container>
+                                        <ng-container *ngIf="mode=== actionMode.VIEW">
+                                            <p style="background-color: rgb(229, 225, 216)"
+                                               class="form-control form-control-sm"
+                                            > {{inventory.currentQuantity}}
+                                            </p>
+                                        </ng-container>
+                                    </div>
+                                    <div id="currentQuantityValidation" style="opacity: 0; height: 0"></div>
+                                </div>
+                                <!--                            حداقل موجودی-->
+                                <div class=" col-md-3 col-sm-3">
+                                    <div class="form-group mb-0 ">
+                                        <label for="minQuantity" style="font-size: 12px">حداقل موجودی</label>
+                                        <!--     <label style="color: red">*</label>-->
+                                        <ng-container *ngIf="mode!== actionMode.VIEW">
+                                            <input type="number" class="form-control form-control-sm input-p"
+                                                   id="minQuantity"
+                                                   autocomplete="off" placeholder="حداقل موجودی که باید داشته باشیم"
+                                                   [(ngModel)]="inventory.minQuantity" name="minQuantity"
+                                                   #minQuantity="ngModel"
+                                                   nbvRequiredMsgHtml="تکمیل فیلد الزامی است."
+                                                   nbvPattern="{{myPattern.number}}"
+                                                   nbvPatternMsgHtml="ورودی به صورت عدد صحیح می باشد."
+                                                   [disabled]="mode===actionMode.VIEW"
+                                                   [class.is-valid]="!(minQuantity?.errors?.nbvRequired ||
+                                                minQuantity?.errors?.nbvPattern)"
+                                                   [class.is-invalid]="(minQuantity?.errors?.nbvRequired ||
+                                                minQuantity?.errors?.nbvPattern) && (minQuantity.touched || doSave)"
+                                                   dest="minQuantityValidation">
+                                        </ng-container>
+                                        <ng-container *ngIf="mode=== actionMode.VIEW">
+                                            <p style="background-color: rgb(229, 225, 216)"
+                                               class="form-control form-control-sm"
+                                            > {{inventory.minQuantity}}
+                                            </p>
+                                        </ng-container>
+                                    </div>
+                                    <div id="minQuantityValidation" style="opacity: 0; height: 0"></div>
+                                </div>
+
+                                <!--                            کد تخصیص یافته در انبار-->
+
+                                <div class=" col-md-3 col-sm-3">
+                                    <div class="form-group ">
+                                        <label for="inventoryCode" style="font-size: 12px">کد تخصیص یافته در
+                                            انبار</label>
+                                        <i class="fa fa-spinner  fa-pulse fa-1x loadingSearch"
+                                           *ngIf="checkInventoryCodeLoading"></i>
+
+                                        <ng-container *ngIf="mode!== actionMode.VIEW">
+                                            <input type="text" class="form-control form-control-sm input-p"
+                                                   id="inventoryCode"
+                                                   placeholder="کد تخصیص یافته در انبار" #inventoryCode="ngModel"
+                                                   [(ngModel)]="inventory.inventoryCode" name="inventoryCode"
+                                                   autocomplete="off"
+                                                   nbvRequiredMsgHtml="تکمیل فیلد الزامی است"
+                                                   [nbvPattern]="myPattern.EnNumberAndAlphabetic"
+                                                   nbvPatternMsgHtml="کد موجودی باید به صورت اعداد و حروف انگلیسی وارد گردد."
+                                                   [class.is-valid]="!(inventoryCode?.errors?.nbvRequired ||
+                                               inventoryCode?.errors?.nbvPattern)"
+                                                   [class.is-invalid]="(inventoryCode?.errors?.nbvRequired ||
+                                               inventoryCode?.errors?.nbvPattern) && (inventoryCode.touched || doSave)"
+                                                   dest="inventoryCodeValidation">
+                                        </ng-container>
+                                        <ng-container *ngIf="mode=== actionMode.VIEW">
+                                            <p style="background-color: rgb(229, 225, 216)"
+                                               class="form-control form-control-sm"
+                                            > {{inventory.inventoryCode}}
+                                            </p>
+                                        </ng-container>
+                                    </div>
+                                    <div id="inventoryCodeValidation" style="opacity: 0; height: 0"></div>
+                                </div>
+
+
+                                <!--                            مقدار سفارش -->
+                                <div class=" col-md-3 col-sm-3">
+                                    <div class="form-group mb-0">
+                                        <label for="orderAmount" style="font-size: 12px">مقدار سفارش </label>
+                                        <!--                                    <label style="color: red">*</label>-->
+
+                                        <!--                                    <ng-container *ngIf="mode === actionMode.EDIT || mode=== actionMode.VIEW">-->
+                                        <!--                                        <div style="background-color: rgb(229, 225, 216)"-->
+                                        <!--                                             class="form-control form-control-sm input-p">-->
+                                        <!--                                            {{inventory.orderAmount}}-->
+                                        <!--                                        </div>-->
+                                        <!--                                    </ng-container>-->
+                                        <!--                                    <ng-container *ngIf="mode === actionMode.ADD">-->
+                                        <input class="form-control form-control-sm input-p" id="orderAmount"
+                                               autocomplete="off" [(ngModel)]="inventory.orderAmount"
+                                               name="orderAmount"
+                                               appNumeric
+                                               [disabled]="mode === actionMode.VIEW"
+                                               dest="orderAmountValidation">
+                                        <!--                                    </ng-container>-->
+                                    </div>
+                                    <div id="orderAmountValidation" style="opacity: 0; height: 0"></div>
+                                </div>
+                                <!--                            انبار  قطعه-->
+
+                                <div class="col-md-3 form-group required col-sm-12">
+                                    <label class="for-label" for="storage1">انبار قطعه:</label>
+                                    <span style="color: red">*</span>
+                                    <!--                                <ng-container *ngIf="mode!== actionMode.VIEW">-->
+
+                                    <ng-select dir="rtl" [(ngModel)]="inventory.inventoryLocationId"
+                                               placeholder="انبار  قطعه"
+                                               id="storage1"
+                                               name="storage1"
+                                               style="padding: 0"
+                                               #storage1="ngModel"
+                                               class="form-control"
+                                               nbvRequired
+                                               [disabled]="mode === actionMode.VIEW||mode === actionMode.EDIT"
+                                               [class.is-valid]="!(storage1?.errors?.nbvRequired ||
+                                                storage1?.errors?.nbvPattern)"
+                                               [class.is-invalid]="(storage1?.errors?.nbvRequired ||
+                                                storage1?.errors?.nbvPattern) && (storage1.touched || doSave)"
+                                               dropdownPosition="bottom">
+                                        <ng-option *ngFor="let item of storageList" [value]="item.id">{{item.title}}
+                                        </ng-option>
+                                    </ng-select>
+                                    <!--                                </ng-container>-->
+                                    <!--                                <ng-container *ngIf="mode=== actionMode.VIEW">-->
+                                    <!--                                    <p style="background-color: rgb(229, 225, 216)"-->
+                                    <!--                                       class="form-control form-control-sm"-->
+                                    <!--                                    > {{inventory.inventoryLocationName}}-->
+                                    <!--                                    </p>-->
+                                    <!--                                </ng-container>-->
+
+                                    <div id="storage1Validation" style="opacity: 0; height: 0"></div>
+                                </div>
+
+
+                                <!--                            موقعیت در انبار -->
+                                <div class=" col-md-3 col-sm-3">
+                                    <div class="form-group mb-0">
+                                        <label for="row" style="font-size: 12px">موقعیت در انبار </label>
+                                        <label style="color: red">*</label>
+
+                                        <ng-container *ngIf="mode === actionMode.EDIT || mode=== actionMode.VIEW">
+                                            <div style="background-color: rgb(229, 225, 216)"
+                                                 class="form-control form-control-sm input-p">
+                                                {{inventory.location}}
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="mode === actionMode.ADD">
+                                            <input type="text" class="form-control form-control-sm input-p" id="row"
+                                                   nbvRequired
+                                                   [nbvPattern]="myPattern.EnNumberAndAlphabetic"
+                                                   autocomplete="off" [(ngModel)]="inventory.location"
+                                                   name="row"
+                                                   #inventoryLocation="ngModel"
+                                                   nbvPatternMsgHtml="کد موجودی باید به صورت اعداد و حروف انگلیسی وارد گردد."
+                                                   [class.is-valid]="!(inventoryLocation?.errors?.nbvRequired ||
+                                               inventoryLocation?.errors?.nbvPattern)"
+                                                   [class.is-invalid]="(inventoryLocation?.errors?.nbvRequired ||
+                                               inventoryLocation?.errors?.nbvPattern) && (inventoryLocation.touched || doSave)"
+                                                   dest="locationValidation">
+                                        </ng-container>
+                                    </div>
+                                    <div id="locationValidation" style="opacity: 0; height: 0"></div>
+                                </div>
+
+
+                                <!--                                ///////-->
+                                <div class=" col-md-12 ">
+                                    <ng-container *ngIf="inventory.partId && mode!== actionMode.ADD">
+                                        <app-inventory-view [receiveLocation]="inventory"></app-inventory-view>
+                                    </ng-container>
+                                </div>
+                            </div>
+
+                        </fieldset>
+
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
+
+        <div class="card-footer text-left" *ngIf="mode!== actionMode.VIEW && inventory.partId">
+            <button class="btn btn-action btn-sm" type="submit">
+                <span *ngIf="mode === actionMode.ADD">ثبت</span>
+                <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-1x"></i>
+
+            </button>
+        </div>
+    </form>
+</div>
+
+
+<app-current-inventory-view [modalId]="modalId" (messageEvent)="receiveMessage($event)"></app-current-inventory-view>

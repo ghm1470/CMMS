@@ -1,0 +1,196 @@
+<div class="collapse" id="org-search">
+  <div class="card" style="margin-bottom: 10px">
+    <div class="card-body card-body-filter">
+      <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2" *ngIf="provinceList.length">
+          <div class="form-group">
+            <label class="for-label" >استان</label>
+            <ng-select bindLabel="name" bindValue="id" [(ngModel)]="getAllOrganizationByFilter.provinceId"
+                       [items]="provinceList" [placeholder]="'استان'" (change)="getCityList()"
+                       style="font-size: 12px"></ng-select>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="for-label" >شهر</label>
+            <ng-select bindLabel="name" bindValue="id" [(ngModel)]="getAllOrganizationByFilter.cityId"
+                       [items]="cityList" [placeholder]="'شهر'" (change)="changeCity()" [disabled]="!cityList.length"
+                       style="font-size: 12px"></ng-select>
+          </div>
+        </div>
+        <div class="col-md-2" *ngIf="parentOrganizationList.length">
+          <div class="form-group">
+            <label class="for-label" >سازمان والد</label>
+            <ng-select bindLabel="name" bindValue="id" [(ngModel)]="getAllOrganizationByFilter.parentOrganId"
+                       [items]="parentOrganizationList" [placeholder]="'سازمان والد'"
+                       style="font-size: 12px"></ng-select>
+          </div>
+
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="for-label" >نام سازمان</label>
+            <input type="text" class="form-control" placeholder="سازمان"
+                   style="width: 100%; font-size: 12px" [(ngModel)]="getAllOrganizationByFilter.organizationName"
+            >
+          </div>
+        </div>
+
+        <div class="  col-md-2 form-group">
+          <div class="form-group">
+            <label class="for-label" >کد سازمان</label>
+            <input type="text" class="form-control" placeholder="کد سازمان"
+                   style="width: 100%; font-size: 12px" [(ngModel)]="getAllOrganizationByFilter.organizationCode"
+            >
+          </div>
+        </div>
+        <div class="col-md-1" style="margin-top: 30px" >
+          <button class="btn btn-sm btn-search" (click)="getListByFilter(options)">
+            جستجو
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+    <ng-container *ngIf="dataOfOrganizationList.itemPage.content.length===0 && loading === false">
+      <div style="text-align: center">نتیجه ای یافت نشد.</div>
+    </ng-container>
+
+
+    <ng-container *ngIf="dataOfOrganizationList.itemPage.content.length>0">
+        <table class="table table-bordered table-striped table-responsive-md">
+          <thead>
+          <tr style="text-align: center">
+            <th class="text-center" style="width: 5%">ردیف</th>
+            <th class="text-center">نام سازمان</th>
+            <th class="text-center">کد سازمان</th>
+            <th class="text-center">استان</th>
+            <th class="text-center">شهر</th>
+            <th class="text-center">سازمان والد</th>
+            <th class="text-center"></th>
+            <th class="text-center" style="width: 5%">ویرایش</th>
+            <th class="text-center" style="width: 5%">حذف</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let item of dataOfOrganizationList.itemPage.content; let i = index">
+            <tr class="text-center">
+              <td>{{Toolkit2.Common.En2Fa(((((dataOfOrganizationList.queryParamReal.paging.page) * dataOfOrganizationList.queryParamReal.paging.size)) + (i + 1)))}}</td>
+              <td>{{tools.Fa2En(item?.name)}}</td>
+              <td>
+                <ng-container *ngIf="item.organCode">{{tools.Fa2En(item?.organCode)}}</ng-container>
+                <ng-container *ngIf="!item.organCode">---</ng-container>
+              </td>
+              <td>
+                <ng-container *ngIf="item.provinceName">{{item.provinceName}}</ng-container>
+                <ng-container *ngIf="!item.provinceName">---</ng-container>
+              </td>
+              <td>
+                <ng-container *ngIf="item.cityName">{{item.cityName}}</ng-container>
+                <ng-container *ngIf="!item.cityName">---</ng-container>
+              </td>
+              <td>
+                <ng-container *ngIf="item.parentOrganName">{{tools.Fa2En(item?.parentOrganName)}}</ng-container>
+                <ng-container *ngIf="!item.parentOrganName">---</ng-container>
+              </td>
+              <td>
+                <ng-container *ngIf="item.userTypeIdList.length>0 " >
+                  <a style="color:#007ad9;text-decoration: underline;cursor: pointer ; font-weight: bold"
+                     (click)="openUserTypeModal(item.name,item.id)">مشاهده ی پست ها</a>
+
+                </ng-container>
+              </td>
+              <td>
+                <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                   *ngIf="roleList.organization_update"
+                   (click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">
+                  <i class="fa fa-edit" title="ویرایش"></i>
+                </a>
+              </td>
+              <td>
+                <a class="btn btn-sm btn-outline-lightning rounded-0"
+                   *ngIf="roleList.organization_delete"
+                   style="cursor: pointer"
+                   (click)="showModalDelete(item,i)"
+                >
+                  <i class="fa fa-trash" title="حذف"></i>
+                </a>
+              </td>
+            </tr>
+          </ng-container>
+
+          </tbody>
+        </table>
+        <shr-pagination
+          *ngIf="dataOfOrganizationList.itemPage !== null && dataOfOrganizationList.itemPage !== undefined"
+          [indicatorCount]="dataOfOrganizationList.indicatorCount"
+          [totalPages]="dataOfOrganizationList.itemPage.totalPages"
+          [currentPage]="dataOfOrganizationList.queryParamReal.paging.page"
+          (selectedPage)="setCurrentPage($event)"
+          class="class1"
+        ></shr-pagination>
+
+    </ng-container>
+
+
+  </div>
+  <!--<div class="col-md-6">-->
+  <!--<agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">-->
+  <!--<agm-marker *ngFor="let item of dataOfOrganizationList.itemPage.content"-->
+  <!--[latitude]="item.organLocation.lat"-->
+  <!--[longitude]="item.organLocation.lng"-->
+  <!--[label]="item.name"-->
+  <!--&gt;</agm-marker>-->
+  <!--</agm-map>-->
+  <!--</div>-->
+</div>
+<!-- *************************** modal **************************-->
+
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="false"
+  [modalSize]="MyModalSize.LARGE"
+  autoShow="false"
+  [myId]="'UserTypeModal'">
+  <div modal-header>
+    <h6>
+      پست های سازمان  {{orgName}}
+    </h6>
+  </div>
+  <div modal-body>
+    <div class="row" style="margin-bottom: 10px">
+      <div class="col-md-4" *ngIf="userTypeListForOrg.length">
+        <input type="text" class="form-control form-control-sm" style="margin-right: 15px;" name="userType"
+               id="userType" [(ngModel)]="userTypeForSearch" placeholder="جستجوی بر اساس عنوان پست">
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-sm btn-search" (click)="getListByFilterForUserType()"
+                style="background-color: #042C76; color: white;">
+          جستجو
+        </button>
+      </div>
+      <div class="col-md-8"></div>
+    </div>
+    <div class="col-md-12">
+      <table class="table table-bordered ">
+        <th style="text-align: center" class="border-dark">پست ها</th>
+        <tr *ngFor="let item of userTypeListForOrg">
+          <td class="text-center">{{item.name}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</nbw-modal>
+<!--**************************************************************************-->
+<app-conferm-delete
+  [title]="selectedItemForDelete.title"
+  [loading]="selectedItemForDelete.loading"
+  [modalId]="'modalId'+selectedItemForDelete.id"
+  (value)="deleteItem($event)"
+></app-conferm-delete>

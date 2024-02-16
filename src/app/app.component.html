@@ -1,0 +1,27 @@
+<!--<form class=" form" [formGroup]="htmlForm" (ngSubmit)="test()">-->
+
+<!--    <input type="text"-->
+<!--           formControlName="national_code"-->
+<!--           class="form-control "-->
+<!--           [(ngModel)]="n"-->
+<!--           [style.fontFamily]="'Vazir-FD'"-->
+<!--           appNumeric>-->
+<!--    <button type="submit">test</button>-->
+<!--</form>-->
+<!--<button (click)="connect()">connect</button>-->
+<!--<button (click)="onMessage()">onMessage</button>-->
+<!--<button (click)="sendMessage()">sendMessage</button>-->
+<!--<mat-progress-bar-->
+<!--     -->
+<!--        color="accent" mode="indeterminate">-->
+<!--</mat-progress-bar>-->
+<mat-progress-bar *ngIf="loading ===true" mode="indeterminate"></mat-progress-bar>
+
+<router-outlet></router-outlet>
+<!--<p (click)="test()">test2</p>-->
+<!--<input autocomplete="off" class="form-control form-control-sm" id="startDate" #startDate-->
+<!--       placeholder="تاریخ  شروع پروژه"-->
+
+<div id="reportFileDiv">
+
+</div>

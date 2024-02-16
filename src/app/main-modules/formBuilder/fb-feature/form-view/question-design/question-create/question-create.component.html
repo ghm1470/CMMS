@@ -1,0 +1,344 @@
+<div class="row mt-3">
+    <fieldset class="scheduler-border col-md-3 col-12 new">
+        <legend class="scheduler-border">
+            <h5>
+                ابزارهای طراحی فرم
+            </h5>
+        </legend>
+        <div style="padding: 0px;">
+            <!--      سوال با پاسخ کوتاه-->
+            <div class="mgt3" (click)="createTextField()" style="cursor: pointer">
+                <div class="tooltipe">
+                    <div class="form-inline" style="display: flex">
+                        <div class="form-group col-md-3">
+                            <img src="~/../assets/images/menu/1.svg" class="img-responsive" width="120" height="100">
+                        </div>
+                        <div class="form-group col-md-9" style="padding: 15px">
+                            <span class="pull-left">سوال با پاسخ کوتاه</span>
+
+                        </div>
+                    </div>
+
+                    <span class="tooltiptext" id="textField">
+            <img src="~/../assets/images/formElement/textField.gif" style="width: 100%">
+
+          </span>
+                </div>
+            </div>
+            <!--   سوال با پاسخ توضیحی   -->
+            <div class="mgt3 " style="cursor: pointer" (click)="createTextArea()">
+                <div class="tooltipe">
+                    <div class="form-inline" style="display: flex">
+                        <div class="form-group col-md-3">
+                            <img src="~/../assets/images/menu/2.svg" class="img-responsive" width="120">
+                        </div>
+                        <div class="form-group col-md-9" style="padding: 15px">
+                            <span class="pull-left">سوال با پاسخ توضیحی</span>
+
+                        </div>
+                    </div>
+                    <span class="tooltiptext" id="textArea">
+            <img src="~/../assets/images/formElement/textView.gif" style="width: 100%">
+          </span>
+                </div>
+            </div>
+            <!--   سوال چند انتخابی   -->
+            <div class="mgt3" style="cursor: pointer" (click)="createCheckBox()">
+                <div class="tooltipe">
+                    <div class="form-inline" style="display: flex">
+                        <div class="form-group col-md-3">
+                            <img src="~/../assets/images/menu/3.svg" class="img-responsive" width="120">
+                        </div>
+                        <div class="form-group col-md-9" style="padding: 15px">
+                            <span class="pull-left">سوال چند انتخابی</span>
+
+                        </div>
+                    </div>
+                    <span class="tooltiptext" id="checkBox">
+            <img src="~/../assets/images/formElement/checkBox.gif" style="width: 100%">
+          </span>
+                </div>
+            </div>
+            <!--  سوال  گزینه ای    -->
+            <div class="mgt3" style="cursor: pointer" (click)="createRadioButton()">
+                <div class="tooltipe">
+                    <div class="form-inline" style="display: flex">
+                        <div class="form-group col-md-3">
+                            <img src="~/../assets/images/menu/4.svg" class="img-responsive" width="120">
+                        </div>
+                        <div class="form-group col-md-9" style="padding: 15px">
+                            <span class="pull-left">سوال  گزینه ای</span>
+
+                        </div>
+                    </div>
+                    <span class="tooltiptext" id="radioButton">
+            <img src="~/../assets/images/formElement/radioButton.gif" style="width: 100%">
+          </span>
+                </div>
+            </div>
+            <!--      سوال کشویی -->
+            <div class="mgt3" style="cursor: pointer" (click)="createComboBox()">
+                <div class="tooltipe">
+                    <div class="form-inline" style="display: flex">
+                        <div class="form-group col-md-3">
+                            <img src="~/../assets/images/menu/5.svg" class="img-responsive" width="120">
+                        </div>
+                        <div class="form-group col-md-9" style="padding: 15px">
+                            <span class="pull-left">سوال کشویی</span>
+
+                        </div>
+                    </div>
+                    <span class="tooltiptext" id="comboBox">
+            <img src="~/../assets/images/formElement/comboBox.gif" style="width: 100%">
+          </span>
+                </div>
+            </div>
+            <!--<div class="mgt3" style="cursor: pointer" (click)="createNumerical()">-->
+            <!--<div class="tooltipe">-->
+            <!--<div class="form-inline" style="display: flex">-->
+            <!--<div class="form-group col-md-3">-->
+            <!--<img src="~/../assets/images/menu/6.svg" class="img-responsive" width="120">-->
+            <!--</div>-->
+            <!--<div class="form-group col-md-9" style="padding: 15px">-->
+            <!--<span class="pull-left">سوال طیفی</span>-->
+
+            <!--</div>-->
+            <!--</div>-->
+            <!--<span class="tooltiptext" id="slider">-->
+            <!--<img src="~/../assets/images/formElement/numerical.gif" style="width: 100%">-->
+            <!--</span>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="mgt3" style="cursor: pointer" (click)="createDate()">-->
+            <!--<div class="tooltipe">-->
+            <!--<div class="form-inline" style="display: flex">-->
+            <!--<div class="form-group col-md-3">-->
+            <!--<img src="~/../assets/images/menu/9.svg" class="img-responsive" width="120">-->
+            <!--</div>-->
+            <!--<div class="form-group col-md-9" style="padding: 15px">-->
+            <!--<span class="pull-left">تقویم</span>-->
+
+            <!--</div>-->
+            <!--</div>-->
+            <!--<span class="tooltiptext" id="date">-->
+            <!--<img src="~/../assets/images/formElement/date.gif" style="width: 100%">-->
+            <!--</span>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--  ساعت    -->
+            <div class="mgt3" style="cursor: pointer" (click)="createTime()">
+                <div class="tooltipe">
+                    <div class="form-inline" style="display: flex">
+                        <div class="form-group col-md-3">
+                            <img src="~/../assets/images/menu/8.svg" class="img-responsive" width="120">
+                        </div>
+                        <div class="form-group col-md-9" style="padding: 15px">
+                            <span class="pull-left">ساعت</span>
+
+                        </div>
+                    </div>
+                    <span class="tooltiptext" id="time">
+            <img src="~/../assets/images/formElement/time.gif" style="width: 100%">
+          </span>
+                </div>
+            </div>
+            <!--<div class="mgt3"  style="cursor: pointer" (click)="createMatrix()">-->
+            <!--<div class="tooltipe">-->
+            <!--<div class="form-inline" style="display: flex">-->
+            <!--<div class="form-group col-md-3">-->
+            <!--<img src="~/../assets/images/menu/7.svg" class="img-responsive" width="120">-->
+            <!--</div>-->
+            <!--<div class="form-group col-md-9" style="padding: 15px">-->
+            <!--<span class="pull-left">سوال ماتریسی</span>-->
+
+            <!--</div>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;<img src="~/../assets/images/formElement/{{selectedLanguage}}/9.png" class="img-responsive"&ndash;&gt;-->
+            <!--&lt;!&ndash;(click)="createMatrix()">&ndash;&gt;-->
+            <!--&lt;!&ndash;<span style="cursor: pointer" (click)="createMatrix()" >سوال ماتریسی</span>&ndash;&gt;-->
+            <!--<span  class="tooltiptext" id="matrix">-->
+            <!--<img src="~/../assets/images/formElement/matrix.gif" style="width: 100%">-->
+            <!--</span>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="mgt3" style="cursor: pointer" (click)="createStarRating()">-->
+            <!--<div class="tooltipe">-->
+            <!--<div class="form-inline" style="display: flex">-->
+            <!--<div class="form-group col-md-3">-->
+            <!--<img src="~/../assets/images/menu/10.svg" class="img-responsive" width="120">-->
+            <!--</div>-->
+            <!--<div class="form-group col-md-9" style="padding: 15px">-->
+            <!--<span class="pull-left">سوال امتیازی</span>-->
+
+            <!--</div>-->
+            <!--</div>-->
+            <!--<span class="tooltiptext" id="ranking">-->
+            <!--<img src="~/../assets/images/formElement/ranking.gif" style="width: 100%">-->
+            <!--</span>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="mgt3 " style="cursor: pointer" (click)="createFileAttach()">-->
+            <!--<div class="tooltipe">-->
+            <!--<div class="form-inline" style="display: flex">-->
+            <!--<div class="form-group col-md-3">-->
+            <!--<img src="~/../assets/images/menu/11.svg" class="img-responsive" width="15">-->
+            <!--</div>-->
+            <!--<div class="form-group col-md-9" style="padding: 15px">-->
+            <!--<span class="pull-left">سوال بارگزاری فایل</span>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<span class="tooltiptext" id="fileAttach">-->
+            <!--<img src="~/../assets/images/formElement/textView.gif" style="width: 100%">-->
+            <!--</span>-->
+            <!--</div>-->
+            <!--</div>-->
+        </div>
+    </fieldset>
+
+
+    <div class="col-9 row">
+        <div class="col-12"
+             style="    max-height: 65vh;
+    overflow: auto;">
+            <div *ngIf="form != null && form.elementList.length > 0">
+                <br>
+                <div class="row form-group" *ngFor="let item of form.elementList; let i = index">
+                    <div [ngSwitch]="item.elementType" class="w-100">
+
+                        <div *ngSwitchCase="'CHECK_BOX'" class="w-100">
+                            <CheckBoxComponent [index]="i"
+                                               (onUpdate)="UpdateItem($event)"
+                                               (onDelete)="Delete($event)"
+                                               (onDuplicate)="Duplicate($event)"
+                                               (onUpElement)="UpElement($event)"
+                                               (onDownElement)="DownElement($event)">
+                            </CheckBoxComponent>
+                            <div class="col-md-12" *ngIf="i != form.elementList.length-1">
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div *ngSwitchCase="'COMBO_BOX'" class="w-100">
+                            <ComboBoxComponent [index]="i"
+                                               (onUpdate)="UpdateItem($event)"
+                                               (onDelete)="Delete($event)" (onDuplicate)="Duplicate($event)"
+                                               (onUpElement)="UpElement($event)" (onDownElement)="DownElement($event)">
+                            </ComboBoxComponent>
+                            <div class="col-md-12" *ngIf="i != form.elementList.length-1">
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div *ngSwitchCase="'DATE'" class="w-100">
+                            <DateComponent [index]="i"
+                                           (onUpdate)="UpdateItem($event)"
+                                           (onDelete)="Delete($event)" (onDuplicate)="Duplicate($event)"
+                                           (onUpElement)="UpElement($event)" (onDownElement)="DownElement($event)">
+                            </DateComponent>
+                            <div class="col-md-112" *ngIf="i != form.elementList.length-1">
+                                <hr>
+                            </div>
+                        </div>
+
+                        <!--<div *ngSwitchCase="'MATRIX'">-->
+                        <!--<MatrixComponent [index]="i"-->
+                        <!--(onUpdate)="UpdateItem($event)"-->
+                        <!--(onDelete)="Delete($event)" (onDuplicate)="Duplicate($event)"-->
+                        <!--(onUpElement)="UpElement($event)" (onDownElement)="DownElement($event)">-->
+                        <!--</MatrixComponent>-->
+                        <!--<div class="col-md-12" *ngIf = "i != form.elementList.length-1">-->
+                        <!--<hr>-->
+                        <!--</div>-->
+                        <!--</div>-->
+
+                        <div *ngSwitchCase="'NUMERICAL'" class="w-100">
+                            <NumericalComponent [index]="i"
+                                                (onUpdate)="UpdateItem($event)"
+                                                (onDelete)="Delete($event)" (onDuplicate)="Duplicate($event)"
+                                                (onUpElement)="UpElement($event)" (onDownElement)="DownElement($event)">
+                            </NumericalComponent>
+                            <div class="col-md-12" *ngIf="i != form.elementList.length-1">
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div *ngSwitchCase="'RADIO_BUTTON'" class="w-100">
+                            <RadioButtonComponent [index]="i"
+                                                  (onUpdate)="UpdateItem($event)"
+                                                  (onDelete)="Delete($event)"
+                                                  (onDuplicate)="Duplicate($event)"
+                                                  (onUpElement)="UpElement($event)"
+                                                  (onDownElement)="DownElement($event)">
+                            </RadioButtonComponent>
+                            <div class="col-md-12" *ngIf="i != form.elementList.length-1">
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div *ngSwitchCase="'STAR_RATING'" class="w-100">
+                            <!--            <StarRatingComponent [index]="i"-->
+                            <!--            (onUpdate)="UpdateItem($event)"-->
+                            <!--            (onDelete)="Delete($event)" (onDuplicate)="Duplicate($event)"-->
+                            <!--            (onUpElement)="UpElement($event)" (onDownElement)="DownElement($event)">-->
+                            <!--            </StarRatingComponent>-->
+                            <div class="col-md-12" *ngIf="i != form.elementList.length-1">
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div *ngSwitchCase="'TEXT_AREA'" class="w-100">
+                            <TextAreaComponent [index]="i"
+                                               (onUpdate)="UpdateItem($event)"
+                                               (onDelete)="Delete($event)"
+                                               (onDuplicate)="Duplicate($event)"
+                                               (onUpElement)="UpElement($event)"
+                                               (onDownElement)="DownElement($event)">
+                            </TextAreaComponent>
+                            <div class="col-md-12" *ngIf="i != form.elementList.length-1">
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div *ngSwitchCase="'TEXT_FIELD'" class="w-100">
+                            <TextFieldComponent [index]="i"
+                                                (onUpdate)="UpdateItem($event)"
+                                                (onDelete)="Delete($event)"
+                                                (onDuplicate)="Duplicate($event)"
+                                                (onUpElement)="UpElement($event)"
+                                                (onDownElement)="DownElement($event)">
+                            </TextFieldComponent>
+                            <div class="col-md-12" *ngIf="i != form.elementList.length-1">
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div *ngSwitchCase="'TIME'" class="w-100">
+                            <TimeComponent [index]="i"
+                                           (onUpdate)="UpdateItem($event)"
+                                           (onDelete)="Delete($event)" (onDuplicate)="Duplicate($event)"
+                                           (onUpElement)="UpElement($event)" (onDownElement)="DownElement($event)">
+                            </TimeComponent>
+                            <div class="col-md-12" *ngIf="i != form.elementList.length-1">
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div *ngSwitchCase="'FILE_ATTACH'" class="w-100">
+                            <app-file-attach [index]="i"
+                                             (onUpdate)="UpdateItem($event)"
+                                             (onDelete)="Delete($event)"
+                                             (onDuplicate)="Duplicate($event)"
+                                             (onUpElement)="UpElement($event)"
+                                             (onDownElement)="DownElement($event)">
+                            </app-file-attach>
+                            <div class="col-md-12" *ngIf="i != form.elementList.length-1">
+                                <hr>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

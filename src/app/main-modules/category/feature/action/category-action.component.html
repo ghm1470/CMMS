@@ -1,0 +1,242 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                <ng-container *ngIf="mode === actionMode.ADD">
+                    <i class="fa fa-plus"></i>&nbsp;
+                    افزودن خانواده گروه دارایی
+                </ng-container>
+                <ng-container *ngIf="mode === actionMode.EDIT">
+                    <i class="fa fa-edit"></i>&nbsp;
+                    ویرایش خانواده گروه دارایی
+                </ng-container>
+                <ng-container *ngIf="mode === actionMode.VIEW">
+                    <i class="fa fa-edit"></i>&nbsp;
+                    مشاهذه جزئیات خانواده گروه دارایی
+                </ng-container>
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <button (click)="cancel()"
+                        class="btn btn-cancel-back btn-sm">
+                    بازگشت
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <form #categoryForm="ngForm" (submit)="checkIfTitleIsUnique(categoryForm)">
+        <div class="card-body card-body-content">
+
+            <div class="row">
+                <div class="col-md-9 form-group required col-sm-12">
+                    <div class="row">
+                        <div class="col-md-6 form-group required col-sm-12">
+                            <label class="for-label">عنوان خانواده گروه:</label>
+                            <label style="color: red">*</label>
+
+                            <div class="input-group input-group-sm">
+                                <input type="text" placeholder="عنوان خانواده گروه" [(ngModel)]="category.title"
+                                       class="form-control" minlength="1" maxlength="80" name="name"
+                                       nbvRequired #name="ngModel"
+                                       [disabled]="mode===actionMode.VIEW"
+                                       [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvPattern)"
+                                       [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvPattern) && (name.touched || doSave)"
+                                       dest="nameValidation">
+                            </div>
+                            <div id="nameValidation"></div>
+                        </div>
+
+                        <div class="col-md-6 form-group required col-sm-12">
+                            <label class="for-label">دسته والد:</label>
+                            <label style="color: red">*</label>
+                            <ng-select dir="rtl" (change)="changeParent();getPropertyOfCategory()"
+                                       [(ngModel)]="category.parentId"
+                                       [disabled]="mode===actionMode.VIEW"
+                                       [loading]="loadingGetPropertyCategory"
+                                       placeholder="دسته اصلی" name="parentId" style="width: 100%;"
+                                       dropdownPosition="bottom">
+                                <ng-option *ngFor="let item of categoryList; let i = index"
+                                           [value]="item.id">
+                                    {{item.title}}
+                                </ng-option>
+                            </ng-select>
+                            <div id="parentIdValidation" style="opacity: 0; height: 0"></div>
+                        </div>
+
+                        <div class="col-md-6 form-group required col-sm-12" *ngIf="mode===actionMode.VIEW">
+                            <label class="for-label">زیر دسته:</label>
+                            <div class="input-group input-group-sm">
+                                {{category.categoryType === categoryType[categoryType.TOOLS.toString()] ? 'ابزار' : ''}}
+                                {{category.categoryType === categoryType[categoryType.FACILITY.toString()] ? 'تجهیز' : ''}}
+                                {{category.categoryType === categoryType[categoryType.BUILDING.toString()] ? 'سالن' : ''}}
+                            </div>
+                        </div>
+                        <ng-container *ngIf="category.parentId === 'ROOT' ">
+                            <div class="col-md-6 form-group required col-sm-12">
+                                <label class="for-label">نوع دسته :</label>
+                                <label style="color: red">*</label>
+                                <ng-select dir="rtl" (change)="changeParent()" [(ngModel)]="category.categoryType"
+                                           [disabled]="mode===actionMode.VIEW"
+                                           placeholder="نوع دسته " name="categoryType" style="width: 100%;"
+                                           dropdownPosition="bottom">
+                                    <ng-option *ngFor="let item of categoryTypeList; let i = index"
+                                               [value]="item.value">
+                                        {{item.title}}
+                                    </ng-option>
+                                </ng-select>
+                                <div id="categoryTypeValidation" style="opacity: 0; height: 0"></div>
+                            </div>
+                        </ng-container>
+                        <div class="col-md-6  form-group required col-sm-12">
+                            <label class="for-label">توضیحات درباره خانواده گروه:</label>
+                            <div class="input-group input-group-sm">
+                <textarea style="resize: none" type="text" placeholder="توضیحات درباره خانواده گروه"
+                          [(ngModel)]="category.description"
+                          [disabled]="mode===actionMode.VIEW"
+                          class="form-control" minlength="3" maxlength="620" name="description"
+                          #description="ngModel"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-3 form-group required col-sm-12" style="margin-top: 15px">
+                    <fieldset class="scheduler-border" id="comapny-documents" style="background-color: #f5f5f5">
+                        <legend class="scheduler-border"><h6>تصویر دسته‌بندی</h6></legend>
+                        <div class="col-md-12" *ngIf="(!category.image || !category.image.fileByte) && !fileLoader">
+                            <ng-container *ngIf="mode!==actionMode.VIEW">
+
+                                <label>
+                                    <a class="btn btn-outline-secondary btn-sm">
+                                        <i class="fa fa-paperclip " aria-hidden="true"></i>
+                                        انتخاب تصویر
+                                        <i class="fa fa-spinner fa-pulse fa-1x " *ngIf="loading"></i>
+                                    </a>
+
+                                    <input type="file" style="display: none;" multiple #input
+                                           accept=".jpg,.jpeg,.webp,.psd,.tiff,.JPG,.JPEG,.webp,.PSD,.TIFF"
+                                           (change)="onChangeUploader(input,$event)" [disabled]="loading">
+
+                                </label>
+                            </ng-container>
+                        </div>
+                        <div class="col-md-12 text-center img-fluid img-thumbnail"
+                             *ngIf="(!category.image || !category.image.fileByte) && fileLoader">
+                            <i class="fa fa-spin fa-2x fa-spinner"></i>
+                        </div>
+
+                        <div *ngIf="category.image && category.image.fileByte"
+                        >
+                            <img [src]="'data:image/jpg;base64,' + category.image.fileByte" class="img img-responsive"
+                                 height="100" width="100">
+                            <i *ngIf="mode!==actionMode.VIEW" class="fa fa-trash" style="color: red" title="حذف"
+                               (click)="deleteImage()"></i>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <fieldset class="scheduler-border" style="background-color: #f5f5f5" id="category-address">
+                <legend class="scheduler-border"><h5 style="color: #51575d">مشخصات دسته بندی</h5></legend>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group required col-sm-12">
+                            <label class="for-label">دسته بندی مشخصات:</label>
+                            <ng-select dir="rtl" (change)="changePropertyCategory()"
+                                       [(ngModel)]="selectedPropertyCategory"
+                                       [disabled]="mode===actionMode.VIEW"
+                                       [loading]="loadingGetPropertyCategory"
+                                       placeholder="انتخاب خانواده گروه مشخصات" name="selectedPropertyCategory"
+                                       style="width: 100%;"
+                                       dropdownPosition="bottom">
+                                <ng-option *ngFor="let item of propertyCategoryList; let i = index"
+                                           [value]="item.id">
+                                    {{item.title}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group required col-sm-12">
+                            <label class="for-label">انتخاب مشخصه:</label>
+                            <ng-select dir="rtl" (change)="changeProperty()" [(ngModel)]="selectedProperty"
+                                       [disabled]="mode===actionMode.VIEW"
+                                       [loading]="loadingChangePropertyCategory"
+                                       placeholder="انتخاب مشخصه" name="property" style="width: 100%;"
+                                       dropdownPosition="bottom">
+                                <ng-option *ngFor="let item of propertyList; let i = index"
+                                           [value]="item">
+                                    {{item.key}}
+                                </ng-option>
+                            </ng-select>
+                            <!--<div class="input-group input-group-sm">-->
+                            <!--<select [(ngModel)]="selectedProperty" name="property" class="form-control"-->
+                            <!--#property="ngModel" (change)="changeProperty()">-->
+                            <!--<option value="-1" disabled>انتخاب مشخصات</option>-->
+                            <!--<option *ngFor="let item of propertyList" [ngValue]="item">{{item.key}}</option>-->
+                            <!--</select>-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <ng-container *ngIf="category.properties && category.properties.length>0">
+                        <div class="col-md-12 card table-responsive-md">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 5%">ردیف</th>
+                                    <th class="text-center">کلید واژه</th>
+                                    <!--<th class="text-center">مقدار</th>-->
+                                    <th class="text-center" style="width: 5%"
+                                        *ngIf="mode!==actionMode.VIEW">حذف
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ng-container *ngFor="let item of category.properties; let i = index">
+                                    <tr class="text-center">
+                                        <td>{{i + 1}}</td>
+                                        <td>{{item.key}}</td>
+                                        <!--<td>-->
+                                        <!--<span *ngIf="item.data">-->
+                                        <!--<span *ngFor="let value of item.data;let i=index">-->
+                                        <!--{{value}}-->
+                                        <!--<span *ngIf="item.data.length - 1 > i">,</span>-->
+                                        <!--</span>-->
+                                        <!--</span>-->
+                                        <!--</td>-->
+                                        <td *ngIf="mode!==actionMode.VIEW">
+                                            <a class="btn btn-sm btn-outline-lightning rounded-0"
+                                               style="cursor: pointer" nbdAreYouSure (then)="deleteProperty(item.id)">
+                                                <i class="fa fa-trash" title="حذف"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf=" category.properties.length===0">
+                        <div class="text-center" style="color: #6d6d6e;text-align: center">
+                            <span>مشخصات ثبت نشده است.</span>
+                        </div>
+                    </ng-container>
+                </div>
+            </fieldset>
+
+        </div>
+        <div class="card-footer text-left">
+            <button class="btn btn-action btn-sm" type="submit" *ngIf="mode!==actionMode.VIEW">
+                <span *ngIf="mode === actionMode.ADD">ثبت</span>
+                <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+            </button>
+        </div>
+    </form>
+</div>

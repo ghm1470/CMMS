@@ -1,0 +1,783 @@
+<ng-container *ngIf="listMode">
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6 col-8 col-sm-6 card-title">
+                    <i class="fa fa-list"></i>&nbsp;&nbsp;
+                    <span>لیست دارایی ها</span>
+                </div>
+                <div class="col-md-6 col-4 col-sm-6 text-left">
+                    <app-export-file
+                            [fileDataTableList]="fileDataTableList"
+                            [entityListForReport]="entityListForReport"
+                            [titleForFile]="' لیست دارایی ها  '"
+                            [PdfReport]="false"
+                            (emitTypeForReport)="EmActivityGetPageForExcel()"
+                    ></app-export-file>
+                    <button title="جستجو"
+                            id="assets-search-btn"
+                            data-toggle="collapse" href="#assets-search" (click)="readService = true"
+                            class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <!--///// افزودن-->
+                    <ng-container>
+
+                        <ng-container *ngIf="roleList.Asset_create;else notAccessCreateTemp">
+                            <button
+                                    (click)="showActionComponent('add')"
+                                    class="btn btn-secondary btn-sm">
+                                <i class="fa fa-plus"></i>
+                                <span class="d-none d-sm-inline d-sm-inline">
+            &nbsp;&nbsp;            افزودن
+            </span>
+                            </button>
+                        </ng-container>
+                        <ng-template #notAccessCreateTemp>
+                            <button style="cursor: not-allowed"
+                                    class="btn btn-secondary btn-sm">
+                                <i class="fa fa-plus"></i>
+                                <span class="d-none d-sm-inline d-sm-inline">
+            &nbsp;&nbsp;            افزودن
+            </span>
+                            </button>
+                        </ng-template>
+                    </ng-container>
+                    <!--///// افزودن!!!!-->
+                </div>
+            </div>
+        </div>
+        <div class="card-body card-body-content myTable overflow-auto">
+
+            <div class="collapse" id="assets-search">
+                <div class="card" style="margin-bottom: 10px">
+                    <div class="card-body card-body-filter">
+                        <div class="row" style="margin-bottom: 10px">
+                            <!--<div class="col-md-12" style="margin-bottom: 15px">-->
+                            <!--<button  class="btn btn-sm " style="background-color: #042C76; color: white;" (click)="showModalAssetSearch()"> جستجو بر اساس </button>-->
+                            <!--</div>-->
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-2  form-group">
+                                        <label class="for-label">نام </label>
+                                        <input type="text" class="form-control form-control-sm" placeholder="نام "
+                                               style="width: 100%" [(ngModel)]="getAllByFilterAndPagination.name">
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label class="for-label">کد </label>
+                                        <input type="text" class="form-control form-control-sm" placeholder="کد "
+                                               style="width: 100%" [(ngModel)]="getAllByFilterAndPagination.code">
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label class="for-label">خانواده گروه </label>
+
+                                        <ng-select bindLabel="title" bindValue="id"
+                                                   [(ngModel)]="getAllByFilterAndPagination.categoryId"
+                                                   [items]="assetCategoryList"
+                                                   [placeholder]="'خانواده گروه '"></ng-select>
+                                    </div>
+
+                                    <!--                        <div class="col-md-2">-->
+                                    <!--                            <label class="for-label">قالب </label>-->
+                                    <!--                            &lt;!&ndash;      <ng-select bindLabel="name" bindValue="id" [(ngModel)]="getAllByFilterAndPagination.assetTemplateId"&ndash;&gt;-->
+                                    <!--                            &lt;!&ndash;                 [items]="assetTemplateList" [placeholder]="'قالب '"></ng-select>&ndash;&gt;-->
+                                    <!--                            <ng-select bindLabel="name" bindValue="id" (change)="changeAssetTemplate($event)"-->
+                                    <!--                                       [items]="assetTemplateList" [placeholder]="'قالب '"></ng-select>-->
+                                    <!--                        </div>-->
+                                    <div class="col-md-2">
+                                        <label class="for-label">اولویت </label>
+                                        <ng-select bindLabel="_title" bindValue="_value"
+                                                   [(ngModel)]="getAllByFilterAndPagination.assetPriority"
+                                                   [items]="assetPriorityList" [placeholder]="'اولویت '"></ng-select>
+
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="for-label">نوع </label>
+                                        <ng-select bindLabel="_title" bindValue="_value"
+                                                   [(ngModel)]="getAllByFilterAndPagination.categoryType"
+                                                   [items]="categoryTypeList" [placeholder]="'نوع '"></ng-select>
+                                    </div>
+                                    <div class="col-md-2 text-right">
+                                        <button class="btn btn-sm btn-search" (click)="search()"
+                                                style="margin-top: 25px">
+                                            جستجو
+                                            <i *ngIf="loadingGetAllAssetWithoutParentId"
+                                               class="fa fa-spinner fa-pulse fa-1x"></i>
+
+                                        </button>
+
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label class="for-label">سالن </label>
+
+                                        <ng-select bindLabel="name" bindValue="id"
+                                                   [(ngModel)]="getAllByFilterAndPagination.assetId"
+                                                   [items]="assetNameAndIdList" [placeholder]="' سالن '"></ng-select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="for-label">وضعیت</label>
+                                        <ng-select
+
+                                                [placeholder]="'وضعیت'"
+                                                [(ngModel)]="getAllByFilterAndPagination.status"
+                                        >
+                                            <!--bindLabel="_title" bindValue="_value"-->
+                                            <!--[items]="statusList"-->
+                                            <!--        (change)="changeStatus($event)"-->
+                                            <ng-option [value]="'ALL'">همه</ng-option>
+                                            <ng-option [value]="'ACTIVE'">فعال</ng-option>
+                                            <ng-option [value]="'INACTIVE'">غیرفعال</ng-option>
+                                        </ng-select>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <!--                            <div class="col-md-12">-->
+                            <!--                                <div class="row">-->
+                            <!--                                    <div class="col-md-3">-->
+                            <!--                                        <label class="for-label">وضعیت</label>-->
+                            <!--                                        <ng-select-->
+
+                            <!--                                                [placeholder]="'وضعیت'"-->
+                            <!--                                                [(ngModel)]="getAllByFilterAndPagination.status"-->
+                            <!--                                        >-->
+                            <!--                                            &lt;!&ndash;bindLabel="_title" bindValue="_value"&ndash;&gt;-->
+                            <!--                                            &lt;!&ndash;[items]="statusList"&ndash;&gt;-->
+                            <!--                                            &lt;!&ndash;        (change)="changeStatus($event)"&ndash;&gt;-->
+                            <!--                                            <ng-option [value]="'ALL'">همه</ng-option>-->
+                            <!--                                            <ng-option [value]="'ACTIVE'">فعال</ng-option>-->
+                            <!--                                            <ng-option [value]="'INACTIVE'">غیرفعال</ng-option>-->
+                            <!--                                        </ng-select>-->
+                            <!--                                    </div>-->
+                            <!--                                    <div class="col-md-3 text-right">-->
+                            <!--                                        <button class="btn btn-sm btn-search" (click)="search()"-->
+                            <!--                                                style="margin-top: 30px">-->
+                            <!--                                            جستجو-->
+                            <!--                                            <i *ngIf="loadingGetAllAssetWithoutParentId"-->
+                            <!--                                               class="fa fa-spinner fa-pulse fa-1x"></i>-->
+
+                            <!--                                        </button>-->
+
+                            <!--                                    </div>-->
+
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <app-loading-spinner [loadingList]="true" *ngIf="loadingGetAllAssetWithoutParentId"></app-loading-spinner>
+
+            <ng-container *ngIf="assetList.length===0 && !loadingGetAllAssetWithoutParentId">
+                <div style="text-align: center">نتیجه ای یافت نشد.</div>
+            </ng-container>
+
+
+            <!--///////////////////////////////////////////////////////////////////////////////-->
+            <ng-container *ngIf=" !showSearchResult">
+                <ng-container *ngIf="assetList.length >0">
+
+                    <table class="table table-bordered table-striped table-responsive-md">
+                        <thead>
+                        <tr style="text-align: center">
+                            <th style="text-align: center;width: 5%">ردیف</th>
+                            <th style="text-align: center;width: 25%"
+                                [ngStyle]="bySearch && {'width' : '10%'}"
+                            >نام
+                            </th>
+                            <th style="text-align: center;width: 10%" *ngIf="bySearch"> استقرار</th>
+                            <!--                <th style="text-align: center"> قالب </th>-->
+                            <th style="text-align: center;width: 15%">کد</th>
+                            <th style="text-align: center;width: 15%">خانواده گروه</th>
+                            <th style="text-align: center;width: 10%"> اولویت</th>
+                            <th style="text-align: center;width: 10%">وضعیت</th>
+                            <th style="text-align: center;width: 10%">نوع</th>
+                            <!--    <th class="text-right" style="width: 5%"></th>-->
+                            <th class="text-center px-0" style="text-align: center;width: 5%">کپی</th>
+                            <th class="text-center px-0" style="text-align: center;width: 5%">ویرایش</th>
+                            <th class="text-center px-0" style="text-align: center;width: 5%">حذف</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ng-container *ngFor="let assetOfAssetList of assetList; let i = index">
+                            <tr>
+                                <td style="text-align: right ;width: 5%">
+                                    {{(i + 1 + (pageIndex * pageSize))|EnToFa}}
+                                </td>
+                                <td style="text-align: right ;width: 25%"
+                                    [ngStyle]="bySearch && {'width' : '10%'}"
+                                >
+                                    <ng-container *ngIf="assetOfAssetList.hasChild">
+
+
+                                        <i *ngIf="loadingForGetChild&&selectedParentIdForGetChild===assetOfAssetList.id"
+                                           class="fa fa-spinner fa-pulse fa-1x"></i>
+                                        <img *ngIf="!assetOfAssetList.openPlus " width="20"
+                                             src="../../../../../assets/images/asset-tree/expand.png"
+                                             [ngStyle]="{marginRight:assetOfAssetList.marginRight +'px'}"
+                                             (click)="getChildList(assetOfAssetList)"
+                                             style="cursor: pointer"
+                                             alt="...">
+
+
+                                        <img *ngIf="assetOfAssetList.openPlus" width="20"
+                                             src="../../../../../assets/images/asset-tree/navigate.png"
+                                             [ngStyle]="{marginRight:assetOfAssetList.marginRight +'px'}"
+                                             (click)="methodTow(assetOfAssetList)"
+                                             style="cursor: pointer"
+                                             alt="...">
+                                        <!--<i class="far fa-minus-square" ></i>-->
+                                        <!--(click)="methodTow(asset.id)"-->
+
+                                        &nbsp;&nbsp;&nbsp;
+                                        <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                                             width="20"
+                                             src="../../../../../assets/images/asset-tree/equipment-16.png"
+                                             style="margin-right: 2px"
+                                             alt="...">
+                                        <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                                             width="20"
+                                             style="margin-right: 2px"
+                                             src="../../../../../assets/images/asset-tree/facilities-16.png"
+                                             alt="...">
+                                        <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                                             width="20"
+                                             style="margin-right: 2px"
+                                             src="../../../../../assets/images/asset-tree/tools-16.png"
+                                             alt="...">
+                                        &nbsp;&nbsp;
+                                        <span style="font-size: 12px; margin-right: 2px"> {{assetOfAssetList.name}} </span>
+
+                                    </ng-container>
+                                    <ng-container *ngIf="!assetOfAssetList.hasChild">
+                                        <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                                             width="20"
+                                             src="../../../../../assets/images/asset-tree/equipment-16.png"
+                                             [ngStyle]="{marginRight:assetOfAssetList.marginRight + 35 +'px'}"
+                                             alt="...">
+                                        <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                                             width="20"
+                                             src="../../../../../assets/images/asset-tree/facilities-16.png"
+                                             [ngStyle]="{marginRight:assetOfAssetList.marginRight + 35 +'px'}"
+                                             alt="...">
+                                        <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                                             width="20"
+                                             src="../../../../../assets/images/asset-tree/tools-16.png"
+                                             [ngStyle]="{marginRight:assetOfAssetList.marginRight + 35 +'px'}"
+                                             alt="...">
+                                        &nbsp;&nbsp;
+                                        <span style="font-size: 12px; margin-right: 2px"> {{assetOfAssetList.name}}</span>
+                                    </ng-container>
+                                </td>
+
+                                <!--                    <td style="text-align: center; font-size: 12px">{{assetOfAssetList?.assetTemplateName}}</td>-->
+                                <td style="text-align: center; font-size: 12px;width: 10%"
+                                    *ngIf="bySearch">{{assetOfAssetList.parentName}}</td>
+                                <td style="text-align: center; font-size: 12px;width: 15%">{{assetOfAssetList.code}}</td>
+                                <td style="text-align: center; font-size: 12px;width: 15%">{{assetOfAssetList.categoryTitle}}</td>
+                                <td style="text-align: center; font-size: 12px;width: 10%">
+                                    <ng-container *ngIf="assetOfAssetList?.assetPriority==='normal'">عادی</ng-container>
+                                    <ng-container *ngIf="assetOfAssetList?.assetPriority==='important'">مهم
+                                    </ng-container>
+                                    <ng-container *ngIf="assetOfAssetList?.assetPriority==='strategic'">استراتژیک
+                                    </ng-container>
+                                </td>
+                                <td style="text-align: center; font-size: 12px;width: 10%">
+                                    <p class="text-center" *ngIf="assetOfAssetList.status">فعال</p>
+                                    <p class="text-center" *ngIf="!assetOfAssetList.status">غیر فعال</p>
+                                </td>
+                                <td style="text-align: center; font-size: 12px;width: 10%">
+                                    <p class="text-center"
+                                       *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.FACILITY.toString()]">
+                                        تجهیز </p>
+                                    <p class="text-center"
+                                       *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.BUILDING.toString()]">
+                                        سالن</p>
+                                    <p class="text-center"
+                                       *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.TOOLS.toString()]">
+                                        ابزار</p>
+                                </td>
+                                <!--    <td>-->
+                                <!--      <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+                                <!--         (click)="chooseSelectedItemForView(asset)" style="cursor: pointer ; font-weight: bold">-->
+                                <!--        <i class="fa fa-eye" title="مشاهده"></i>-->
+                                <!--      </a>-->
+                                <!--    </td>-->
+
+
+                                <td style="width: 5%">
+                                    <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                       (click)="showModalAssetCopyModal(assetOfAssetList.id,assetList)"
+                                       style="cursor: pointer ; font-weight: bold">
+                                        <i *ngIf="!loadingCopy||assetForCopyId!==assetOfAssetList.id" class="fa fa-copy"
+                                           title="کپی دارایی"></i>
+                                        <i *ngIf="loadingCopy&&assetForCopyId===assetOfAssetList.id"
+                                           class="fa fa-spinner fa-pulse fa-1x"></i>
+
+                                    </a>
+
+
+                                </td>
+                                <td class="text-center" style="width: 5%">
+                                    <ng-container *ngIf="roleList.Asset_update;else notEditAccessTemp">
+
+                                        <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                           (click)="chooseSelectedItemForEdit(assetOfAssetList)"
+                                           style="cursor: pointer ; font-weight: bold">
+                                            <i class="fa fa-edit" title="ویرایش"></i>
+                                        </a>
+                                    </ng-container>
+                                    <ng-template #notEditAccessTemp>
+                                        <i class="fa fa-edit" title="ویرایش" style="cursor: no-drop"></i>
+
+                                    </ng-template>
+                                </td>
+                                <td class="text-center" style="width: 5%;">
+                                    <ng-container *ngIf="roleList.Asset_delete;else notDeleteAccessTemp">
+                                        <a class="btn btn-sm btn-outline-lightning rounded-0"
+                                           style="cursor: pointer"
+                                           (click)="showModalDelete(assetOfAssetList,i,assetList)"
+                                        >
+                                            <i class="fa fa-trash" title="حذف"></i>
+                                        </a>
+                                    </ng-container>
+                                    <ng-template #notDeleteAccessTemp>
+                                        <i class="fa fa-trash" style="cursor: no-drop" title="حذف"></i>
+
+                                    </ng-template>
+                                </td>
+
+
+                            </tr>
+                            <ng-container *ngIf="assetOfAssetList.hasChild">
+                                <ng-template [ngTemplateOutlet]="childListTemp"
+                                             [ngTemplateOutletContext]="{$implicit:assetOfAssetList.childAssetList,
+                                               stepIn:1,index:i+1,parent:assetOfAssetList }">
+                                </ng-template>
+                            </ng-container>
+                        </ng-container>
+                        </tbody>
+                    </table>
+                </ng-container>
+
+                <!--childList-->
+                <ng-template #childListTemp let-childList let-stepIn='stepIn' let-index='index' let-parent='parent'>
+                    <ng-container *ngFor="let child of childList; let i = index">
+                        <tr>
+                            <td style="text-align: right; width: 5%">
+                                {{index + ' - ' + (i + 1)|EnToFa}}
+                            </td>
+                            <td style="text-align: right; width: 25%">
+
+                                <ng-container *ngIf="child.hasChild">
+                    <span [style.margin-right.px]="10*stepIn">
+
+
+
+
+                            <i *ngIf="loadingForGetChild&&selectedParentIdForGetChild===child.id"
+                               class="fa fa-spinner fa-pulse fa-1x"></i>
+                        <img *ngIf="!child.openPlus " width="20"
+                             src="../../../../../assets/images/asset-tree/expand.png"
+                             [ngStyle]="{marginRight:child.marginRight +'px'}"
+                             (click)="getChildList(child)"
+                             style="cursor: pointer"
+                             alt="...">
+
+
+                        <img *ngIf="child.openPlus" width="20"
+                             src="../../../../../assets/images/asset-tree/navigate.png"
+                             [ngStyle]="{marginRight:child.marginRight +'px'}"
+                             (click)="methodTow(child)"
+                             style="cursor: pointer"
+                             alt="...">
+
+
+                        <!--<i class="far fa-minus-square" ></i>-->
+                        <!--(click)="methodTow(child.id)"-->
+                        &nbsp;&nbsp;&nbsp;
+                        <img *ngIf="child.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                             width="20"
+                             src="../../../../../assets/images/asset-tree/equipment-16.png"
+                             style="margin-right: 2px"
+                             alt="...">
+                        <img *ngIf="child.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                             width="20"
+                             style="margin-right: 2px"
+                             src="../../../../../assets/images/asset-tree/facilities-16.png"
+                             alt="...">
+                        <img *ngIf="child.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                             width="20"
+                             style="margin-right: 2px"
+                             src="../../../../../assets/images/asset-tree/tools-16.png"
+                             alt="...">
+                        &nbsp;&nbsp;
+                        <span style="font-size: 12px; margin-right: 2px"> {{child.name}} </span>
+                    </span>
+                                </ng-container>
+                                <ng-container *ngIf="!child.hasChild">
+                        <span [style.margin-right.px]=" 10*(stepIn+1)">
+
+                        <img *ngIf="child.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                             width="20"
+                             src="../../../../../assets/images/asset-tree/equipment-16.png"
+                             [ngStyle]="{marginRight:child.marginRight + 35 +'px'}"
+                             alt="...">
+                        <img *ngIf="child.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                             width="20"
+                             src="../../../../../assets/images/asset-tree/facilities-16.png"
+                             [ngStyle]="{marginRight:child.marginRight + 35 +'px'}"
+                             alt="...">
+                        <img *ngIf="child.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                             width="20"
+                             src="../../../../../assets/images/asset-tree/tools-16.png"
+                             [ngStyle]="{marginRight:child.marginRight + 35 +'px'}"
+                             alt="...">
+                        &nbsp;&nbsp;
+                        <span style="font-size: 12px; margin-right: 2px"> {{child.name}}</span>
+                    </span>
+                                </ng-container>
+
+                            </td>
+
+                            <!--                <td style="text-align: center; font-size: 12px">{{child?.assetTemplateName}}</td>-->
+                            <td style="text-align: center; font-size: 12px; width: 15%">{{child.code}}</td>
+                            <td style="text-align: center; font-size: 12px; width: 15%">{{child.categoryTitle}}</td>
+                            <td style="text-align: center; font-size: 12px; width: 10%">
+                                <ng-container *ngIf="child?.assetPriority==='normal'">عادی</ng-container>
+                                <ng-container *ngIf="child?.assetPriority==='important'">مهم</ng-container>
+                                <ng-container *ngIf="child?.assetPriority==='strategic'">استراتژیک</ng-container>
+                            </td>
+                            <td style="text-align: center; font-size: 12px; width: 10%">
+                                <p class="text-center" *ngIf="child.status">فعال</p>
+                                <p class="text-center" *ngIf="!child.status">غیر فعال</p>
+                            </td>
+                            <td style="text-align: center; font-size: 12px; width: 10%">
+                                <p class="text-center"
+                                   *ngIf="child.categoryType === categoryType[categoryType.FACILITY.toString()]">
+                                    تجهیز </p>
+                                <p class="text-center"
+                                   *ngIf="child.categoryType === categoryType[categoryType.BUILDING.toString()]">
+                                    سالن</p>
+                                <p class="text-center"
+                                   *ngIf="child.categoryType === categoryType[categoryType.TOOLS.toString()]">
+                                    ابزار</p>
+                            </td>
+                            <!--    <td>-->
+                            <!--      <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+                            <!--         (click)="chooseSelectedItemForView(child)" style="cursor: pointer ; font-weight: bold">-->
+                            <!--        <i class="fa fa-eye" title="مشاهده"></i>-->
+                            <!--      </a>-->
+                            <!--    </td>-->
+                            <td style="width: 5%">
+                                <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                   (click)="showModalAssetCopyModal(child.id,childList)"
+                                   style="cursor: pointer ; font-weight: bold">
+                                    <i *ngIf="!loadingCopy||assetForCopyId!==child.id" class="fa fa-copy"
+                                       title="کپی دارایی"></i>
+                                    <i *ngIf="loadingCopy&&assetForCopyId===child.id"
+                                       class="fa fa-spinner fa-pulse fa-1x"></i>
+
+                                </a>
+
+
+                            </td>
+
+                            <td class="text-center" style="width: 5%">
+                                <ng-container *ngIf="roleList.Asset_update;else notEditAccessTemp">
+
+                                    <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                       (click)="chooseSelectedItemForEdit(child)"
+                                       style="cursor: pointer ; font-weight: bold">
+                                        <i class="fa fa-edit" title="ویرایش"></i>
+                                    </a>
+                                </ng-container>
+                                <ng-template #notEditAccessTemp>
+                                    <i class="fa fa-edit" title="ویرایش" style="cursor: no-drop"></i>
+
+                                </ng-template>
+                            </td>
+                            <td class="text-center" style=" width: 5%">
+                                <ng-container *ngIf="roleList.Asset_delete;else notDeleteAccessTemp">
+                                    <a class="btn btn-sm btn-outline-lightning rounded-0"
+                                       style="cursor: pointer"
+                                       (click)="showModalDelete(child , i , childList,parent)"
+                                    >
+                                        <i class="fa fa-trash" title="حذف"></i>
+                                    </a>
+                                </ng-container>
+                                <ng-template #notDeleteAccessTemp>
+                                    <i class="fa fa-trash" style="cursor: no-drop" title="حذف"></i>
+
+                                </ng-template>
+                            </td>
+
+
+                        </tr>
+                        <ng-container *ngIf="child.hasChild">
+                            <ng-template [ngTemplateOutlet]="childListTemp"
+                                         [ngTemplateOutletContext]="{$implicit:child.childAssetList,
+                                          stepIn:stepIn+1,index:index  + ' - ' +( i + 1) ,parent:child}">
+                            </ng-template>
+                        </ng-container>
+                    </ng-container>
+                </ng-template>
+                <!--childList-->
+                <!--    pagination-->
+                <app-paginator
+                        [totalElements]="length"
+                        [pageSize]="pageSize"
+                        [pageIndex]="pageIndex"
+                        [pageSizeOptions]="[]"
+                        [showFirstLastButtons]="true"
+                        (page)=" changePage($event)"
+                ></app-paginator>
+            </ng-container>
+            <!--/////////////////////////////////////////////////////////////////////////////////-->
+
+            <!--    pagination-->
+            <!--<app-list-pagination-fo-search *ngIf="showSearchResult"-->
+            <!--                               [getAllByFilterAndPagination]="getAllByFilterAndPagination"></app-list-pagination-fo-search>-->
+        </div>
+    </div>
+</ng-container>
+<ng-container *ngIf="!listMode">
+    <app-tree-action [mode]="mode"
+                     [assetId]="selectedAssetId"
+                     [from]="'asset'"
+                     (back)="backEmit()"
+                     (assetForUpdate)="emitAssetForUpdate($event)"
+    >
+    </app-tree-action>
+</ng-container>
+
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="true"
+        [dataBackdrop]="true"
+        [modalSize]="MyModalSize.CUSTOM_WIDTH"
+        [customWidthPercent]="{xs: 120, md:65}"
+        autoShow="false"
+        [myId]="assetSearchModal">
+    <div modal-header>
+        جستجو بر اساس:
+    </div>
+    <div modal-body style="display: flow-root">
+
+        <div class=" table-responsive-md">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]="assetName && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px;"></i>
+                                        نام
+                                        <div class="btn-group-sm ">
+                                            <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                                    *ngIf="!assetName"
+                                                    style="margin-right: 70px " (click)="assetName = true">
+                                                افزودن
+                                            </button>
+                                            <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                                    *ngIf="assetName"
+                                                    style="margin-right: 62px " (click)="assetName = false">
+                                                برداشتن
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]="assetCode && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px"></i>
+                                کد
+                                <hr style="margin-top: 10px ; margin-bottom:  10px">
+                                <div class="btn-group-sm ">
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="!assetCode"
+                                            style="margin-right: 70px " (click)="assetCode = true">
+                                        افزودن
+                                    </button>
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="assetCode"
+                                            style="margin-right: 62px " (click)="assetCode = false">
+                                        برداشتن
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]="status && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px"></i>
+                                وضعیت
+
+
+                                <div class="btn-group-sm ">
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="!status"
+                                            style="margin-right: 85px " (click)="status = true">
+                                        افزودن
+                                    </button>
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="status"
+                                            style="margin-right: 75px " (click)="status = false">
+                                        برداشتن
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]="assetTemplateId && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px"></i>
+                                قالب
+
+                                <div class="btn-group-sm ">
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="!assetTemplateId"
+                                            style=" margin-right: 80px; " (click)="assetTemplateId = true">
+                                        افزودن
+                                    </button>
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="assetTemplateId"
+                                            style="margin-right: 50px; " (click)="assetTemplateId = false">
+                                        برداشتن
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="cardBox" [ngStyle]=" categoryTypeId  && {'background' : '#a9ddab'}">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <i class="fa fa-search" style="margin-left: 5px; margin-top: 5px"></i>
+                                نوع دسته
+
+                                <div class="btn-group-sm ">
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="!categoryTypeId"
+                                            style=" margin-right: 65px;" (click)="categoryTypeId = true">
+                                        افزودن
+                                    </button>
+                                    <button type="button" class="justify-content-end btn btn-light btn-sm "
+                                            *ngIf="categoryTypeId"
+                                            style="margin-right: 56px; " (click)="categoryTypeId = false">
+                                        برداشتن
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+    <div modal-footer>
+        <div class="btn-group-sm">
+            <button type="button" class="btn btn-action btn-sm "
+                    (click)="hideModalAssetSearch()" style="margin-right: 70px ">
+                تایید
+            </button>
+        </div>
+    </div>
+
+
+</nbw-modal>
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="true"
+        [dataBackdrop]="true"
+        [modalSize]="MyModalSize.DEFAULT"
+        (onClose)="showModalBody=false"
+        [customWidthPercent]="{xs: 120, md:65}"
+        autoShow="false"
+        [myId]="assetCopyModal">
+    <div modal-header>
+        کد دارایی را وارد کنید
+    </div>
+    <div modal-body style="display: flow-root" *ngIf="showModalBody">
+
+        <div class=" table-responsive-md">
+            <div class="row">
+                <div class="col-md-6 form-group required col-sm-12">
+                    <label class="for-label">کد دارایی:</label>
+                    <span style="color: red">*</span>
+                    <div class="input-group input-group-sm">
+                        <!--                                                       [nbvPattern]="myPattern.EnNumberAndAlphabetic"-->
+                        <input type="text" placeholder="کد دارایی" [(ngModel)]="codeForCopy"
+                               class="form-control" minlength="1" maxlength="80"
+                               name="code"
+                               id="code"
+                               nbvRequired #code="ngModel"
+                               nbvPatternMsgHtml="کد دارایی باید به صورت اعداد و حروف انگلیسی وارد گردد."
+                               [class.is-valid]="!(code?.errors?.nbvRequired || code?.errors?.nbvPattern)"
+                               [class.is-invalid]="(code?.errors?.nbvRequired || code?.errors?.nbvPattern) && (code.touched)"
+                               dest="codeValidation">
+                    </div>
+                    <div id="codeValidation"></div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+    <div modal-footer>
+        <div class="btn-group-sm">
+            <button type="button" class="btn btn-action btn-sm "
+                    (click)="changeAssetCode()" style="margin-right: 70px ">
+                تایید
+            </button>
+        </div>
+    </div>
+
+
+</nbw-modal>
+<!--**************************************************************************-->
+<app-conferm-delete
+        [title]="selectedItemForDelete.title"
+        [loading]="selectedItemForDelete.loading"
+        [modalId]="'modalId'+selectedItemForDelete.id"
+        (value)="deleteItem($event)"
+></app-conferm-delete>

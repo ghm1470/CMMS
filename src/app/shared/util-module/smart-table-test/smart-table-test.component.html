@@ -1,0 +1,60 @@
+<!--<div class="row">-->
+  <!--<div class="col-md-4">-->
+    <!--<input *ngIf="config.filtering" style="width: 200px" placeholder="جستجو در کل جدول"-->
+           <!--[ngTableFiltering]="config.filtering"-->
+           <!--class="form-control"-->
+           <!--(tableChanged)="onChangeTable(config)"/>-->
+  <!--</div>-->
+<!--</div>-->
+<div class="row">
+  <div class="w-100 align-content-center">
+    <pro-table
+      [config]="config.table"
+      [rowTemplate]="rowTemplate"
+      [expanderTemplate]="expanderTemplate"
+      (tableChanged)="onChangeTable(config)"
+      >
+      <!--(cellClicked)="onCellClick(data)"-->
+    </pro-table>
+  </div>
+</div>
+<!--<div class="row">-->
+  <!--<div class="col-sm-6" *ngIf="config.paging">-->
+    <!--<pagination-->
+                <!--class=""-->
+                <!--[(ngModel)]="config.paging.page"-->
+                <!--[totalItems]="config.paging.length"-->
+                <!--[itemsPerPage]="config.paging.itemsPerPage"-->
+                <!--[maxSize]="config.paging.maxSize"-->
+                <!--[boundaryLinks]="false"-->
+                <!--[rotate]="true"-->
+                <!--(pageChanged)="onChangeTable(config, $event)"-->
+                <!--(numPages)="config.paging.numPages = $event"-->
+                <!--[firstText]="config.paging.firstText"-->
+                <!--[previousText]="config.paging.previousText"-->
+                <!--[nextText]="config.paging.nextText"-->
+                <!--[lastText]="config.paging.lastText"-->
+    <!--&gt;-->
+    <!--</pagination>-->
+  <!--</div>-->
+  <!--<div class="col-sm-2" *ngIf="config.paging" hidden>-->
+    <!--تعداد سطر-->
+    <!--<select [(ngModel)]="trNumber" (change)="ngOnInit()" name="trNumber">-->
+      <!--<option [value]="5">5</option>-->
+      <!--<option [value]="10">10</option>-->
+      <!--<option [value]="20">20</option>-->
+      <!--<option [value]="50">50</option>-->
+    <!--</select>-->
+  <!--</div>-->
+  <!--<div class="col-sm-12 col-lg-12 col-xs-12" *ngIf="config.export && checkAdmin()">-->
+    <!--<csv-downloader *ngIf="config.export.curPage" [stripHtml]="config.export.stripHtml" [data]="curPageData" [classes]="config.export.curPage.Class">-->
+      <!--<span title="دانلود صفحه فعلی" class="glyphicon glyphicon-download" style="color:blue;" aria-hidden="true"></span>-->
+    <!--</csv-downloader>-->
+    <!--<csv-downloader *ngIf="config.export.allPage" [stripHtml]="config.export.stripHtml" [data]="allPageData" [classes]="config.export.allPage.Class">-->
+      <!--<span class="glyphicon glyphicon-download" style="color:green;" aria-hidden="true"></span>-->
+    <!--</csv-downloader>-->
+  <!--</div>-->
+<!--</div>-->
+
+<!--<pre *ngIf="config.paging" class="card card-block card-header">Page: {{config.paging.page}} / {{config.paging.numPages}}</pre>-->
+

@@ -1,0 +1,14 @@
+ .modal-content {
+  background: none !important;
+  width: auto !important;
+  border: none !important;
+}
+
+ .modal-body {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+ ::ng-deep.modal {
+  z-index: 9999 !important;
+}

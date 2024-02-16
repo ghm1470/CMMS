@@ -1,0 +1,184 @@
+<ng-container>
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6 col-8 col-sm-6 card-title">
+                    <i class="fa fa-list"></i>&nbsp;&nbsp;
+                    گزارش مصرفی قطعه
+                </div>
+            </div>
+        </div>
+        <div class="card-body card-body-content">
+
+            <div class="collapse active show" id="work-search">
+                <div class="card" style="margin-bottom: 10px">
+                    <div class="card-body card-body-filter">
+                        <div class="row">
+
+                            <div class="col-md-3">
+                                <label class="for-label">نام قطعه</label>
+                                <ng-select bindLabel="name" bindValue="id"
+                                           [items]="partList"
+                                           (change)="search();execSearch($event)"
+                                           (search)="execSearch($event)"
+                                           [loading]="loadingExecSearch"
+                                           [(ngModel)]="getPageDto.partId"
+                                           (scrollToEnd)="getAllPart()"
+                                           [placeholder]="'نام قطعه'">
+
+
+                                    <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                                        <div class="ng-option disabled" *ngIf="searchTerm">
+                                            قطعه ای با عنوان
+                                            " {{searchTerm}} "
+                                            یافت نشد.
+                                        </div>
+                                    </ng-template>
+                                    <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+                                        <div class="ng-option disabled" *ngIf="searchTerm">
+                                            جستجو برای عنوان
+                                            "   {{searchTerm}} "
+                                        </div>
+                                    </ng-template>
+                                </ng-select>
+
+                                <!--                                <ng-select bindLabel="name" bindValue="id"-->
+                                <!--                                           [items]="partList"-->
+                                <!--                                           (change)="search()"-->
+                                <!--                                           [(ngModel)]="getPageDto.partId"-->
+                                <!--                                           [placeholder]="'نام قطعه'"></ng-select>-->
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="for-label"> از تاریخ </label>
+                                <input class="form-control form-control-sm"
+                                       style="direction: ltr" id="dateFrom" #requestTime
+                                       placeholder="از تاریخ    "
+                                       autocomplete="off">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="for-label">تا تاریخ</label>
+                                <input class="form-control form-control-sm"
+                                       style="direction: ltr" id="dateUntil" #requestTime
+                                       placeholder="تا تاریخ"
+                                       autocomplete="off">
+                            </div>
+
+
+                            <div class="col-md-1 text-left" style="margin-top: 30px;">
+                                <button class="btn btn-sm  btn-search" (click)="search()">
+                                    <!--<i class="fa fa-search"></i>-->
+                                    جستجو
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="loading-get-one text-center" *ngIf="loading">
+                <span class="mt-5 px-4  align-items-center d-inline-flex">
+                  <span class="fa fa-spinner fa-spin ml-2"></span>
+                  درحال بارگذاری
+                </span>
+            </div>
+
+            <ng-container>
+                <table class="table table-bordered table-striped table-responsive-md">
+                    <thead>
+                    <tr style="text-align: center">
+                        <th class="text-center">ردیف</th>
+                        <th class="text-center">تاریخ استفاده</th>
+                        <th class="text-center">تعداد استفاده شده</th>
+                        <th class="text-center"> دستگاه استفاده شده</th>
+                        <th class="text-center" style="width: 15%">جزئیات تعمیر</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngIf="!entityList.length&&loading===false">
+                        <td colspan="5">
+
+                            <div class="col-md-12 text-center">
+                                <a style="color: #7884a7;    margin: 20px;">نتیجه ای یافت نگردید.</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <ng-container *ngFor="let item of entityList; let i = index">
+                        <tr class="text-center">
+                            <td class="text-center">
+                                {{(i + 1 + (pageIndex * pageSize))}}
+                            </td>
+                            <td class="text-center" style="direction: ltr">
+                                {{moment.convertIsoToJDateWithTime(item?.usedTime) | perNumber}}
+                            </td>
+
+                            <td class="text-center">
+                                {{item.usedNumber}}
+                            </td>
+                            <td class="text-center">{{item?.assetName}}</td>
+
+                            <td class="text-center">
+                                <i class="fa fa-eye cursor-pointer" title="مشاهده جزئیات تغییر"
+                                   (click)="showDetail(item)"
+                                ></i>
+                            </td>
+                        </tr>
+                    </ng-container>
+                    <tr class="text-center">
+                        <td colspan="5" style="background-color: #e0f5ff">
+                            تعداد کل مصرفی :
+                            {{totalNumber}}
+                        </td>
+                    </tr>
+
+
+                    </tbody>
+                </table>
+
+
+            </ng-container>
+            <!--    pagination-->
+            <app-paginator
+                    [totalElements]="length"
+                    [pageSize]="pageSize"
+                    [pageIndex]="pageIndex"
+                    [pageSizeOptions]="[]"
+                    [showFirstLastButtons]="true"
+                    (page)=" changePage($event)"
+            ></app-paginator>
+
+
+            <!--    pagination-->
+
+        </div>
+    </div>
+
+</ng-container>
+
+
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="true"
+        [dataBackdrop]="true"
+        (onClose)="showModalBody=false"
+
+        [modalSize]="MyModalSize.CUSTOM_WIDTH"
+        [customWidthPercent]="{xs: 120, md:65}"
+        autoShow="true"
+        [myId]="modalId">
+    <div modal-header>
+        جزئیات تغییر
+    </div>
+    <div modal-body style="display: flow-root" *ngIf="showModalBody">
+        <app-new-form-work-order-khales
+                [workOrderId]="workOrderId"
+                [mode]="'VIEW'"
+        >
+
+        </app-new-form-work-order-khales>
+
+    </div>
+
+</nbw-modal>
+

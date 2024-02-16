@@ -1,0 +1,311 @@
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="true"
+  [dataBackdrop]="false"
+  [modalSize]="MyModalSize.CUSTOM_WIDTH"
+  [customWidthPercent]="{xs: 50, md:65}"
+  autoShow="false"
+  [myId]="'viewAssetForScheduleMaintenance'">
+  <div modal-header>
+    <span >دارایی ها</span>
+  </div>
+
+  <div modal-body style="display: flow-root">
+    <div class="row">
+      <div class="col-md-3 form-group required col-sm-12">
+        <label class="for-label">نام دارایی:</label>
+        <input class="form-control" [(ngModel)]="term"
+               [placeholder]="'جستجو براساس نام دارایی'">
+      </div>
+      <div class="col-md-3 form-group required col-sm-12">
+        <label class="for-label">کد دارایی:</label>
+        <input class="form-control" [(ngModel)]="code"
+               [placeholder]="'جستجو براساس کد دارایی'">
+      </div>
+      <div class="col-md-2" style="margin-top: 30px">
+        <button class="btn btn-search btn-sm" (click)="search()"
+        >
+          جستجو
+          <i *ngIf="loadingGetAllAssetWithoutParentId" class="fa fa-spinner fa-pulse fa-1x"></i>
+
+        </button>
+      </div>
+    </div>
+
+
+    <div class="card table-responsive-md">
+      <table class="table table-striped table-bordered">
+        <thead>
+        <tr >
+          <th style="text-align: right">ردیف</th>
+          <th style="text-align: right">نام دارایی</th>
+          <th style="text-align: center">کد دارایی</th>
+          <th style="text-align: center">وضعیت  دارایی</th>
+          <th></th>
+          <!--<th class="text-right" style="width: 5%"></th>-->
+          <!--<th class="text-right" style="width: 5%"></th>-->
+          <!--(click)="treeMethod(item)"-->
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let assetOfAssetList of assetList; let i = index">
+          <tr>
+            <td>
+              {{(i + 1 + (pageIndex * pageSize))}}
+            </td>
+            <td style="text-align: right">
+              <ng-container *ngIf="assetOfAssetList.hasChild">
+
+
+
+                <i *ngIf="loadingForGetChild&&selectedParentIdForGetChild===assetOfAssetList.id"
+                   class="fa fa-spinner fa-pulse fa-1x"></i>
+                <img *ngIf="!assetOfAssetList.openPlus " width="20"
+                     src="../../../../../assets/images/asset-tree/expand.png"
+                     [ngStyle]="{marginRight:assetOfAssetList.marginRight +'px'}"
+                     (click)="getChildList(assetOfAssetList)"
+                     style="cursor: pointer"
+                     alt="...">
+
+
+                <img *ngIf="assetOfAssetList.openPlus" width="20"
+                     src="../../../../../assets/images/asset-tree/navigate.png"
+                     [ngStyle]="{marginRight:assetOfAssetList.marginRight +'px'}"
+                     (click)="methodTow(assetOfAssetList)"
+                     style="cursor: pointer"
+                     alt="...">
+                <!--<i class="far fa-minus-square" ></i>-->
+                <!--(click)="methodTow(asset.id)"-->
+
+                &nbsp;&nbsp;&nbsp;
+                <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                     width="20"
+                     src="../../../../../assets/images/asset-tree/equipment-16.png"
+                     style="margin-right: 2px"
+                     alt="...">
+                <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                     width="20"
+                     style="margin-right: 2px"
+                     src="../../../../../assets/images/asset-tree/facilities-16.png"
+                     alt="...">
+                <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                     width="20"
+                     style="margin-right: 2px"
+                     src="../../../../../assets/images/asset-tree/tools-16.png"
+                     alt="...">
+                &nbsp;&nbsp;
+                <span style="font-size: 12px; margin-right: 2px"> {{assetOfAssetList.name}} </span>
+
+              </ng-container>
+              <ng-container *ngIf="!assetOfAssetList.hasChild">
+                <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                     width="20"
+                     src="../../../../../assets/images/asset-tree/equipment-16.png"
+                     [ngStyle]="{marginRight:assetOfAssetList.marginRight + 35 +'px'}"
+                     alt="...">
+                <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                     width="20"
+                     src="../../../../../assets/images/asset-tree/facilities-16.png"
+                     [ngStyle]="{marginRight:assetOfAssetList.marginRight + 35 +'px'}"
+                     alt="...">
+                <img *ngIf="assetOfAssetList.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                     width="20"
+                     src="../../../../../assets/images/asset-tree/tools-16.png"
+                     [ngStyle]="{marginRight:assetOfAssetList.marginRight + 35 +'px'}"
+                     alt="...">
+                &nbsp;&nbsp;
+                <span style="font-size: 12px; margin-right: 2px"> {{assetOfAssetList.name}}</span>
+              </ng-container>
+            </td>
+            <td style="text-align: center; font-size: 12px">{{assetOfAssetList.code}}</td>
+            <td style="text-align: center; font-size: 12px">
+              <ng-container *ngIf="assetOfAssetList.status===true" >
+                فعال
+              </ng-container>
+              <ng-container *ngIf="assetOfAssetList.status===false" >
+                غیرفعال
+              </ng-container>
+            </td>
+            <td style="text-align: center;">
+              <!--            <ng-container *ngIf="assetOfAssetList.hasChild === false">-->
+              <button class="btn btn-sm btn-action" (click)="treeMethod(assetOfAssetList)" >
+                انتخاب
+              </button>
+              <!--            </ng-container>-->
+            </td>
+          </tr>
+          <ng-container *ngIf="assetOfAssetList.hasChild">
+            <ng-template [ngTemplateOutlet]="childListTemp"
+                         [ngTemplateOutletContext]="{$implicit:assetOfAssetList.childAssetList,  stepIn:1 }">
+            </ng-template>
+          </ng-container>
+        </ng-container>
+
+<!--        <tr *ngFor="let item of assetList; let i = index" >-->
+
+
+
+<!--          &lt;!&ndash;<td>&ndash;&gt;-->
+<!--            &lt;!&ndash;<a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"&ndash;&gt;-->
+<!--               &lt;!&ndash;(click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">&ndash;&gt;-->
+<!--              &lt;!&ndash;<i class="fa fa-edit" title="ویرایش"></i>&ndash;&gt;-->
+<!--            &lt;!&ndash;</a>&ndash;&gt;-->
+<!--          &lt;!&ndash;</td>&ndash;&gt;-->
+<!--          &lt;!&ndash;<td>&ndash;&gt;-->
+<!--            &lt;!&ndash;<a class="btn btn-sm btn-outline-lightning rounded-0"&ndash;&gt;-->
+<!--               &lt;!&ndash;style="cursor: pointer" nbdAreYouSure (then)="deleteItem(item)">&ndash;&gt;-->
+<!--              &lt;!&ndash;<i class="fa fa-trash" title="حذف"></i>&ndash;&gt;-->
+<!--            &lt;!&ndash;</a>&ndash;&gt;-->
+<!--          &lt;!&ndash;</td>&ndash;&gt;-->
+
+<!--          <td style="text-align: center; font-size: 12px">{{item.code}}</td>-->
+<!--          <td style="text-align: center; font-size: 12px">-->
+<!--            <ng-container *ngIf="item.status===true" >-->
+<!--              فعال-->
+<!--            </ng-container>-->
+<!--            <ng-container *ngIf="item.status===false" >-->
+<!--              غیرفعال-->
+<!--            </ng-container>-->
+<!--          </td>-->
+<!--          <td style="text-align: center;">-->
+<!--            &lt;!&ndash;            <ng-container *ngIf="item.hasChild === false">&ndash;&gt;-->
+<!--            <button class="btn btn-sm btn-action" (click)="treeMethod(item)" >-->
+<!--              انتخاب-->
+<!--            </button>-->
+<!--            &lt;!&ndash;            </ng-container>&ndash;&gt;-->
+<!--          </td>-->
+<!--        </tr>-->
+        </tbody>
+      </table>
+    </div>
+
+
+
+
+
+
+    <div modal-footer>
+      <div class="btn-group-sm" style="margin-top: 15px">
+        <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal" style="margin :0 5px "
+                (click)="cancelModal()">
+          انصراف
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!--childList-->
+  <ng-template #childListTemp let-childList let-stepIn='stepIn'>
+    <ng-container *ngFor="let child of childList; let i = index">
+      <tr>
+        <td>
+                              {{(i + 1 + (pageIndex * pageSize))}}
+          <!--                    - -->
+        </td>
+        <td style="text-align: right">
+
+          <ng-container *ngIf="child.hasChild">
+                    <span [style.margin-right.px]=" 40*stepIn">
+
+
+
+
+                            <i *ngIf="loadingForGetChild&&selectedParentIdForGetChild===child.id"
+                               class="fa fa-spinner fa-pulse fa-1x"></i>
+                        <img *ngIf="!child.openPlus " width="20"
+                             src="../../../../../assets/images/asset-tree/expand.png"
+                             [ngStyle]="{marginRight:child.marginRight +'px'}"
+                             (click)="getChildList(child)"
+                             style="cursor: pointer"
+                             alt="...">
+
+
+                        <img *ngIf="child.openPlus" width="20"
+                             src="../../../../../assets/images/asset-tree/navigate.png"
+                             [ngStyle]="{marginRight:child.marginRight +'px'}"
+                             (click)="methodTow(child)"
+                             style="cursor: pointer"
+                             alt="...">
+
+
+                      <!--<i class="far fa-minus-square" ></i>-->
+                      <!--(click)="methodTow(child.id)"-->
+                        &nbsp;&nbsp;&nbsp;
+                        <img *ngIf="child.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                             width="20"
+                             src="../../../../../assets/images/asset-tree/equipment-16.png"
+                             style="margin-right: 2px"
+                             alt="...">
+                        <img *ngIf="child.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                             width="20"
+                             style="margin-right: 2px"
+                             src="../../../../../assets/images/asset-tree/facilities-16.png"
+                             alt="...">
+                        <img *ngIf="child.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                             width="20"
+                             style="margin-right: 2px"
+                             src="../../../../../assets/images/asset-tree/tools-16.png"
+                             alt="...">
+                        &nbsp;&nbsp;
+                        <span style="font-size: 12px; margin-right: 2px"> {{child.name}} </span>
+                    </span>
+          </ng-container>
+          <ng-container *ngIf="!child.hasChild">
+                        <span [style.margin-right.px]=" 40*(stepIn+1)">
+
+                        <img *ngIf="child.categoryType === categoryType[categoryType.FACILITY.toString()]"
+                             width="20"
+                             src="../../../../../assets/images/asset-tree/equipment-16.png"
+                             [ngStyle]="{marginRight:child.marginRight + 35 +'px'}"
+                             alt="...">
+                        <img *ngIf="child.categoryType === categoryType[categoryType.BUILDING.toString()]"
+                             width="20"
+                             src="../../../../../assets/images/asset-tree/facilities-16.png"
+                             [ngStyle]="{marginRight:child.marginRight + 35 +'px'}"
+                             alt="...">
+                        <img *ngIf="child.categoryType === categoryType[categoryType.TOOLS.toString()]"
+                             width="20"
+                             src="../../../../../assets/images/asset-tree/tools-16.png"
+                             [ngStyle]="{marginRight:child.marginRight + 35 +'px'}"
+                             alt="...">
+                        &nbsp;&nbsp;
+                        <span style="font-size: 12px; margin-right: 2px"> {{child.name}}</span>
+                    </span>
+          </ng-container>
+
+        </td>
+        <td style="text-align: center; font-size: 12px">{{child.code}}</td>
+        <td style="text-align: center; font-size: 12px">
+          <ng-container *ngIf="child.status===true" >
+            فعال
+          </ng-container>
+          <ng-container *ngIf="child.status===false" >
+            غیرفعال
+          </ng-container>
+        </td>
+        <td style="text-align: center;">
+          <!--            <ng-container *ngIf="child.hasChild === false">-->
+          <button class="btn btn-sm btn-action" (click)="treeMethod(child)" >
+            انتخاب
+          </button>
+          <!--            </ng-container>-->
+        </td>
+
+      </tr>
+      <ng-container *ngIf="child.hasChild">
+        <ng-template [ngTemplateOutlet]="childListTemp"
+                     [ngTemplateOutletContext]="{$implicit:child.childAssetList,  stepIn:stepIn+1 }">
+        </ng-template>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+  <!--childList-->
+</nbw-modal>
+
+
+
+<!--=======================================-->
+<!--<i class="far fa-plus-square"></i>-->
+<!--<i class="far fa-minus-square"></i>-->
+

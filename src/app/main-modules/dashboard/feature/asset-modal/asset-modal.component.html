@@ -1,0 +1,95 @@
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="false"
+  [dataBackdrop]="true"
+  [modalSize]="MyModalSize.CUSTOM_WIDTH"
+  [customWidthPercent]="{xs: 100, md:90}"
+  autoShow="false"
+  [myId]="modalId">
+  <div modal-header>
+    {{title}}
+  </div>
+  <div modal-body style="display: flow-root">
+
+    <table class="table table-bordered table-striped table-responsive-md" >
+      <thead>
+      <tr style="text-align: center">
+        <th style="text-align: right">نام دارایی</th>
+        <th style="text-align: center">کد دارایی</th>
+        <th style="text-align: center">وضعیت  دارایی</th>
+        <th style="text-align: center">نوع  دارایی</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of assetsList; let i = index" >
+        <td style="text-align: right">
+          <ng-container *ngIf="item.hasChild === true">
+
+
+            <!--<span *ngIf="item.openPlus === false"  [ngStyle]="{marginRight:item.marginRight+'px'}">-->
+            <!--<i class="far fa-plus-square" (click)="getChildList(item, i)"></i>-->
+            <!--</span>-->
+
+
+            <img  *ngIf="item.openPlus === false" width="20"
+                  src="../../../../../assets/images/asset-tree/expand.png"
+                  (click)="getChildList(item, i)"
+                  alt="...">
+
+
+            <img  *ngIf="item.openPlus === true" width="20"
+                  src="../../../../../assets/images/asset-tree/navigate.png"
+                  (click)="methodTow(item.id)"
+                  alt="...">
+            <!--<i class="far fa-minus-square" ></i>-->
+            <!--(click)="methodTow(item.id)"-->
+            <img  *ngIf="item.categoryType === categoryType[categoryType.FACILITY.toString()]" width="20"
+                  src="../../../../../assets/images/asset-tree/equipment-16.png"
+
+                  alt="...">
+            <img *ngIf="item.categoryType === categoryType[categoryType.BUILDING.toString()]" width="20"
+                 src="../../../../../assets/images/asset-tree/facilities-16.png"
+                 alt="...">
+            <img *ngIf="item.categoryType === categoryType[categoryType.TOOLS.toString()]" width="20"
+                 src="../../../../../assets/images/asset-tree/tools-16.png"
+                 alt="...">
+            &nbsp;&nbsp;
+            <span    style="font-size: 12px;"> {{item.name}} </span>
+
+          </ng-container>
+          <ng-container *ngIf="item.hasChild === false">
+            <img  *ngIf="item.categoryType === categoryType[categoryType.FACILITY.toString()]" width="20"
+                  src="../../../../../assets/images/asset-tree/equipment-16.png"
+                  alt="...">
+            <img *ngIf="item.categoryType === categoryType[categoryType.BUILDING.toString()]" width="20"
+                 src="../../../../../assets/images/asset-tree/facilities-16.png"
+                 alt="...">
+            <img *ngIf="item.categoryType === categoryType[categoryType.TOOLS.toString()]" width="20"
+                 src="../../../../../assets/images/asset-tree/tools-16.png"
+                 alt="...">
+            &nbsp;&nbsp;
+            <span  style="font-size: 12px;"> {{item.name}}</span>
+          </ng-container>
+        </td>
+
+        <td style="text-align: center; font-size: 12px">{{item.code}}</td>
+        <td style="text-align: center; font-size: 12px">
+          <p class="text-center" *ngIf="item.status">فعال</p>
+          <p class="text-center" *ngIf="!item.status">غیر فعال</p>
+        </td>
+        <td style="text-align: center; font-size: 12px">
+          <p class="text-center" *ngIf="item.categoryType === categoryType[categoryType.FACILITY.toString()]">امکانات</p>
+          <p class="text-center"  *ngIf="item.categoryType === categoryType[categoryType.BUILDING.toString()]">سالن</p>
+          <p class="text-center"  *ngIf="item.categoryType === categoryType[categoryType.TOOLS.toString()]">ابزار</p>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="col-12 text-center" *ngIf="assetsList.length === 0" >
+      موردی یافت نشد
+    </div>
+
+  </div>
+</nbw-modal>
+

@@ -1,0 +1,447 @@
+<div id="scheduleCreate" class="carousel slide" data-interval="false">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6 col-8 col-sm-6 card-title">
+                            <ng-container *ngIf="mode === actionMode.ADD">
+                                <i class="fa fa-plus"></i>&nbsp;
+                                افزودن زمان بندی بازدید
+                            </ng-container>
+                            <ng-container *ngIf="mode === actionMode.EDIT">
+                                <i class="fa fa-edit"></i>&nbsp;
+                                ویرایش زمان بندی بازدید
+                            </ng-container>
+
+                            <ng-container *ngIf="mode === actionMode.VIEW">
+                                <i class="fa fa-eye"></i>&nbsp;
+                                مشاهده زمان بندی بازدید
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6 col-4 col-sm-6 text-left">
+                            <button (click)="cancel()"
+                                    class="btn btn-cancel-back btn-sm">
+                                بازگشت
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <form #scheduleMaintenanceForm="ngForm" (submit)="action(scheduleMaintenanceForm)">
+                    <div class="card-body card-body-content overflow-auto"  style="height: 70vh">
+                        <div class="row" style="margin: 0;">
+                            <div class="col-md-9 row">
+                                <div class="col-md-6 form-group required col-sm-12">
+                                    <label class="for-label">عنوان:
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div class="input-group input-group-sm">
+                                        <input [(ngModel)]="scheduleMaintenance.title" name="title" class="form-control"
+                                               #title="ngModel" nbvRequired
+                                               [disabled]="mode!==actionMode.ADD"
+                                               [class.is-valid]="!(title?.errors?.nbvRequired || title?.errors?.nbvPattern)"
+                                               [class.is-invalid]="(title?.errors?.nbvRequired || title?.errors?.nbvPattern) && (title.touched || doSave)"
+                                               dest="titleValidation">
+                                    </div>
+                                    <div id="titleValidation" style="opacity: 0; height: 0"></div>
+                                </div>
+
+                                <div class="col-md-6 form-group required col-sm-12">
+                                    <label class="for-label">کد:
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div class="input-group input-group-sm">
+                                        <input [(ngModel)]="scheduleMaintenance.code" name="code" class="form-control"
+                                               #code="ngModel"
+                                               nbvRequired
+                                               (change)="checkCodeExist()"
+                                               [disabled]="mode!==actionMode.ADD"
+                                               nbvPattern="{{myPattern.EnNumberAndAlphabetic}}"
+                                               nbvPatternMsgHtml="ورودی به صورت عدد و حروف انگلیسی می باشد."
+                                               [class.is-valid]="!(code?.errors?.nbvRequired || code?.errors?.nbvPattern)"
+                                               [class.is-invalid]="(code?.errors?.nbvRequired || code?.errors?.nbvPattern)&& (code.touched || doSave)"
+                                               dest="codeValidation">
+                                    </div>
+                                    <div id="codeValidation" style="opacity: 0; height: 0"></div>
+                                </div>
+                                <div class="col-md-6 form-group required col-sm-12">
+                                    <label class="for-label" for="statusffId">وضعیت :</label>
+                                    <span style="color: red">*</span>
+                                    <ng-select dir="rtl"
+                                               [disabled]="mode!==actionMode.ADD"
+                                               [(ngModel)]="scheduleMaintenance.statusId"
+                                               placeholder="انتخاب وضعیت "
+                                               style="padding: 0"
+                                               #statusffId="ngModel"
+                                               id="statusffId"
+                                               name="statusffId"
+                                               class="form-control"
+                                               nbvRequired
+                                               [class.is-valid]="!(statusffId?.errors?.nbvRequired || statusffId?.errors?.nbvPattern)"
+                                               [class.is-invalid]="(statusffId?.errors?.nbvRequired || statusffId?.errors?.nbvPattern)
+                                                        && (statusffId.touched || doSave)"
+                                               dropdownPosition="bottom">
+                                        <ng-option *ngFor="let item of workOrderStatusList"
+                                                   [value]="item.id">{{item.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                    <div id="statusffIdListValidation" style="opacity: 0; height: 0"></div>
+                                </div>
+                                <div class="col-md-6 form-group required col-sm-12">
+                                    <label class="for-label" for="maintenanceType">نوع بازدید :</label>
+                                    <span style="color: red">*</span>
+                                    <ng-select dir="rtl"
+                                               [disabled]="mode!==actionMode.ADD"
+                                               [(ngModel)]="scheduleMaintenance.maintenanceType"
+                                               placeholder="انتخاب نوع بازدید "
+                                               style="padding: 0"
+                                               #maintenanceType="ngModel"
+                                               id="maintenanceType"
+                                               name="maintenanceType"
+                                               class="form-control"
+                                               nbvRequired
+                                               [class.is-valid]="!(maintenanceType?.errors?.nbvRequired || maintenanceType?.errors?.nbvPattern)"
+                                               [class.is-invalid]="(maintenanceType?.errors?.nbvRequired || maintenanceType?.errors?.nbvPattern)
+                                                        && (maintenanceType.touched || doSave)"
+                                               dropdownPosition="bottom">
+                                        <ng-option *ngFor="let item of maintenanceTypeList"
+                                                   [value]="item._value">{{item._title}}
+                                        </ng-option>
+                                    </ng-select>
+                                    <div id="maintenanceTypeListValidation" style="opacity: 0; height: 0"></div>
+                                </div>
+                                <div class="col-md-6 form-group required col-sm-12">
+                                    <label class="for-label" for="priority"> اولویت :</label>
+                                    <span style="color: red">*</span>
+                                    <ng-select dir="rtl"
+                                               [disabled]="mode!==actionMode.ADD"
+                                               [(ngModel)]="scheduleMaintenance.priority"
+                                               placeholder="انتخاب  اولویت "
+                                               style="padding: 0"
+                                               #priority="ngModel"
+                                               id="priority"
+                                               name="priority"
+                                               class="form-control"
+                                               nbvRequired
+                                               [class.is-valid]="!(priority?.errors?.nbvRequired || priority?.errors?.nbvPattern)"
+                                               [class.is-invalid]="(priority?.errors?.nbvRequired || priority?.errors?.nbvPattern)
+                                                        && (priority.touched || doSave)"
+                                               dropdownPosition="bottom">
+                                        <ng-option *ngFor="let item of priorityList"
+                                                   [value]="item._value">{{item._title}}
+                                        </ng-option>
+                                    </ng-select>
+                                    <div id="priorityListValidation" style="opacity: 0; height: 0"></div>
+                                </div>
+
+
+                                <div class="col-md-6 form-group required col-sm-12"
+
+
+                                     *ngIf="mode !== actionMode.VIEW">
+                                    <label class="for-label">دارایی:
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <ng-container *ngIf="mode!==actionMode.ADD">
+                                        <div class="form-control  form-control-sm"
+                                             [ngStyle]="(doSave&&!parentAsset.name) && {'border' : 'solid 1px red'}"
+                                             style="background-color: #f9f9f9">
+                                            {{parentAsset.name}}
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="mode===actionMode.ADD">
+
+                                        <div (click)="openGetAllModal()"
+                                             [ngStyle]="(doSave&&!parentAsset.name) && {'border' : 'solid 1px red'}"
+                                             class="form-control  form-control-sm">
+                                            {{parentAsset.name}}
+                                        </div>
+                                    </ng-container>
+                                </div>
+
+                                <div class="col-md-6 form-group required col-sm-12" *ngIf="mode === actionMode.VIEW">
+                                    <label class="for-label">دارایی:
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div
+                                            class="form-control  form-control-sm"
+                                            style="    background-color: rgb(229, 225, 216);">
+                                        {{scheduleMaintenance.assetName}}
+                                        <!--                {{scheduleMaintenance.assetCode}}-->
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 form-group required col-sm-12">
+                                    <label class="for-label" for="statusId"> فرایند :</label>
+                                    <span style="color: red">*</span>
+                                    <ng-select dir="rtl"
+                                               [disabled]="mode!==actionMode.ADD"
+                                               [(ngModel)]="scheduleMaintenance.activityId"
+                                               placeholder="انتخاب  فرایند "
+                                               style="padding: 0"
+                                               #statusId="ngModel"
+                                               id="statusId"
+                                               name="statusId"
+                                               class="form-control"
+                                               nbvRequired
+                                               [class.is-valid]="!(statusId?.errors?.nbvRequired || statusId?.errors?.nbvPattern)"
+                                               [class.is-invalid]="(statusId?.errors?.nbvRequired || statusId?.errors?.nbvPattern)
+                                                        && (statusId.touched || doSave)"
+                                               dropdownPosition="bottom">
+                                        <ng-option *ngFor="let item of activityIdList" [value]="item.id">{{item.title}}</ng-option>
+                                    </ng-select>
+                                    <div id="statusIdListValidation" style="opacity: 0; height: 0"></div>
+                                </div>
+
+
+
+                                <div class="col-md-6 form-group required col-sm-12">
+                                    <label class="for-label">پروژه:
+                                        <!--                    <span style="color: red" >*</span>-->
+                                    </label>
+                                    <ng-select dir="rtl"
+                                               [disabled]="mode!==actionMode.ADD"
+                                               [(ngModel)]="scheduleMaintenance.projectId"
+                                               name="projectId"
+
+                                               placeholder="پروژه "
+                                               style="width: 100%;"
+                                               dropdownPosition="bottom">
+                                        <ng-option *ngFor="let item of projectList" [value]="item.id">{{item.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                    <!--<div class="input-group input-group-sm">-->
+                                    <!--<select [(ngModel)]="scheduleMaintenance.projectId" name="projectId" class="form-control"-->
+                                    <!--&gt;-->
+                                    <!--<option value="-1" disabled>پروژه</option>-->
+                                    <!--<option *ngFor="let item of projectList" [value]="item.id">{{item.name}}</option>-->
+                                    <!--</select>-->
+                                    <!--</div>-->
+
+                                </div>
+
+                                <!--                <div class="col-md-6 form-group required col-sm-12">-->
+                                <!--                  <label class="for-label">وضعیت فعالیت :-->
+                                <!--                    <span style="color: red" >*</span>-->
+                                <!--                  </label>-->
+                                <!--                  &nbsp;&nbsp;-->
+                                <!--                  <label class="switch">-->
+                                <!--                    <input type="checkbox" [checked]="scheduleMaintenance.active"-->
+                                <!--                           (change)="changeScheduleMaintenanceStatus($event)">-->
+                                <!--                    <span class="slider round"></span>&nbsp;&nbsp;-->
+                                <!--                    <label style="color: green" *ngIf="scheduleMaintenance.active">فعال</label>-->
+                                <!--                    <label style="color: #990000" *ngIf="!scheduleMaintenance.active">غیر فعال</label>-->
+                                <!--                  </label>-->
+                                <!--                </div>-->
+                            </div>
+
+                            <div class="col-md-3" style="margin-top: 15px">
+                                <fieldset class="scheduler-border" id="comapny-documents"
+                                          style="background-color: #f5f5f5">
+                                    <legend class="scheduler-border" *ngIf="mode !== actionMode.VIEW"><h6>اپلود
+                                        تصویر</h6></legend>
+                                    <legend class="scheduler-border" *ngIf="mode == actionMode.VIEW"><h6>تصویر</h6>
+                                    </legend>
+                                    <ng-container *ngIf="mode !== actionMode.VIEW">
+                                        <div class="col-md-12"
+                                             *ngIf="(!scheduleMaintenance.image || !scheduleMaintenance.image.fileByte)  && !fileLoader">
+                                            <label>
+                                                <a class="btn btn-sm btn-outline-secondary">
+                                                    <i class="fa fa-paperclip " aria-hidden="true"
+                                                       style="font-size: larger"></i>
+                                                    انتخاب تصویر
+                                                </a>
+                                                <input type="file" style="display: none;" #input
+                                                       accept=".jpg,.jpeg,.webp,.psd,.tiff,.JPG,.JPEG,.webp,.PSD,.TIFF"
+                                                       (change)="onChangeUploader(input)">
+                                            </label>
+                                        </div>
+                                    </ng-container>
+                                    <div class="col-md-12 text-center img-fluid img-thumbnail"
+                                         *ngIf="(!scheduleMaintenance.image || !scheduleMaintenance.image.fileByte) && fileLoader">
+                                        <i class="fa fa-spin fa-2x fa-spinner"></i>
+                                    </div>
+                                    <div class="col-md-12 img-fluid img-thumbnail"
+                                         *ngIf="scheduleMaintenance.image && scheduleMaintenance.image.fileByte">
+                                        <img [src]="'data:image/jpg;base64,' + scheduleMaintenance.image.fileByte"
+                                             class="img img-responsive"
+                                             height="100" width="100">
+                                        <i class="fa fa-trash" style="color: red" (click)="deleteImage()"></i>
+                                    </div>
+                                    <p class="text-center"
+                                       *ngIf="!scheduleMaintenance.image  && mode == actionMode.VIEW">
+                                        تصویری بارگذاری نشده
+                                    </p>
+                                </fieldset>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="card-footer text-left">
+                        <ng-container *ngIf="mode === actionMode.ADD">
+                            <button class="btn btn-sm btn-action" type="submit" *ngIf="mode!== actionMode.VIEW"
+                                    [disabled]="codeExist">
+                                <span *ngIf="mode === actionMode.ADD">ذخیره</span>
+                                <i *ngIf="loadingAction" class="fa fa-spinner fa-pulse fa-1x"></i>
+
+                            </button>
+                        </ng-container>
+                        <!--                      <ng-container *ngIf="mode === actionMode.EDIT">-->
+                        <!--                            <button class="btn btn-sm btn-action" type="submit" *ngIf="mode!== actionMode.VIEW"-->
+                        <!--                                    [disabled]="codeExist">-->
+                        <!--                                <span *ngIf="mode === actionMode.EDIT">ویرایش</span>-->
+                        <!--                            </button>-->
+                        <!--                        </ng-container>-->
+
+                        <ng-container *ngIf="mode === actionMode.EDIT || mode === actionMode.VIEW">
+                            <button class="btn btn-warning btn-sm" type="button" style="margin: 0 5px"
+                                    *ngIf="menuStatus" (click)="next()">
+                                مرحله بعد - اطلاعات تکمیلی
+                            </button>
+                        </ng-container>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6 col-6 col-sm-6 card-title">
+                            اطلاعات تکمیلی زمان بندی بازدید
+                            (
+                            {{scheduleMaintenance.title}}
+                            )
+                        </div>
+                        <div class="col-md-6 col-6 col-sm-6 text-left">
+                            <button (click)="prev()"
+                                    class="btn btn-cancel-back btn-sm">
+                                بازگشت به مرحله قبل
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body card-body-content">
+                    <div class="col-md-12" style="padding: 0" *ngIf="menuStatus">
+                        <ul class="nav nav-tabs" role="navigation" style="text-align: right;padding-right: 0">
+                            <li class="nav-item">
+                                <a href="#information" style="color: #a0a0a0;font-size: 14px" class="nav-link active"
+                                   id="informationB"
+                                   data-toggle="tab" role="tab" aria-controls="information"
+                                   (click)="basicInformation = true; setParamToRoute('informationB')">کلیات</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#completionDetails" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   id="completionDetailsB"
+                                   data-toggle="tab" role="tab" aria-controls="completionDetails"
+                                   (click)="completionDetails = true; setParamToRoute('completionDetailsB')">اطلاعات
+                                    تکمیلی</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#scheduledWithTime" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   id="scheduledWithTimeB"
+                                   data-toggle="tab" role="tab" aria-controls="scheduledTime"
+                                   (click)="changeMethodTime(); setParamToRoute('scheduledWithTimeB')">دوره بازدید
+                                    زمانی</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#scheduledWithMetering" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   id="scheduledWithMeteringB"
+                                   data-toggle="tab" role="tab" aria-controls="scheduledMetering"
+                                   (click)=" changeMethodMetering(); setParamToRoute('scheduledWithMeteringB')">دوره
+                                    بازدید کارکردی</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#parts" style="color: #a0a0a0;font-size: 14px" class="nav-link" id="partsB"
+                                   data-toggle="tab" role="tab" aria-controls="parts"
+                                   (click)="parts = true; setParamToRoute('partsB')"> قطعات  به کار برده شده</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#tasks" style="color: #a0a0a0;font-size: 14px" class="nav-link" id="tasksB"
+                                   data-toggle="tab" role="tab" aria-controls="tasks"
+                                   (click)="tasks = true; setParamToRoute('tasksB')">وظایف</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#taskGroup" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   id="taskGroupB"
+                                   data-toggle="tab" role="tab" aria-controls="taskGroup"
+                                   (click)="taskGroup = true; setParamToRoute('taskGroupB')">مجموعه کارها</a>
+                            </li>
+                            <!--                <li class="nav-item">-->
+                            <!--                  <a href="#notification" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+                            <!--                     data-toggle="tab" role="tab" aria-controls="notification" (click)="notification = true">آگاه سازی</a>-->
+                            <!--                </li>-->
+                            <li class="nav-item">
+                                <a href="#file" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab" id="fileB"
+                                   role="tab" aria-controls="file" (click)="file = true; setParamToRoute('fileB')">مستندات</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <!--کلیات-->
+                            <div class="tab-pane fade active show" id="information" role="tabpanel">
+                                <app-schedule-maintenance-basic-information *ngIf="basicInformation" [mode]="mode"
+                                                                            [scheduleMaintenanceId]="scheduleMaintenanceId"></app-schedule-maintenance-basic-information>
+                            </div>
+                            <!--اطلاعات تکمیلی-->
+                            <div class="tab-pane fade" id="completionDetails" role="tabpanel">
+                                <app-schedule-maintenance-completion-detail *ngIf="completionDetails"
+                                                                            [scheduleMaintenanceId]="scheduleMaintenanceId"
+                                                                            [mode]="mode"></app-schedule-maintenance-completion-detail>
+                            </div>
+                            <!--دوره بازدید زمانی-->
+                            <div class="tab-pane fade" id="scheduledWithTime" role="tabpanel">
+                                <app-schedule-with-time *ngIf="scheduledWithTime" [againGetT]="againGetT" [TMode]="mode"
+                                                        [scheduleMaintenanceId]="scheduleMaintenanceId"></app-schedule-with-time>
+                            </div>
+                            <!--دوره بازدید کارکردی-->
+                            <div class="tab-pane fade" id="scheduledWithMetering" role="tabpanel">
+                                <app-schedule-with-metering *ngIf="scheduledWithMetering" [againGetM]="againGetM"
+                                                            [MMode]="mode"
+                                                            [scheduleMaintenanceId]="scheduleMaintenanceId"
+                                                            [assetId]="scheduleMaintenance.assetId"></app-schedule-with-metering>
+                            </div>
+                            <!--قطعات  به کار برده شده-->
+                            <div class="tab-pane fade" id="parts" role="tabpanel">
+                                <app-part-with-usage-count *ngIf="parts" [referenceId]="scheduleMaintenanceId"
+                                                           [modeS]="mode"></app-part-with-usage-count>
+                            </div>
+                            <!-- وظایف-->
+                            <div class="tab-pane fade" id="tasks" role="tabpanel">
+                                <app-task-list *ngIf="tasks" [referenceId]="scheduleMaintenanceId" [modeS]="mode"
+                                               [formStatus]="'schedule'"></app-task-list>
+                            </div>
+                            <!--مجموعه کارها-->
+                            <div class="tab-pane fade" id="taskGroup" role="tabpanel">
+                                <app-schedule-maintenance-task-group [mode]="mode"
+                                                                     [scheduleMaintenanceId]="scheduleMaintenanceId"
+                                                                     *ngIf="taskGroup"></app-schedule-maintenance-task-group>
+                            </div>
+                            <!--آگاه سازی-->
+<!--                            <div class="tab-pane fade" id="notification" role="tabpanel">-->
+<!--                                <app-notify [referenceId]="scheduleMaintenanceId" *ngIf="notification" [modeW]="mode"-->
+<!--                                            [typeOfNotification]="typeOfNotification"></app-notify>-->
+<!--                            </div>-->
+                            <!--مستندات-->
+                            <div class="tab-pane fade" id="file" role="tabpanel">
+                                <app-document *ngIf="file" [extraId]="scheduleMaintenanceId" [mode]="mode"
+                                              (documents)="changeDocumentList($event)"></app-document>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<app-view-asset (parentAsset)="setParentMethod($event)" [openModal]="openModal"></app-view-asset>

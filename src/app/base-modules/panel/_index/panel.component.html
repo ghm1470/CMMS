@@ -1,0 +1,42 @@
+<!--<form class=" form" [formGroup]="htmlForm" (ngSubmit)="test()">-->
+
+<!--    <input type="text"-->
+<!--           formControlName="national_code"-->
+<!--           class="form-control "-->
+<!--           [(ngModel)]="n"-->
+<!--           [style.fontFamily]="'Vazir-FD'"-->
+<!--           appNumeric>-->
+<!--    <button type="submit">test</button>-->
+<!--</form>-->
+<!--    <button (click)="playNotificationSound()">playNotificationSound</button>-->
+
+<div id="main-wrapper" class="defaultdark">
+    <div class="wrapper">
+        <app-sidebar [user]="user"
+                     [userType]="userType"></app-sidebar>
+        <div id="container">
+            <div id="header">
+                <app-header2></app-header2>
+            </div>
+            <!--<ng-scrollbar class="scroll-frame"-->
+            <!--barClass="scrollbar"-->
+            <!--shown='hover'-->
+            <!--compact="true"-->
+            <!--thumbClass="scroll-thumb">-->
+            <div id="content" class="container-fluid p-md-3 p-sm-3 p-0"
+                 style="background-color: #f2f3f4; overflow-x: hidden!important;">
+                <!--                bg-light p-md-2 p-sm-2 p-1-->
+                <div class="">
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+            <!--</ng-scrollbar>-->
+        </div>
+    </div>
+</div>
+<audio id="notificationSound" hidden>
+    <source src="assets/notify/noti-message-in.mp3" type="audio/ogg">
+</audio>
+<audio id="notificationSound2" hidden>
+    <source src="assets/notify/noti-message-in.mp3" type="audio/ogg">
+</audio>

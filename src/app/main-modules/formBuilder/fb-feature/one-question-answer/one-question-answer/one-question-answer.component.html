@@ -1,0 +1,107 @@
+<div class="col-md-12" *ngIf="!MyToolkit.checkIsNullOrUndefined(question)">
+  <!--<div class="col-md-12" [ngSwitch]="question.elementType">-->
+  <fieldset class="scheduler-border">
+    <legend class="scheduler-border"><h4>پاسخ ها</h4></legend>
+
+    <div class="col-md-12">
+      <p>{{question.label}}</p>
+    </div>
+
+    <div class="col-md-8 col-md-offset-2">
+
+      <div class="col-md-12" *ngIf="MyToolkit.checkIsNullOrUndefined(answers) || answers.length == 0">
+        <p>پاسخی به این سوال داده نشده است.</p>
+      </div>
+
+      <ng-container *ngIf="answers.length > 0">
+        <div *ngIf="question.elementType == MyElementType.CHECK_BOX || question.elementType == MyElementType.RADIO_BUTTON
+                  || question.elementType == MyElementType.COMBO_BOX">
+          <div class="col-md-12">
+            <table class="table table-bordered table-hover">
+              <tr>
+                <td style="width: 34%">عنوان گزینه</td>
+                <td style="width: 33%">تعداد پاسخ ها به این گزینه</td>
+                <td style="width: 33%">مشاهده افراد پاسخ دهنده</td>
+              </tr>
+              <tr *ngFor="let ans of answers">
+                <td>{{ans.optionCaption}}</td>
+                <td>{{MyToolkit.En2Fa(ans.count)}}</td>
+                <td>
+                  <a (click)="getPerson(ans.optionId)">
+                    <img src="../../../../../../assets/images/public/multiple-users-silhouette.svg" width="25px">
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div *ngIf="question.elementType == MyElementType.DATE">
+          <table class="table table-bordered table-hover">
+            <tr>
+              <td>فرد پاسخ دهنده</td>
+              <td>پاسخ</td>
+            </tr>
+            <tr *ngFor="let ans of answers">
+              <td>{{ans.person.firstNameFa}} {{ans.person.lastNameFa}}</td>
+              <td>{{MyToolkit.En2Fa(MyToolkit2.Moment.getJaliliDateFromIsoOrFull(ans.answer[0]))}}</td>
+            </tr>
+          </table>
+        </div>
+        <div *ngIf="question.elementType == MyElementType.NUMERICAL || question.elementType == MyElementType.STAR_RATING
+                  || question.elementType == MyElementType.TIME">
+          <table class="table table-bordered table-hover">
+            <tr>
+              <td>فرد پاسخ دهنده</td>
+              <td>پاسخ</td>
+            </tr>
+            <tr *ngFor="let ans of answers">
+              <td>{{ans.person.firstNameFa}} {{ans.person.lastNameFa}}</td>
+              <td>{{MyToolkit.En2Fa(ans.answer[0])}}</td>
+            </tr>
+          </table>
+        </div>
+        <div
+          *ngIf="question.elementType == MyElementType.TEXT_AREA || question.elementType == MyElementType.TEXT_FIELD">
+          <table class="table table-bordered table-hover">
+            <tr>
+              <td>فرد پاسخ دهنده</td>
+              <td>پاسخ</td>
+            </tr>
+            <tr *ngFor="let ans of answers">
+              <td>{{ans.person.firstNameFa}} {{ans.person.lastNameFa}}</td>
+              <td>{{ans.answer[0]}}</td>
+            </tr>
+          </table>
+        </div>
+        <div *ngIf="question.elementType == MyElementType.FILE_ATTACH"></div>
+      </ng-container>
+    </div>
+  </fieldset>
+</div>
+
+<!--data-backdrop="false"-->
+<div class="modal fade peopleModal" id="peopleModal" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" style="margin-top: 3%; margin-right: 5%; z-index: 10000000">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="height: 350px">
+
+      <div class="modal-header">
+        <div class="col-md-11">
+          <h4>افراد پاسخ دهنده به این گزینه</h4>
+        </div>
+        <div class="col-md-1">
+          <i class="glyphicon glyphicon-remove" style="color: #b4bcb0" (click)="closeModal()"></i>
+        </div>
+      </div>
+      <div class="modal-body" style="display: flow-root">
+        <ng-container *ngIf="peopleAnswered.length > 0">
+          <table class="table table-bordered">
+            <tr *ngFor="let item of peopleAnswered">
+              <td>{{item.person.firstNameFa}} {{item.person.lastNameFa}}</td>
+            </tr>
+          </table>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,377 @@
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.X_LARGE"
+        autoShow="false"
+        [myId]="'ShowTheFormOfPreviousStepsModal'">
+    <div modal-header>
+    <span style="font-size: 16px">
+       مشاهده ی فرم تکمیل شده توسط {{sendUser.username}} {{sendUser.userFamilyName}}
+    </span>
+    </div>
+    <div modal-body>
+        <!--/////////////////////////////////////////////////////-->
+
+        <div class="col-md-12" style="padding: 0;margin-bottom:20px ">
+            <ul class="nav nav-tabs" role="navigation" style="text-align: right;padding-right: 0">
+                <li class="nav-item">
+                    <a href="#workOrder" style="color: #a0a0a0;font-size: 14px" class="nav-link active"
+                       id="informationB"
+                       data-toggle="tab" role="tab" aria-controls="workOrder"
+                       (click)="basicInformation = true; ">کلیات</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#completionDetails" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                       id="completionDetailsB"
+                       data-toggle="tab" role="tab" aria-controls="completionDetails"
+                       (click)="completionDetails = true;">اطلاعات
+                        تکمیلی</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#basicInformationItems" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                       id="basicInformationB"
+                       data-toggle="tab" role="tab" aria-controls="basicInformation"
+                       (click)="basicInformation = true;  ">اطلاعات پایه</a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a href="#tasks" style="color: #a0a0a0;font-size: 14px" class="nav-link" id="tasksB"
+                       data-toggle="tab" role="tab" aria-controls="tasks"
+                       (click)="tasks = true;  ">وظایف</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#taskGroup" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                       id="taskGroupB"
+                       data-toggle="tab" role="tab" aria-controls="taskGroup"
+                       (click)="taskGroup = true;  ">مجموعه کارها</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#parts" style="color: #a0a0a0;font-size: 14px" class="nav-link" id="partsB"
+                       data-toggle="tab" role="tab" aria-controls="parts"
+                       (click)="parts = true;  "> قطعات به کار برده شده</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#miscCost" style="color: #a0a0a0;font-size: 14px" class="nav-link" id="miscCostB"
+                       data-toggle="tab" role="tab" aria-controls="miscCost"
+                       (click)="miscCost = true; ">هزینه های متفرقه</a>
+                </li>
+                <!--                <li class="nav-item">-->
+                <!--                  <a href="#notification" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+                <!--                     data-toggle="tab" role="tab" aria-controls="notification" (click)="notification = true">آگاه سازی</a>-->
+                <!--                </li>-->
+                <li class="nav-item">
+                    <a href="#file" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                       data-toggle="tab" id="fileB"
+                       role="tab" aria-controls="file"
+                       (click)="file = true;  ">مستندات</a>
+                </li>
+
+                <!--//فرم های دستی-->
+                <ng-container *ngFor="let activitySampleForm of activitySampleFormList;let i=index">
+                    <li class="nav-item">
+                        <a [href]="'#formComplete'+i" style="color: #a0a0a0;font-size: 14px"
+                           class="nav-link"
+                           data-toggle="tab" [id]="'formCompleteB'+i"
+                           role="tab" aria-controls="formComplete">
+                            {{activitySampleForm?.form?.title}}</a>
+                    </li>
+                </ng-container>
+            </ul>
+
+        </div>
+        <!--/////////////////////////////////////////////////////-->
+        <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+        <!--======================================,,,,,,,,,,,,,,,,,,,,,,,,,,,=================-->
+        <div class="card-body" style="margin-top: -35px" *ngIf="!loading">
+            <!--========================carousel-->
+            <div id="carouselExampleControlsModal" class="carousel slide" data-ride="carousel" data-interval="false">
+                <div class="carousel-inner">
+                    <!--=========================== دستور کار=========-->
+                    <div class="carousel-item active" id="workOrder">
+                        <div class="mt-2">
+                            <fieldset class="scheduler-border" style="background-color: #f7f7f7 ;  height: 65vh;
+    max-height: 65vh;
+    overflow: auto;">
+                                <legend class="scheduler-border">
+                                    <h6>اطلاعات مربوط به دستور کار
+                                        </h6></legend>
+
+                                <app-work-order-carsousel-view
+                                        [typeOfNotification]="'view'"
+                                        [workOrderIn]="workOrderAndFormRepository.workOrderCreateDTO"
+                                        [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"
+                                        [isView]="true"
+                                        [workOrderAccessId]="workOrderAccessId"
+                                        [workOrderCreateDTO]="workOrderCreateDTO"
+                                        (nextCarousel)="nextCarousel($event)"
+                                        (getWorKOrderForm)="getFormWorKOrder($event)">
+                                </app-work-order-carsousel-view>
+
+
+                            </fieldset>
+                        </div>
+
+                    </div>
+                    <!--========================اطلاعات تکمیلی===================-->
+                    <div class="carousel-item" id="completionDetails" *ngIf="completionDetails">
+                        <div class="mt-2">
+                            <fieldset class="scheduler-border" style="background-color: #f7f7f7 ;  height: 65vh;
+    max-height: 65vh;
+    overflow: auto;">
+                                <legend class="scheduler-border"><h6>فرم اطلاعات تکمیلی
+                                    </h6></legend>
+
+                                <app-completion-detail-work-t-view (nextCarousel)="nextCarousel($event)"
+                                                                   [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"
+                                                                   [completionDetail]="workOrderAndFormRepository.completionDetail"
+                                ></app-completion-detail-work-t-view>
+
+
+                            </fieldset>
+                        </div>
+
+                    </div>
+                    <!--========================= اطلاعات پایه==================-->
+                    <div class="carousel-item" id="basicInformationItems" *ngIf="basicInformation">
+                        <div class="mt-2">
+                            <fieldset class="scheduler-border" style="background-color: #f7f7f7 ;  height: 65vh;
+    max-height: 65vh;
+    overflow: auto;">
+                                <legend class="scheduler-border"><h6>فرم مربوط به اطلاعات پایه
+                                    </h6></legend>
+
+                                <app-work-order-basic-info-work-tview (nextCarousel)="nextCarousel($event)"
+                                                                      [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"
+                                                                      [sendUser]="sendUser"
+
+                                                                      [workOrderBasicInformation]="workOrderAndFormRepository.workOrderBasicInformation"
+                                ></app-work-order-basic-info-work-tview>
+
+
+                            </fieldset>
+                        </div>
+
+                    </div>
+                    <!--=====================  وظایف======================-->
+                    <div class="carousel-item"id="tasks" *ngIf="tasks">
+                        <div class="mt-2">
+                            <fieldset class="scheduler-border" style="background-color: #f7f7f7 ;  height: 65vh;
+    max-height: 65vh;
+    overflow: auto;">
+                                <legend class="scheduler-border"><h6>فرم مربوط به وظایف
+                                    </h6></legend>
+
+                                <app-list-work-table-view (nextCarousel)="nextCarousel($event)"
+                                                          [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"
+                                                          [taskList]="workOrderAndFormRepository.taskList"
+                                ></app-list-work-table-view>
+
+
+                            </fieldset>
+                        </div>
+                    </div>
+                    <!--===========================مجموعه وظایف================-->
+                    <div class="carousel-item" id="taskGroup" *ngIf="taskGroup">
+                        <div class="mt-2">
+                            <fieldset class="scheduler-border" style="background-color: #f7f7f7 ;  height: 65vh;
+    max-height: 65vh;
+    overflow: auto;">
+                                <legend class="scheduler-border"><h6>فرم مربوط به مجموعه کار
+                                    </h6></legend>
+
+                                <app-work-order-task-group-work-tview (nextCarousel)="nextCarousel($event)"
+                                                                      [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"
+                                                                      [taskGroupStringList]="workOrderAndFormRepository.taskGroupList"
+                                                                      [workOrderId]="workOrderId"
+
+                                ></app-work-order-task-group-work-tview>
+
+
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    <!--=======================قطعات به کار برده شده====================-->
+                    <div class="carousel-item" id="parts" *ngIf="parts">
+                        <div class="mt-2">
+                            <fieldset class="scheduler-border" style="background-color: #f7f7f7 ;  height: 65vh;
+    max-height: 65vh;
+    overflow: auto;">
+                                <legend class="scheduler-border"><h6>فرم مربوط به قطعات به کار برده شده
+                                    </h6></legend>
+
+                                <app-part-with-usage-count-work-tview (nextCarousel)="nextCarousel($event)"
+                                                                      [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"
+                                                                      [workOrderId]="workOrderId"
+                                                                      [partWithUsageCountList]="workOrderAndFormRepository.partWithUsageCountList"
+                                ></app-part-with-usage-count-work-tview>
+
+
+                            </fieldset>
+                        </div>
+                    </div>
+                    <!--=========================هزینه های متفرقه==================-->
+                    <div class="carousel-item" id="miscCost" *ngIf="miscCost">
+                        <div class="mt-2">
+                            <fieldset class="scheduler-border" style="background-color: #f7f7f7;   height: 65vh;
+    max-height: 65vh;
+    overflow: auto;">
+                                <legend class="scheduler-border"><h6>فرم مربوط به هزینه های متفرقه
+                                    </h6></legend>
+
+                                <app-misc-cost-work-tview (nextCarousel)="nextCarousel($event)"
+                                                          [workOrderId]="workOrderId"
+                                                          [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"
+                                                          [miscCostList]="workOrderAndFormRepository.miscCostList"
+                                ></app-misc-cost-work-tview>
+
+
+                            </fieldset>
+                        </div>
+                    </div>
+                    <!--=======================آگاه سازی====================-->
+<!--                    <div class="carousel-item" *ngIf="notification">-->
+<!--                        <div class="mt-2">-->
+<!--                            <fieldset class="scheduler-border" style="background-color: #f7f7f7">-->
+<!--                                <legend class="scheduler-border"><h6>فرم مربوط به آگاه سازی  -->
+<!--                                    </h6></legend>-->
+
+<!--                                <app-notify-work-tview (nextCarousel)="nextCarousel($event)"-->
+
+<!--                                                       [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"-->
+<!--                                                       [workOrderId]="workOrderId"-->
+<!--                                                       [notifyList]="workOrderAndFormRepository.notifyList"-->
+<!--                                ></app-notify-work-tview>-->
+
+
+<!--                            </fieldset>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <!--======================گزارشات=====================-->
+                    <!--<div class="carousel-item" *ngIf="reports">-->
+                    <!--<div class="mt-2">-->
+                    <!--<fieldset class="scheduler-border" style=background-color: #f7f7f7 >-->
+                    <!--<legend class="scheduler-border"><h6>فرم مربوط به گزارشات  -->
+                    <!--</span></legend>-->
+                    <!---->
+                    <!--<h1> در دست ساخت </h1>-->
+                    <!--<br>-->
+                    <!--<h2>under construction</h2>-->
+                    <!--<button (click)="nextCarousel($event)" class="btn btn-sm"-->
+                    <!--style="background-color: #042C76 ; color: white ">-->
+                    <!--بعدی-->
+                    <!--</button>-->
+                    <!---->
+
+                    <!--</fieldset>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--=====================مستندات======================-->
+                    <div class="carousel-item" id="file" *ngIf="file">
+                        <div class="mt-2">
+                            <fieldset class="scheduler-border" style="background-color: #f7f7f7
+                                   ;  height: 65vh;
+    max-height: 65vh;
+    overflow: auto;">
+                                <legend class="scheduler-border"><h6>اطلاعات مربوط به مستندات
+                                    </h6></legend>
+
+                                <app-document-work-tview
+                                        [sendInformationNumberOfTabs]="sendInformationNumberOfTabs"
+                                        (nextCarousel)="nextCarousel($event)"
+                                        [documentList]="workOrderAndFormRepository.documentList"
+                                ></app-document-work-tview>
+
+
+                            </fieldset>
+                        </div>
+                    </div>
+                    <!--=======================================-->
+                    <!--//فرم های دستی-->
+                    <ng-container *ngFor="let activitySampleForm of activitySampleFormList;let i=index">
+                        <div class="carousel-item " [id]="'formComplete'+i">
+                            <!--                <div class="carousel-item " id="formComplete" >-->
+                            <div class="mt-2">
+                                <fieldset class="scheduler-border" style="background-color: #f7f7f7 ;  height: 65vh;
+    max-height: 65vh;
+    overflow: auto;">
+                                    <legend class="scheduler-border">
+                                        <h6>اطلاعات مربوط به فرم ({{activitySampleForm?.form?.title}}
+                                            )
+                                            </h6></legend>
+                                    <ng-container *ngIf="formComplete">
+
+                                        <app-form-answer [form]="activitySampleForm?.form"
+
+                                                         [disabledFiled]="true"
+                                                         [activityLevelId]="activityLevelId"
+                                                         [formData]="activitySampleForm.formData"
+                                                         [instanceId]="activityInstanceId"
+                                        >
+
+                                        </app-form-answer>
+
+                                        <!--                                            (sendFormTitle)="getFormTitle($event)"-->
+<!--                                        <app-form-complete-work-table-->
+<!--                                                [nextItem]="activitySampleFormList.length>i+1?true:false"-->
+<!--                                                [formId]="workOrderAndFormRepository?.form?.id"-->
+<!--                                                [activitySampleForm]="activitySampleForm"-->
+<!--                                                [showSaveButton]="true"-->
+<!--                                                (nextCarousel)="nextCarousel($event)"-->
+<!--                                                [activityLevelId]="activityLevelId"-->
+<!--                                                [activityInstanceId]="activityInstanceId"-->
+<!--                                                [numberOfParticipation]="numberOfParticipation"-->
+<!--                                                [instanceId]="activityInstanceId"-->
+<!--                                                [incomingFormId]="workOrderAndFormRepository?.form?.id"-->
+<!--                                                [formStatus]="'DontPending'"-->
+<!--                                                [isView]="true"-->
+<!--                                                [formDataId]="workOrderAndFormRepository?.formData?.id"-->
+<!--                                                [hasWorkOrder]="workOrder"-->
+<!--                                        ></app-form-complete-work-table>-->
+                                    </ng-container>
+
+                                </fieldset>
+                            </div>
+                        </div>
+                    </ng-container>
+
+<!--                    <div class="carousel-item " id="formComplete" *ngIf=" formComplete ">-->
+<!--                        <div class="mt-2">-->
+<!--                            <fieldset class="scheduler-border" style="background-color: #f7f7f7">-->
+<!--                                <legend class="scheduler-border">-->
+<!--                                    <h6>اطلاعات مربوط به فرم ({{formTitle}}-->
+<!--                                        ) -->
+<!--                                        </h6></legend>-->
+
+<!--                                <app-form-complete-work-table-->
+<!--                                        [showSaveButton]="true"-->
+<!--                                        (nextCarousel)="nextCarousel($event)"-->
+<!--                                        (sendFormTitle)="getFormTitle($event)"-->
+<!--                                        [instanceId]="activityInstanceId"-->
+<!--                                        [incomingFormId]="workOrderAndFormRepository?.form?.id"-->
+<!--                                        [formStatus]="'DontPending'"-->
+<!--                                        [activityLevelId]="activityLevelId"-->
+<!--                                        [formDataId]="workOrderAndFormRepository?.formData?.id"-->
+<!--                                        [hasWorkOrder]="workOrder"-->
+<!--                                ></app-form-complete-work-table>-->
+
+
+<!--                            </fieldset>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </div>
+            </div>
+
+
+        </div>
+        <!--======================================,,,,,,,,,,,,,,,,,,,,,,,,,,,=================-->
+    </div>
+</nbw-modal>
+
+
+
+
+

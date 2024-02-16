@@ -1,0 +1,416 @@
+<!--<ng-container *ngIf="mode!==actionMode.VIEW">-->
+<form #assetBasicInformationForm="ngForm" (submit)="action(assetBasicInformationForm)" style="margin-top: 15px">
+    <!--    <div class="card-body card-body-content">-->
+    <fieldset class="scheduler-border" id="comdfgpany-address" style="background-color: #f7f7f7">
+        <legend class="scheduler-border"></legend>
+        <div class="row">
+            <div class="col-md-4 form-group required col-sm-12">
+                <label class="for-label">بودجه تخصیص یافته:</label>
+                <!--        {{assetBasicInformation.budgetId}}-->
+                <div class="input-group input-group-sm">
+                    <ng-select dir="rtl" [(ngModel)]="assetBasicInformation.budgetId"
+                               placeholder="بودجه تخصیص یافته" name="propergtyList" id="budgetId"
+                               style="width: 100%;"
+                               [disabled]="mode===actionMode.VIEW"
+                               dropdownPosition="bottom">
+                        <option value="-1" disabled>انتخاب بودجه تخصیص یافته</option>
+                        <ng-option *ngFor="let item of budgetList; let i = index"
+                                   [value]="item.id">
+                            {{item.title}}
+                        </ng-option>
+                        <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                            <div class="ng-option disabled" style="color: #a8a6a5">
+                                نتیجه یافت نشد...
+                            </div>
+                        </ng-template>
+
+                        <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+                            <div class="ng-option disabled" style="color: #a8a6a5">
+                                در حال جستجو...
+                            </div>
+                        </ng-template>
+                        <ng-template ng-typetosearch-tmp let-searchTerm="searchTerm">
+                            <div class="ng-option disabled" style="color: #a8a6a5">
+                                متن برای جستجو...
+                            </div>
+                        </ng-template>
+                    </ng-select>
+                    <!--          <select [(ngModel)]="assetBasicInformation.budgetId" name="budgetId" class="form-control"-->
+                    <!--                  #budgetId="ngModel" nbvRequired nbvPattern="{{myPattern.OBJECT_ID}}"-->
+                    <!--                  nbvPatternMsgHtml=""-->
+                    <!--                  [class.is-valid]="!(budgetId?.errors?.nbvRequired || budgetId?.errors?.nbvPattern)"-->
+                    <!--                  [class.is-invalid]="(budgetId?.errors?.nbvRequired || budgetId?.errors?.nbvPattern) && (budgetId.touched || doSave)"-->
+                    <!--                  dest="budgetIdValidation">-->
+                    <!--            <option value="-1" disabled>انتخاب بودجه تخصیص یافته</option>-->
+                    <!--            <option *ngFor="let item of budgetList" [value]="item.id">{{item.title}}</option>-->
+                    <!--          </select>-->
+                </div>
+                <div id="budgetIdValidation" style="opacity: 0; height: 0"></div>
+            </div>
+
+            <div class="col-md-4 form-group required col-sm-12">
+                <label class="for-label">دپارتمان مسئول:</label>
+                <div class="input-group input-group-sm">
+                    <ng-select dir="rtl" [(ngModel)]="assetBasicInformation.chargeDepartmentId"
+                               placeholder="دپارتمان مسئول" name="propertyList" id="chargeDepartmentId"
+                               style="width: 100%;"
+                               [disabled]="mode===actionMode.VIEW"
+                               dropdownPosition="bottom">
+                        <option value="-1" disabled>انتخاب دپارتمان مسئول</option>
+                        <ng-option *ngFor="let item of chargeDepartmentList; let i = index"
+                                   [value]="item.id">
+                            {{item.title}}
+                        </ng-option>
+                        <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                            <div class="ng-option disabled" style="color: #a8a6a5">
+                                نتیجه یافت نشد...
+                            </div>
+                        </ng-template>
+
+                        <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+                            <div class="ng-option disabled" style="color: #a8a6a5">
+                                در حال جستجو...
+                            </div>
+                        </ng-template>
+                        <ng-template ng-typetosearch-tmp let-searchTerm="searchTerm">
+                            <div class="ng-option disabled" style="color: #a8a6a5">
+                                متن برای جستجو...
+                            </div>
+                        </ng-template>
+                    </ng-select>
+                    <!--          <select [(ngModel)]="assetBasicInformation.chargeDepartmentId" name="chargeDepartmentId" class="form-control"-->
+                    <!--                  #chargeDepartmentId="ngModel" nbvRequired nbvPattern="{{myPattern.OBJECT_ID}}"-->
+                    <!--                  nbvPatternMsgHtml=""-->
+                    <!--                  [class.is-valid]="!(chargeDepartmentId?.errors?.nbvRequired || chargeDepartmentId?.errors?.nbvPattern)"-->
+                    <!--                  [class.is-invalid]="(chargeDepartmentId?.errors?.nbvRequired || chargeDepartmentId?.errors?.nbvPattern) && (chargeDepartmentId.touched || doSave)"-->
+                    <!--                  dest="chargeDepartmentIdValidation">-->
+                    <!--            <option value="-1" disabled>انتخاب دپارتمان مسئول</option>-->
+                    <!--            <option *ngFor="let item of chargeDepartmentList" [value]="item.id">{{item.title}}</option>-->
+                    <!--          </select>-->
+                </div>
+                <div id="chargeDepartmentIdValidation" style="opacity: 0; height: 0"></div>
+            </div>
+
+            <div class="col-md-4 form-group required col-sm-12">
+                <!--=====================================================-->
+                <label class="for-label">واحد اندازه گیری:</label>
+                <span style="color: red">*</span>
+                <ng-select [items]="locationCodingSettingList$ | async"
+                           bindLabel="title"
+                           bindValue="id"
+                           [(ngModel)]="assetBasicInformation.unitIdList"
+                           [addTag]="false"
+                           [multiple]="true"
+                           [hideSelected]="true"
+                           [loading]="locationCodingSettingLoading"
+                           [typeahead]="locationCodingSettingInput"
+                           nbvRequiredMsgHtml="انتخاب واحد اندازه گیری الزامی می باشد"
+                           placeholder=" واحد اندازه گیری را انتخاب کنید. "
+                           id="locationCodingSetting"
+                           name="locationCodingSettingId"
+                           style="padding: 0"
+                           #locationCodingSetting="ngModel"
+                           class="form-control"
+                           nbvRequired
+                           [disabled]="mode===actionMode.VIEW"
+                           [class.is-valid]="!(locationCodingSetting?.errors?.nbvRequired || locationCodingSetting?.errors?.nbvPattern)"
+                           [class.is-invalid]="(locationCodingSetting?.errors?.nbvRequired || locationCodingSetting?.errors?.nbvPattern)
+                                                        && (locationCodingSetting.touched || doSave)"
+                           dropdownPosition="bottom"
+                           dest="locationCodingSettingDest">
+                    <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                        <div class="ng-option disabled" style="color: #a8a6a5">
+                            نتیجه یافت نشد...
+                        </div>
+                    </ng-template>
+
+                    <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+                        <div class="ng-option disabled" style="color: #a8a6a5">
+                            در حال جستجو...
+                        </div>
+                    </ng-template>
+                    <ng-template ng-typetosearch-tmp let-searchTerm="searchTerm">
+                        <div class="ng-option disabled" style="color: #a8a6a5">
+                            متن برای جستجو...
+                        </div>
+                    </ng-template>
+                </ng-select>
+                <div id="locationCodingSettingDest"></div>
+
+                <!--=================================================-->
+                <!--<label class="for-label">واحد اندازه گیری:</label>-->
+                <!--<div class="input-group input-group-sm">-->
+                <!--<select [(ngModel)]="assetBasicInformation.unit.id" name="unitId" class="form-control"-->
+                <!--#unitId="ngModel" nbvRequired nbvPattern="{{myPattern.OBJECT_ID}}"-->
+                <!--nbvPatternMsgHtml=""-->
+                <!--[class.is-valid]="!(unitId?.errors?.nbvRequired || unitId?.errors?.nbvPattern)"-->
+                <!--[class.is-invalid]="(unitId?.errors?.nbvRequired || unitId?.errors?.nbvPattern) && (unitId.touched || doSave)"-->
+                <!--dest="unitIdValidation">-->
+                <!--<option value="-1" disabled>واحداندازه گیری</option>-->
+                <!--<option *ngFor="let item of unitOfMeasurementList" [value]="item.id">{{item.title}}</option>-->
+                <!--</select>-->
+                <!--</div>-->
+                <!--<div id="unitIdValidation" style="opacity: 0; height: 0"></div>-->
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12 form-group required col-sm-12">
+                <label class="for-label">یادداشت ها:</label>
+                <div class="input-group input-group-sm">
+        <textarea type="text" placeholder="یادداشت ها" [(ngModel)]="assetBasicInformation.note"
+                  [disabled]="mode===actionMode.VIEW"
+                  class="form-control" maxlength="620" name="note" style="resize: none"></textarea>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="scheduler-border" id="company-address" style="background-color: #f7f7f7">
+        <legend class="scheduler-border"><h6 style="color: #51575d">آدرس محل دارایی</h6></legend>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group required col-sm-12">
+                    <label class="for-label">استان:</label>
+                    <div class="input-group input-group-sm">
+                        <ng-select dir="rtl" [(ngModel)]="assetBasicInformation.address.provinceId"
+                                   placeholder="استان" name="provinceId" id="provinceId" style="width: 100%;"
+                                   (change)="getCityList(true)"
+                                   [disabled]="mode===actionMode.VIEW"
+                                   dropdownPosition="bottom">
+                            <option value="-1" disabled>استان</option>
+                            <ng-option *ngFor="let item of provinceList" [value]="item.id"
+                            >{{item.name}}</ng-option>
+                            <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                    نتیجه یافت نشد...
+                                </div>
+                            </ng-template>
+
+                            <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                    در حال جستجو...
+                                </div>
+                            </ng-template>
+                            <ng-template ng-typetosearch-tmp let-searchTerm="searchTerm">
+                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                    متن برای جستجو...
+                                </div>
+                            </ng-template>
+                        </ng-select>
+                        <!--              <select [(ngModel)]="assetBasicInformation.address.province.id" name="provinceId" class="form-control"-->
+                        <!--                      #provinceId="ngModel" nbvRequired nbvPattern="{{myPattern.OBJECT_ID}}"-->
+                        <!--                      nbvPatternMsgHtml="" (change)="getCityList(true)"-->
+                        <!--                      [class.is-valid]="!(provinceId?.errors?.nbvRequired || provinceId?.errors?.nbvPattern)"-->
+                        <!--                      [class.is-invalid]="(provinceId?.errors?.nbvRequired || provinceId?.errors?.nbvPattern) && (provinceId.touched || doSave)"-->
+                        <!--                      dest="provinceIdValidation">-->
+                        <!--                <option value="-1" disabled>استان</option>-->
+                        <!--                <option *ngFor="let item of provinceList" [value]="item.id">{{item.name}}</option>-->
+                        <!--              </select>-->
+                    </div>
+                    <!--            <div id="provinceIdValidation" style="opacity: 0; height: 0"></div>-->
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group required col-sm-12">
+                    <label class="for-label">
+                        <ng-container
+                                *ngIf="cityList.length===0&&assetBasicInformation.address.provinceId;else cityLabelTemp">
+                                <span style="color: #fc5050">
+                                * شهری برای این استان ثبت نشده است.
+                                </span>
+                        </ng-container>
+                        <ng-template #cityLabelTemp>
+                            شهر:
+                        </ng-template>
+                    </label>
+                    <div class="input-group input-group-sm">
+
+                        <ng-select dir="rtl" [(ngModel)]="assetBasicInformation.address.cityId"
+                                   [disabled]="mode===actionMode.VIEW"
+                                   [loading]="loadingCity"
+                                   placeholder="شهر" name="cityId" id="cityId" style="width: 100%;"
+                                   dropdownPosition="bottom">
+                            <option value="-1" disabled>شهر</option>
+                            <ng-option *ngFor="let item of cityList" [value]="item.id">{{item.name}}</ng-option>
+                            <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                    نتیجه یافت نشد...
+                                </div>
+                            </ng-template>
+
+                            <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                    در حال جستجو...
+                                </div>
+                            </ng-template>
+                            <ng-template ng-typetosearch-tmp let-searchTerm="searchTerm">
+                                <div class="ng-option disabled" style="color: #a8a6a5">
+                                    متن برای جستجو...
+                                </div>
+                            </ng-template>
+                        </ng-select>
+                        <!--              <select [(ngModel)]="assetBasicInformation.address.city.id" name="cityId" class="form-control"-->
+                        <!--                      #cityId="ngModel" nbvRequired nbvPattern="{{myPattern.OBJECT_ID}}"-->
+                        <!--                      nbvPatternMsgHtml="" (change)="changeCity()"-->
+                        <!--                      [class.is-valid]="!(cityId?.errors?.nbvRequired || cityId?.errors?.nbvPattern)"-->
+                        <!--                      [class.is-invalid]="(cityId?.errors?.nbvRequired || cityId?.errors?.nbvPattern) && (cityId.touched || doSave)"-->
+                        <!--                      dest="cityIdValidation">-->
+                        <!--                <option value="-1" disabled>شهر</option>-->
+                        <!--                <option *ngFor="let item of cityList" [value]="item.id">{{item.name}}</option>-->
+                        <!--              </select>-->
+                    </div>
+                    <!--            <div id="cityIdValidation" style="opacity: 0; height: 0"></div>-->
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group required col-sm-12">
+                    <label class="for-label">توضیحات بیشتر درباره آدرس:</label>
+                    <div class="input-group input-group-sm">
+                  <textarea style="resize: none" type="text" placeholder="آدرس"
+                            [disabled]="mode===actionMode.VIEW"
+                            [(ngModel)]="assetBasicInformation.address.description"
+                            class="form-control" minlength="1" maxlength="620" name="addressDescription"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <!--    </div>-->
+    <div class="col-md-12 text-left" *ngIf="mode!==actionMode.VIEW">
+        <button class="btn btn-action btn-sm" type="submit">
+            <span>ثبت اطلاعات</span>
+            <i *ngIf="disabledButton"
+               class="fa fa-spinner fa-pulse fa-2x"></i>
+        </button>
+    </div>
+</form>
+<!--</ng-container>-->
+
+
+<!--<div class="card" *ngIf="mode===actionMode.VIEW">-->
+<!--    <div class="card-body card-body-content">-->
+<!--        <div class="row">-->
+
+<!--            <div class="col-md-6">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-md-6 form-group required col-sm-12">-->
+<!--                        <label class="for-label">بودجه تخصیص یافته:</label>-->
+<!--                        <div class="input-group input-group-sm">-->
+<!--                            &lt;!&ndash;        <ng-container *ngFor="let item of budgetList">&ndash;&gt;-->
+<!--                            &lt;!&ndash;          <a *ngIf="item.id===assetBasicInformation.budgetId">{{item.title}}</a>&ndash;&gt;-->
+<!--                            &lt;!&ndash;        </ng-container>&ndash;&gt;-->
+<!--                            <p>{{assetBasicInformation.budgetName}}</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-md-6 form-group required col-sm-12">-->
+<!--                        <label class="for-label">دپارتمان مسئول:</label>-->
+<!--                        <div class="input-group input-group-sm">-->
+<!--                            <p>{{assetBasicInformation.chargeDepartmentName}}</p>-->
+
+
+<!--                            &lt;!&ndash;        <ng-container *ngFor="let item of chargeDepartmentList">&ndash;&gt;-->
+<!--                            &lt;!&ndash;          <a *ngIf="item.id===assetBasicInformation.chargeDepartmentId">{{item.title}}</a>&ndash;&gt;-->
+<!--                            &lt;!&ndash;        </ng-container>&ndash;&gt;-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div class="row">-->
+<!--                    <div class="col-md-6 form-group required col-sm-12">-->
+<!--                        <label class="for-label">واحد اندازه گیری:</label>-->
+<!--                        <div class="input-group input-group-sm">-->
+<!--                            &lt;!&ndash;        <ng-container *ngFor="let item of locationCodingSettingList">&ndash;&gt;-->
+<!--                            &lt;!&ndash;          <ng-container *ngFor="let unitId of assetBasicInformation.unitIdList">&ndash;&gt;-->
+<!--                            &lt;!&ndash;            <a *ngIf="item.id===unitId">{{item.title}}</a>&ndash;&gt;-->
+<!--                            &lt;!&ndash;          </ng-container>&ndash;&gt;-->
+<!--                            &lt;!&ndash;        </ng-container>&ndash;&gt;-->
+<!--                            <ng-container-->
+<!--                                    *ngIf="assetBasicInformation.unitOfMeasurementName && assetBasicInformation.unitOfMeasurementName.length>0">-->
+<!--                                <ng-container *ngFor="let unitId of assetBasicInformation.unitOfMeasurementName">-->
+<!--                                    &lt;!&ndash;                    <a *ngIf="item.id===unitId">{{item.title}}</a>&ndash;&gt;-->
+<!--                                    <p>{{unitId.title}}</p>-->
+
+<!--                                </ng-container>-->
+<!--                            </ng-container>-->
+
+
+<!--                        </div>-->
+<!--                    </div>-->
+
+
+<!--                    <div class="col-md-6 form-group required col-sm-12">-->
+<!--                        <label class="for-label">یادداشت ها:</label>-->
+<!--                        <div class="input-group input-group-sm">-->
+<!--                            {{assetBasicInformation.note}}-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+
+<!--            <div class="col-md-6">-->
+<!--                <fieldset class="scheduler-border" id="company-address-view">-->
+<!--                    <legend class="scheduler-border"><h4 style="color: #51575d">آدرس محل دارایی</h4></legend>-->
+<!--                    <div class="col-md-12">-->
+<!--                        <div class="row">-->
+<!--                            <div class="form-group required col-sm-6">-->
+<!--                                <label class="for-label">استان:</label>-->
+<!--                                <div class="input-group input-group-sm">-->
+<!--                                    &lt;!&ndash;              <ng-container *ngFor="let item of provinceList">&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                <a *ngIf="assetBasicInformation.address.province.id===item.id">{{item.name}}</a>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;              </ng-container>&ndash;&gt;-->
+<!--                                    <p>{{assetBasicInformation.address.provinceName}}</p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                            <div class="form-group required col-sm-6" *ngIf="assetBasicInformation.address.cityName">-->
+<!--                                <label class="for-label">شهر:</label>-->
+<!--                                <div class="input-group input-group-sm">-->
+<!--                                    &lt;!&ndash;              <ng-container *ngFor="let item of cityList">&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                <a *ngIf="assetBasicInformation.address.city.id===item.id">{{item.name}}</a>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;              </ng-container>&ndash;&gt;-->
+<!--                                    <p>{{assetBasicInformation.address.cityName}}</p>-->
+
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                            <div class="form-group required col-sm-12">-->
+<!--                                <label class="for-label">توضیحات بیشتر درباره آدرس:</label>-->
+<!--                                <div class="input-group input-group-sm">-->
+<!--                                    {{assetBasicInformation.address.description}}-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                            &lt;!&ndash;          <div class="row">&ndash;&gt;-->
+<!--                            &lt;!&ndash;            <div class="col-md-12">&ndash;&gt;-->
+<!--                            &lt;!&ndash;              <span style="color: red">راهنمای نقشه:</span>&ndash;&gt;-->
+<!--                            &lt;!&ndash;              <label class="text-info" *ngIf="!locationSelected">&ndash;&gt;-->
+<!--                            &lt;!&ndash;                &nbsp;&nbsp;&nbsp;&ndash;&gt;-->
+<!--                            &lt;!&ndash;                برای انتخاب مکان شرکت نقشه را جابجا کنید تا مکان نما بر روی شرکت قرار بگیرد سپس بر روی مکان نما کلیک&ndash;&gt;-->
+<!--                            &lt;!&ndash;                کنید.&ndash;&gt;-->
+<!--                            &lt;!&ndash;              </label>&ndash;&gt;-->
+<!--                            &lt;!&ndash;              <label class="text-info" *ngIf="locationSelected">&ndash;&gt;-->
+<!--                            &lt;!&ndash;                &nbsp;&nbsp;&nbsp;&ndash;&gt;-->
+<!--                            &lt;!&ndash;                برای ویرایش مکان شرکت بر روی ایکن مکان نما کلیک کنید.&ndash;&gt;-->
+<!--                            &lt;!&ndash;              </label>&ndash;&gt;-->
+<!--                            &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--                            &lt;!&ndash;          </div>&ndash;&gt;-->
+
+<!--                        </div>-->
+<!--                        &lt;!&ndash;        <div class="col-md-6">&ndash;&gt;-->
+<!--                        &lt;!&ndash;          <agm-map [latitude]="lat" [longitude]="lng"&ndash;&gt;-->
+<!--                        &lt;!&ndash;                   [zoom]="zoom" (centerChange)="centerChange($event)">&ndash;&gt;-->
+<!--                        &lt;!&ndash;            <agm-marker *ngIf="locationSelected" [latitude]="assetBasicInformation.address.location.lat"&ndash;&gt;-->
+<!--                        &lt;!&ndash;                        [longitude]="assetBasicInformation.address.location.lng" animation="DROP"&ndash;&gt;-->
+<!--                        &lt;!&ndash;                        (markerClick)="changeLocation()"></agm-marker>&ndash;&gt;-->
+<!--                        &lt;!&ndash;          </agm-map>&ndash;&gt;-->
+<!--                        &lt;!&ndash;          <img *ngIf="!locationSelected" (click)="doSetAssetMarker()" width="60"&ndash;&gt;-->
+<!--                        &lt;!&ndash;               src="../../../../../../assets/images/companyPin.png" alt="..."&ndash;&gt;-->
+<!--                        &lt;!&ndash;               style="z-index: 99999; position: relative;margin-top: -315px;margin-right: 190px">&ndash;&gt;-->
+<!--                        &lt;!&ndash;        </div>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                </fieldset>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->

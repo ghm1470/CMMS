@@ -1,0 +1,171 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                <i class="fa fa-list"></i>&nbsp;&nbsp;
+                <span *ngIf="state == true ">تاریخچه ی فعال  </span>
+                <span *ngIf="state == false ">تاریخچه ی اتمام یافته</span>
+
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <button title="جستجو" data-toggle="collapse" href="#workTableHistory-search" (click)="getAssetList()"
+                        class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!--/////// loading /////////-->
+    <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+    <!--<div class="loading-get-one text-center" *ngIf="getOneLoading">-->
+    <!--<span class="mt-5 px-4  align-items-center d-inline-flex">-->
+    <!--<span class="fa fa-spinner fa-spin ml-2"></span>-->
+    <!--درحال بارگذاری-->
+    <!--</span>-->
+    <!--</div>-->
+
+
+    <div class="card-body card-body-content">
+        <div class="collapse showers" id="workTableHistory-search">
+            <div class="card" style="margin-bottom: 10px">
+                <div class="card-body card-body-filter">
+                    <div class="row">
+                        <div class="col-md-3   form-group">
+                            <label class="for-label" style="color: #191b1c">عنوان درخواست</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="عنوان درخواست"
+                                   style="width: 100%" [(ngModel)]="getAllByFilterAndPagination.requestTitle">
+                        </div>
+                        <div class="col-md-3 ">
+                            <label class="for-label"> تاریخ درخواست تعمیر</label>
+                            <input class="form-control form-control-sm" id="requestTime" #requestTime
+                                   placeholder="تاریخ ارسال درخواست" autocomplete="off">
+                        </div>
+                        <div class="col-md-3 ">
+                            <label class="for-label">تاریخ دریافت درخواست</label>
+                            <input class="form-control form-control-sm" id="deliveryDate" #deliveryDate
+                                   placeholder="تاریخ سررسید" autocomplete="off">
+
+                        </div>
+                        <div class="col-md-3 ">
+                            <label class="for-label">تاریخ اعمال نظر</label>
+                            <input class="form-control form-control-sm" id="replyDate" #replyDate
+                                   placeholder="تاریخ اعمال نظر" autocomplete="off">
+                        </div>
+                        <div class="col-md-3" *ngIf=" assetList.length>0">
+                            <label class="for-label" style="color: #191b1c">دارایی</label>
+                            <ng-select bindLabel="name" bindValue="id" [(ngModel)]="getAllByFilterAndPagination.assetId"
+                                       [items]="assetList" [placeholder]="'دارایی'"></ng-select>
+                        </div>
+                        <div *ngIf=" priorityList.length>0" class="col-md-3">
+                            <label class="for-label" style="color: #191b1c"> اولویت درخواست</label>
+                            <ng-select bindLabel="_title" bindValue="_value"
+                                       [(ngModel)]="getAllByFilterAndPagination.priority"
+                                       [items]="priorityList" [placeholder]="'اولویت'"></ng-select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="for-label" style="color: #191b1c">وضعیت زمان بندی </label>
+                            <ng-select [(ngModel)]="getAllByFilterAndPagination.fromSchedule"
+                                       name="fromSchedule"
+                                       [placeholder]="'وضعیت زمان بندی'">
+                                <ng-option [value]="true"> زمان بندی شده</ng-option>
+                                <ng-option [value]="false"> زمان بندی نشده</ng-option>
+                            </ng-select>
+                        </div>
+                        <div class="col-md-1 text-left" style="margin-top: 30px;">
+                            <button class="btn btn-sm  btn-search" (click)="search()">
+                                جستجو
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <ng-container *ngIf="!loading && !this.entityList.length">
+            <div class="row justify-content-center">
+                <span> تاریخچه ای وجود ندارد.</span>
+            </div>
+
+        </ng-container>
+
+        <div class="tab-content" id="pills-tabContent">
+            <ng-container *ngIf="entityList.length">
+
+                <table class="table table-bordered table-striped table-responsive-md"
+                >
+                    <thead>
+                    <tr style="text-align: center">
+                        <th>ردیف</th>
+                        <th>عنوان درخواست</th>
+                        <th> تاریخ درخواست تعمیر</th>
+                        <th>تاریخ دریافت درخواست</th>
+                        <th>تاریخ اعمال نظر</th>
+                        <th>دارایی</th>
+                        <th> اولویت درخواست</th>
+                        <th> نوع بازدید</th>
+                        <th> وضعیت زمان بندی</th>
+                        <th>مشاهده</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ng-container *ngFor="let request of entityList;let i=index">
+                        <tr style="text-align: center">
+                            <td>
+                                {{(i + 1 + (pageIndex * pageSize))}}
+                            </td>
+                            <td>{{request?.workRequestTitle}}</td>
+                            <td>{{MyToolkit.En2Fa(MyToolkit2.Moment.getJaliliDateFromIsoOrFull(request?.workRequestTime))}}</td>
+                            <td>{{MyToolkit.En2Fa(MyToolkit2.Moment.getJaliliDateFromIsoOrFull(request?.deliveryDate))}}</td>
+                            <td>{{MyToolkit.En2Fa(MyToolkit2.Moment.getJaliliDateFromIsoOrFull(request?.replyDate))}}</td>
+                            <td>{{request.assetName}} {{tools.Fa2En(request?.assetCode)}}</td>
+                            <td *ngIf="request?.priority?.toString() === 'HIGHEST'">خیلی زیاد</td>
+                            <td *ngIf="request?.priority?.toString() === 'HIGH'">زیاد</td>
+                            <td *ngIf="request?.priority?.toString() === 'MEDIUM'">متوسط</td>
+                            <td *ngIf="request?.priority?.toString() === 'LOW'">کم</td>
+                            <td *ngIf="request?.priority?.toString() === 'LOWEST'">خیلی کم</td>
+                            <td *ngIf="!request?.priority"></td>
+                            <td *ngIf="request?.maintenanceType?.toString() === 'PREVENTIVE'">پیشگیرانه</td>
+                            <td *ngIf="request?.maintenanceType?.toString() === 'DAMAGE'">آسیب</td>
+                            <td *ngIf="request?.maintenanceType?.toString() === 'CORRECTIVE'">اصلاحی</td>
+                            <td *ngIf="request?.maintenanceType?.toString() === 'SAFETY'">ایمنی</td>
+                            <td *ngIf="request?.maintenanceType?.toString() === 'UPGRADE'">ارتقاء</td>
+                            <td *ngIf="request?.maintenanceType?.toString() === 'ELECTRICAL'">الکتریکی</td>
+                            <td *ngIf="request?.maintenanceType?.toString() === 'PROJECT'">پروژه</td>
+                            <td *ngIf="request?.maintenanceType?.toString() === 'INSPECTION'">بازرسی</td>
+                            <td *ngIf="request?.maintenanceType?.toString() === 'METERREADING'">خواندن کارکرد</td>
+                            <td *ngIf="request?.maintenanceType?.toString() === 'OTHER'">سایر</td>
+                            <td *ngIf="!request?.maintenanceType"></td>
+
+                            <td>
+                                <span *ngIf="request.fromSchedule === true"> زمان بندی شده </span>
+                                <span *ngIf="request.fromSchedule === false"> زمان بندی نشده</span>
+                            </td>
+                            <td [routerLink]="'action'"
+                                [queryParams]="{activityInstanceId: request.instanceId, state: state}">
+                                <i class="fa fa-eye" title="نمایش" style="width: 60px"></i>
+
+                            </td>
+                        </tr>
+                    </ng-container>
+
+                    </tbody>
+                </table>
+            </ng-container>
+            <!--    pagination-->
+            <app-paginator
+                    [totalElements]="length"
+                    [pageSize]="pageSize"
+                    [pageIndex]="pageIndex"
+                    [pageSizeOptions]="[]"
+                    [showFirstLastButtons]="true"
+                    (page)=" changePage($event)"
+            ></app-paginator>
+        </div>
+
+
+    </div>
+</div>
+

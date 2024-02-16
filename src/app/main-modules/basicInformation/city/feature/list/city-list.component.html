@@ -1,0 +1,108 @@
+<div class="row">
+    <div class="col-md-4" >
+      <div *ngIf="provinceList.length">
+        <label style="color: #4c4c4c; font-size: 12px
+"> جستجو شهر براساس استان:</label>
+        <ng-select bindLabel="name" bindValue="id" [(ngModel)]="selectedProvinceId"
+                   [clearable]="false"
+                   style="font-size: 12px"
+                   [items]="provinceList" [placeholder]="'استان'" (change)="getPage($event)"></ng-select>
+      </div>
+    </div>
+  <div class="col-md-4 form-group required col-sm-12">
+    <label class="for-label">جستجو:</label>
+    <input class="form-control" [(ngModel)]="term"
+           [placeholder]="'جستجو براساس نام شهر'">
+  </div>
+  <div class="col-md-1" style="margin-top: 30px">
+    <button class="btn btn-search btn-sm" (click)="search()"
+    >
+      جستجو
+    </button>
+  </div>
+
+<div class="col-md-12" style="margin-top:5px">
+  <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+  <ng-container *ngIf="!entityList.length && loading === false">
+    <div style="text-align: center">نتیجه ای یافت نشد.</div>
+  </ng-container>
+  <ng-container *ngIf="entityList.length">
+    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+
+
+
+      <table  class="table table-striped table-bordered table-responsive-md">
+        <thead >
+        <tr style="text-align: center">
+          <th class="text-center" style="width: 5%">ردیف</th>
+          <th class="text-center">نام شهر</th>
+          <th class="text-center" style="width: 5%">ویرایش</th>
+          <th class="text-center" style="width: 5%">حذف</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of entityList; let i = index">
+          <tr class="text-center">
+            <td>
+              {{(i + 1 + (pageIndex * pageSize))}}
+            </td>
+            <td>{{item.name}}</td>
+
+            <td>
+              <ng-container *ngIf="roleList.City_update;else notEditAccessTemp">
+
+                <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                   (click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">
+                  <i class="fa fa-edit" title="ویرایش"></i>
+                </a>
+              </ng-container>
+              <ng-template #notEditAccessTemp>
+                <i class="fa fa-edit" title="ویرایش" style="cursor: no-drop"></i>
+
+              </ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="roleList.City_delete;else notDeleteAccessTemp">
+                <a class="btn btn-sm btn-outline-lightning rounded-0"
+                   style="cursor: pointer"
+                   (click)="showModalDelete(item,i)"
+                >
+                  <i class="fa fa-trash" title="حذف"></i>
+                </a>
+              </ng-container>
+              <ng-template #notDeleteAccessTemp>
+                <i class="fa fa-trash" style="cursor: no-drop" title="حذف"></i>
+
+              </ng-template>
+            </td>
+
+          </tr>
+        </ng-container>
+
+        </tbody>
+      </table>
+      <!--    pagination-->
+      <app-paginator
+              [totalElements]="length"
+              [pageSize]="pageSize"
+              [pageIndex]="pageIndex"
+              [pageSizeOptions]="[]"
+              [showFirstLastButtons]="true"
+              (page)=" changePage($event)"
+      ></app-paginator>
+
+
+      <!--    pagination-->
+    </div>
+  </ng-container>
+</div>
+</div>
+
+<!--**************************************************************************-->
+<app-conferm-delete
+  [title]="selectedItemForDelete.title"
+  [loading]="selectedItemForDelete.loading"
+  [modalId]="'modalId'+selectedItemForDelete.id"
+  (value)="deleteItem($event)"
+></app-conferm-delete>

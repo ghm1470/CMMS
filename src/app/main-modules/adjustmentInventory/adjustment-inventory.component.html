@@ -1,0 +1,83 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 card-title">
+        تنظیم موجودی
+      </div>
+    </div>
+  </div>
+
+    <form #adjustmentInventoryForm="ngForm" (submit)="action(adjustmentInventoryForm)">
+      <div class="card-body card-body-content">
+      <div class="col-md-12">
+        <div class="row">
+
+          <div class="col-md-5">
+            <div class="form-group w-75 d">
+              <label class="control-label" style="font-size: 12px">انتخاب قطعه :
+              </label>
+              <div (click)="openModal(1)" class="form-control form-control-sm" type="text" id="history1"
+
+              >{{showInventory.partName}}
+<!--                {{showInventory.partCode}}-->
+              </div>
+            </div>
+            <div id="titleValidation"></div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group w-75 d">
+              <label class="control-label" style="font-size: 12px">مقدار قبلی :
+              </label>
+              <div class="form-control form-control-sm" type="text" id="history2"
+              >{{showInventory.previousQuantity}}</div>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group w-75 d">
+              <label class="control-label" style="font-size: 12px">مقدار جدید :
+              </label>
+              <input class="form-control form-control-sm" type="text" id="history3"
+                     [(ngModel)]="showInventory.newQuantity"
+                     #quantity="ngModel"
+                     nbvPattern="{{myPattern.number}}"
+                     nbvRequired name="quantity"
+              [class.is-valid]="!(quantity?.errors?.nbvRequired || quantity?.errors?.nbvPattern)"
+              [class.is-invalid]="(quantity?.errors?.nbvRequired || quantity?.errors?.nbvPattern) && (quantity.touched || doSave)"
+                     dest="quantityValidation">
+            </div>
+            <div id="quantityValidation"></div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group w-75 d">
+              <label class="control-label" style="font-size: 12px">حداقل مقدار:
+              </label>
+              <div class="form-control form-control-sm" type="text" id="history4"
+              >{{showInventory.minQuantity}}</div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      </div>
+      <div class="card-footer text-left">
+        <button type="submit" class="btn btn-action btn-sm">
+          <span>ذخیره</span>
+          <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-1x"></i>
+
+        </button>
+      </div>
+    </form>
+    <div *ngIf="mode === actionMode.VIEW">
+      <ng-container *ngIf="showModal">
+      <app-current
+              [allowToOpenCollapse]="allowToOpenCollapse"
+              (messageEvent)="receiveMessage($event)"
+              [lastEvent]="lastEvent"></app-current>
+      </ng-container>
+    </div>
+
+
+</div>
+

@@ -1,0 +1,221 @@
+<div class="row" *ngIf="formStatus === 'pending'">
+  <div class=" col-md-12 " style="margin-top: 25px ; margin-bottom: 25px ;float: right" *ngIf="modeW !== actionMode.VIEW">
+    <button class="btn btn-action" (click)="addNewNotify()">افزودن آگاه سازی</button>
+  </div>
+  <div class="col-md-12">
+    <div class="text-center" *ngIf="!notifyList.length">
+      <a style="color: #7884a7">هیچ اطلاعاتی ثبت نشده!</a>
+    </div>
+    <div class="card table-responsive-md form-inline" *ngIf="notifyList.length">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th class="text-center" style="width: 5%">ردیف</th>
+          <th class="text-center">کاربر</th>
+          <th class="text-center">هشدار</th>
+          <th class="text-center" style="width: 5%" *ngIf="modeW !== actionMode.VIEW">ویرایش </th>
+          <th class="text-center" style="width: 5%" *ngIf="modeW !== actionMode.VIEW">حذف</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <ng-container *ngFor="let item of notifyList; let i = index">
+          <tr class="text-center">
+            <td>{{i + 1}}</td>
+            <td>{{item?.user.name + ' ' + item?.user.family}}</td>
+            <td>
+              <ng-container *ngFor="let event of item.events; let i = index">
+                <ng-container *ngFor="let notifyEventList of notifyEventList">
+                  <ng-container *ngIf="notifyEventList._value === event.toString()">
+                    {{i + 1}}-
+                    {{notifyEventList._title}}
+                    <span *ngIf="i !== item?.events?.length - 1"><br></span>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </td>
+            <td *ngIf="modeW !== actionMode.VIEW">
+              <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                 (click)="chooseSelectedItemForEdit(item,i)" style="cursor: pointer ; font-weight: bold">
+                <i class="fa fa-edit" title="ویرایش"></i>
+              </a>
+            </td>
+            <td *ngIf="modeW !== actionMode.VIEW">
+              <a class="btn btn-sm btn-outline-lightning rounded-0"
+                 style="cursor: pointer" nbdAreYouSure (then)="deleteItem(item)">
+                <i class="fa fa-trash" title="حذف"></i>
+              </a>
+            </td>
+          </tr>
+        </ng-container>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="formStatus !== 'pending'">
+
+  <div class="col-md-12">
+    <div class="text-center" *ngIf="!notifyList.length">
+      <a style="color: #7884a7">هیچ اطلاعاتی ثبت نشده!</a>
+    </div>
+    <div class="card table-responsive-md form-inline" *ngIf="notifyList.length">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th class="text-center" style="width: 5%">ردیف</th>
+          <th class="text-center">کاربر</th>
+          <th class="text-center">هشدار</th>
+          <!--<th class="text-center" style="width: 5%" *ngIf="modeW !== actionMode.VIEW"></th>-->
+          <!--<th class="text-center" style="width: 5%" *ngIf="modeW !== actionMode.VIEW"></th>-->
+        </tr>
+        </thead>
+        <tbody>
+
+        <ng-container *ngFor="let item of notifyList; let i = index">
+          <tr class="text-center">
+            <td>{{i + 1}}</td>
+            <td>{{item?.user.name + ' ' + item?.user.family}}</td>
+            <td>
+              <ng-container *ngFor="let event of item.events; let i = index">
+                <ng-container *ngFor="let notifyEventList of notifyEventList">
+                  <ng-container *ngIf="notifyEventList._value === event.toString()">
+                    {{i + 1}}-
+                    {{notifyEventList._title}}
+                    <span *ngIf="i !== item?.events?.length - 1"><br></span>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </td>
+            <!--<td *ngIf="modeW !== actionMode.VIEW">-->
+            <!--<a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+            <!--(click)="chooseSelectedItemForEdit(item,i)" style="cursor: pointer ; font-weight: bold">-->
+            <!--<i class="fa fa-edit" title="ویرایش"></i>-->
+            <!--</a>-->
+            <!--</td>-->
+            <!--<td *ngIf="modeW !== actionMode.VIEW">-->
+            <!--<a class="btn btn-sm btn-outline-lightning rounded-0"-->
+            <!--style="cursor: pointer" nbdAreYouSure (then)="deleteItem(item)">-->
+            <!--<i class="fa fa-trash" title="حذف"></i>-->
+            <!--</a>-->
+            <!--</td>-->
+          </tr>
+        </ng-container>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="notifyModal" data-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="col-lg-12">
+          <div class="modal-title" style="color:#40046D ;font-size: 18px;
+              text-align: center !important;
+              font-weight: bold">
+            <i class="fa fa-plus"></i> &nbsp;&nbsp;
+            <span *ngIf="mode === actionMode.ADD"> افزودن اگاه سازی</span>
+            <span *ngIf="mode === actionMode.EDIT"> ویرایش اگاه سازی</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-body" style="display: flow-root;  padding: 15px;border-radius: 5px">
+
+        <form #notifyForm="ngForm">
+
+          <div class="col-md-12">
+            <div class="row">
+              <label class="for-label">کاربر</label>
+              <ng-select class="form-control" (change)="addUserToNotify()"
+                         style="width: 100%;padding: 0px" dir="rtl" [(ngModel)]="notify.user.id"
+                         [ngModelOptions]="{standalone: true}">
+                <ng-option *ngFor="let item of userList" [value]="item.id">
+                  {{item.name + ' ' + item.family}}
+                </ng-option>
+              </ng-select>
+            </div>
+            <div class="row">
+              <div class="col-md-12" style=" background-color: #042C76;color: white !important; margin-top: 30px;  ;cursor: pointer; font-size: 14px" >
+                ارسال پیام به صورت سیستمی
+              </div>
+            </div>
+            <div class="row" style="margin-top: 3vh" *ngFor="let item of notifyEventList;let i=index">
+              <div class="col-md-6" style="text-align: right">
+                <div class="demo-checkboxes">
+                  <input [id]="i" type="checkbox" [value]="item._value" [checked]="checkNotifyChecked(item._value)"
+                         (change)="checkNotify(item)">
+                  <label style="cursor: pointer ; font-size: 12px ; margin-right: 5px;" [for]="i">
+                    {{item._title}}
+                  </label>
+                </div>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12" style="background-color: #042C76;color: white !important; margin-top: 30px ;cursor: pointer;font-size: 14px" >
+                ارسال پیام به صورت پیام کاربری
+              </div>
+            </div>
+            <div class="row" style="margin-top: 3vh" *ngFor="let item of notifyEventList;let i=index">
+              <div class="col-md-6" style="text-align: right">
+                <div class="demo-checkboxes">
+                  <input [id]="i" type="checkbox" [value]="item._value" [checked]="checkNotifyCheckedTow(item._value)"
+                         (change)="checkNotify(item)">
+                  <label style="cursor: pointer; font-size: 12px; margin-right: 5px;" [for]="i">
+                    {{item._title}}
+                  </label>
+                </div>
+
+              </div>
+            </div>
+            <div class="demo-checkboxes">
+              <input type="checkbox"
+                     >
+              <!--(change)="checkNotify(item)"-->
+              <label style="cursor: pointer;margin-right: 5px ;font-size: 12px;
+    margin-top: 17px;" >
+                اطلاع رسانی همزمان با ثبت پیام
+              </label>
+            </div>
+            <div class="row" style="margin-left: -45px;
+    margin-top: 20px;">
+              <div class=" col-sm-12" style="margin-right: -15px; margin-left: -15px">
+                <textarea type="text" style="font-size: 12px" placeholder="پیام شما"
+                          class="form-control" minlength="3" maxlength="620" name="description"
+                ></textarea>
+
+              </div>
+
+            </div>
+            <div class="row">
+              <button  type="button" class="btn btn-sm"  style="background-color: #042C76;margin-top: 10px; font-size: 10px ;margin-bottom: 30px; color: white !important;" >
+                ارسال
+              </button>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <div class="btn-group-sm">
+              <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal" style="margin :0 5px "
+                      (click)="cancelModal()">
+                انصراف
+              </button>
+              <button type="button" class="btn btn-sm" style="background-color: #042C76 ;color: white !important;" (click)="action()">
+                <span *ngIf="mode === actionMode.ADD">ذخیره</span>
+                <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+

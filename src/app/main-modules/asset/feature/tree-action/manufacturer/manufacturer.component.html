@@ -1,0 +1,174 @@
+<div class="card">
+
+    <div class="card-body card-body-content">
+        <form class=" form" [formGroup]="htmlForm" (ngSubmit)="onSubmit()">
+            <div class="col-md-12">
+                <div class="row" style="    border-bottom: 1px solid;margin-bottom: 10px;">
+                    <!--                    نام شرکت سازنده-->
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="form-group">
+                            <label> نام شرکت سازنده</label>
+                            <input
+                                    class=" form-control "
+                                    id="manufacturerCompanyName"
+                                    name="manufacturerCompanyName"
+                                    formControlName="manufacturerCompanyName"
+                                    type="text"
+                                    style="font-family: IRANSansWeb-farsi!important;
+                                        "
+                                    autocomplete="off">
+
+                        </div>
+                    </div>
+                    <!--                    تلفن شرکت سازنده-->
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="form-group">
+                            <label> تلفن شرکت سازنده</label>
+                            <input
+                                    class=" form-control "
+                                    id="manufacturerCompanyPhone"
+                                    name="manufacturerCompanyPhone"
+                                    formControlName="manufacturerCompanyPhone"
+                                    type="text"
+                                    appNumeric
+                                    style="font-family: IRANSansWeb-farsi!important;
+                                        "
+                                    autocomplete="off">
+
+                        </div>
+                    </div>
+                    <!--                    ایمیل شرکت سازنده-->
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="form-group">
+                            <label> ایمیل شرکت سازنده</label>
+                            <input
+                                    class="form-control "
+                                    id="manufacturerCompanyEmail"
+                                    name="manufacturerCompanyEmail"
+                                    formControlName="manufacturerCompanyEmail"
+                                    type="text"
+                                    style="font-family: IRANSansWeb-farsi!important;
+                                        "
+                                    autocomplete="off">
+
+                        </div>
+                    </div>
+                    <!--                    آدرس شرکت سازنده-->
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="form-group">
+                            <label> آدرس شرکت سازنده</label>
+                            <textarea
+                                    class="form-control "
+                                    id="manufacturerCompanyAddress"
+                                    name="manufacturerCompanyAddress"
+                                    formControlName="manufacturerCompanyAddress"
+                                    style="font-family: IRANSansWeb-farsi!important;
+                                        "
+                                    autocomplete="off">
+                            </textarea>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <!--                    نام شرکت فروشنده -->
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="form-group">
+                            <label> نام شرکت فروشنده </label>
+                            <input
+                                    class="form-control "
+                                    id="sellerCompanyName"
+                                    name="sellerCompanyName"
+                                    formControlName="sellerCompanyName"
+                                    type="text"
+                                    style="font-family: IRANSansWeb-farsi!important;
+                                        "
+                                    autocomplete="off">
+
+                        </div>
+                    </div>
+                    <!--                    تلفن شرکت فروشنده -->
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="form-group">
+                            <label> تلفن شرکت فروشنده </label>
+                            <input
+                                    class="form-control "
+                                    id="sellerCompanyPhone"
+                                    name="sellerCompanyPhone"
+                                    formControlName="sellerCompanyPhone"
+                                    type="text"
+                                    appNumeric
+                                    style="font-family: IRANSansWeb-farsi!important;
+                                        "
+                                    autocomplete="off">
+
+                        </div>
+                    </div>
+                    <!--                    ایمیل شرکت فروشنده -->
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="form-group">
+                            <label> ایمیل شرکت فروشنده </label>
+                            <input
+                                    class="form-control "
+                                    id="sellerCompanyEmail"
+                                    name="sellerCompanyEmail"
+                                    formControlName="sellerCompanyEmail"
+                                    type="text"
+                                    style=" font-family: IRANSansWeb-farsi!important;
+                                        "
+                                    autocomplete="off">
+
+                        </div>
+                    </div>
+                    <!--                    آدرس شرکت فروشنده -->
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="form-group">
+                            <label> آدرس شرکت فروشنده </label>
+                            <textarea
+                                    class=" form-control "
+                                    id="sellerCompanyAddress"
+                                    name="sellerCompanyAddress"
+                                    formControlName="sellerCompanyAddress"
+                                    style=" font-family: IRANSansWeb-farsi!important; "
+                                    autocomplete="off">
+                            </textarea>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <ng-container *ngIf="actionMode!==ActionMode.VIEW">
+                    <div modal-footer class="row justify-content-end"
+                         style="padding-right: 10px;padding-left:10px">
+                        <button type="button" class="btn btn-action btn-sm"
+                                (click)="creatForm()"
+                                style="    margin: 5px 5px;  min-width: 45px;text-align: center;">
+                            <span>
+                               بازخوانی فرم
+                            </span>
+                        </button>
+
+                        <button type="submit" class="btn btn-action btn-sm"
+                                style="    margin: 5px 5px;  min-width: 45px;text-align: center;">
+                            <span>
+                                {{actionMode === ActionMode.ADD ? ' ثبت  ' : 'ویرایش '}}
+                            </span>
+
+                            <i class="fa fa-spinner fa-pulse fa-1x" aria-hidden="true" *ngIf="loadingAction"></i>
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
+
+
+        </form>
+
+    </div>
+</div>
+
+
+

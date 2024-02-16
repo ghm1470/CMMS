@@ -1,0 +1,84 @@
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="false"
+  [dataBackdrop]="true"
+  [modalSize]="MyModalSize.CUSTOM_WIDTH"
+  [customWidthPercent]="{xs: 100, md:90}"
+  autoShow="false"
+  (onClose)="removeModal()"
+  [myId]="modalId">
+  <div modal-header>
+    {{title}}
+  </div>
+  <div modal-body style="display: flow-root">
+    <table class="table table-bordered table-striped" *ngIf="workOrderList.length > 0" >
+      <thead>
+      <tr>
+        <th class="text-center">ردیف</th>
+        <th class="text-center">عنوان</th>
+        <th class="text-center">کد</th>
+        <th class="text-center">اولویت</th>
+        <th class="text-center">نوع بازدید</th>
+        <th class="text-center">دارایی</th>
+        <th class="text-center">شروع</th>
+        <th class="text-center">پایان</th>
+        <th class="text-center">زمان بندی</th>
+        <th class="text-center" style="width: 5%"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let item of workOrderList;let i=index">
+        <tr style="text-align: center">
+          <td>{{MyToolkit.Common.En2Fa(i + 1)}}</td>
+          <td>{{item.workOrderName}}</td>
+          <td>{{item.workOrderCode}}</td>
+          <td>
+            <ng-container *ngFor="let priority of priorityList">
+              <ng-container *ngIf="priority._value === item.workOrderPriority">
+                {{priority._title}}
+              </ng-container>
+            </ng-container>
+          </td>
+          <td>
+            <ng-container *ngFor="let maintenanceType of maintenanceTypeList">
+              <ng-container *ngIf="maintenanceType._value === item.workOrderMaintenanceType">
+                {{maintenanceType._title}}
+              </ng-container>
+            </ng-container>
+          </td>
+          <td>
+            {{item.assetName}}
+          </td>
+          <td>
+<!--            {{item.workOrderStartDate| convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+            {{myMoment.convertIsoToJDate(item?.workOrderStartDate) | perNumber}}
+          <td>
+<!--            {{item.workOrderEndDate| convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+          {{myMoment.convertIsoToJDate(item?.workOrderEndDate) | perNumber}}
+          </td>
+          <td>
+            <span *ngIf="item.fromSchedule === true">
+              شده
+            </span>
+
+            <span *ngIf="item.fromSchedule === false" > نشده </span>
+          </td>
+          <td>
+            <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2" (click)="removeModal()" [routerLink]="'/panel/workOrder/action'" [queryParams]="{mode: 'VIEW', workOrderId: item.workOrderId}"
+                style="cursor: pointer ; font-weight: bold">
+              <i class="fa fa-eye" title="مشاهده"></i>
+            </a>
+          </td>
+        </tr>
+      </ng-container>
+
+      </tbody>
+    </table>
+
+    <div class="col-12 text-center" *ngIf="workOrderList.length === 0" >
+      موردی یافت نشد
+    </div>
+
+  </div>
+</nbw-modal>
+

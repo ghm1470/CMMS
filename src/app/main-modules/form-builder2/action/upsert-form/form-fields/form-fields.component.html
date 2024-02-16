@@ -1,0 +1,587 @@
+<div class="card">
+
+    <div class="card-body" style="max-height: 67vh;height: 67vh; overflow: auto;">
+
+        <ng-container *ngFor="let element of form.newElementList;let elementIndex=index">
+
+            <div class="row " style="margin-bottom: 10px">
+                <div class="col card p-0" [matTooltip]="element.guide"
+                     [matTooltipPosition]="'above'">
+                    <!--                    <ng-container *ngTemplateOutlet="elementTypeItemsTemp; context:{ $implicit: element }">-->
+
+                    <!--                    </ng-container>-->
+
+                    <ng-container [ngSwitch]="element.newElementType">
+
+                        <div class="card-header">
+                            <h6>
+                                <span *ngIf="element.required===true||element.required==='true'" style="color: #fc5959">*</span>
+                                <ng-container *ngSwitchCase="'TEXT_FIELD'">متن کوتاه -</ng-container>
+                                <ng-container *ngSwitchCase="'TEXT_AREA'">متن بلند(توضیحی) -</ng-container>
+                                <ng-container *ngSwitchCase="'COMBO_BOX'">لیستی -</ng-container>
+                                <ng-container *ngSwitchCase="'CHECK_BOX'">گزینه ای چند انتخابی -</ng-container>
+                                <ng-container *ngSwitchCase="'RADIO_BUTTON'">گزینه ای تک انتخابی -</ng-container>
+                                <ng-container *ngSwitchCase="'DATE'">تاریخ -</ng-container>
+                                <ng-container *ngSwitchCase="'TIME'">ساعت -</ng-container>
+                                عنوان :
+                                {{ element.questionTitle }}
+                            </h6>
+
+                        </div>
+                        <div class="card-body-content  p-4 cursor-pointer">
+
+                            <!--        TEXT_FIELD-->
+                            <ng-container *ngSwitchCase="'TEXT_FIELD'">
+                                <input type="text" class="form-control"
+                                       [id]="'inputText'+element.id"
+                                       [placeholder]="element.placeHolder?element.placeHolder:''"
+                                       [maxLength]="element.maxLength"
+                                       [minLength]="element.minLength"
+                                >
+                            </ng-container>
+
+                            <!--        TEXT_AREA-->
+                            <ng-container *ngSwitchCase="'TEXT_AREA'">
+                                <textarea class="form-control"
+                                          placeholder="{{element.placeHolder?element.placeHolder:''}}"
+                                          style="max-height: 80px;min-height: 80px;max-width: 100%;min-width: 100%"
+                                          [id]="'inputTextArea'+element.id"
+                                          [maxLength]="element.maxLength"
+                                          [minLength]="element.minLength"
+                                ></textarea>
+
+                            </ng-container>
+                            <!--        DATE-->
+                            <ng-container *ngSwitchCase="'DATE'">
+
+
+                                <input type="text" class="form-control"
+                                       [id]="'inputDate'+element.id"
+                                       [placeholder]="element.placeHolder?element.placeHolder:''"
+                                       [maxLength]="element.maxLength"
+                                       [minLength]="element.minLength"
+                                >
+                            </ng-container>
+                            <!--        COMBO_BOX-->
+                            <ng-container *ngSwitchCase="'COMBO_BOX'">
+
+                                <ng-select dir="rtl" [id]="'comboBox'+element.id"
+                                           [placeholder]="element.placeHolder?element.placeHolder:''"
+                                           style="width: 100%;height: 31px;     background-color: #DCD1CF;"
+                                           dropdownPosition="bottom">
+                                    <ng-container *ngFor="let option  of element.newOptionList">
+                                        <ng-option value="{{option.id}}">{{option.value}}</ng-option>
+                                    </ng-container>
+
+                                </ng-select>
+
+                                <!--                -->
+                                <!--                <select dir="rtl"-->
+                                <!--                        id="comboBox{{element.id}}"-->
+                                <!--                        class="form-control"-->
+                                <!--                >-->
+                                <!--                    <ng-container *ngFor="let option  of element.newOptionList">-->
+                                <!--                        <option value="{{option.id}}">{{option.value}}</option>-->
+                                <!--                    </ng-container>-->
+                                <!--                </select>-->
+                            </ng-container>
+                            <!--        CHECK_BOX-->
+                            <ng-container *ngSwitchCase="'CHECK_BOX'">
+                                <ng-container *ngFor="let option  of element.newOptionList">
+                                    <div class="row ">
+                                        <div class="d-flex align-items-start">
+                                            <input type="checkbox"
+                                                   [id]="'checkbox'+option.id"
+                                                   [placeholder]="element.placeHolder?element.placeHolder:''"
+                                                   [maxLength]="element.maxLength"
+                                                   [minLength]="element.minLength"
+                                            >
+                                        </div>
+                                        <div class="col">
+                                            <span>&nbsp;&nbsp;{{option.value}}</span>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                            <!--        RADIO_BUTTON-->
+                            <ng-container *ngSwitchCase="'RADIO_BUTTON'">
+                                <ng-container *ngFor="let option  of element.newOptionList">
+                                    <label style="width: 100%;cursor: pointer">
+                                        <div class="row ">
+                                            <div class="d-flex align-items-start">
+                                                <input type="radio"
+                                                       [id]="'radio'+option.id"
+                                                       name="radio{{element.id}}"
+                                                       [placeholder]="element.placeHolder?element.placeHolder:''"
+                                                       [maxLength]="element.maxLength"
+                                                       [minLength]="element.minLength"
+                                                >
+                                            </div>
+                                            <div class="col">
+                                                <span>&nbsp;&nbsp;{{option.value}}</span>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </ng-container>
+                            </ng-container>
+
+                            <!--        TIME-->
+                            <ng-container *ngSwitchCase="'TIME'">
+
+                                <div class="row ">
+                                    <div class="col-2">
+                                        <label> دقیقه : </label>
+                                        <input type="number" min="0" max="59" class="form-control"
+                                               [id]="'inputTimeminute'+element.id"
+                                               [placeholder]="'دقیقه'"
+                                        >
+                                    </div>
+                                    <div class="col-2">
+                                        <label> ساعت : </label>
+
+                                        <input type="number" min="0" max="23" class="form-control"
+                                               [id]="'inputTimeHour'+element.id"
+                                               [placeholder]="'ساعت'"
+                                        >
+                                    </div>
+
+
+                                </div>
+                            </ng-container>
+                        </div>
+
+                    </ng-container>
+
+
+                </div>
+                <div class="d-flex align-items-center" *ngIf="mode!==actionMode.VIEW">
+                    <i class="fa fa-arrow-up cursor-pointer  mr-2" *ngIf="elementIndex>0"
+                       (click)="elementMove('up',elementIndex)"></i>
+                    <i class="fa fa-arrow-up cursor-pointer mr-2 "
+                       style="color: #9498b0"
+                       *ngIf="elementIndex===0"></i>
+                    <i class="fa fa-arrow-down cursor-pointer mr-2 "
+                       *ngIf="elementIndex+1<form.newElementList.length"
+                       (click)="elementMove('down',elementIndex) "></i>
+                    <i class="fa fa-arrow-down cursor-pointer mr-2 "
+                       style="color: #9498b0"
+                       *ngIf="elementIndex+1===form.newElementList.length"></i>
+                    <i class="fa fa-edit cursor-pointer ml-2 mr-2" (click)=" selectElementForEdit(element)"></i>
+                    <i class="fa fa-trash cursor-pointer"
+                       style="color: #fc5959"
+                       (click)="form.newElementList.splice(elementIndex,1)"></i>
+                </div>
+            </div>
+        </ng-container>
+
+        <!--'Register' : 'Update' btn-->
+        <!--        <div class="form-group d-flex justify-content-between">-->
+        <!--            <button type="submit" class="btn btn-success" (click)="updateForm()">-->
+        <!--                ذخیره-->
+        <!--                <i *ngIf="loadingSubmit" class="fa fa-spinner fa-pulse fa-1x"></i>-->
+
+        <!--            </button>-->
+
+        <!--        </div>-->
+
+
+    </div>
+    <div class="card-header">
+        <!--        <h3> فرم  {{ form.title }} </h3>-->
+        <div class="form-group d-flex justify-content-between">
+            <button type="submit" class="btn btn-success" *ngIf="mode!==actionMode.VIEW" (click)="showModal()">
+                <!--                <i class="fa fa-plus-circle"></i>-->
+                افزودن سوال
+
+            </button>
+            <div>
+                <button type="button" (click)="back()" class="btn btn-cancel-back  ml-4">
+                    بازگشت
+
+                </button>
+
+                <button type="submit" class="btn btn-action ml-4" *ngIf="mode!==actionMode.VIEW" (click)="updateForm()">
+                    <!--                    <i class="fa fa-save"></i>-->
+
+                    ذخیره
+                    <i *ngIf="loadingSubmit" class="fa fa-spinner fa-pulse fa-1x"></i>
+
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #elementTypeItemsTemp let-element>
+    <ng-container [ngSwitch]="element.newElementType">
+
+        <div class="card-header">
+            <h6>
+                <span *ngIf="element.required===true||element.required==='true'" style="color: #fc5959">*</span>
+                <ng-container *ngSwitchCase="'TEXT_FIELD'">متن کوتاه -</ng-container>
+                <ng-container *ngSwitchCase="'TEXT_AREA'">متن بلند(توضیحی) -</ng-container>
+                <ng-container *ngSwitchCase="'COMBO_BOX'">لیستی -</ng-container>
+                <ng-container *ngSwitchCase="'CHECK_BOX'">گزینه ای چند انتخابی -</ng-container>
+                <ng-container *ngSwitchCase="'RADIO_BUTTON'">گزینه ای تک انتخابی -</ng-container>
+                <ng-container *ngSwitchCase="'DATE'">تاریخ -</ng-container>
+                <ng-container *ngSwitchCase="'TIME'">ساعت -</ng-container>
+                عنوان :
+                {{ element.questionTitle }}
+            </h6>
+
+        </div>
+        <div class="card-body-content  p-4 cursor-pointer">
+
+            <!--        TEXT_FIELD-->
+            <ng-container *ngSwitchCase="'TEXT_FIELD'">
+                <input type="text" class="form-control"
+                       id="inputText{{element.id}}"
+                       [placeholder]="element.placeHolder?element.placeHolder:''"
+                       [maxLength]="element.maxLength"
+                       [minLength]="element.minLength"
+                >
+            </ng-container>
+
+            <!--        TEXT_AREA-->
+            <ng-container *ngSwitchCase="'TEXT_AREA'">
+            <textarea class="form-control"
+                      id="inputTextArea{{element.id}}"
+                      style="max-height: 80px;min-height: 80px;max-width: 100%;min-width: 100%"
+                      [placeholder]="element.placeHolder?element.placeHolder:''"
+                      [maxLength]="element.maxLength"
+                      [minLength]="element.minLength">
+            </textarea>
+            </ng-container>
+            <!--        DATE-->
+            <ng-container *ngSwitchCase="'DATE'">
+
+
+                <input type="text" class="form-control"
+                       id="inputDate{{element.id}}"
+                       [placeholder]="element.placeHolder?element.placeHolder:''"
+                       [maxLength]="element.maxLength"
+                       [minLength]="element.minLength"
+                >
+            </ng-container>
+            <!--        COMBO_BOX-->
+            <ng-container *ngSwitchCase="'COMBO_BOX'">
+
+                <ng-select dir="rtl" id="comboBox{{element.id}}"
+                           [placeholder]="element.placeHolder?element.placeHolder:''"
+                           style="width: 100%;height: 31px;     background-color: #DCD1CF;"
+                           dropdownPosition="bottom">
+                    <ng-container *ngFor="let option  of element.newOptionList">
+                        <ng-option value="{{option.id}}">{{option.value}}</ng-option>
+                    </ng-container>
+
+                </ng-select>
+
+                <!--                -->
+                <!--                <select dir="rtl"-->
+                <!--                        id="comboBox{{element.id}}"-->
+                <!--                        class="form-control"-->
+                <!--                >-->
+                <!--                    <ng-container *ngFor="let option  of element.newOptionList">-->
+                <!--                        <option value="{{option.id}}">{{option.value}}</option>-->
+                <!--                    </ng-container>-->
+                <!--                </select>-->
+            </ng-container>
+            <!--        CHECK_BOX-->
+            <ng-container *ngSwitchCase="'CHECK_BOX'">
+                <ng-container *ngFor="let option  of element.newOptionList">
+                    <div class="row ">
+                        <div class="d-flex align-items-start">
+                            <input type="checkbox"
+                                   id="checkbox{{option.id}}"
+                                   [placeholder]="element.placeHolder?element.placeHolder:''"
+                                   [maxLength]="element.maxLength"
+                                   [minLength]="element.minLength"
+                            >
+                        </div>
+                        <div class="col">
+                            <span>&nbsp;&nbsp;{{option.value}}</span>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <!--        RADIO_BUTTON-->
+            <ng-container *ngSwitchCase="'RADIO_BUTTON'">
+                <ng-container *ngFor="let option  of element.newOptionList">
+                    <label style="width: 100%;cursor: pointer">
+                        <div class="row ">
+                            <div class="d-flex align-items-start">
+                                <input type="radio"
+                                       id="radio{{option.id}}"
+                                       name="radio{{element.id}}"
+                                       [placeholder]="element.placeHolder?element.placeHolder:''"
+                                       [maxLength]="element.maxLength"
+                                       [minLength]="element.minLength"
+                                >
+                            </div>
+                            <div class="col">
+                                <span>&nbsp;&nbsp;{{option.value}}</span>
+                            </div>
+                        </div>
+                    </label>
+                </ng-container>
+            </ng-container>
+
+            <!--        TIME-->
+            <ng-container *ngSwitchCase="'TIME'">
+
+                <div class="row ">
+                    <div class="col-2">
+                        <label> دقیقه : </label>
+                        <input type="number" min="0" max="59" class="form-control"
+                               id="inputTimeminute{{element.id}}"
+                               [placeholder]="'دقیقه'"
+                        >
+                    </div>
+                    <div class="col-2">
+                        <label> ساعت : </label>
+
+                        <input type="number" min="0" max="23" class="form-control"
+                               id="inputTimeHour{{element.id}}"
+                               [placeholder]="'ساعت'"
+                        >
+                    </div>
+
+
+                </div>
+            </ng-container>
+        </div>
+
+    </ng-container>
+
+</ng-template>
+
+
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.CUSTOM_WIDTH"
+        autoShow="false"
+        (onClose)=" onCloseModal()"
+        [myId]="'insertFieldsModal'">
+    <div modal-header>
+        <i class="fa fa-plus-circle" style="color: gray">
+        </i>
+        افزودن سوال
+    </div>
+    <div modal-body>
+        <form class=" form" [formGroup]="htmlForm" (ngSubmit)="onSubmit()">
+            <div class="col-md-12">
+                <div class="row">
+
+                    <!--            newElementType-->
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label> نوع</label>
+                            <span style="color: #fc5959">*</span>
+
+                            <select dir="rtl" id="newElementType" class="form-control"
+                                    [(ngModel)]="newElement.newElementType"
+                                    name="newElementType" formControlName="newElementType">
+                                <option value="TEXT_FIELD">{{'متن کوتاه'}}</option>
+                                <option value="TEXT_AREA">{{'متن بلند(توضیحی)'}}</option>
+                                <option value="COMBO_BOX">{{'لیستی'}}</option>
+                                <option value="CHECK_BOX">{{'گزینه ای چند انتخابی'}}</option>
+                                <option value="RADIO_BUTTON">{{'گزینه ای تک انتخابی'}}</option>
+                                <option value="DATE">{{'تاریخ'}}</option>
+                                <option value="TIME">{{'ساعت'}}</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <!--            questionTitle-->
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>عنوان</label>
+                            <span style="color: #fc5959">*</span>
+
+                            <input type="text" class="form-control" formControlName="questionTitle"
+                                   [pattern]="myPattern.TITLEFa"
+                                   [(ngModel)]="newElement.questionTitle">
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--            guide-->
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>راهنما</label>
+                            <input type="text" class="form-control" formControlName="guide"
+                                   [pattern]="myPattern.TITLEFa"
+                                   [(ngModel)]="newElement.guide">
+
+                        </div>
+                    </div>
+                    <!--                required-->
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label> اجباری / اختیاری</label>
+                            <select dir="rtl" id="required" class="form-control"
+                                    [(ngModel)]="newElement.required"
+                                    name="required" formControlName="required">
+                                <option [value]=true>{{'اجباری '}}</option>
+                                <option [value]=false>{{'اختیاری  '}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!--            placeHolder-->
+                    <ng-container
+                            *ngIf="newElement.newElementType!==newElementType.RADIO_BUTTON&&
+                                   newElement.newElementType!==newElementType.CHECK_BOX&&
+                                   newElement.newElementType!==newElementType.TIME">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>متن جانما</label>
+                                <input type="text" class="form-control" formControlName="placeHolder"
+                                       [pattern]="myPattern.TITLEFa"
+                                       [(ngModel)]="newElement.placeHolder">
+
+                            </div>
+                        </div>
+                    </ng-container>
+
+
+                </div>
+
+
+                <!--max-min-->
+                <!--                TEXT_FIELD && TEXT_AREA-->
+                <ng-container
+                        *ngIf="newElement.newElementType===newElementType.TEXT_FIELD||newElement.newElementType===newElementType.TEXT_AREA">
+
+                    <div class="row">
+                        <!--            minLength-->
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>حداقل طول</label>
+                                <input type="number" class="form-control" formControlName="minLength"
+                                       [pattern]="myPattern.number"
+                                       min="0"
+                                       placeholder="مقدار عددی وارد شود"
+                                       [(ngModel)]="newElement.minLength">
+                            </div>
+                        </div>
+                        <!--            maxLength-->
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>حداکثر طول</label>
+                                <input type="number" class="form-control" formControlName="maxLength"
+                                       min="0"
+                                       [pattern]="myPattern.number"
+                                       placeholder="مقدار عددی وارد شود"
+                                       [(ngModel)]="newElement.maxLength">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </ng-container>
+
+                <!--max-min!!!!!!!!!!!!!-->
+
+                <!--                optionList-->
+                <!--                RADIO_BUTTON && COMBO_BOX && CHECK_BOX-->
+                <ng-container *ngIf="newElement.newElementType===newElementType.COMBO_BOX||
+                                     newElement.newElementType===newElementType.RADIO_BUTTON||
+                                     newElement.newElementType===newElementType.CHECK_BOX
+                                           ">
+                    <div class="row" style="margin-bottom: 10px">
+                        <div class="col">
+
+                            <label>نام گزینه</label>
+                            <input type="text" class="form-control" formControlName="optionTitle"
+                                   [pattern]="myPattern.TITLEFa"
+                                   [(ngModel)]="newOption.value">
+                        </div>
+                        <div class="d-flex align-items-end">
+
+                            <button (click)="addOption()" [disabled]="!newOption.value.trim()"
+                                    *ngIf="mode!==actionMode.VIEW" class="btn btn-success">
+                                <i class="fa fa-plus-circle"></i>
+                                {{newOption.id ? 'ویرایش' : 'افزودن'}}
+                            </button>
+                        </div>
+                    </div>
+                    <div style="max-height: 200px;
+    overflow: auto;
+    background-color: #f1f1f1;">
+
+                        <ng-container *ngFor="let option of newElement.newOptionList;let optionIndex=index">
+                            <div class="row m-2">
+
+                                <div class="col card">
+                                    <label>{{option.value}}</label>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="fa fa-edit cursor-pointer ml-2 mr-2"
+                                       (click)=" selectOptionForEdit(option)"></i>
+                                    <i class="fa fa-trash cursor-pointer"
+                                       style="color: #fc5959"
+                                       (click)="newElement.newOptionList.splice(optionIndex,1)"></i>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
+                <!--                optionList!!!!-->
+                <!--                CHECK_BOX-->
+                <ng-container
+                        *ngIf="newElement.newElementType===newElementType.CHECK_BOX">
+
+                    <div class="row">
+
+                        <!--            minItemSelectable-->
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>حداقل گزینه قابل انتخاب</label>
+                                <span style="color: #fc5959">*</span>
+
+                                <input type="number" class="form-control" formControlName="minItemSelectable"
+                                       min="0"
+                                       [max]="newElement.newOptionList.length"
+                                       [pattern]="myPattern.number"
+                                       placeholder="مقدار عددی وارد شود"
+                                       [(ngModel)]="newElement.minItemSelectable">
+
+                            </div>
+                        </div>
+                        <!--            maxItemSelectable-->
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>حداکثر گزینه قابل انتخاب</label>
+                                <span style="color: #fc5959">*</span>
+
+                                <input type="number" class="form-control" formControlName="maxItemSelectable"
+                                       min="0"
+                                       [pattern]="myPattern.number"
+                                       [max]="newElement.newOptionList.length"
+                                       placeholder="مقدار عددی وارد شود"
+                                       [(ngModel)]="newElement.maxItemSelectable">
+
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+
+            </div>
+
+
+            <div modal-footer class="row justify-content-center" *ngIf="mode!==actionMode.VIEW">
+                <button type="submit" class="btn btn-success">
+                    <i class="fa fa-save"></i>
+                    تایید
+                </button>
+
+            </div>
+        </form>
+    </div>
+</nbw-modal>

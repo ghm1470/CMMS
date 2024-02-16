@@ -1,0 +1,91 @@
+<div class="card">
+
+    <div class="card-body card-body-content">
+        <!--<div class="col-md-12">-->
+        <div class="col-md-4 text-right" *ngIf="mode!==actionMode.VIEW">
+            <label class="control-label" style="height: 22px">انتخاب روانکارها</label>
+            <ng-select dir="rtl" (change)="changePart()" [(ngModel)]="selectedLubricant.lubricantId"
+                       placeholder="روانکارها" name="propertyList" id="propertyList" style="width: 100%;"
+                       dropdownPosition="bottom">
+                <ng-option value="-1" disabled>انتخاب روانکار</ng-option>
+                <ng-container *ngFor="let item of lubricantListGetAll; let i = index">
+                    <ng-option *ngIf="!checkSelect(item)"
+                               [value]="item.id">
+                        {{ item.title }}  {{ ' ( ' + item.type + ' ) ' }}
+                    </ng-option>
+                </ng-container>
+
+            </ng-select>
+            <br>
+        </div>
+
+
+        <div class="col-md-12" style="text-align: center" *ngIf="loading">
+            <i class="fa fa-spinner fa-pulse fa-3x "></i>
+
+        </div>
+        <div class="text-center">
+            <a *ngIf="!lubricantListForShowInTable.length && !loading" style="color: #7884a7">روانکاری ثبت نشده!</a>
+        </div>
+        <table class="table table-bordered table-responsive-md table-striped" *ngIf="lubricantListForShowInTable.length">
+            <thead>
+            <tr>
+                <td class="text-center" style="width: 10%">ردیف</td>
+                <td class="text-center">نام</td>
+                <td class="text-center">گرید / نوع</td>
+                <td class="text-center"> تعداد</td>
+                <td class="text-center" style="width: 10%" *ngIf="mode!==actionMode.VIEW">حذف</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of lubricantListForShowInTable;let i = index">
+                <th class="text-center" style="width: 10%">{{toolKit2.Common.En2Fa(i + 1)}}</th>
+                <td class="text-center">{{item?.title}}</td>
+                <td class="text-center">{{item?.type}}</td>
+                <td class="text-center">
+
+                    <ng-container *ngIf="mode===actionMode.VIEW">
+                        {{item?.amount}}
+                    </ng-container>
+                    <ng-container *ngIf="mode!==actionMode.VIEW">
+                        <input
+                                class=" form-control "
+                                id="usedNumber"
+                                name="usedNumber"
+                                type="text"
+                                appNumeric
+                                [(ngModel)]="item.amount"
+                                style="text-align: center;
+                                        font-family: IRANSansWeb-farsi!important;
+                                        padding: 0;  "
+                                autocomplete="off">
+                    </ng-container>
+                </td>
+                <!--                <td class="text-center" style="width: 5%">-->
+                <!--                    <i class="fa fa-eye" (click)="deletePart(item.id)" style="cursor: pointer;"></i>-->
+                <!--                </td>-->
+                <td class="text-center" style="width: 5%" *ngIf="mode!==actionMode.VIEW">
+                    <i class="fa fa-trash" (click)="deletePart(item.lubricantId)" style="cursor: pointer;"></i>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class=" text-left" style="padding-top: 1rem" *ngIf="mode!==actionMode.VIEW">
+            <button type="button" class="btn btn-action btn-sm"
+                    (click)="getAllPart()"
+                    style="    margin: 5px 5px;  min-width: 45px;text-align: center;">
+                            <span>
+                               بازخوانی فرم
+                            </span>
+            </button>
+
+            <button class="btn btn-action btn-sm" type="button" (click)="updateAssetParts()">
+                ثبت اطلاعات
+            </button>
+        </div>
+        <!--</div>-->
+
+
+    </div>
+
+</div>

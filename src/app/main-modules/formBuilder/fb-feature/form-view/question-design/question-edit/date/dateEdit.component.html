@@ -1,0 +1,175 @@
+<br>
+<div class="row">
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-body backShadow">
+          <form class="form-horizontal" [formGroup]="dateForm">
+            <div class="row">
+              <input type="text" style="display: none" [placeholder]="date.id" [(ngModel)]="date.id"
+                     formControlName="id">
+            </div>
+
+            <div class="row form-group">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.questionTitle}}</label>
+              </div>
+              <div class="col-md-12 text-left">
+                <textarea *ngIf="editingItem.newElement" rows="3" type="text" class="form-control"
+                          [placeholder]="editingItem.item.label"
+                          (keyup)="changeLabel($event.target.value)" #label formControlName="label">
+                </textarea>
+                <textarea *ngIf="!editingItem.newElement" rows="3" type="text" class="form-control"
+                          [(ngModel)]="date.label"
+                          #label formControlName="label">
+                </textarea>
+                <p style="color: red" *ngIf="(saveButton || dateForm.controls['label'].touched) && date.label == '' ">
+                  {{data.errorMessages.labelRequired}}
+                </p>
+              </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.questionHelpText}}</label>
+              </div>
+              <div class="col-md-12 text-left">
+                <input *ngIf="editingItem.newElement" type="text" class="form-control"
+                       [placeholder]="editingItem.item.helpText"
+                       (keyup)="changeHelpText($event.target.value)" #helpText formControlName="helpText">
+                <input *ngIf="!editingItem.newElement" type="text" class="form-control"
+                       [(ngModel)]="date.helpText"
+                       #helpText formControlName="helpText">
+              </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+              <div class="col-md-4 text-left">
+                <label class="control-label default font-size-15" *ngIf="data != null">{{data.formQuestion.questionRequired}}</label>
+              </div>
+              <div class="col-md-8 text-right">
+                <!--<input type="checkbox" class="form-control"-->
+                       <!--[(ngModel)]="date.required" #required formControlName="required">-->
+                <input type="checkbox" formControlName="required"  [(ngModel)]="date.required" #required>
+
+              </div>
+            </div>
+            <hr>
+
+            <div class="row form-group" *ngIf="isRtl">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.startDate}}</label>
+              </div>
+              <div class="col-md-12 text-center">
+                <div class="input-group text-right">
+                  <input type="text" class="form-control" id="startDate" formControlName="startRTL"
+                         #startDate [(ngModel)]="start" (click)="onChangeStartDate($event.target.value)" />
+                </div>
+              </div>
+              <p style="color: red" *ngIf="(saveButton || dateForm.controls['startRTL'].touched) && startNotValid">
+                زمان شروع معتبر نمی باشد.
+              </p>
+              <p style="color: red" *ngIf="(saveButton || dateForm.controls['startRTL'].touched) && nowBiggerThanStart">
+زمان شروع از زمان حال کوچک تر است.
+              </p>
+            </div>
+
+
+            <div class="row form-group" *ngIf="isRtl">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.endDate}}</label>
+              </div>
+              <div class="col-md-12 text-center">
+                <div class="input-group text-right">
+                  <input type="text" class="form-control" id="endDate" formControlName="endRTL"
+                         #endDate [(ngModel)]="end" (click)="onChangeEndDate($event.target.value)" />
+                </div>
+              </div>
+              <p style="color: red" *ngIf="(saveButton || dateForm.controls['endRTL'].touched) && endNotValid">
+                زمان پایان معتبر نیست.
+              </p>
+              <p style="color: red" *ngIf="(saveButton || dateForm.controls['endRTL'].touched) && nowBiggerThanEnd">
+                زمان پایان از زمان حال کوچک تر است.
+              </p>
+              <p style="color: red" *ngIf="(saveButton || dateForm.controls['endRTL'].touched) && startBiggerThanEnd">
+                زمان پایان از زمان شروع کوچک تر است.
+              </p>
+            </div>
+
+            <div class="row form-group" *ngIf="!isRtl">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.startDate}}</label>
+              </div>
+              <div class="col-md-12 text-center">
+                <div class="input-group col-md-12 text-right">
+                  <div class="input-group-addon">
+                    <span class="far fa-calendar-alt" id="MsDate" ></span>
+                  </div>
+                  <input type="text" class="form-control col-md-3" id="MstartDate" formControlName="startMiladi"
+                         [value]="start" (click)="onChangeStartDate($event.target.value)"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="row form-group" *ngIf="!isRtl">
+              <div class="col-md-12 text-left">
+                <label class="control-label" *ngIf="data != null">{{data.formQuestion.endDate}}</label>
+              </div>
+              <div class="col-md-12 text-center">
+                <div class="input-group col-md-12 text-right">
+                  <div class="input-group-addon">
+                    <span class="far fa-calendar-alt" id="MeDate" ></span>
+                  </div>
+                  <input type="text" class="form-control col-md-3" id="MendDate" formControlName="endMiladi"
+                         [value]="end" (click)="onChangeEndDate($event.target.value)"/>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 text-left" *ngIf="dateError != ''">
+              <p style="color: red">{{dateError}}</p>
+            </div>
+
+            <hr>
+
+            <div class="row form-group">
+              <div class="w-100">
+                <button class="btn btn-sm btn-cancel-back" style="margin-top: 10px!important;" (click)="close()" *ngIf="data != null">
+                  <span>{{data.public.close}}</span>
+                </button>
+              <button class="btn btn-sm btn-action"  style="margin-top: 10px!important;" (click)="save()" *ngIf="data != null">
+                  <span>{{data.public.save}}</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-body backShadow">
+           <div class="col-md-12 text-right" *ngIf="data != null">
+              <h4>{{data.formQuestion.questionTitle}}:</h4>
+              <span>{{date.label}}</span>
+              <span style="color: red" *ngIf="date.required">*</span>
+             <a class="toolTipColor" [title]="date.helpText">
+               <i class="fa fa-info-circle"></i>
+             </a>
+            </div>
+
+          <!--questionTitle image-->
+          <!--<div class="col-md-12">-->
+              <!--<br>-->
+            <!--<div class="col-md-6">-->
+              <!--<input type="file" accept="image/*" id="image" class="upload" (change)="settingQuestionImage($event)"/>-->
+            <!--</div>-->
+            <!--<div class="col-md-6" *ngIf="date.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE">-->
+              <!--<img style="width:200px; border-radius: 7px" [attr.src]="date.picture.imageData">-->
+              <!--<i class="fa fa-times" aria-hidden="true" style="color: red " (click)="deleteQuestionImage()"></i>-->
+            <!--</div>-->
+            <!--</div>-->
+
+          </div>
+        </div>
+      </div>
+</div>

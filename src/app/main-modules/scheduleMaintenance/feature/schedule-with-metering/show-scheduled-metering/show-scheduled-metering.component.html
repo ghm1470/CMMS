@@ -1,0 +1,47 @@
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="true"
+  [dataBackdrop]="true"
+  [modalSize]="MyModalSize.CUSTOM_WIDTH"
+  [customWidthPercent]="{xs: 100, md:65}"
+  autoShow="false"
+  [myId]="'showScheduledMetering'">
+  <div modal-header>
+    <span >مسافت های سررسید </span>
+  </div>
+
+  <div modal-body style="display: flow-root">
+    <div class="col-md-12">
+      <div class="card table-responsive-md">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th class="text-center" style="width: 5%">ردیف</th>
+            <th class="text-center" >مسافت های   سررسید   </th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let item of NextLaunchMeteringLis; let i = index">
+            <tr class="text-center">
+              <td>{{i + 1}}</td>
+              <td>{{item}}</td>
+              <!--<td>{{scheduleWithTimeAndMetering.scheduledTime.}}</td>-->
+            </tr>
+          </ng-container>
+
+          </tbody>
+        </table>
+
+        <!--<shr-pagination-->
+          <!--*ngIf="NextLaunchMeteringLis.itemPage !== null && NextLaunchMeteringLis.itemPage !== undefined"-->
+          <!--[indicatorCount]="NextLaunchMeteringLis.indicatorCount"-->
+          <!--[totalPages]="NextLaunchMeteringLis.itemPage.totalPages"-->
+          <!--[currentPage]="NextLaunchMeteringLis.queryParamReal.paging.page"-->
+          <!--(selectedPage)="setCurrentPage($event)"-->
+          <!--class="class1"-->
+        <!--&gt;</shr-pagination>-->
+      </div>
+
+    </div>
+  </div>
+</nbw-modal>

@@ -1,0 +1,368 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                <i class="fa fa-list"></i>&nbsp;&nbsp;
+                <span>لیست قطعات</span>
+
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <app-export-file
+                        [fileDataTableList]="fileDataTableList"
+                        [entityListForReport]="entityListForReport"
+                        [titleForFile]="' لیست قطعات  '"
+                        [PdfReport]="false"
+                        (emitTypeForReport)="EmActivityGetPageForExcel()"
+                ></app-export-file>
+                <button title="جستجو" data-toggle="collapse" href="#part-search"
+                        id="part-searchBtn"
+                        class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">
+                    <i class="fa fa-search"></i>
+                </button>
+                <ng-container *ngIf="roleList.Part_create">
+                    <button [routerLink]="'action'" [queryParams]="{mode: actionMode.ADD}"
+                            class="btn btn-secondary btn-sm">
+                        <i class="fa fa-plus"></i>
+                        <span class="d-none d-sm-inline d-sm-inline">
+            &nbsp;&nbsp;
+            افزودن
+            </span>
+                    </button>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+    <div class="card-body card-body-content">
+        <div class="collapse" id="part-search">
+            <div class="card" style="margin-bottom: 10px">
+                <div class="card-body card-body-filter">
+                    <div class="row" style="margin-bottom: 10px">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3  form-group">
+                                    <label class="for-label">نام قطعه</label>
+                                    <input type="text" class="form-control form-control-sm" placeholder="نام قطعه"
+                                           style="width: 100%" [(ngModel)]="partForSearch.partName">
+                                </div>
+                                <div class="col-md-3  form-group">
+                                    <label class="for-label">کد قطعه</label>
+                                    <input type="text" class="form-control form-control-sm" placeholder="کد قطعه"
+                                           style="width: 100%" [(ngModel)]="partForSearch.partCode">
+                                </div>
+                                <div class="col-md-3 text-right">
+
+                                    <button class="btn btn-sm btn-search"
+                                            style="margin-top: 30px ;" (click)="search()">
+                                        <!--      <i class="fa fa-search"></i>-->
+                                        جستجو
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+        <div class="text-center" *ngIf="!entityList.length &&  !loading">
+            <a style="color: #7884a7">هیچ قطعه ای ثبت نشده!</a>
+        </div>
+        <table class="table table-bordered table-striped table-responsive-md" *ngIf="entityList.length && !loading">
+            <thead>
+            <tr>
+                <th class="text-center" style="width: 5%">ردیف</th>
+                <th class="text-center">نام قطعه</th>
+                <th class="text-center">کد قطعه</th>
+                <th class="text-center" style="width: 5%">ویرایش</th>
+                <th class="text-center" style="width: 5%">حذف</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let item of entityList; let i = index">
+                <tr class="text-center">
+                    <td>
+                        {{(i + 1 + (pageIndex * pageSize))}}
+                    </td>
+                    <td>{{item.partName}}</td>
+                    <td>{{item.partCode}}</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                           *ngIf="roleList.Asset_update"
+                           (click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">
+                            <i class="fa fa-edit" title="ویرایش"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-lightning rounded-0"
+                           *ngIf="roleList.Asset_delete"
+                           style="cursor: pointer" (click)="showModalDelete(item,i)">
+                            <i class="fa fa-trash" title="حذف"></i>
+                        </a>
+                    </td>
+                </tr>
+            </ng-container>
+
+            </tbody>
+        </table>
+
+        <!--    pagination-->
+        <app-paginator
+                [totalElements]="length"
+                [pageSize]="pageSize"
+                [pageIndex]="pageIndex"
+                [pageSizeOptions]="[]"
+                [showFirstLastButtons]="true"
+                (page)=" changePage($event)"
+        ></app-paginator>
+    </div>
+</div>
+
+
+<!--    pagination-->
+
+<!--**************************************************************************-->
+<app-conferm-delete
+        [title]="selectedItemForDelete.title"
+        [loading]="selectedItemForDelete.loading"
+        [modalId]="'modalId'+selectedItemForDelete.id"
+        (value)="deleteItem($event)"
+></app-conferm-delete>
+
+<!--==================================================================================-->
+<!--&lt;!&ndash;////////// Search input //////////&ndash;&gt;-->
+<!--<div class="collapse" id="part-search">-->
+<!--<div class="card" style="margin-bottom: 10px">-->
+<!--<div class="card-body card-body-filter">-->
+<!--<div class="row" style="margin-bottom: 10px">-->
+<!--<div class="col-md-12">-->
+<!--<div class="row">-->
+<!--<div class="col-md-3  form-group">-->
+<!--<label class="for-label">نام قطعه</label>-->
+<!--<input type="text" class="form-control form-control-sm" placeholder="نام قطعه"-->
+<!--style="width: 100%" [(ngModel)]="partForSearch.partName">-->
+<!--</div>-->
+<!--<div class="col-md-3  form-group">-->
+<!--<label class="for-label">کد قطعه</label>-->
+<!--<input type="text" class="form-control form-control-sm" placeholder="کد قطعه"-->
+<!--style="width: 100%" [(ngModel)]="partForSearch.partCode">-->
+<!--</div>-->
+<!--<div class="col-md-3  form-group">-->
+<!--<label class="for-label">کد موجودی</label>-->
+<!--<input type="text" class="form-control form-control-sm" placeholder="کد موجودی"-->
+<!--style="width: 100%" [(ngModel)]="partForSearch.inventoryCode">-->
+<!--</div>-->
+<!--<div class="col-md-3  form-group">-->
+<!--<label class="for-label">صف</label>-->
+<!--<input type="text" class="form-control form-control-sm" placeholder="صف"-->
+<!--style="width: 100%" [(ngModel)]="partForSearch.row">-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--<div class="col-md-12">-->
+<!--<div class="row">-->
+<!--<div class="col-md-3  form-group">-->
+<!--<label class="for-label">راهرو</label>-->
+<!--<input type="text" class="form-control form-control-sm" placeholder="راهرو"-->
+<!--style="width: 100%" [(ngModel)]="partForSearch.corridor">-->
+<!--</div>-->
+<!--<div class="col-md-3  form-group">-->
+<!--<label class="for-label">انبارک</label>-->
+<!--<input type="text" class="form-control form-control-sm" placeholder="انبارک"-->
+<!--style="width: 100%" [(ngModel)]="partForSearch.warehouse">-->
+<!--</div>-->
+
+<!--<div class="col-md-3 text-right">-->
+<!--<button class="btn btn-sm btn-search"-->
+<!--style="margin-top: 30px ;" (click)="getListByFilter()">-->
+<!--&lt;!&ndash;      <i class="fa fa-search"></i>&ndash;&gt;-->
+<!--جستجو-->
+<!--</button>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+
+<!--<app-loading-spinner [loadingList]="true" *ngIf="showLoader"></app-loading-spinner>-->
+
+<!--<app-part-pagination-list *ngIf="showSearchResult" [partForSearch]="partForSearch"></app-part-pagination-list>-->
+
+
+<!--<ng-container *ngIf="!showLoader">-->
+<!--<ng-container *ngIf="existInventory === true">-->
+<!--<p style="margin-top: 5px ; font-size: 12px ; background-color: #ff3e4c">شما نمیتوانید این قطعه را حذف کنید چون این قطعه دارای سوابق می باشد-->
+<!--<hr style="margin: 0">-->
+<!--</ng-container>-->
+
+<!--<ng-container *ngIf="!showSearchResult">-->
+<!--<ng-container *ngIf="PSBList.length>0">-->
+<!--<table class="table table-striped table-responsive-md table-bordered">-->
+<!--<thead>-->
+<!--<tr >-->
+<!--<th class="text-right" style="width: 40%" >-->
+<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--نام قطعه-->
+<!--</th>-->
+<!--<th class="text-right" style="padding: 12px 0px">کد قطعه</th>-->
+<!--<th class="text-right" style="padding: 12px 0px">کد موجودی</th>-->
+<!--<th class="text-right" style="padding: 12px 0px">ردیف</th>-->
+<!--<th class="text-right" style="padding: 12px 0px">راهرو</th>-->
+<!--<th class="text-right" style="padding: 12px 0px">انبارک</th>-->
+<!--<th class="text-right" style="width: 10%"></th>-->
+<!--<th class="text-right" style="width: 10%"></th>-->
+<!--<th class="text-right" style="width: 10%"></th>-->
+
+<!--</tr>-->
+<!--</thead>-->
+<!--<tbody>-->
+<!--<tr *ngFor="let item of PSBList; let i = index" >-->
+<!--<td style="text-align: right;width: 40%">-->
+<!--<ng-container *ngIf="item.hasChild === true">-->
+
+
+<!--&lt;!&ndash;<span *ngIf="item.openPlus === false"  [ngStyle]="{marginRight:item.marginRight+'px'}">&ndash;&gt;-->
+<!--&lt;!&ndash;<i class="far fa-plus-square" (click)="getChildList(item, i)"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;</span>&ndash;&gt;-->
+
+<!--&lt;!&ndash;باز کردن&ndash;&gt;-->
+<!--<img  *ngIf="item.openPlus === false" width="15"-->
+<!--src="../../../../../assets/images/asset-tree/expand.png"-->
+<!--[ngStyle]="{marginRight:item.marginRight +'px'}"-->
+<!--(click)="getChildList(item, i, item.categoryTypePSB)"-->
+<!--alt="...">-->
+
+
+<!--<img  *ngIf="item.openPlus === true" width="15"-->
+<!--src="../../../../../assets/images/asset-tree/navigate.png"-->
+<!--[ngStyle]="{marginRight:item.marginRight +'px'}"-->
+<!--(click)="methodTow(item.id)"-->
+<!--alt="...">-->
+<!--&lt;!&ndash;<i class="far fa-minus-square" ></i>&ndash;&gt;-->
+<!--&lt;!&ndash;(click)="methodTow(item.id)"&ndash;&gt;-->
+<!--&nbsp;&nbsp;&nbsp;-->
+<!--<img  *ngIf="item.categoryTypePSB === 'STORAGE'" width="15"-->
+<!--src="../../../../../assets/images/asset-tree/storage.jpeg"-->
+<!--style="margin-right: 2px"-->
+<!--alt="...">-->
+<!--<img *ngIf="item.categoryTypePSB === categoryType[categoryType.BUILDING.toString()]" width="15"-->
+<!--style="margin-right: 2px"-->
+<!--src="../../../../../assets/images/asset-tree/facilities-16.png"-->
+<!--alt="...">-->
+<!--<img *ngIf="item.categoryTypePSB === 'PART'" width="15"-->
+<!--style="margin-right: 2px"-->
+<!--src="../../../../../assets/images/asset-tree/_parts.png"-->
+<!--alt="...">-->
+<!--&nbsp;-->
+<!--<span    style="font-size: 12px; margin-right: 2px"> {{item.name}} </span>-->
+
+<!--</ng-container>-->
+<!--<ng-container *ngIf="item.hasChild === false">-->
+<!--<img  *ngIf="item.categoryTypePSB === 'STORAGE'" width="15"-->
+<!--src="../../../../../assets/images/asset-tree/storage.jpeg"-->
+<!--[ngStyle]="{marginRight:item.marginRight + 35 +'px'}"-->
+<!--alt="...">-->
+<!--<img *ngIf="item.categoryTypePSB === categoryType[categoryType.BUILDING.toString()]" width="15"-->
+<!--src="../../../../../assets/images/asset-tree/"-->
+<!--[ngStyle]="{marginRight:item.marginRight + 35 +'px'}"-->
+<!--alt="...">-->
+<!--<img *ngIf="item.categoryTypePSB === 'PART' && !item.isPartOfAsset" width="15"-->
+<!--src="../../../../../assets/images/asset-tree/_parts.png"-->
+<!--[ngStyle]="{marginRight:item.marginRight + 25 +'px'}"-->
+<!--alt="...">-->
+<!--<img *ngIf="item.categoryTypePSB === 'PART' && item.isPartOfAsset" width="15"-->
+<!--src="../../../../../assets/images/asset-tree/_parts.png"-->
+<!--[ngStyle]="{marginRight:item.marginRight + 35 +'px'}"-->
+<!--alt="...">-->
+<!--&nbsp;&nbsp;-->
+<!--<span  style="font-size: 12px; margin-right: 2px"> {{item.name}}</span>-->
+<!--</ng-container>-->
+<!--</td>-->
+
+<!--<td style="text-align: start; font-size: 12px ">{{item?.partCode}}</td>-->
+<!--<td style="text-align: start; font-size: 12px ">{{item?.code}}</td>-->
+<!--<td style="text-align: start; font-size: 12px">{{item?.row}}</td>-->
+<!--<td style="text-align: start; font-size: 12px">{{item?.corridor}}</td>-->
+<!--<td style="text-align: start; font-size: 12px">{{item?.warehouse}}</td>-->
+
+<!--<td>-->
+<!--<ng-container *ngIf="item.categoryTypePSB === 'PART'">-->
+<!--<a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+<!--*ngIf="roleList.Part_update"-->
+<!--(click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold ;width: 30%">-->
+<!--<i class="fa fa-edit" title="ویرایش"></i>-->
+<!--</a>-->
+<!--</ng-container>-->
+
+<!--&lt;!&ndash;        <ng-container *ngIf="item.categoryTypePSB !== 'PART'">&ndash;&gt;-->
+<!--&lt;!&ndash;          <span class="btn btn-sm  mr-2"&ndash;&gt;-->
+<!--&lt;!&ndash;              style=" font-weight: bold ;width: 40%; opacity: 0.3; cursor: not-allowed ">&ndash;&gt;-->
+<!--&lt;!&ndash;            <i class="fa fa-edit" ></i>&ndash;&gt;-->
+<!--&lt;!&ndash;          </span>&ndash;&gt;-->
+<!--&lt;!&ndash;        </ng-container>&ndash;&gt;-->
+<!--</td>-->
+
+<!--<td>-->
+<!--<ng-container *ngIf="item.categoryTypePSB === 'PART'">-->
+<!--<a class="btn btn-sm btn-outline-lightning rounded-0"-->
+<!--*ngIf="roleList.Part_delete"-->
+<!--style="cursor: pointer"-->
+<!--(click)="showModalDelete(item,i)"-->
+
+<!--&gt;-->
+<!--<i class="fa fa-trash" title="حذف"></i>-->
+<!--</a>-->
+<!--</ng-container>-->
+
+<!--&lt;!&ndash;        <ng-container *ngIf="item.categoryTypePSB !== 'PART'">&ndash;&gt;-->
+<!--&lt;!&ndash;          <span class="btn btn-sm  rounded-0"&ndash;&gt;-->
+<!--&lt;!&ndash;             style=" opacity: 0.3; cursor: not-allowed ">&ndash;&gt;-->
+<!--&lt;!&ndash;            <i class="fa fa-trash" title="حذف" ></i>&ndash;&gt;-->
+<!--&lt;!&ndash;          </span>&ndash;&gt;-->
+<!--&lt;!&ndash;        </ng-container>&ndash;&gt;-->
+<!--</td>-->
+
+
+<!--<td>-->
+<!--<ng-container *ngIf="item.categoryTypePSB === 'PART'">-->
+<!--<a  class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+<!--*ngIf="roleList.Part_see"-->
+<!--(click)="chooseSelectedItemForView(item)" style="cursor: pointer ; font-weight: bold">-->
+<!--<i class="fa fa-eye" title="نمایش"></i>-->
+<!--</a>-->
+<!--</ng-container>-->
+<!--&lt;!&ndash;        <ng-container *ngIf="item.categoryTypePSB !== 'PART'">&ndash;&gt;-->
+<!--&lt;!&ndash;        <a  class="btn btn-sm  rounded-0"&ndash;&gt;-->
+<!--&lt;!&ndash;            style=" opacity: 0.3; cursor: not-allowed;">&ndash;&gt;-->
+<!--&lt;!&ndash;          <i class="fa fa-eye" title="نمایش" style=" margin-right: 9px "></i>&ndash;&gt;-->
+<!--&lt;!&ndash;        </a>&ndash;&gt;-->
+<!--&lt;!&ndash;        </ng-container>&ndash;&gt;-->
+<!--</td>-->
+
+
+<!--</tr>-->
+<!--</tbody>-->
+<!--</table>-->
+<!--</ng-container>-->
+
+<!--<div class="col-md-12" *ngIf="PSBList.length === 0">-->
+<!--<div class="row">-->
+<!--<div class="col-md-12 text-center"> هیچ قطعه ای ثبت نشده است!</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</ng-container>-->
+<!--</ng-container>-->
+
+<!--<app-conferm-delete-->
+<!--[title]="selectedItemForDelete.title"-->
+<!--[loading]="selectedItemForDelete.loading"-->
+<!--[modalId]="'modalId'+selectedItemForDelete.id"-->
+<!--(value)="deleteItem($event)"-->
+<!--&gt;</app-conferm-delete>-->

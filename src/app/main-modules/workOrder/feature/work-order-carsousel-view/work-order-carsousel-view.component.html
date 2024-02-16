@@ -1,0 +1,221 @@
+<app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+<ng-container *ngIf="!loading">
+    <form id="workOrderForm23" #workOrderForm="ngForm" (submit)="action(workOrderForm)">
+
+        <div class="row">
+            <div class="col-md-9 form-group required col-sm-12">
+                <div class="row">
+
+
+                    <!--      <div class="col-md-4 form-group required col-sm-12" *ngIf="workOrderAccess.title && !isView ">-->
+                    <!--        <label class="for-label">نام دستور کار:</label>-->
+                    <!--        <div class="input-group input-group-sm">-->
+                    <!--          <input type="text" placeholder="نام دستور کار" [(ngModel)]="workOrderIn.title"-->
+                    <!--                 class="form-control form-control-sm" maxlength="80" minlength="3" name="title"-->
+
+                    <!--          >-->
+                    <!--        </div>-->
+                    <!--        <div id="nameValidation"></div>-->
+                    <!--      </div>-->
+                    <!--=================================-->
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label">نام دستور کار:</label>
+                        <div class="input-group input-group-sm">
+                            <input disabled type="text" placeholder="نام دستور کار" [(ngModel)]="workOrderIn.title"
+                                   class="form-control form-control-sm" maxlength="80" minlength="3" name="title"
+
+                            >
+                        </div>
+                    </div>
+                    <!--=================================-->
+
+
+                    <!--      <div class="col-md-4 form-group required col-sm-12" *ngIf="workOrderAccess.code && !isView ">-->
+                    <!--        <label class="for-label">کد دستور کار:</label>-->
+                    <!--        <label style="color: red">*</label>-->
+                    <!--        <div class="input-group input-group-sm">-->
+                    <!--          <input type="text" placeholder="کد دستور کار" [(ngModel)]="workOrderIn.code "-->
+                    <!--                 class="form-control form-control-sm" minlength="1" maxlength="80" name="code"-->
+                    <!--                 nbvRequired #code="ngModel" (change)="changeAssetCode()"-->
+                    <!--                 [nbvPattern]="myPattern.EnNumberAndAlphabetic"-->
+                    <!--                 nbvPatternMsgHtml="کد دستور کار باید به صورت اعداد و حروف انگلیسی وارد گردد."-->
+                    <!--                 [class.is-valid]="!(code?.errors?.nbvRequired || code?.errors?.nbvPattern)"-->
+                    <!--                 [class.is-invalid]="(code?.errors?.nbvRequired || code?.errors?.nbvPattern) && (code.touched || doSave)"-->
+                    <!--                 dest="codeValidation">-->
+                    <!--        </div>-->
+                    <!--        <div id="codeValidation"></div>-->
+                    <!--      </div>-->
+                    <!--=================================-->
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label">کد دستور کار:</label>
+                        <label style="color: red">*</label>
+                        <div class="input-group input-group-sm">
+                            <input disabled type="text" placeholder="کد دستور کار" [(ngModel)]="workOrderIn.code"
+                                   class="form-control form-control-sm" name="code2"
+                            >
+                        </div>
+                    </div>
+                    <!--=================================-->
+
+
+                    <!--      <div class="col-md-4 form-group required col-sm-12"  *ngIf="workOrderAccess.maintenanceType && !isView">-->
+                    <!--        <label class="for-label">نوع بازدید:</label>-->
+
+                    <!--        <ng-select dir="rtl"  [(ngModel)]="workOrderIn.maintenanceType"-->
+
+                    <!--                   placeholder="نوع بازدید" name="maintenanceType" style="width: 100%;height: 31px;     background-color: #DCD1CF;"-->
+                    <!--                   dropdownPosition="bottom">-->
+                    <!--          <ng-option *ngFor="let item of maintenanceTypeList; let i = index"-->
+                    <!--                     [value]="item._value">-->
+                    <!--            {{item._title}}-->
+                    <!--          </ng-option>-->
+                    <!--        </ng-select>-->
+                    <!--        <div id="maintenanceTypeValidation" style="opacity: 0; height: 0"></div>-->
+                    <!--      </div>-->
+                    <!--=================================-->
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label">نوع بازدید:</label>
+
+                        <input class="form-control form-control-sm" disabled dir="rtl" [(ngModel)]="maintenanceType"
+                               name="maintenanceType" style="width: 100%;height: 31px;  "
+                        >
+                    </div>
+                    <!--=================================-->
+
+                    <!--      <div class="col-md-4 form-group required col-sm-12"  *ngIf="workOrderAccess.priority && !isView">-->
+                    <!--        <label class="for-label">اولویت:</label>-->
+                    <!--        <ng-select dir="rtl"  [(ngModel)]="workOrderIn.priority"-->
+
+                    <!--                   placeholder="اولویت" name="priority" style="width: 100%;"-->
+                    <!--                   dropdownPosition="bottom">-->
+                    <!--          <ng-option *ngFor="let item of priorityList; let i = index"-->
+                    <!--                     [value]="item._value">-->
+                    <!--            {{item._title}}-->
+                    <!--          </ng-option>-->
+                    <!--        </ng-select>-->
+                    <!--        <div id="priorityValidation" style="opacity: 0; height: 0"></div>-->
+                    <!--      </div>-->
+                    <!--=================================-->
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label">اولویت:</label>
+                        <input disabled dir="rtl" class="form-control form-control-sm" [(ngModel)]="priority"
+                               name="priority" style="width: 100%;"
+                        >
+                    </div>
+
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label">دارایی:</label>
+                        <label style="color: red">*</label>
+                        <div class="input-group input-group-sm">
+                            <input disabled [(ngModel)]="parentAsset.name" name="assetId"
+                                   class="form-control form-control-sm"
+                                   #assetId="ngModel">
+                        </div>
+                    </div>
+                    <!--=================================-->
+
+
+                    <!--      <div class="col-md-4 form-group required col-sm-12"  *ngIf="workOrderAccess.projectId && !isView">-->
+                    <!--        <label class="for-label">پروژه:</label>-->
+                    <!--        <div class="input-group input-group-sm">-->
+                    <!--          <ng-select dir="rtl" [(ngModel)]="workOrderIn.projectId" name="projectId"-->
+                    <!--                     placeholder="انتخاب پروژه" style="width: 100%;"-->
+                    <!--                     dropdownPosition="bottom" [disabled]="mode===actionMode.VIEW">-->
+                    <!--            &lt;!&ndash;                <ng-option value="-1" disabled>پروژه</ng-option>&ndash;&gt;-->
+                    <!--            <ng-option *ngFor="let item of projectList; let i = index"-->
+                    <!--                       [value]="item.id">-->
+                    <!--              {{item.name}}-->
+                    <!--            </ng-option>-->
+                    <!--          </ng-select>-->
+
+                    <!--        </div>-->
+                    <!--        <div id="projectIdValidation" style="opacity: 0; height: 0"></div>-->
+                    <!--      </div>-->
+                    <!--=================================-->
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label">پروژه:</label>
+                        <div class="input-group input-group-sm">
+                            <input disabled dir="rtl" class="form-control form-control-sm" [(ngModel)]="projectName"
+                                   name="projectId"
+                                   style="width: 100%;"
+                            >
+                        </div>
+                    </div>
+                    <!--=================================-->
+                    <!--      <div class="col-md-4 form-group required col-sm-12"  *ngIf="workOrderAccess.statusId && !isView">-->
+                    <!--        <label class="for-label">وضعیت:</label>-->
+                    <!--        <ng-select dir="rtl"  [(ngModel)]="workOrderIn.statusId"-->
+
+                    <!--                   placeholder="وضعیت" name="statusId" style="width: 100%;"-->
+                    <!--                   dropdownPosition="bottom">-->
+                    <!--          <ng-option *ngFor="let item of workOrderStatusList; let i = index"-->
+                    <!--                     [value]="item.id">-->
+                    <!--            {{item.name}}-->
+                    <!--          </ng-option>-->
+                    <!--        </ng-select>-->
+                    <!--        <div id="statusIdValidation" style="opacity: 0; height: 0"></div>-->
+                    <!--      </div>-->
+                    <!--=================================-->
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label">وضعیت:</label>
+                        <input disabled class="form-control form-control-sm" dir="rtl" [(ngModel)]="status"
+                               name="statusId" style="width: 100%;">
+                    </div>
+                    <!--=================================-->
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label">تاریخ  شروع کار: </label>
+                        <label style="color: red">*</label>
+                        <input autocomplete="off" class="form-control form-control-sm" id="startDate"
+                               disabled #startDate placeholder="تاریخ  شروع کار"
+                           >
+<!--                        [disabled]="(workOrderAccess.startDate && isView) || (!workOrderAccess.startDate && !isView) "-->
+                    </div>
+                    <!--=================================-->
+                    <!--=================================-->
+
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label">تاریخ  پایان کار: </label>
+                        <input autocomplete="off" class="form-control form-control-sm" id="endDate" #endDate
+                               placeholder="تاریخ  پایان کار"
+                               disabled  >
+
+<!--                        [disabled]="(!workOrderAccess.endDate && !isView) || (workOrderAccess.endDate && isView)"-->
+                    </div>
+                    <!--=================================-->
+                    <!--=================================-->
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label">آخرین مهلت: </label>
+                        <label style="color: red">*</label>
+                        <input autocomplete="off" class="form-control form-control-sm" id="requiredCompletionDate"
+                               #requiredCompletionDate
+                               placeholder="آخرین مهلت"
+                               disabled >
+<!--                        [disabled]="true"-->
+                        <!--               [disabled]="(!workOrderAccess.requiredCompletionDate && !isView) || (workOrderAccess.requiredCompletionDate && isView)">-->
+                    </div>
+                    <!--=================================-->
+                    <!--=================================-->
+                </div>
+            </div>
+            <div class="col-md-3 form-group required col-sm-12">
+                <fieldset class="scheduler-border" id="comapny-documents" style="background-color: #f5f5f5">
+                    <legend class="scheduler-border"><h6> تصویر </h6></legend>
+                    <ng-container *ngIf="!workOrderAccess.image || (workOrderAccess.image && isView)">
+                        <div class="col-md-12 img-fluid img-thumbnail"
+                             *ngIf="workOrderIn.image && workOrderIn.image.fileByte">
+                            <img [src]="'data:image/jpg;base64,' + workOrderIn.image.fileByte"
+                                 class="img img-responsive"
+                                 height="150" width="150">
+                        </div>
+                    </ng-container>
+                </fieldset>
+            </div>
+
+        </div>
+    </form>
+</ng-container>
+
+
+<app-view-asset *ngIf="workOrderAccess.assetId" (parentAsset)="setParentMethod($event)"
+                [openModal]="openModal"></app-view-asset>
+

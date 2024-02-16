@@ -1,0 +1,331 @@
+<ng-container *ngIf="listMode">
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6 col-6 col-sm-6 card-title">
+                    <i class="fa fa-list"></i>&nbsp;&nbsp;
+                    <span>درخواست تعمیر</span>
+                </div>
+                <div class="col-md-6 col-6 col-sm-6 text-left">
+                    <button title="جستجو" data-toggle="collapse" href="#submit-search" (click)="readService = true"
+                            class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <button title="بارگزاری مجدد"
+                            (click)="getPage()"
+                            class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">
+                        <i class="fa fa-redo"></i>
+                    </button>
+                    <!--///// افزودن-->
+                    <ng-container>
+
+                        <ng-container *ngIf="roleList.workRequest_create;else notAccessCreateTemp">
+                            <button
+                                    (click)="showActionComponent('add')"
+                                    class="btn btn-secondary btn-sm">
+                                <i class="fa fa-plus"></i>
+                                <span class="d-none d-sm-inline d-sm-inline">
+            &nbsp;&nbsp;            افزودن
+            </span>
+                            </button>
+                        </ng-container>
+                        <ng-template #notAccessCreateTemp>
+                            <button style="cursor: not-allowed"
+                                    class="btn btn-secondary btn-sm">
+                                <i class="fa fa-plus"></i>
+                                <span class="d-none d-sm-inline d-sm-inline">
+            &nbsp;&nbsp;            افزودن
+            </span>
+                            </button>
+                        </ng-template>
+                    </ng-container>
+                    <!--///// افزودن!!!!-->
+                </div>
+            </div>
+        </div>
+        <div class="card-body card-body-content">
+            <div class="collapse" id="submit-search">
+                <div class="card" style="margin-bottom: 10px">
+                    <div class="card-body card-body-filter">
+                        <div class="row" style="margin-bottom: 10px">
+                            <!--                <div class="col-md-4">-->
+                            <!--                    <div class="form-group">-->
+                            <!--                        <label class="for-label">عنوان درخواست کار: </label>-->
+                            <!--                        <input type="text" class="form-control form-control-sm" placeholder="عنوان"-->
+                            <!--                               style="width: 100%" [(ngModel)]="name">-->
+                            <!--                    </div>-->
+                            <!--                </div>-->
+                            <div class="col-md-4" *ngIf="assetList.length">
+                                <div class="form-group">
+                                    <label class="for-label">نام دستگاه</label>
+                                    <ng-select bindLabel="name" bindValue="id" [(ngModel)]="assetId"
+                                               [items]="assetList" [placeholder]="'نام دستگاه'"></ng-select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-1" style="margin-top: 30px">
+                                <button class="btn btn-sm btn-search"
+                                        (click)="search()">
+                                    جستجو
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+            <ng-container *ngIf="entityList.length===0&& !loading">
+                <div style="text-align: center">نتیجه ای یافت نشد.</div>
+            </ng-container>
+            <ng-container *ngIf="entityList.length>0 && !loading">
+                <table class="table table-bordered table-striped table-responsive-md">
+                    <thead>
+                    <tr style="text-align: center">
+                        <th class="text-center" style="width: 5%">ردیف</th>
+                        <th class="text-center">نام دستگاه</th>
+                        <!--            <th class="text-center">عنوان درخواست</th>-->
+                        <th class="text-center">تاریخ ارسال درخواست</th>
+                        <th class="text-center">شماره برگه em</th>
+                        <!--                        <th class="text-center">زمان مشاهده مرحله بعد</th>-->
+                        <!--        <th class="text-center">فرآیند</th>-->
+
+                        <!--            <th class="text-center"> پیشرفت درخواست تعمیر</th>-->
+                        <th class="text-center" style="width: 5%">وضعیت تعمیر</th>
+                        <th class="text-center" style="width: 5%">ارزیابی</th>
+                        <th class="text-center" style="width: 5%">مشاهده</th>
+                        <th class="text-center" style="width: 5%">حذف</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ng-container *ngFor="let item of entityList; let i = index">
+                        <tr class="text-center">
+                            <td>
+                                {{(i + 1 + (pageIndex * pageSize))}}
+                            </td>
+                            <td>{{item.assetName}}</td>
+                            <!--                <td>{{item.workRequestTitle}}</td>-->
+                            <td class="text-center" style="direction: ltr">
+                                {{moment.convertIsoToJDateWithTime(item?.workRequestTime) | perNumber}}
+                            </td>
+                            <td class="text-center" style="direction: ltr">
+                                {{item.emSheetCode}}
+                            </td>
+                            <!--                            <td class="text-center" style="direction: ltr">-->
+                            <!--                                {{moment.convertIsoToJDateWithTime(item?.nextLevelSeenDate) | perNumber}}-->
+                            <!--                            </td>-->
+                            <!--          <td>{{item.activityName}}</td>-->
+
+                            <!--                <td>-->
+                            <!--                    <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+                            <!--                       (click)="showProcessSteps(item.id)" style="cursor: pointer ; font-weight: bold">-->
+                            <!--                        <i class="fa fa-eye" title="مشاهده"></i>-->
+                            <!--                    </a>-->
+
+                            <!--                </td>-->
+
+                            <td>
+                                <a class="btn btn-sm btn-outline-lightning rounded-0 mr-0">
+
+
+                                    <i class="fa  fa-times cursor-pointer"
+                                       style="color: #f74343;font-size: 15px"
+                                       *ngIf="item.workRequestStatus==='rejected'"
+                                       [matTooltip]="' رد شده'"
+                                       (click)="selectForRejectionReason(item)"></i>
+                                    <i class="fa fa-check"
+                                       style="color: #64f743" *ngIf="item.workRequestStatus==='finished'"
+                                       [matTooltip]="'اتمام یافته'"></i>
+                                    <i class="fa  fa-cogs"
+                                       style="color: #314656" *ngIf="item.workRequestStatus==='inProcess'"
+                                       [matTooltip]="' درحال انجام'"></i>
+                                </a>
+
+                            </td>
+                            <td>
+                                <ng-container *ngIf="item.hasAssessment">
+                                    <a class="btn btn-sm btn-outline-lightning rounded-0 p-0"
+                                       (click)="selectedItemForAssessment(item)"
+                                       style="cursor: pointer ; font-weight: bold">
+                                        <img src="assets/images/assessment-icon.png" width="30" title="ارزیابی">
+                                    </a>
+                                </ng-container>
+
+                            </td>
+
+                            <td>
+                                <ng-container *ngIf="roleList.workRequest_see;else notEditAccessTemp">
+
+                                    <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                       (click)="selectedItemForView(item)" style="cursor: pointer ; font-weight: bold">
+                                        <i class="fa fa-eye" title="مشاهده"></i>
+                                    </a>
+                                </ng-container>
+                                <ng-template #notEditAccessTemp>
+                                    <i class="fa fa-eye" title="مشاهده" style="cursor: no-drop"></i>
+
+                                </ng-template>
+
+                            </td>
+
+                            <td>
+                                <ng-container *ngIf="roleList.workRequest_delete;else notDeleteAccessTemp">
+                                    <a class="btn btn-sm btn-outline-lightning rounded-0"
+                                       style="cursor: pointer"
+                                       (click)="showModalDelete(item,i)"
+                                    >
+                                        <i class="fa fa-trash" title="حذف"></i>
+                                    </a>
+                                </ng-container>
+                                <ng-template #notDeleteAccessTemp>
+                                    <i class="fa fa-trash" style="cursor: no-drop" title="حذف"></i>
+
+                                </ng-template>
+                            </td>
+                        </tr>
+                    </ng-container>
+
+                    </tbody>
+                </table>
+
+
+            </ng-container>
+            <!--    pagination-->
+            <app-paginator
+                    [totalElements]="length"
+                    [pageSize]="pageSize"
+                    [pageIndex]="pageIndex"
+                    [pageSizeOptions]="[]"
+                    [showFirstLastButtons]="true"
+                    (page)=" changePage($event)"
+            ></app-paginator>
+
+        </div>
+    </div>
+
+
+</ng-container>
+<ng-container *ngIf="!listMode">
+    <app-submit-work-request-action
+            [workRequestId]="selectedWorkRequestId"
+            (back)="backEmit()"
+            (save)="getPage()"
+    >
+
+    </app-submit-work-request-action>
+</ng-container>
+<!--    pagination-->
+
+<!--**************************************************************************-->
+<app-conferm-delete
+        [title]="selectedItemForDelete.title"
+        [loading]="selectedItemForDelete.loading"
+        [modalId]="'modalId'+selectedItemForDelete.id"
+        (value)="deleteItem($event)"
+></app-conferm-delete>
+<!--<app-view-asset (parentAsset)="setParentMethod($event)" [openModal]="openModal"></app-view-asset>-->
+<!--================================مودال مشاهده تمام مراحل فرایند=============================-->
+<ng-container *ngIf="showProcessStepsModal">
+    <app-show-process-steps [activityInstanceId]="activityInstanceId"
+                            (closeModal)="showProcessStepsModal=false"
+                            [submitWorkRequestTitle]="'تعمیر'"></app-show-process-steps>
+</ng-container>
+
+
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.DEFAULT"
+        autoShow="false"
+        [myId]="'assessmentListModal'">
+    <div modal-header>
+        <img src="assets/images/assessment-icon.png" width="50" title="ارزیابی">
+
+        ارزیابی
+    </div>
+    <div modal-body>
+        <div class="col-md-12 p-0">
+            <table class="table table-bordered table-striped table-responsive-md">
+                <thead>
+                <tr style="text-align: center">
+                    <th class="text-center" style="width: 5%">ردیف</th>
+                    <th class="text-center">نام کاربر</th>
+                    <th class="text-center" style="width: 40%">امتیاز</th>
+                </tr>
+                </thead>
+                <tbody>
+                <ng-container *ngFor="let technician of getWorkRequestTechnician; let i = index">
+                    <tr class="text-center">
+                        <td>
+                            {{i + 1 }}
+                        </td>
+                        <td>{{technician.userName }} {{ technician.userFamily}}</td>
+                        <td class="text-center" style="direction: ltr">
+                            <div class="form-group">
+                                <ng-select bindLabel="title" bindValue="value" dir="rtl" [(ngModel)]="technician.point"
+                                           [clearable]="false"
+                                           [items]="AssessmentValueList" [placeholder]="'امتیاز '"></ng-select>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-container>
+
+                </tbody>
+            </table>
+
+        </div>
+        <br>
+        <br>
+        <div class="col-md-12">
+            <div class="row justify-content-end">
+                <button class="btn btn-save"
+                        [disabled]="loading"
+                        style="background-color: #eeeeee"
+                        (click)="saveAssessment()">
+
+                    ثبت
+                    <i class="fa fa-spinner fa-pulse " *ngIf="loading"></i>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</nbw-modal>
+<!--/ نمایش علت رد /-->
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.DEFAULT"
+        autoShow="false"
+        [myId]="'rejectionReasonModal'">
+    <div modal-header>
+
+        علت رد
+    </div>
+    <div modal-body>
+        <div class="col-md-12 p-0">
+            <p>
+                {{selectedRejectionReason?.rejectionReason}}
+            </p>
+        </div>
+        <br>
+        <br>
+        <!--        <div class="col-md-12">-->
+        <!--            <div class="row justify-content-end">-->
+        <!--                <button class="btn btn-save"-->
+        <!--                        [disabled]="loading"-->
+        <!--                        style="background-color: #eeeeee"-->
+        <!--                        (click)="saveAssessment()">-->
+
+        <!--                    ثبت-->
+        <!--                    <i class="fa fa-spinner fa-pulse " *ngIf="loading"></i>-->
+        <!--                </button>-->
+
+        <!--            </div>-->
+        <!--        </div>-->
+    </div>
+</nbw-modal>

@@ -1,0 +1,131 @@
+<!--////////// Search input //////////-->
+<div class="collapse" id="workOrderStatus-search">
+    <div class="card" style="margin-bottom: 10px">
+        <div class="card-body card-body-filter">
+            <div class="row" style="margin-bottom: 10px">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label class="for-label">عنوان وضعیت درخواست کار :</label>
+                            <input [(ngModel)]="workOrderSearch.title" [placeholder]="'عنوان '"
+                                   class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="for-label">وضعیت :</label>
+                            <ng-select bindLabel="_title" bindValue="_value"
+                                       [(ngModel)]="workOrderSearch.workOrderStatus"
+                                       [items]="statusList" [placeholder]="'وضعیت درخواست کار'"></ng-select>
+                        </div>
+                        <div class="col-md-4 " style="margin-top: 30px">
+                            <button class="btn btn-sm btn-search" (click)="search()">
+                                جستجو
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--/////////empety List ////////////////-->
+<!--===================-->
+
+<app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+<div class="col-md -12" *ngIf="!entityList.length && loading === false">
+    <br>
+    <br>
+    <div class="text-center" style="color: #6d6d6e">
+        <a *ngIf="entityList.length===0">هیچ اطلاعاتی یافت نشد!</a>
+    </div>
+    <br>
+    <br>
+</div>
+
+
+<div *ngIf="entityList.length && !loading" class="tab-pane fade show active"
+     id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+    <table class="table table-bordered table-responsive-md table-striped">
+        <thead>
+        <tr style="text-align: center">
+            <th class="text-center" style="width: 5%">ردیف</th>
+            <th class="text-center">عنوان وضعیت درخواست کار</th>
+            <th class="text-center">وضعیت</th>
+            <th class="text-center" style="width: 5%">ویرایش</th>
+            <th class="text-center" style="width: 5%">حذف</th>
+        </tr>
+        </thead>
+        <ng-container *ngIf="entityList.length>0">
+            <tbody>
+            <ng-container *ngFor="let item of entityList; let i = index">
+                <tr class="text-center">
+                    <td>
+                        {{(i + 1 + (pageIndex * pageSize))}}
+                    </td>
+                    <td>{{item.name}}</td>
+                    <td>
+                        <ng-container *ngFor="let s of statusList; let i =index">
+                            {{item.status === s ? statusList[i + 1] : ''}} <!--0-->
+                        </ng-container>
+
+                    </td>
+                    <td>
+                        <ng-container *ngIf="roleList.WorkOrderStatus_update;else notEditAccessTemp">
+
+                            <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                               (click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">
+                                <i class="fa fa-edit" title="ویرایش"></i>
+                            </a>
+                        </ng-container>
+                        <ng-template #notEditAccessTemp>
+                            <i class="fa fa-edit" title="ویرایش" style="cursor: no-drop"></i>
+
+                        </ng-template>
+                    </td>
+                    <td>
+                        <ng-container *ngIf="roleList.WorkOrderStatus_delete;else notDeleteAccessTemp">
+                            <a class="btn btn-sm btn-outline-lightning rounded-0"
+                               style="cursor: pointer"
+                               (click)="showModalDelete(item,i)"
+                            >
+                                <i class="fa fa-trash" title="حذف"></i>
+                            </a>
+                        </ng-container>
+                        <ng-template #notDeleteAccessTemp>
+                            <i class="fa fa-trash" style="cursor: no-drop" title="حذف"></i>
+
+                        </ng-template>
+                    </td>
+                </tr>
+            </ng-container>
+
+            </tbody>
+        </ng-container>
+        <ng-container *ngIf="entityList.length===0">
+            <div class="col-md-12" style="text-align: center"><p>هیچ اطلاعاتی ثبت نشده!</p></div>
+        </ng-container>
+    </table>
+
+    <!--    pagination-->
+    <app-paginator
+            [totalElements]="length"
+            [pageSize]="pageSize"
+            [pageIndex]="pageIndex"
+            [pageSizeOptions]="[]"
+            [showFirstLastButtons]="true"
+            (page)=" changePage($event)"
+    ></app-paginator>
+
+
+    <!--    pagination-->
+</div>
+<!--**************************************************************************-->
+<app-conferm-delete
+        [title]="selectedItemForDelete.title"
+        [loading]="selectedItemForDelete.loading"
+        [modalId]="'modalId'+selectedItemForDelete.id"
+        (value)="deleteItem($event)"
+></app-conferm-delete>

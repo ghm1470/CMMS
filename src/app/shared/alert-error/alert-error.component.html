@@ -1,0 +1,6 @@
+<div [hidden]="(data.valid || data.pristine) && !touched">
+  <div class="invalid-alert" *ngIf="data.hasError('required')">{{requiredMsg}}</div>
+  <div class="invalid-alert" *ngIf="data.hasError('maxlength')">{{maxlengthMsg}}</div>
+  <div class="invalid-alert" *ngIf="data.hasError('minlength')">{{minlengthMsg}}</div>
+  <div class="invalid-alert" *ngIf="!data.hasError('maxlength') && data.hasError('pattern')">{{patternMsg}}</div>
+</div>

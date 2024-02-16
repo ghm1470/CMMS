@@ -1,0 +1,440 @@
+<div id="partCreate" class="carousel slide" data-interval="false">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6 col-8 col-sm-6 card-title">
+                            <ng-container *ngIf="mode === actionMode.ADD">
+                                <i class="fa fa-plus"></i>&nbsp;
+                                افزودن قطعه
+                            </ng-container>
+                            <ng-container *ngIf="mode === actionMode.EDIT">
+                                <i class="fa fa-edit"></i>&nbsp;
+                                ویرایش قطعه
+                            </ng-container>
+                            <ng-container *ngIf="mode === actionMode.VIEW">
+                                <i class="fa fa-eye"></i>&nbsp;
+                                نمایش قطعه
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6 col-4 col-sm-6 text-left">
+                            <button (click)="cancel()"
+                                    class="btn btn-cancel-back btn-sm">
+                                بازگشت
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <form #partForm="ngForm" (submit)="checkPartCode(partForm)">
+                    <div class="card-body card-body-content">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-6 form-group required col-sm-12">
+                                        <label for="partName" class="control-label" style="font-size: 12px">نام
+                                            قطعه</label>
+                                        <label style="color: red">*</label>
+                                        <div class="input-group input-group-sm">
+                                            <input class="form-control form-control-sm input-c  " id="partName"
+                                                   name="name"
+                                                   placeholder="نام " [(ngModel)]="part.name" autocomplete="off"
+                                                   nbvRequired #name="ngModel"
+                                                   [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvPattern)"
+                                                   [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvPattern) && (name.touched || doSave)"
+                                                   dest="nameValidation">
+                                        </div>
+                                        <div id="nameValidation" style="opacity: 0; height: 0"></div>
+                                    </div>
+
+
+                                    <div class="col-md-6 form-group required col-sm-12">
+                                        <label for="code" class="control-label" style="font-size: 12px">کد قطعه</label>
+                                        <!--                                        <label style="color: red">*</label>-->
+                                        <i class="fa fa-spinner  fa-pulse fa-1x loadingSearch"
+                                           *ngIf="checkPartCodeLoading"></i>
+                                        <div class="input-group input-group-sm">
+                                            <!--                                            nbvRequired-->
+                                            <input class="form-control form-control-sm input-c  " id="code" name="code"
+                                                   placeholder="کد " [(ngModel)]="part.partCode" autocomplete="off"
+                                                   #code="ngModel"
+                                                   [class.is-invalid]="(code?.errors?.nbvRequired || code?.errors?.nbvPattern) && (code.touched || doSave)"
+                                                   dest="nameValidation">
+                                        </div>
+                                        <div id="codeValidation" style="opacity: 0; height: 0"></div>
+                                    </div>
+
+                                    <div class="col-md-6 form-group required col-sm-12">
+                                        <label for="partName" class="control-label" style="font-size: 12px">جنس
+                                            قطعه</label>
+                                        <div class="input-group input-group-sm">
+                                            <input class="form-control form-control-sm input-c  " id="material"
+                                                   name="material"
+                                                   placeholder="جنس " [(ngModel)]="part.material" autocomplete="off"
+                                                   #material="ngModel"
+                                                   [class.is-valid]="!(material?.errors?.nbvRequired || material?.errors?.nbvPattern)"
+                                                   [class.is-invalid]="(material?.errors?.nbvRequired || material?.errors?.nbvPattern) && (material.touched || doSave)"
+                                                   dest="materialValidation">
+                                        </div>
+                                        <div id="materialValidation" style="opacity: 0; height: 0"></div>
+                                    </div>
+
+                                    <div class="col-md-6 form-group required col-sm-12">
+                                        <label for="partName" class="control-label" style="font-size: 12px">دسته بندی
+                                            قطعه</label>
+                                        <!--                                        <ng-select bindLabel="_title" bindValue="_value"-->
+                                        <!--                                                   [(ngModel)]="part.partCategory"-->
+                                        <!--                                                   [items]="partCategoryList" [placeholder]="'دسته بندی'"></ng-select>-->
+                                        <ng-select dir="rtl"
+                                                   [(ngModel)]="part.partCategory"
+                                                   id="budget"
+                                                   name="budget"
+                                                   [disabled]="mode===actionMode.VIEW"
+                                                   placeholder="دسته بندی قطعه"
+                                                   style="width: 100%;"
+                                                   dropdownPosition="bottom">
+                                            <ng-container *ngFor="let item of partCategoryList ;let i=index">
+                                                <ng-container *ngIf="i%2===0">
+                                                    <ng-option [value]="item">{{partCategoryList[i+1]}}</ng-option>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ng-select>
+                                        <!--                                        <div id="materialValidation" style="opacity: 0; height: 0"></div>-->
+                                    </div>
+
+                                    <div class="col-md-12  " style="margin-top: 0px">
+                                        <div class="w-100 form-group text-right mb-0">
+                                            <label for="3" class="control-label" style="font-size: 12px">توضیحات</label>
+                                            <textarea class=" form-control form-control-sm input-c" rows="3" id="3"
+                                                      placeholder="توضیحاتی درمورد قطعه" [(ngModel)]="part.description"
+                                                      name="descriptionPart"
+
+                                                      #description="ngModel"
+
+                                            ></textarea>
+                                        </div>
+                                        <div id="descriptionValidation" style="opacity: 0; height: 0"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-3 form-group required col-sm-12">
+                                <fieldset class="scheduler-border" id="comapny-documents"
+                                          style="background-color: #f5f5f5">
+                                    <legend class="scheduler-border"><h6>تصویر دارایی</h6></legend>
+                                    <ng-container *ngIf="!loadingGetOne">
+
+                                        <div class="col-md-12"
+                                             *ngIf="!part.image || !part.image.fileByte">
+                                            <label>
+                                                <a class="btn btn-outline-secondary btn-sm "
+                                                   [ngStyle]="loadingUpload  && { 'cursor' : 'wait'} "
+                                                >
+                                                    <i *ngIf="!loadingUpload" class="fa fa-paperclip "
+                                                       aria-hidden="true"></i>
+                                                    <i *ngIf="loadingUpload" class="fa fa-spinner fa-pulse fa-1x"></i>
+
+                                                    انتخاب تصویر
+                                                </a>
+                                                <input type="file" style="display: none;" #input id="file"
+                                                       [disabled]=" loadingUpload "
+                                                       (change)="onChangeUploader(input)">
+                                            </label>
+                                        </div>
+                                        <ng-container *ngIf="part.image && part.image.fileByte">
+                                            <div class="col-md-12">
+                                                <label (click)="deleteImage()">
+                                                    <a class="btn btn-outline-secondary btn-sm ">
+                                                        <i class="fa fa-trash " aria-hidden="true"></i>
+                                                        حذف تصویر
+                                                    </a>
+
+                                                </label>
+                                            </div>
+
+                                            <div class="col-md-12 img-fluid img-thumbnail p-2">
+                                                <img [src]="'data:image/jpg;base64,' + part.image.fileByte"
+                                                     (click)="showImageModalAsset()"
+                                                     class="img img-responsive cursor-pointer"
+                                                     style="width: 100%;height: 100%">
+                                            </div>
+
+                                        </ng-container>
+                                    </ng-container>
+
+                                </fieldset>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="card-footer text-left">
+                        <ng-container *ngIf="mode !== actionMode.VIEW">
+                            <button class="btn btn-action btn-sm" type="submit">
+                                <span *ngIf="mode === actionMode.ADD">ثبت</span>
+                                <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                                <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+                            </button>
+                            <!--                            <ng-container *ngIf="mode === actionMode.ADD">-->
+                            <!--                                <button class="btn btn-action btn-sm" type="submit" [disabled]="partForm.invalid ">ثبت-->
+                            <!--                                </button>-->
+                            <!--                            </ng-container>-->
+
+                            <ng-container *ngIf="mode === actionMode.EDIT">
+
+                                <!--                                <button class="btn btn-action btn-sm" type="submit" style="margin: 0 5px"-->
+                                <!--                                        [disabled]="partForm.invalid ">ویرایش-->
+                                <!--                                </button>-->
+
+                                <button class="btn btn-warning btn-sm" type="button" *ngIf="valid" (click)="next()">
+                                    مرحله بعد - تکمیل اطلاعات قطعه
+                                </button>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="mode === actionMode.VIEW">
+                            <button class="btn btn-warning btn-sm" type="button" (click)="next()">
+                                مرحله بعد - تکمیل اطلاعات قطعه
+                            </button>
+                        </ng-container>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6 col-6 col-sm-6 card-title">
+                            <i class="fa fa-list"></i>&nbsp;&nbsp;
+                            تکمیل اطلاعات قطعه
+                            {{part.name}}
+                        </div>
+                        <div class="col-md-6 col-6 col-sm-6 text-left">
+                            <button class="btn btn-sm btn-cancel-back" (click)="prev()">
+                                بازگشت به مرحله قبل
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body card-body-content">
+                    <ul class="nav nav-tabs p-0">
+<!--                        موجودی-->
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#home" id="inventory"
+                               style="font-size: 12px">موجودی</a>
+                        </li>
+<!--                        مرجع مصرف دارایی-->
+                        <!--                            مشخصات فروشنده/سازنده-->
+                        <li class="nav-item">
+                            <a href="#Manufacturer" style="color: #a0a0a0;font-size: 12px" class="nav-link"
+                               data-toggle="tab" role="tab" aria-controls="Manufacturer"
+                               >مشخصات فروشنده/سازنده</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link " data-toggle="tab" href="#boms" style="font-size: 12px"
+                               (click)="bomsB = true">مرجع مصرف دارایی</a>
+                        </li>
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link " data-toggle="tab" href="#user" style="font-size: 12px"-->
+<!--                               (click)="  userB = true">پرسنل</a>-->
+<!--                        </li>-->
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link " data-toggle="tab" href="#warranty" style="font-size: 12px"-->
+<!--                               (click)="warrantyB = true">گارانتی</a>-->
+<!--                        </li>-->
+                        <li class="nav-item">
+                            <a class="nav-link " data-toggle="tab" href="#document" style="font-size: 12px"
+                               (click)="documentB = true">مستندات</a>
+                        </li>
+                    </ul>
+                    <!--================================================================================>-->
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="home">
+                            <app-inventory-list *ngIf="inventoryB" [modePart]="mode" [partName]="part.name"
+                                                [partCode]="part.partCode"></app-inventory-list>
+                        </div>
+                        <div class="tab-pane fade" id="boms" *ngIf="bomsB===true">
+                            <app-asset-consuming-reference-list [partId]="partId"
+                                                                [modePart]="mode"></app-asset-consuming-reference-list>
+                        </div>
+                        <!--                            مشخصات فروشنده/سازنده-->
+                        <div class="tab-pane fade" id="Manufacturer" role="tabpanel">
+                            <!--                                <ng-container *ngIf="tabTitle==='Manufacturer'">-->
+                            <ng-container >
+                                <app-manufacturer-part [partId]="partId" [actionMode]="mode"></app-manufacturer-part>
+                            </ng-container>
+                            <!--                                </ng-container>-->
+                        </div>
+<!--                        <div class="tab-pane fade" id="warranty" *ngIf="warrantyB===true">-->
+<!--                            <app-warranty-list [partId]="partId" [type]="'part'" [modePage]="mode"></app-warranty-list>-->
+<!--                        </div>-->
+
+
+<!--                        <div class="tab-pane fade" id="user" *ngIf="userB===true">-->
+<!--                            <app-user-list-for-asset [modePage]="mode" [mode]="'part'"-->
+<!--                                                     [entityId]="partId"></app-user-list-for-asset>-->
+<!--                        </div>-->
+                        <div class="tab-pane fade" id="document" *ngIf="documentB===true">
+                            <app-document [mode]="mode" [extraId]="partId" *ngIf="mode"></app-document>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--=======================================budgetAllocatedModal-->
+
+
+<div class="modal" tabindex="-1" role="dialog" id="budgetAllocatedModal" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-lg-6">
+                    <h5 class="modal-title" style="color:#40046D ;font-size: 22px;
+    text-align: center !important;
+    font-weight: bold;">
+                        افزودن بودجه خرید</h5>
+                </div>
+                <div class="col-lg-6" style="padding: 0">
+
+                </div>
+
+
+            </div>
+
+            <div class="modal-body" style="display: flow-root;  padding: 15px;border-radius: 5px">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group ">
+                            <label style="font-size: 12px">عنوان بودجه :
+                            </label>
+                            <input type="text" class="form-control form-control-sm" name="budgetTitle" id="budgetTitle"
+                                   autocomplete="off" placeholder="عنوان بودجه">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group mb-0">
+                            <label style="font-size: 12px">توضیحات :
+                            </label>
+                            <textarea type="text" class="form-control form-control-sm" name="budgetTitle2"
+                                      id="budgetTitle2"
+                                      placeholder="در این قسمت توضیحات درمورد بودجه ی تخصیص یافته ارائه میشود"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-cancel-back" data-dismiss="modal" style="margin :0 5px "
+                        (click)="cancelModal('budgetAllocatedModal')">
+                    انصراف
+                </button>
+                <button type="button" class="btn btn-action">افزودن</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!--=================================== Add Maintenance Officer=>-->
+
+<div class="modal" tabindex="-1" role="dialog" id=" maintenanceOfficerModal" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-lg-12">
+                    <h5 class="modal-title" style="color:#40046D ;font-size: 22px;
+    text-align: center !important;
+    font-weight: bold;">
+                        افزودن مسئول تعمیرات و نگهداری</h5>
+                </div>
+                <!--<div class="col-lg-6" style="padding: 0">-->
+
+                <!--</div>-->
+
+
+            </div>
+
+            <div class="modal-body" style="display: flow-root;  padding: 15px;border-radius: 5px">
+                <div class="row">
+                    <!--<form #partForm="ngForm" (submit)="action(partForm)">-->
+                    <div class="col-md-12">
+                        <div class="form-group ">
+                            <label style="font-size: 12px">کد بخش:
+                            </label>
+                            <input type="text" class="form-control form-control-sm" name="sectionCode" id="sectionCode"
+                                   placeholder="کد بخش" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group mb-0">
+                            <label style="font-size: 12px">توضیحات :
+                            </label>
+                            <textarea type="text" class="form-control form-control-sm" name="description3"
+                                      id="description3"
+                                      placeholder="در این قسمت توضیحات درمورد بخش مسئول تعمیرات و نگهداری  ارائه میشود"></textarea>
+                        </div>
+                    </div>
+
+                    <!--</form>-->
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel-back btn-sm" data-dismiss="modal" style="margin :0 5px "
+                            (click)="cancelModal('maintenanceOfficerModal')">
+                        انصراف
+                    </button>
+                    <button type="button" class="btn btn-action btn-sm">افزودن</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--/// مدال نمایش عکس//-->
+<nbw-modal
+        [hasHeader]="false"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.LARGE"
+        modalDialogCentered="true"
+        autoShow="false"
+        [myId]="'showImageModalPart'">
+
+    <div modal-body class="row justify-content-center" style="padding: 0;margin: 0;">
+        <div class="col-5 text-center p-0 m-0"></div>
+        <div class="col-2 text-center p-0 m-0"
+             data-dismiss="modal"
+             style="    margin-top: 0; z-index: 1; position: fixed">
+            <span class="fa fa-times px-2 cursor-pointer"
+                  style="background-color: #ffffff99;
+                         color: #383030;
+                         padding: 6px;
+                         border-radius: 50%;">
+
+            </span>
+        </div>
+        <div class="col-5 text-center p-0 m-0"></div>
+        <div class="col-12 text-center p-0 m-0">
+
+            <img *ngIf="part?.image?.fileByte"
+                 style="border-radius: 4%;width: 100%"
+                 [src]="'data:image/jpg;base64,' + part.image.fileByte">
+        </div>
+    </div>
+</nbw-modal>
+<!--/// مدال نمایش عکس//-->

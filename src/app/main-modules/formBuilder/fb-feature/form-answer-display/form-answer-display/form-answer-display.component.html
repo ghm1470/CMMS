@@ -1,0 +1,326 @@
+<div class="col-md-12">
+  <fieldset class="scheduler-border">
+    <legend class="scheduler-border"><h4>فرم سابقه فرهنگی</h4></legend>
+    <h6 class="text-center">{{form.title}}</h6>
+    <div class="col-md-10" style="background-color: white; width: 100%; text-align: center;">
+      <div *ngIf="form != null && form.elementList.length > 0">
+        <br>
+        <div class="row form-group" *ngFor="let item of form.elementList;let i = index;">
+          <div [ngSwitch]="item.elementType">
+
+            <div *ngSwitchCase="'CHECK_BOX'">
+              <div class="col-md-2 text-center">
+                <img *ngIf="item.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE" [src]="item.picture.imageData"
+                     height="100px" width="100px">
+              </div>
+              <div class="col-md-8">
+                <div class="col-md-12 text-left">
+                  <label class="control-label"> {{MyToolkit.En2Fa(i+1)}}.&nbsp;&nbsp;{{item.label}}</label>
+                </div>
+                <div class="col-md-12">
+                  <br>
+                </div>
+                <div *ngFor="let ch of item.optionList;let q=index;">
+                  <div class="col-md-12" style="margin-bottom: 10px;">
+                    <div class="col-md-1">
+                      <input type="checkbox" name="selection{{item.id}}" [value]="ch.id">
+                    </div>
+                    <div class="col-md-1 text-center" *ngIf="ch.imageStatus != MyImageStatus.WITHOUT_IMAGE">
+                      <img [src]="ch.imageData" height="50px" width="50px">
+                    </div>
+                    <div class="col-md-5 text-left">
+                      <span>&nbsp;&nbsp;{{ch.caption}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2 answer">
+                <a (click)="answerDetail(item)">مشاهده پاسخ ها</a>
+              </div>
+              <div class="col-md-12">
+                <br>
+                <hr>
+              </div>
+            </div>
+
+            <div *ngSwitchCase="'COMBO_BOX'">
+              <div class="col-md-2 text-center">
+                <img *ngIf="item.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE" [src]="item.picture.imageData"
+                     height="100px" width="100px">
+              </div>
+              <div class="col-md-8">
+                <div class="col-md-12 text-left">
+                  <label class="control-label text-justify">{{MyToolkit.En2Fa(i+1)}}.&nbsp;&nbsp;{{item.label}}</label>
+                </div>
+                <div class="col-md-12">
+                  <br>
+                </div>
+                <div class="col-md-8 col-md-offset-2  text-center" *ngIf="item.comboBoxType == 'SINGLE'">
+                  <select class="col-md-12 form-control" name="selectedSingle{{i}}">
+                    <option *ngFor="let singleOpt of item.comboOptionList;let j=index;" [value]="singleOpt"
+                            [selected]="j===0"> {{singleOpt}}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-md-8 col-md-offset-2  text-center" *ngIf="item.comboBoxType == 'MULTIPLE'">
+                  <select class="col-md-12 form-control" name="selectedMulti{{i}}" multiple="multiple">
+                    <option *ngFor="let multiOpt of item.comboOptionList;let k=index;" [value]="multiOpt"
+                            [selected]="k===0"> {{multiOpt}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-2 answer">
+                <a (click)="answerDetail(item)">مشاهده پاسخ ها</a>
+              </div>
+              <div class="col-md-12">
+                <br>
+                <hr>
+              </div>
+            </div>
+
+            <div *ngSwitchCase="'DATE'">
+              <div class="col-md-2 text-center">
+                <img *ngIf="item.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE" [src]="item.picture.imageData"
+                     height="100px" width="100px">
+              </div>
+              <div class="col-md-8">
+                <div class="col-md-12 text-left">
+                  <label class="control-label text-justify">{{MyToolkit.En2Fa(i+1)}}.&nbsp;&nbsp;{{item.label}}</label>
+                </div>
+                <div class="col-md-12">
+                  <br>
+                </div>
+                <div class="col-md-8 col-md-offset-2">
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <span class="far fa-calendar-alt" id="date{{i}}"></span>
+                    </div>
+                    <input type="text" class="form-control col-md-3" id="inputDate{{i}}" #Date/>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2 answer">
+                <a (click)="answerDetail(item)">مشاهده پاسخ ها</a>
+              </div>
+              <div class="col-md-12">
+                <br>
+                <hr>
+              </div>
+            </div>
+
+            <div *ngSwitchCase="'NUMERICAL'">
+              <div class="col-md-2 text-center">
+                <img *ngIf="item.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE" [src]="item.picture.imageData"
+                     height="100px" width="100px">
+              </div>
+              <div class="col-md-8">
+                <div class="col-md-12 text-left">
+                  <label class="control-label text-justify">{{MyToolkit.En2Fa(i+1)}}.&nbsp;&nbsp;{{item.label}}</label>
+                </div>
+                <div class="col-md-12">
+                  <br>
+                </div>
+                <div class="col-md-10 col-md-offset-1">
+                  <div class="col-md-2 text-right">{{item.endLabel}}</div>
+                  <div class="col-md-8 text-center">
+                    <p-slider id="slider" [min]="item.minLength" [max]="item.maxLength" [step]="item.step"
+                              name="slider"></p-slider>
+                  </div>
+                  <div class="col-md-2 text-left">{{item.beginLabel}}</div>
+                </div>
+              </div>
+              <div class="col-md-2 answer">
+                <a (click)="answerDetail(item)">مشاهده پاسخ ها</a>
+              </div>
+              <div class="col-md-12">
+                <br>
+                <hr>
+              </div>
+            </div>
+
+            <div *ngSwitchCase="'RADIO_BUTTON'">
+              <div class="col-md-2 text-center">
+                <img *ngIf="item.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE" [src]="item.picture.imageData"
+                     height="100px" width="100px">
+              </div>
+              <div class="col-md-8">
+                <div class="col-md-12 text-left">
+                  <label class="control-label text-justify">{{MyToolkit.En2Fa(i+1)}}.&nbsp;&nbsp;{{item.label}}</label>
+                </div>
+                <div class="col-md-12">
+                  <br>
+                </div>
+                <div *ngFor="let ch of item.optionList;let q=index">
+                  <div class="col-md-12" style="margin-bottom: 10px;">
+                    <div class="col-md-1">
+                      <input type="radio" name="radio{{item.id}}" [value]="ch.id">
+                    </div>
+                    <div class="col-md-1 text-center" *ngIf="ch.imageStatus != MyImageStatus.WITHOUT_IMAGE">
+                      <img [src]="ch.imageData" height="50px" width="50px">
+                    </div>
+                    <div class="col-md-5 text-left">
+                      <span>&nbsp;&nbsp;{{ch.caption}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2 answer">
+                <a (click)="answerDetail(item)">مشاهده پاسخ ها</a>
+              </div>
+              <div class="col-md-12">
+                <br>
+                <hr>
+              </div>
+            </div>
+
+            <div *ngSwitchCase="'STAR_RATING'">
+              <div class="col-md-2 text-center">
+                <img *ngIf="item.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE" [src]="item.picture.imageData"
+                     height="100px" width="100px">
+              </div>
+              <div class="col-md-8">
+                <div class="col-md-12 text-left">
+                  <label class="control-label text-justify">{{MyToolkit.En2Fa(i+1)}}.&nbsp;&nbsp;{{item.label}}</label>
+                </div>
+                <div class="col-md-12">
+                  <br>
+                </div>
+                <div class="col-md-8 col-md-offset-2 text-center">
+                  <!--<star-rating-comp [starType]="'svg'" [direction]="item.direction"-->
+                                    <!--[showHalfStars]="true" [labelPosition]="'top'" [numOfStars]="item.starCount"-->
+                                    <!--[rating]="item.initialRate" [staticColor]="item.colorStatus">-->
+                  <!--</star-rating-comp>-->
+                </div>
+              </div>
+              <div class="col-md-2 answer">
+                <a (click)="answerDetail(item)">مشاهده پاسخ ها</a>
+              </div>
+              <div class="col-md-12">
+                <br>
+                <hr>
+              </div>
+            </div>
+
+            <div *ngSwitchCase="'TEXT_AREA'">
+              <div class="col-md-2 text-center">
+                <img *ngIf="item.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE" [src]="item.picture.imageData"
+                     height="100px" width="100px">
+              </div>
+              <div class="col-md-8">
+                <div class="col-md-12 text-left">
+                  <label class="control-label text-justify">{{MyToolkit.En2Fa(i+1)}}.&nbsp;&nbsp;{{item.label}}</label>
+                </div>
+                <div class="col-md-12">
+                  <br>
+                </div>
+                <div class="col-md-8 col-md-offset-2 text-center">
+                  <textarea class="form-control" [placeholder]="item.placeHolder"></textarea>
+                </div>
+              </div>
+              <div class="col-md-2 answer">
+                <a (click)="answerDetail(item)">مشاهده پاسخ ها</a>
+              </div>
+              <div class="col-md-12">
+                <br>
+                <hr>
+              </div>
+            </div>
+
+            <div *ngSwitchCase="'TEXT_FIELD'">
+              <div class="col-md-2 text-center">
+                <img *ngIf="item.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE" [src]="item.picture.imageData"
+                     height="100px" width="100px">
+              </div>
+              <div class="col-md-8">
+                <div class="col-md-12 text-left">
+                  <label class="control-label text-justify">{{MyToolkit.En2Fa(i+1)}}.&nbsp;&nbsp;{{item.label}}</label>
+                </div>
+                <div class="col-md-12">
+                  <br>
+                </div>
+                <div class="col-md-8 col-md-offset-2 text-center" *ngIf="item.textFieldType == 'PASSWORD'">
+                  <input class="form-control" [type]="item.textFieldType | lowercase"
+                         attr.minlength="{{item.minLength}}"
+                         attr.maxlength="{{item.maxLength}}" placeholder="******">
+                </div>
+                <div class="col-md-8 col-md-offset-2 text-center" *ngIf="item.textFieldType != 'PASSWORD'">
+                  <input class="form-control" [type]="item.textFieldType | lowercase"
+                         attr.minlength="{{item.minLength}}"
+                         attr.maxlength="{{item.maxLength}}" [placeholder]="item.placeHolder">
+                </div>
+              </div>
+              <div class="col-md-2 answer">
+                <a (click)="answerDetail(item)">مشاهده پاسخ ها</a>
+              </div>
+              <div class="col-md-12">
+                <br>
+                <hr>
+              </div>
+            </div>
+
+            <div *ngSwitchCase="'TIME'">
+              <div class="col-md-2 text-center">
+                <img *ngIf="item.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE" [src]="item.picture.imageData"
+                     height="100px" width="100px">
+              </div>
+              <div class="col-md-8">
+                <div class="col-md-12 text-left">
+                  <label class="control-label text-justify">{{MyToolkit.En2Fa(i+1)}}.&nbsp;&nbsp;{{item.label}}</label>
+                </div>
+                <div class="col-md-12">
+                  <br>
+                </div>
+                <div class="col-md-8 col-md-offset-2">
+                  <input type="time" class="form-control input-small" id="timePicker{{i}}"/>
+                </div>
+              </div>
+              <div class="col-md-2 answer">
+                <a (click)="answerDetail(item)">مشاهده پاسخ ها</a>
+              </div>
+              <div class="col-md-12">
+                <br>
+                <hr>
+              </div>
+            </div>
+
+<!--            <div *ngSwitchCase="'FILE_ATTACH'">-->
+<!--              <div class="col-md-2 text-center">-->
+<!--                <img *ngIf="item.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE" [src]="item.picture.imageData"-->
+<!--                     height="100px" width="100px">-->
+<!--              </div>-->
+<!--              <div class="col-md-8">-->
+<!--                <div class="col-md-12 text-left">-->
+<!--                  <label class="control-label text-justify">{{MyToolkit.En2Fa(i+1)}}.&nbsp;&nbsp;{{item.label}}</label>-->
+<!--                </div>-->
+<!--                <div class="col-md-12">-->
+<!--                  <br>-->
+<!--                </div>-->
+<!--                <div class="col-md-8 col-md-offset-2" *ngIf="item.fileType == 'PDF'">-->
+<!--                  <label>فایل ضمیمه</label>-->
+<!--                  <span>(فایل با پسوند PDF و حجم کمتر از یک مگابایت باشد.)</span>-->
+<!--                  <app-attachment-->
+<!--                    [attachmentList]="attachmentList"-->
+<!--                    [limitation]="item.fileCountLimitation">-->
+<!--                  </app-attachment>-->
+<!--                </div>-->
+<!--                <div class="col-md-8 col-md-offset-2" *ngIf="item.fileType == 'IMAGE'">-->
+<!--                  <app-image-upload [image]="image" [fileType]="null" [multiple]="false">-->
+<!--                  </app-image-upload>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="col-md-2">-->
+<!--                <a (click)="answerDetail(item)">مشاهده پاسخ ها</a>-->
+<!--              </div>-->
+<!--              <div class="col-md-12">-->
+<!--                <br>-->
+<!--                <hr>-->
+<!--              </div>-->
+<!--            </div>-->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>

@@ -1,0 +1,47 @@
+<img src="assets/images/excel.PNG" class=" cursor-pointer"
+     *ngIf="ExcelReport"
+     (click)="EmActivityGetPageForExcel('excel')"
+     matTooltip="دانلود  به صورت excel"
+     style="    width: 30px;border-radius: 20%; height: 30px;">
+<i class="fa fa-spinner fa-pulse fa-1x" *ngIf="loadingForReport&&typeForReport==='excel'"
+   aria-hidden="true"></i>
+<img src="assets/images/pdf-download.png" class=" cursor-pointer mx-2"
+     *ngIf="PdfReport"
+     (click)="EmActivityGetPageForExcel('pdf')"
+     matTooltip="دانلود گزارش به صورت pdf"
+
+     style=" width: 30px;border-radius: 20%; height: 30px;">
+<i class="fa fa-spinner fa-pulse fa-1x" *ngIf="loadingForReport&&typeForReport==='pdf'"
+   aria-hidden="true"></i>
+<div class="overflow-auto myTable1" id="myTable1"
+     style="position: absolute;z-index: -9999;"
+>
+    <table id='htmlData' class=" table table-striped table-bordered table-responsive-md"
+
+           style="display: inline-table !important;      overflow: auto !important;"
+    >
+        <thead>
+        <tr style="text-align: center">
+            <th>ردیف</th>
+            <ng-container *ngFor="let fileDataTable of fileDataTableList">
+                <th>{{fileDataTable.thTitle}}</th>
+            </ng-container>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let entity of entityListForReport;let i=index">
+            <tr style="text-align: center">
+                <td>
+                    {{i + 1 }}
+                </td>
+                <ng-container *ngFor="let fileDataTable of fileDataTableList">
+                    <td>{{entity[fileDataTable.tdTitle]}}</td>
+                </ng-container>
+
+            </tr>
+        </ng-container>
+
+        </tbody>
+    </table>
+
+</div>

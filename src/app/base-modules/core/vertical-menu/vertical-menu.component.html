@@ -1,0 +1,840 @@
+<ng-scrollbar class="scroll-frame"
+              barClass="scrollbar"
+              visibility="hover"
+              thumbClass="scroll-thumb">
+    <ul class="list-unstyled components" style="min-height:calc(100vh - 140px) ; height: 100vh">
+        <li>
+            <!--            <a [routerLink]="['/panel']"><span>مدیریت سیستم</span></a>-->
+            <ul class="show list-unstyled" id="systemManagement">
+
+                <li *ngIf="roleList.Home_see">
+                    <a [routerLink]="['/panel']" (click)="setMenuItem(true,'homeBtn')" id="homeBtn">
+                        <span>خانه</span>
+                    </a>
+                </li>
+                <li *ngIf="roleList.calender_see">
+                    <a [routerLink]="['/panel/calender']" (click)="setMenuItem(true,'homeBtn')" id="calenderBtn">
+                        <span>تقویم</span>
+                    </a>
+                </li>
+
+                <!--<li [routerLinkActive]="'active'">-->
+                <!--<a [routerLink]="['/panel/worktable']" [queryParams]="{page: 0, size: 10}">-->
+                <!--<span>کارتابل کاربری-->
+                <!--<span class="badge badge-danger" *ngIf="count > 0">{{toolkit.Common.En2Fa(count)}}</span>-->
+                <!--</span>-->
+                <!--</a>-->
+
+                <!--</li>-->
+                <!--کارتابل کاربری-->
+                <ng-container *ngIf="roleList.noticeBoard_awaiting_list_random||
+                                     roleList.noticeBoard_awaiting_list_scheduling||
+                                     roleList.noticeBoard_active_list||
+                                     roleList.noticeBoard_completed_list
+                                ">
+                    <!--                    noticeBoard_see = <any>'مشاهده کارتابل همه',  // noticeBoardAll_see-->
+                    <!--                    noticeBoard_create = <any>'مشاهده کارتابل تاریخچه فعال',    // noticeBoardActiveHistory_see-->
+                    <!--                        noticeBoard_update = <any>'مشاهده کارتابل تاریخچه اتمام یافته',  // noticeBoardInActiveHistory_see-->
+                    <!--                            noticeBoard_list = <any>'مشاهده لیست کارتابل تاریخچه اتمام یافته',-->
+
+                    <li [routerLinkActive]="'active'">
+                        <a href="#worktable" data-toggle="collapse" aria-expanded="false"
+                           id="worktableBtn"
+                           class="dropdown-toggle">
+                            <span>کارتابل کاربری</span>
+
+                            <!--                            noticeBoard_see = 'مشاهده کارتابل ، فرآیند در انتظار تایید' as any,  // noticeBoardAll_see-->
+                            <!--                            noticeBoard_create = 'مشاهده کارتابل ،  تاریخچه فرآیند اتمام نیافته' as any,    // noticeBoardActiveHistory_see-->
+                            <!--                            noticeBoard_update = 'مشاهده کارتابل ،   تاریخچه فرآیند اتمام یافته' as any,  // noticeBoardInActiveHistory_see-->
+                            <!--                            noticeBoard_awaiting_list = 'مشاهده لیست فرایند در انتظار تایید' as any,-->
+                            <!--                            noticeBoard_active_list = 'مشاهده لیست تاریخچه فعال' as any,-->
+                            <!--                            noticeBoard_completed_list = 'مشاهده لیست کارتابل تاریخچه اتمام یافته' as any,-->
+                            <i class="fa fa-chevron-left"></i></a>
+                        <ul class="list-unstyled collapse subChildBGColor" id="worktable">
+                            <li [routerLinkActive]="'active'"
+                                *ngIf="roleList.noticeBoard_awaiting_list_random">
+                                <a [routerLink]="['/panel/worktable']" [queryParams]="{page: 0, size: 10}"
+                                   (click)="setMenuItem(true,'worktableBtn','worktableBtn1')" id="worktableBtn1"
+                                   class="notification"
+                                >
+
+                                    <span>  فرایند در انتظار تایید- تصادفی  </span>
+                                        <span class="badge" *ngIf="count > 0">{{toolkit.Common.En2Fa(count)}}</span>
+<!--                                    <span class="badge badge-danger" *ngIf="count > 0">{{toolkit.Common.En2Fa(count)}}</span>-->
+
+                                    <!--                                    <span class="badge badge-danger"-->
+                                    <!--                                          *ngIf="count > 0">{{toolkit.Common.En2Fa(count)}}</span>-->
+                                </a>
+                            </li>
+                            <li [routerLinkActive]="'active'"
+                                *ngIf="roleList.noticeBoard_awaiting_list_scheduling">
+                                <a [routerLink]="['/panel/workTableSchedule']" [queryParams]="{page: 0, size: 10}"
+                                   (click)="setMenuItem(true,'worktableBtn','workTableSchedule')" id="workTableSchedule"
+                                >
+                                    <span>  فرایند در انتظار تایید- زمانبندی شده  </span>
+                                    <!--                                    <span class="badge badge-danger"-->
+                                    <!--                                          *ngIf="count > 0">{{toolkit.Common.En2Fa(count)}}</span>-->
+                                </a>
+                            </li>
+                            <li [routerLinkActive]="'active'" *ngIf="roleList.noticeBoard_active_list">
+                                <a [routerLink]="['/panel/worktableActiveHistory']"
+                                   (click)="setMenuItem(true,'worktableBtn','worktableActiveHistoryBtnTrue')"
+                                   id="worktableActiveHistoryBtnTrue"
+                                   [queryParams]="{ state: true, page: 0 , size: 10}">
+                                    <span>   تاریخچه  فرآیند اتمام نیافته </span>
+                                </a>
+                            </li>
+                            <li [routerLinkActive]="'active'" *ngIf="roleList.noticeBoard_completed_list">
+                                <a [routerLink]="['/panel/worktableActiveHistory']"
+                                   (click)="setMenuItem(true,'worktableBtn','worktableActiveHistoryBtnFalse')"
+                                   id="worktableActiveHistoryBtnFalse"
+                                   [queryParams]="{state: false ,page: 0 , size: 10}">
+                                    <span>   تاریخچه  فرآیند اتمام یافته</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ng-container>
+
+
+                <li [routerLinkActive]="'active'"
+                    *ngIf="roleList.AssignedAsset_list ||
+                           roleList.AssignedPart_list ||
+                           roleList.AssignedWorkOrder_list">
+                    <a href="#myDuties" data-toggle="collapse"
+                       id="myDutiesBtn"
+                       class="dropdown-toggle">
+                        <span>            وظایف من</span>
+                        <i class="fa fa-chevron-left"></i></a>
+                    <ul class="list-unstyled collapse subChildBGColor" id="myDuties">
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.AssignedAsset_list ">
+                            <a [routerLink]="['/panel/assignedAsset']" [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'myDutiesBtn','assignedAssetBtn')" id="assignedAssetBtn"
+                            >
+                                <span>دارایی تخصیص یافته</span>
+                            </a>
+                        </li>
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.AssignedPart_list">
+                            <a [routerLink]="['/panel/assignedPart']" [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'myDutiesBtn','assignedPartBtn')" id="assignedPartBtn"
+                            >
+                                <span>قطعات تخصیص یافته</span>
+                            </a>
+                        </li>
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.AssignedWorkOrder_list">
+                            <a [routerLink]="['/panel/assignedWorkOrder']" [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'myDutiesBtn','assignedWorkOrderBtn')"
+                               id="assignedWorkOrderBtn"
+                            >
+                                <!--                <span class="badge badge-danger">5</span>-->
+                                <span>دستور کارتخصیص یافته</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li [routerLinkActive]="'active'" *ngIf="  roleList.Project_list ||
+                                                           roleList.WorkOrderRandom_list||
+                                                           roleList.WorkOrderScheduling_list||
+                                                           roleList.Scheduling_list||
+                                                           roleList.TaskGroup_list||
+                                                           roleList.workRequest_list
+                                                            ">
+                    <a href="#repairAndMaintenance" data-toggle="collapse" aria-expanded="false"
+                       id="repairAndMaintenanceBtn"
+
+                       class="dropdown-toggle">
+                        <span>تعمیر و نگهداری</span>
+                        <i class="fa fa-chevron-left"></i></a>
+
+                    <ul class="list-unstyled collapse subChildBGColor" id="repairAndMaintenance">
+                        <li [routerLinkActive]="'active'" *ngIf="  roleList.Project_list">
+                            <a [routerLink]="['/panel/project']" [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'repairAndMaintenanceBtn','projectBtn')" id="projectBtn"
+                            >
+                                <span>مدیریت پروژه ها</span>
+                            </a>
+                        </li>
+
+
+                        <!--                        <li [routerLinkActive]="'active'"-->
+                        <!--                            *ngIf=" roleList.WorkOrder_list">-->
+                        <!--                            <a [routerLink]="['/panel/workOrder']" [queryParams]="{page: 0 , size: 10}"-->
+                        <!--                               (click)="setMenuItem(true,'repairAndMaintenanceBtn','workOrderBtn')" id="workOrderBtn"-->
+                        <!--                            >-->
+                        <!--                                <span>آرشیو دستور کار</span>-->
+                        <!--                            </a>-->
+                        <!--                        </li>-->
+
+
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.WorkOrderScheduling_list||roleList.WorkOrderRandom_list">
+                            <a href="#workOrder" data-toggle="collapse" aria-expanded="false"
+                               id="workOrderBtn"
+
+                               class="dropdown-toggle">
+                                <span>آرشیو دستور کار</span>
+                                <i class="fa fa-chevron-left"></i></a>
+                            <ul class="list-unstyled collapse childBGColor" id="workOrder">
+
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.WorkOrderRandom_list ">
+                                    <a [routerLink]="['/panel/workOrderRandom']" [queryParams]="{page: 0 , size: 10}"
+                                       (click)="setMenuItem(true,'repairAndMaintenanceBtn','workOrderBtn','workOrderRandomBtn')"
+                                       id="workOrderRandomBtn"
+                                    >
+                                        <span>آرشیو دستور کار تصادفی</span>
+                                    </a>
+                                </li>
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.WorkOrderScheduling_list ">
+                                    <a [routerLink]="['/panel/workOrderScheduling']"
+                                       [queryParams]="{page: 0 , size: 10}"
+                                       (click)="setMenuItem(true,'repairAndMaintenanceBtn','workOrderBtn','workOrderSchedulingBtn')"
+                                       id="workOrderSchedulingBtn"
+                                    >
+                                        <span>آرشیو دستور کار زمانبندی شده</span>
+                                    </a>
+                                </li>
+
+
+                            </ul>
+                        </li>
+
+
+                        <li [routerLinkActive]="'active'"
+                            *ngIf=" roleList.Scheduling_list">
+                            <a [routerLink]="['/panel/scheduling']" [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'repairAndMaintenanceBtn','scheduleMaintenanceBtn')"
+                               id="scheduleMaintenanceBtn"
+                            >
+                                <span>زمان بندی نت</span>
+                            </a>
+                        </li>
+
+                        <li [routerLinkActive]="'active'" *ngIf=" roleList.TaskGroup_list">
+                            <a [routerLink]="['/panel/taskGroup/main']" [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'repairAndMaintenanceBtn','mainBtn')" id="mainBtn"
+                            >
+                                <span>مدیریت مجموعه کارها</span>
+                            </a>
+                        </li>
+
+                        <li [routerLinkActive]="'active'" *ngIf="roleList.workRequest_list">
+                            <a [routerLink]="['/panel/submitWorkRequest']" [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'repairAndMaintenanceBtn','submitWorkRequestBtn')"
+                               id="submitWorkRequestBtn"
+                            >
+                                <span>ارسال درخواست تعمیر</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li [routerLinkActive]="'active'"
+                    *ngIf="roleList.metering_list">
+                    <a [routerLink]="['/panel/reading']"
+                       (click)="setMenuItem(true,'readingBtn')" id="readingBtn"
+                    >
+                        <span>متراژ خوانی</span>
+                    </a>
+                </li>
+
+
+                <li [routerLinkActive]="'active'"
+                    *ngIf="roleList.message_send ||
+                           roleList.message_received_list ||
+                           roleList.message_sender_list ||
+                           roleList.message_system_list ||
+                           roleList.message_Delete_list ">
+                    <a href="#notifications" data-toggle="collapse" aria-expanded="false"
+                       id="notificationsBtn"
+
+                       class="dropdown-toggle">
+                        <span>پیام رسانی</span>
+                        <i class="fa fa-chevron-left"></i></a>
+                    <ul class="list-unstyled collapse subChildBGColor" id="notifications">
+                        <li [routerLinkActive]="'active'" *ngIf="roleList.message_send">
+                            <a [routerLink]="['/panel/sent/inbox/action']" [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'notificationsBtn','sentInboxActionBtn')"
+                               id="sentInboxActionBtn"
+                            >
+                                <span>   ارسال پیام </span>
+                            </a>
+                        </li>
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.message_received_list">
+                            <a [routerLink]="['/panel/inbox']" [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'notificationsBtn','inboxBtn')" id="inboxBtn"
+                            >
+                                <span>صندوق ورودی</span>
+                            </a>
+                        </li>
+
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.message_sender_list">
+                            <a [routerLink]="['/panel/sent']" [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'notificationsBtn','sentBtn')" id="sentBtn"
+                            >
+                                <span>پیام‌های ارسالی </span>
+                            </a>
+
+
+                        </li>
+
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.message_system_list">
+                            <a [routerLink]="['/panel/systemMessages']" [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'notificationsBtn','systemMessagesBtn')" id="systemMessagesBtn"
+                            >
+                                <span>پیام‌های سیستم </span>
+                            </a>
+                        </li>
+
+                        <li [routerLinkActive]="'active'" *ngIf="roleList.message_Delete_list">
+                            <a [routerLink]="['/panel/trash']" [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'notificationsBtn','trashBtn')" id="trashBtn"
+                            >
+                                <span>لیست پیام‌های حذف شده </span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!--        <li [routerLinkActive]="'active'">-->
+                    <!--          <a class="dropdown-toggle collapse">-->
+                    <!--            <span>درخواست خرید</span>-->
+                    <!--          </a>-->
+                    <!--        </li>-->
+
+                </li>
+
+
+                <li [routerLinkActive]="'active'" *ngIf="roleList.City_list ||
+                                                         roleList.Province_list ||
+                                                         roleList.Currency_list ||
+                                                         roleList.Budget_list||
+                                                         roleList.WorkOrderStatus_list||
+                                                         roleList.Measurement_list ||
+                                                         roleList.Property_list ||
+                                                         roleList.Company_list||
+                                                         roleList.Storage_list||
+                                                         roleList.ChargeDepartment_list||
+                                                         roleList.assetCategory_list ||
+                                                         roleList.User_list||
+                                                         roleList.UserType_list||
+                                                         roleList.formBuilder_list ||
+                                                         roleList.Asset_list ||
+                                                         roleList.AssetTemplate_list||
+                                                         roleList.Part_list ||
+                                                         roleList.Inventory_list ||
+                                                         roleList.PropertyCategory_list ||
+                                                         roleList.AdjustInventory_create ||
+                                                         roleList.formCategory_list||
+                                                         roleList.processBuilder_list||
+                                                         roleList.BOM_list ">
+
+                    <a href="#basicInformation" data-toggle="collapse" aria-expanded="false"
+                       id="basicInformationBtn"
+
+                       class="dropdown-toggle">
+                        <span>اطلاعات پایه</span>
+                        <i class="fa fa-chevron-left"></i></a>
+
+                    <ul class="list-unstyled collapse subChildBGColor basicInformation" id="basicInformation">
+                        <li [routerLinkActive]="'active'" *ngIf="roleList.User_list||roleList.UserType_list">
+                            <a href="#userManagement" data-toggle="collapse" aria-expanded="false"
+                               id="userManagementBtn"
+
+                               class="dropdown-toggle"><span>مدیریت کاربران</span><i class="fa fa-chevron-left"></i></a>
+                            <ul class="list-unstyled collapse childBGColor" id="userManagement">
+
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.UserType_list ">
+                                    <a [routerLink]="['/panel/security']" [queryParams]="{page: 0 , size: 10}"
+                                       (click)="setMenuItem(true,'basicInformationBtn','userManagementBtn','securityBtn')"
+                                       id="securityBtn"
+                                    >
+                                        <span>پست</span>
+                                    </a>
+                                </li>
+
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.User_list">
+                                    <a [routerLink]="['/panel/user']" [queryParams]="{page: 0 , size: 10}"
+                                       (click)="setMenuItem(true,'basicInformationBtn','userManagementBtn','userBtn')"
+                                       id="userBtn"
+                                    >
+                                        <span>کاربران</span>
+                                    </a>
+                                </li>
+
+
+                            </ul>
+                        </li>
+
+
+                        <!--            <li [routerLinkActive]="'active'"-->
+                        <!--                *ngIf="roleList.organization_create || roleList.organization_delete ||-->
+                        <!--            roleList.organization_see || roleList.organization_update">-->
+                        <!--              <a [routerLink]="['/panel/basicInformation/organization']" [queryParams]="{page: 0 , size: 10}" (click)="setNumberOfPage('organization')">-->
+                        <!--                <span>مدیریت سازمان‌ها</span>-->
+                        <!--              </a>-->
+                        <!--            </li>-->
+
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.formCategory_list ||roleList.formBuilder_list ">
+                            <a href="#formManagement" data-toggle="collapse" aria-expanded="false"
+                               id="formManagementBtn"
+
+                               class="dropdown-toggle"><span>مدیریت فرم‌ها</span><i class="fa fa-chevron-left"></i></a>
+                            <ul class="list-unstyled collapse childBGColor" id="formManagement">
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.formCategory_list ">
+                                    <a [routerLink]="['/panel/basicInformation/formCategory']"
+                                       (click)="setMenuItem(true,'basicInformationBtn','formManagementBtn','basicInformationFormCategoryBtn')"
+                                       id="basicInformationFormCategoryBtn"
+                                       [queryParams]="{page: 0 , size: 10}">
+                                        <span>دسته بندی فرم</span>
+                                    </a>
+                                </li>
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.formBuilder_list">
+                                    <a [routerLink]="['/panel/formBuilder']" [queryParams]="{page: 0 , size: 10}"
+                                       (click)="setMenuItem(true,'basicInformationBtn','formManagementBtn','formBuilderBtn')"
+                                       id="formBuilderBtn"
+                                    >
+                                        <span> فرم ها</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.processBuilder_list">
+                            <a href="#activity" data-toggle="collapse" aria-expanded="false"
+                               id="activityBtn"
+                               class="dropdown-toggle"><span>فرایند ساز</span><i class="fa fa-chevron-left"></i></a>
+                            <ul class="list-unstyled collapse childBGColor" id="activity">
+                                <!--                                <li [routerLinkActive]="'active'" *ngIf="roleList.processBuilder_create">-->
+                                <!--                                    <a [routerLink]="['/panel/activity/create']">-->
+                                <!--                                        <span>افزودن فرایند</span>-->
+                                <!--                                    </a>-->
+                                <!--                                </li>-->
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.processBuilder_list">
+                                    <a [routerLink]="['/panel/activity/list']"
+                                       (click)="setMenuItem(true,'basicInformationBtn','activityBtn','activityListBtn')"
+                                       id="activityListBtn"
+                                    >
+                                        <span>مدیریت فرایند ها</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.Property_list ||roleList.PropertyCategory_list">
+                            <a href="#PropertyManage" data-toggle="collapse" aria-expanded="false"
+                               id="PropertyManageBtn"
+                               class="dropdown-toggle"><span>مدیریت مشخصات</span><i
+                                    class="fa fa-chevron-left"></i></a>
+                            <ul class="list-unstyled collapse childBGColor" id="PropertyManage">
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.PropertyCategory_list ">
+                                    <a [routerLink]="['/panel/basicInformation/propertyCategory']"
+                                       (click)="setMenuItem(true,'basicInformationBtn','PropertyManageBtn','basicInformationPropertyCategoryBtn')"
+                                       id="basicInformationPropertyCategoryBtn"
+
+                                       [queryParams]="{page: 0 , size: 10}">
+                                        <span>دسته بندی مشخصات</span>
+                                    </a>
+                                </li>
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.Property_list ">
+                                    <a [routerLink]="['/panel/basicInformation/property']"
+                                       (click)="setMenuItem(true,'basicInformationBtn','PropertyManageBtn','basicInformationPropertyBtn')"
+                                       id="basicInformationPropertyBtn"
+                                       [queryParams]="{page: 0 , size: 10}">
+                                        <span>مشخصات</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.Asset_list  ||roleList.AssetTemplate_list||roleList.assetCategory_list">
+                            <a href="#assets" data-toggle="collapse" aria-expanded="false"
+                               id="assetsBtn"
+                               class="dropdown-toggle"><span>مدیریت دارایی ها</span><i
+                                    class="fa fa-chevron-left"></i></a>
+                            <ul class="list-unstyled collapse childBGColor" id="assets">
+
+                                <!--                                <li [routerLinkActive]="'active'"-->
+                                <!--                                    *ngIf="roleList.assetCategory_list">-->
+                                <!--                                    <a [routerLink]="['/panel/basicInformation/category']"-->
+                                <!--                                       [queryParams]="{page: 0 , size: 10}">-->
+                                <!--                                        <span>لیست دسته بندی دارایی  </span>-->
+                                <!--                                    </a>-->
+                                <!--                                </li>-->
+
+                                <!--                                <li [routerLinkActive]="'active'"-->
+                                <!--                                    *ngIf="roleList.AssetTemplate_list ">-->
+                                <!--                                    <a [routerLink]="['/panel/assetTemplate']" [queryParams]="{page: 0 , size: 10}">-->
+                                <!--                                        <span>لیست قالب دارایی</span>-->
+                                <!--                                    </a>-->
+                                <!--                                </li>-->
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.assetCategory_list">
+                                    <a [routerLink]="['/panel/assetCategory']"
+                                       (click)="setMenuItem(true,'basicInformationBtn','assetsBtn','assetCategoryBtn')"
+                                       id="assetCategoryBtn"
+                                    >
+                                        <span> خانواده گروه دارایی </span>
+                                    </a>
+                                </li>
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.Asset_list">
+                                    <a [routerLink]="['/panel/asset']"
+                                       (click)="setMenuItem(true,'basicInformationBtn','assetsBtn','assetBtn')"
+                                       id="assetBtn"
+                                    >
+                                        <span> لیست دارایی </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.Part_list||
+                                   roleList.Inventory_list ||
+                                  roleList.AdjustInventory_create ||
+                                   roleList.BOM_list">
+                            <a href="#part" data-toggle="collapse" aria-expanded="false"
+                               id="partBtn"
+                               class="dropdown-toggle"><span>قطعات</span><i class="fa fa-chevron-left"></i></a>
+                            <ul class="list-unstyled collapse childBGColor" id="part">
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.Part_list ">
+                                    <a [routerLink]="['/panel/part']" [queryParams]="{page: 0 , size: 10}"
+                                       (click)="setMenuItem(true,'basicInformationBtn','partBtn','partBtn1')"
+                                       id="partBtn1"
+                                    >
+                                        <span>قطعات</span>
+                                    </a>
+                                </li>
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.Inventory_list ">
+                                    <a [routerLink]="['/panel/currentInventory']" [queryParams]="{page: 0 , size: 10}"
+                                       (click)="setMenuItem(true,'basicInformationBtn','partBtn','currentInventoryBtn')"
+                                       id="currentInventoryBtn"
+                                    >
+                                        <span>موجودی </span>
+                                    </a>
+                                </li>
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.AdjustInventory_create">
+                                    <a [routerLink]="['/panel/adjustmentInventory']"
+                                       (click)="setMenuItem(true,'basicInformationBtn','partBtn','adjustmentInventoryBtn')"
+                                       id="adjustmentInventoryBtn"
+                                    >
+                                        <span>تنظیم موجودی</span>
+                                    </a>
+                                </li>
+                                <li [routerLinkActive]="'active'"
+                                    *ngIf="roleList.BOM_list">
+                                    <a [routerLink]="['/panel/billOfMaterialsGroups']"
+                                       (click)="setMenuItem(true,'basicInformationBtn','partBtn','billOfMaterialsGroupsBtn')"
+                                       id="billOfMaterialsGroupsBtn"
+
+                                       [queryParams]="{page: 0 , size: 10}">
+                                        <span> ساختار فنی ماشین آلات و تجهیزات </span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.Province_list || roleList.City_list ">
+                            <a href="#AddressManage" data-toggle="collapse" aria-expanded="false"
+                               id="AddressManageBtn"
+                               class="dropdown-toggle"><span>مدیریت مکان‌ها</span><i class="fa fa-chevron-left"></i></a>
+                            <ul class="list-unstyled collapse childBGColor" id="AddressManage">
+                                <li [routerLinkActive]="'active'" *ngIf="roleList.Province_list">
+                                    <a [routerLink]="['/panel/basicInformation/province']"
+                                       (click)="setMenuItem(true,'basicInformationBtn','AddressManageBtn','provinceBtn')"
+                                       id="provinceBtn"
+                                    >
+                                        <span>استان</span>
+                                    </a>
+                                </li>
+                                <li [routerLinkActive]="'active'" *ngIf="roleList.City_list">
+                                    <a [routerLink]="['/panel/basicInformation/city']"
+                                       (click)="setMenuItem(true,'basicInformationBtn','AddressManageBtn','cityBtn')"
+                                       id="cityBtn"
+                                    >
+                                        <span>شهر</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.Currency_list || roleList.Budget_list">
+                            <a href="#budgetManage" data-toggle="collapse" aria-expanded="false"
+                               id="budgetManageBtn"
+                               class="dropdown-toggle"><span>مدیریت مالی</span><i class="fa fa-chevron-left"></i></a>
+                            <ul class="list-unstyled collapse childBGColorkir2" id="budgetManage">
+                                <li [routerLinkActive]="'active'" *ngIf="roleList.Currency_list">
+                                    <a [routerLink]="['/panel/basicInformation/currency']"
+                                       (click)="setMenuItem(true,'basicInformationBtn','budgetManageBtn','currencyBtn')"
+                                       id="currencyBtn"
+                                    >
+                                        <span>واحد پول</span>
+                                    </a>
+                                </li>
+                                <li [routerLinkActive]="'active'" *ngIf="roleList.Budget_list">
+                                    <a [routerLink]="['/panel/basicInformation/budget']"
+                                       (click)="setNumberOfPage('budget');
+                                       setMenuItem(true,'basicInformationBtn','budgetManageBtn','budgetBtn')"
+                                       id="budgetBtn"
+
+                                       [queryParams]="{page: 0 , size: 10}">
+                                        <span>بودجه </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.WorkOrderStatus_list">
+                            <a [routerLink]="['/panel/basicInformation/workOrderStatus']"
+                               [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'basicInformationBtn','workOrderStatusBtn')"
+                               id="workOrderStatusBtn"
+                            >
+                                <span>وضعیت درخواست کار</span>
+                            </a>
+                        </li>
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.Measurement_list">
+                            <a [routerLink]="['/panel/basicInformation/unitOfMeasurement']"
+                               (click)="setMenuItem(true,'basicInformationBtn','unitOfMeasurementBtn')"
+                               id="unitOfMeasurementBtn"
+                            >
+                                <span>واحداندازه گیری</span>
+                            </a>
+                        </li>
+
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.Company_list">
+                            <a [routerLink]="['/panel/basicInformation/company']" [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'basicInformationBtn','companyBtn')" id="companyBtn"
+                            >
+                                <span>شرکت </span>
+                            </a>
+                        </li>
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.Storage_list">
+                            <a [routerLink]="['/panel/basicInformation/storage']" [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'basicInformationBtn','storageBtn')" id="storageBtn"
+                            >
+                                <span>انبار </span>
+                            </a>
+                        </li>
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.ChargeDepartment_list">
+                            <a [routerLink]="['/panel/basicInformation/chargeDepartment']"
+                               [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'basicInformationBtn','chargeDepartmentBtn')"
+                               id="chargeDepartmentBtn"
+                            >
+                                <span>دپارتمان مسئول</span>
+                            </a>
+                        </li>
+                        <!--                        نوع فعالیت-->
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.TypeOfActivity_list">
+                            <a [routerLink]="['/panel/typeOfActivity']"
+                               [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'basicInformationBtn','typeOfActivityBtn')"
+                               id="typeOfActivityBtn"
+                            >
+                                <span>نوع فعالیت</span>
+                            </a>
+                        </li>
+                        <!--                        رسته کاری-->
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.WorkingField_list">
+                            <a [routerLink]="['/panel/workingField']"
+                               [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'basicInformationBtn','workingFieldBtn')"
+                               id="workingFieldBtn"
+                            >
+                                <span>رسته کاری</span>
+                            </a>
+                        </li>
+                        <!--                        روانکارها-->
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.Lubricant_list">
+                            <a [routerLink]="['/panel/lubricant']"
+                               [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'basicInformationBtn','lubricantBtn')"
+                               id="lubricantBtn"
+                            >
+                                <span>روانکارها</span>
+                            </a>
+                        </li>
+                        <!--                        درجه اهمیت-->
+                        <li [routerLinkActive]="'active'"
+                            *ngIf="roleList.DegreeOfImportance_list">
+                            <a [routerLink]="['/panel/degreeOfImportance']"
+                               [queryParams]="{page: 0 , size: 10}"
+                               (click)="setMenuItem(true,'basicInformationBtn','degreeOfImportanceBtn')"
+                               id="degreeOfImportanceBtn"
+                            >
+                                <span>درجه اهمیت</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <!-- گزارش گیری-->
+                <ng-container *ngIf="roleList.Report_usedPart||
+                                     roleList.Report_personnelWorkTime
+                                ">
+
+                    <li [routerLinkActive]="'active'">
+                        <a href="#reporting" data-toggle="collapse" aria-expanded="false"
+                           id="reportingBtn"
+                           class="dropdown-toggle">
+                            <span> گزارش گیری</span>
+
+
+                            <!--                            noticeBoard_see = 'مشاهده کارتابل ، فرآیند در انتظار تایید' as any,  // noticeBoardAll_see-->
+                            <!--                            noticeBoard_create = 'مشاهده کارتابل ،  تاریخچه فرآیند اتمام نیافته' as any,    // noticeBoardActiveHistory_see-->
+                            <!--                            noticeBoard_update = 'مشاهده کارتابل ،   تاریخچه فرآیند اتمام یافته' as any,  // noticeBoardInActiveHistory_see-->
+                            <!--                            noticeBoard_awaiting_list = 'مشاهده لیست فرایند در انتظار تایید' as any,-->
+                            <!--                            noticeBoard_active_list = 'مشاهده لیست تاریخچه فعال' as any,-->
+                            <!--                            noticeBoard_completed_list = 'مشاهده لیست کارتابل تاریخچه اتمام یافته' as any,-->
+                            <i class="fa fa-chevron-left"></i></a>
+                        <ul class="list-unstyled collapse subChildBGColor" id="reporting">
+                            <li [routerLinkActive]="'active'"
+                                *ngIf="roleList.Report_usedPart">
+                                <a [routerLink]="['/panel/reporting/asset']" [queryParams]="{page: 0, size: 10}"
+                                   (click)="setMenuItem(true,'reportingBtn','reportingBtnAsset')" id="reportingBtnAsset"
+                                >
+                                    <span> مصرفی قطعه  </span>
+                                </a>
+                            </li>
+
+
+                            <li [routerLinkActive]="'active'" *ngIf="roleList.Report_keyPerformanceIndicator">
+                                <a href="#reportingUser" data-toggle="collapse" aria-expanded="false"
+                                   id="reportingUserBtn"
+                                   class="dropdown-toggle">
+                                    <span>پرسنل</span>
+                                    <i class="fa fa-chevron-left"></i></a>
+                                <ul class="list-unstyled collapse subChildBGColor"
+                                    id="reportingUser">
+
+                                    <li [routerLinkActive]="'active'"
+                                        *ngIf="roleList.Report_personnelWorkTime">
+                                        <a [routerLink]="['/panel/reporting/user']" [queryParams]="{page: 0, size: 10}"
+                                           (click)="setMenuItem(true,'reportingBtn',
+                                           'reportingUserBtn','reportingUserBtnUer')"
+                                           id="reportingUserBtnUer"
+                                        >
+                                            <span>  کارکرد پرسنل  </span>
+                                        </a>
+                                    </li>
+                                    <li [routerLinkActive]="'active'"
+                                        *ngIf="roleList.Report_keyPerformanceIndicator">
+                                        <a [routerLink]="['/panel/reporting/userAssessment']"
+                                           (click)="setMenuItem(true,'reportingBtn',
+                                           'reportingUserBtn','reportingUserBtnAssessment')"
+                                           id="reportingUserBtnAssessment"
+                                        >
+                                            <span>   ارزیابی پرسنل </span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+                            <li [routerLinkActive]="'active'" *ngIf="roleList.Report_keyPerformanceIndicator">
+                                <a href="#reportingKeyPerformanceIndicator" data-toggle="collapse" aria-expanded="false"
+                                   id="reportingKeyPerformanceIndicatorBtn"
+                                   class="dropdown-toggle">
+                                    <span>شاخص های قابلیت اطمینان</span>
+                                    <i class="fa fa-chevron-left"></i></a>
+                                <ul class="list-unstyled collapse subChildBGColor"
+                                    id="reportingKeyPerformanceIndicator">
+
+
+                                    <li [routerLinkActive]="'active'"
+                                        *ngIf="roleList.Report_keyPerformanceIndicator">
+                                        <a [routerLink]="['/panel/reporting/mtbf']"
+                                           (click)="setMenuItem(true,'reportingBtn',
+                                   'reportingKeyPerformanceIndicatorBtn',
+                                   'reportingKeyPerformanceIndicatorBtnMtbf')"
+                                           id="reportingKeyPerformanceIndicatorBtnMtbf"
+                                        >
+                                            <span> MTBF  </span>
+                                        </a>
+                                    </li>
+                                    <li [routerLinkActive]="'active'"
+                                        *ngIf="roleList.Report_keyPerformanceIndicator">
+                                        <a [routerLink]="['/panel/reporting/mttr']"
+                                           (click)="setMenuItem(true,'reportingBtn',
+                                   'reportingKeyPerformanceIndicatorBtn',
+                                   'reportingKeyPerformanceIndicatorBtnMttr')"
+                                           id="reportingKeyPerformanceIndicatorBtnMttr"
+                                        >
+                                            <span> MTTR </span>
+                                        </a>
+                                    </li>
+                                    <li [routerLinkActive]="'active'"
+                                        *ngIf="roleList.Report_keyPerformanceIndicator">
+                                        <a [routerLink]="['/panel/reporting/mdt']"
+                                           (click)="setMenuItem(true,'reportingBtn',
+                                   'reportingKeyPerformanceIndicatorBtn',
+                                   'reportingKeyPerformanceIndicatorBtnMdt')"
+                                           id="reportingKeyPerformanceIndicatorBtnMdt"
+                                        >
+                                            <span> MDT </span>
+                                        </a>
+                                    </li>
+                                    <li [routerLinkActive]="'active'"
+                                        *ngIf="roleList.Report_keyPerformanceIndicator">
+                                        <a [routerLink]="['/panel/reporting/KPI-table']"
+                                           [queryParams]="{page: 0, size: 10}"
+                                           (click)="setMenuItem(true,'reportingBtn',
+                                   'reportingKeyPerformanceIndicatorBtn',
+                                   'reportingKeyPerformanceIndicatorBtnKPI-table')"
+                                           id="reportingKeyPerformanceIndicatorBtnKPI-table"
+                                        >
+                                            <span> جدول شاخص ها </span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+
+                        </ul>
+                    </li>
+                </ng-container>
+
+            </ul>
+        </li>
+    </ul>
+</ng-scrollbar>

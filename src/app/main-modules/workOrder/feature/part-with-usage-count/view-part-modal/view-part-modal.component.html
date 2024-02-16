@@ -1,0 +1,274 @@
+<nbw-modal
+        [hasHeader]="false"
+        [hasFooter]="false"
+        [dataBackdrop]="false"
+        [modalSize]="MyModalSize.X_LARGE"
+        [customWidthPercent]="{xs: 100, md:65}"
+        autoShow="false"
+        [myId]="'viewPartForPartWhitUsageCount'">
+    <!--    <div modal-header>-->
+    <!--        <span>قطعات</span>-->
+    <!--    </div>-->
+
+    <div modal-body style="display: flow-root">
+
+        <div class="card">
+            <div class="card-body card-body-filter">
+                <div class="row" style="margin-bottom: 5px">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-3  form-group">
+                                <label class="for-label">نام قطعه</label>
+                                <input type="text" class="form-control form-control-sm" placeholder="نام قطعه"
+                                       style="width: 100%" [(ngModel)]="partForSearch.partName">
+                            </div>
+                            <div class="col-md-3  form-group">
+                                <label class="for-label">کد قطعه</label>
+                                <input type="text" class="form-control form-control-sm" placeholder="کد قطعه"
+                                       style="width: 100%" [(ngModel)]="partForSearch.partCode">
+                            </div>
+                            <div class="col-md-3 text-right">
+                                <button class="btn btn-sm btn-search"
+                                        style="margin-top: 30px ;" (click)="search()">
+                                    <!--      <i class="fa fa-search"></i>-->
+                                    جستجو
+                                </button>
+                            </div>
+                            <div class="col-md-3 text-left">
+                                <i class="fa fa-window-close cursor-pointer"
+                                   style="font-size: 20px;color: #28547b;" (click)="cancelModal('cancel')"></i>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="row"style="min-height: 70vh; overflow: auto">
+            <div class="col-md-7" style="max-height: 68vh ;overflow: auto">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th class="text-center" style="width: 5%">ردیف</th>
+                        <th class="text-center">نام قطعه</th>
+                        <th class="text-center">کد قطعه</th>
+                        <th class="text-center">انتخاب</th>
+                        <!--<th class="text-right" style="width: 10%"></th>-->
+                        <!--<th class="text-right" style="width: 10%"></th>-->
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <ng-container *ngFor="let item of entityList; let i = index">
+                        <tr class="text-center">
+                            <td>
+                                {{(i + 1 + (pageIndex * pageSize))}}
+                            </td>
+                            <td>{{item.partName}}</td>
+                            <td>{{item.partCode}}</td>
+
+
+                            <td>
+                                <!--                                *ngIf="!item.forbiddenSelected && item.categoryTypePSB === 'PART'"-->
+                                <i class="fa fa-arrow-left cursor-pointer"
+                                   style="color: #52e6fd" (click)="sendPart(item,i)"></i>
+                                <!--                                <button class="btn-action btn btn-sm"-->
+                                <!--                                        (click)="sendPart(item)">انتخاب-->
+                                <!--                                </button>-->
+                            </td>
+                        </tr>
+                    </ng-container>
+
+                    <!--        <tr *ngFor="let item of PSBList; let i = index" >-->
+                    <!--          <td style="text-align: right;width: 40%">-->
+                    <!--            <ng-container *ngIf="item.hasChild === true">-->
+
+
+                    <!--              &lt;!&ndash;<span *ngIf="item.openPlus === false"  [ngStyle]="{marginRight:item.marginRight+'px'}">&ndash;&gt;-->
+                    <!--              &lt;!&ndash;<i class="far fa-plus-square" (click)="getChildList(item, i)"></i>&ndash;&gt;-->
+                    <!--              &lt;!&ndash;</span>&ndash;&gt;-->
+
+
+                    <!--              <img  *ngIf="item.openPlus === false" width="15"-->
+                    <!--                    src="../../../../../assets/images/asset-tree/expand.png"-->
+                    <!--                    [ngStyle]="{marginRight:item.marginRight +'px'}"-->
+                    <!--                    (click)="getChildList(item, i, item.categoryTypePSB)"-->
+                    <!--                    alt="...">-->
+
+
+                    <!--              <img  *ngIf="item.openPlus === true" width="15"-->
+                    <!--                    src="../../../../../assets/images/asset-tree/navigate.png"-->
+                    <!--                    [ngStyle]="{marginRight:item.marginRight +'px'}"-->
+                    <!--                    (click)="methodTow(item.id)"-->
+                    <!--                    alt="...">-->
+                    <!--              &lt;!&ndash;<i class="far fa-minus-square" ></i>&ndash;&gt;-->
+                    <!--              &lt;!&ndash;(click)="methodTow(item.id)"&ndash;&gt;-->
+                    <!--              &nbsp;&nbsp;&nbsp;-->
+                    <!--              <img  *ngIf="item.categoryTypePSB === 'STORAGE'" width="15"-->
+                    <!--                    src="../../../../../assets/images/asset-tree/storage.jpeg"-->
+                    <!--                    style="margin-right: 2px"-->
+                    <!--                    alt="...">-->
+                    <!--              <img *ngIf="item.categoryTypePSB === categoryType[categoryType.BUILDING.toString()]" width="15"-->
+                    <!--                   style="margin-right: 2px"-->
+                    <!--                   src="../../../../../assets/images/asset-tree/facilities-16.png"-->
+                    <!--                   alt="...">-->
+                    <!--              <img *ngIf="item.categoryTypePSB === 'PART'" width="15"-->
+                    <!--                   style="margin-right: 2px"-->
+                    <!--                   src="../../../../../assets/images/asset-tree/_parts.png"-->
+                    <!--                   alt="...">-->
+                    <!--              &nbsp;-->
+                    <!--              <span    style="font-size: 12px; margin-right: 2px"> {{item.name}} </span>-->
+
+                    <!--            </ng-container>-->
+                    <!--            <ng-container *ngIf="item.hasChild === false">-->
+                    <!--              <img  *ngIf="item.categoryTypePSB === 'STORAGE'" width="15"-->
+                    <!--                    src="../../../../../../assets/images/asset-tree/storage.jpeg"-->
+                    <!--                    [ngStyle]="{marginRight:item.marginRight + 35 +'px'}"-->
+                    <!--                    alt="...">-->
+                    <!--              <img *ngIf="item.categoryTypePSB === categoryType[categoryType.BUILDING.toString()]" width="15"-->
+                    <!--                   src="../../../../../../assets/images/asset-tree/"-->
+                    <!--                   [ngStyle]="{marginRight:item.marginRight + 35 +'px'}"-->
+                    <!--                   alt="...">-->
+                    <!--              <img *ngIf="item.categoryTypePSB === 'PART' && !item.isPartOfAsset" width="15"-->
+                    <!--                   src="../../../../../../assets/images/asset-tree/_parts.png"-->
+                    <!--                   [ngStyle]="{marginRight:item.marginRight + 25 +'px'}"-->
+                    <!--                   alt="...">-->
+                    <!--              <img *ngIf="item.categoryTypePSB === 'PART' && item.isPartOfAsset" width="15"-->
+                    <!--                   src="../../../../../../assets/images/asset-tree/_parts.png"-->
+                    <!--                   [ngStyle]="{marginRight:item.marginRight + 35 +'px'}"-->
+                    <!--                   alt="...">-->
+
+                    <!--              <span *ngIf="!item.forbiddenSelected" style="font-size: 12px; margin-right: 2px;" (click)="sendPart(item)"> {{item.name}}</span>-->
+                    <!--              <span  *ngIf="item.forbiddenSelected" style="font-size: 12px; margin-right: 2px; cursor: not-allowed" > {{item.name}}</span>-->
+                    <!--            </ng-container>-->
+                    <!--          </td>-->
+
+                    <!--          <td style="text-align: start; font-size: 12px ">{{item?.partCode}}</td>-->
+                    <!--          <td style="text-align: start; font-size: 12px ">{{item.code}}</td>-->
+                    <!--          <td style="text-align: start; font-size: 12px">-->
+                    <!--            <ng-container *ngIf="item.row" >{{item.row}}</ng-container>-->
+                    <!--            <ng-container *ngIf="!item.row" >-&#45;&#45;</ng-container>-->
+                    <!--          </td>-->
+                    <!--          <td style="text-align: start; font-size: 12px">-->
+                    <!--            <ng-container *ngIf="item.corridor" >{{item.corridor}}</ng-container>-->
+                    <!--            <ng-container *ngIf="!item.corridor" >-&#45;&#45;</ng-container>-->
+                    <!--           </td>-->
+                    <!--          <td style="text-align: start; font-size: 12px">-->
+                    <!--            <ng-container *ngIf="item.warehouse" >{{item.warehouse}}</ng-container>-->
+                    <!--            <ng-container *ngIf="!item.warehouse" >-&#45;&#45;</ng-container>-->
+                    <!--           </td>-->
+                    <!--          <td>-->
+                    <!--            <button class="btn-action btn btn-sm" *ngIf="!item.forbiddenSelected && item.categoryTypePSB === 'PART'" (click)="sendPart(item)" >انتخاب</button>-->
+                    <!--          </td>-->
+
+                    <!--          &lt;!&ndash;<td>&ndash;&gt;-->
+                    <!--            &lt;!&ndash;<ng-container *ngIf="item.categoryTypePSB === 'PART'">&ndash;&gt;-->
+                    <!--              &lt;!&ndash;<a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"&ndash;&gt;-->
+                    <!--                 &lt;!&ndash;(click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold ;width: 30%">&ndash;&gt;-->
+                    <!--                &lt;!&ndash;<i class="fa fa-edit" title="ویرایش"></i>&ndash;&gt;-->
+                    <!--              &lt;!&ndash;</a>&ndash;&gt;-->
+                    <!--            &lt;!&ndash;</ng-container>&ndash;&gt;-->
+
+                    <!--            &lt;!&ndash;<ng-container *ngIf="item.categoryTypePSB !== 'PART'">&ndash;&gt;-->
+                    <!--          &lt;!&ndash;<span class="btn btn-sm  mr-2"&ndash;&gt;-->
+                    <!--                &lt;!&ndash;style=" font-weight: bold ;width: 40%; opacity: 0.3; cursor: not-allowed ">&ndash;&gt;-->
+                    <!--            &lt;!&ndash;<i class="fa fa-edit" ></i>&ndash;&gt;-->
+                    <!--          &lt;!&ndash;</span>&ndash;&gt;-->
+                    <!--            &lt;!&ndash;</ng-container>&ndash;&gt;-->
+                    <!--          &lt;!&ndash;</td>&ndash;&gt;-->
+
+                    <!--          &lt;!&ndash;<td>&ndash;&gt;-->
+                    <!--            &lt;!&ndash;<ng-container *ngIf="item.categoryTypePSB === 'PART'">&ndash;&gt;-->
+                    <!--              &lt;!&ndash;<a class="btn btn-sm btn-outline-lightning rounded-0"&ndash;&gt;-->
+                    <!--                 &lt;!&ndash;style="cursor: pointer" nbdAreYouSure (then)="deleteItem(item)">&ndash;&gt;-->
+                    <!--                &lt;!&ndash;<i class="fa fa-trash" title="حذف"></i>&ndash;&gt;-->
+                    <!--              &lt;!&ndash;</a>&ndash;&gt;-->
+                    <!--            &lt;!&ndash;</ng-container>&ndash;&gt;-->
+
+                    <!--            &lt;!&ndash;<ng-container *ngIf="item.categoryTypePSB !== 'PART'">&ndash;&gt;-->
+                    <!--          &lt;!&ndash;<span class="btn btn-sm  rounded-0"&ndash;&gt;-->
+                    <!--                &lt;!&ndash;style=" opacity: 0.3; cursor: not-allowed ">&ndash;&gt;-->
+                    <!--            &lt;!&ndash;<i class="fa fa-trash" title="حذف" ></i>&ndash;&gt;-->
+                    <!--          &lt;!&ndash;</span>&ndash;&gt;-->
+                    <!--            &lt;!&ndash;</ng-container>&ndash;&gt;-->
+                    <!--          &lt;!&ndash;</td>&ndash;&gt;-->
+
+
+                    <!--        </tr>-->
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col-md-5" style="max-height: 68vh ;overflow: auto">
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th class="text-center">حذف</th>
+                        <th class="text-center" style="width: 5%">ردیف</th>
+                        <th class="text-center">نام قطعه</th>
+                        <th class="text-center">کد قطعه</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <ng-container *ngFor="let item of partWithUsageCountList; let i = index">
+                        <tr class="text-center">
+
+                            <td>
+                                <i class="fa fa-arrow-right cursor-pointer"
+                                   style="color: #ff5b92" (click)="deletePart(item,i)"></i>
+
+                            </td>
+                            <td>
+                                {{(i + 1)}}
+                            </td>
+                            <td>{{item.partName}}</td>
+                            <td>{{item.partCode}}</td>
+
+                        </tr>
+                    </ng-container>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <!--    pagination-->
+                <app-paginator
+                        [totalElements]="length"
+                        [pageSize]="pageSize"
+                        [pageIndex]="pageIndex"
+                        [pageSizeOptions]="[]"
+                        [showFirstLastButtons]="true"
+                        (page)=" changePage($event)"
+                ></app-paginator>
+                <!--    pagination-->
+            </div>
+            <div class="col-md-5">
+                <div class="btn-group-sm text-left" style="margin-top: 15px">
+                    <button type="button" class="btn btn-action  btn-sm " data-dismiss="modal"
+                            style="margin :0 5px "
+                            (click)="cancelModal('confirm')">
+                        تایید
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <!--        <div modal-footer>-->
+        <!--            <div class="btn-group-sm text-left" style="margin-top: 15px">-->
+        <!--                <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal" style="margin :0 5px "-->
+        <!--                        (click)="cancelModal('cancel')">-->
+        <!--                    انصراف-->
+        <!--                </button>-->
+        <!--            </div>-->
+        <!--        </div>-->
+
+    </div>
+</nbw-modal>

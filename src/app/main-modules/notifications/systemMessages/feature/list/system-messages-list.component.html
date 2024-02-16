@@ -1,0 +1,430 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+        <i class="fa fa-list"></i>&nbsp;&nbsp;
+        <span>لیست پیام های سیستم</span>
+
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+        <button title="جستجو" data-toggle="collapse" href="#activity-search"
+                class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">
+          <i class="fa fa-search"></i>
+        </button>
+
+      </div>
+    </div>
+  </div>
+  <div class="card-body card-body-content">
+    <div class="collapse" id="activity-search">
+      <div class="card" style="margin-bottom: 10px">
+        <div class="card-body card-body-filter">
+<!--          <div class="row">-->
+
+<!--            <div class="col-md-3">-->
+<!--              <p>مرتب سازی بر حسب زمان:</p>-->
+
+<!--            </div>-->
+<!--            <div class="col-md-2 text-left">-->
+<!--              <button class="btn btn-sm btn-action" (click)="changeSort(false)"-->
+<!--                      style="color: white;">-->
+<!--                <i class="fa fa-arrow-up"></i>-->
+<!--                صعودی-->
+<!--              </button>-->
+<!--            </div>-->
+<!--            <div class="col-md-2 text-right">-->
+<!--              <button class="btn  btn-cancel-back btn-sm  " (click)="changeSort(true)"-->
+<!--                      style=" color: white;">-->
+<!--                <i class="fa fa-arrow-down"></i>-->
+<!--                نزولی-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </div>-->
+          <div class="row">
+
+            <div class="col-md-4">
+              <label class="for-label">از تاریخ</label>
+              <input class="form-control form-control-sm" id="startDate" #startDate placeholder="از تاریخ">
+              <!--<ng-select bindLabel="_title" bindValue="_value" [(ngModel)]="getAllByFilterAndPagination.startDate"-->
+              <!--[items]="schedulingList" [placeholder]="'از تاریخ'"></ng-select>-->
+            </div>
+            <div class="col-md-4">
+              <label class="for-label">تا تاریخ</label>
+              <input class="form-control form-control-sm" id="endDate" #endDate placeholder="تا تاریخ">
+              <!--<ng-select bindLabel="_title" bindValue="_value" [(ngModel)]="getAllByFilterAndPagination.startDate"-->
+              <!--[items]="schedulingList" [placeholder]="'تا تاریخ:'"></ng-select>-->
+            </div>
+
+
+            <div class="col-md-1">
+              <button class="btn btn-sm  btn-search" style=" margin-top: 30px;"
+                      (click)="getListByFilter()">
+                جستجو
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+    <ng-container *ngIf="! dataOfjSystemMessagesList.itemPage.content.length && loading === false">
+      <div style="text-align: center">نتیجه ای یافت نشد.</div>
+    </ng-container>
+    <ng-container *ngIf=" dataOfjSystemMessagesList.itemPage.content.length">
+      <table class="table table-bordered table-striped table-responsive-md">
+        <thead>
+
+        <tr>
+          <th class="text-center" style="width: 5%">ردیف</th>
+          <th class="text-center">فرستنده</th>
+          <!--      <th class="text-center">گیرنده</th>-->
+          <th class="text-center">موضوع پیام</th>
+          <th class="text-center"  style="width: 10%">تاریخ دریافت
+            &nbsp;
+            <br class="d-block d-sm-none d-md-none" >
+            <i class="fas fa-sort-up" style="font-size: 15pt; cursor: pointer" title="مرتب سازی به صورت صعودی" (click)="changeSort(false)" ></i>&nbsp;
+            <i class="fas fa-sort-down" style="font-size: 15pt ; cursor: pointer" title="مرتب سازی به صورت نزولی" (click)="changeSort(true)"></i>
+          </th>
+
+
+          <th class="text-center" style="width: 5%">نمایش</th>
+          <th class="text-center" style="width: 5%">حذف</th>
+        </tr>
+
+
+        </thead>
+        <ng-container *ngIf=" dataOfjSystemMessagesList.itemPage.content.length">
+          <tbody>
+
+          <ng-container *ngFor="let item of dataOfjSystemMessagesList.itemPage.content; let i = index">
+            <tr class="text-center">
+              <td class="text-center" style="width: 5%">{{toolkit2.Common.En2Fa(((((dataOfjSystemMessagesList.queryParamReal.paging.page) * dataOfjSystemMessagesList.queryParamReal.paging.size)) + (i + 1)))}}</td>
+              <td>حامی</td>
+              <!--          <td>{{user.name}} {{user.family}}</td>-->
+              <td>{{item.subject}}</td>
+              <td>{{item.creationDate}}</td>
+              <td>
+                <a class="btn btn-sm btn-outline-lightning rounded-0"
+                   style="cursor: pointer" (click)="showNotification(item) ">
+                  <i class="fa fa-eye" title="نمایش"></i>
+                </a>
+              </td>
+              <td>
+                <a class="btn btn-sm btn-outline-lightning rounded-0"
+                   style="cursor: pointer" (click)="showModalDelete(item,i)">
+                  <i class="fa fa-trash" title="حذف"></i>
+                </a>
+              </td>
+            </tr>
+          </ng-container>
+
+          </tbody>
+        </ng-container>
+      </table>
+    </ng-container>
+
+    <shr-pagination
+      *ngIf="dataOfjSystemMessagesList.itemPage.content.length"
+      [indicatorCount]="dataOfjSystemMessagesList.indicatorCount"
+      [totalPages]="dataOfjSystemMessagesList.itemPage.totalPages"
+      [currentPage]="dataOfjSystemMessagesList.queryParamReal.paging.page"
+      (selectedPage)="setCurrentPage($event)"
+      class="class1"></shr-pagination>
+  </div>
+</div>
+
+<!--**************************************************************************-->
+<app-conferm-delete
+  [title]="selectedItemForDelete.title"
+  [loading]="selectedItemForDelete.loading"
+  [modalId]="'modalId'+selectedItemForDelete.id"
+  (value)="deleteItem($event)"
+></app-conferm-delete>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--before same style in project-->
+<!--////////// Search input //////////-->
+<!--<div class="row" style="margin-bottom: 10px">-->
+<!--  <div class="col-md-12 text-left">-->
+<!--    <div class="row">-->
+<!--      <div class="col-md-3">-->
+<!--        <p>مرتب سازی بر حسب زمان:</p>-->
+
+<!--      </div>-->
+<!--      <div class="col-md-2 text-left">-->
+<!--        <button class="btn btn-sm btn-action btn-search" (click)="changeSort(false)"-->
+<!--                style="color: white;background-color: #2da75f">-->
+<!--          <i class="fa fa-arrow-up"></i>-->
+<!--          صعودی-->
+<!--        </button>-->
+<!--      </div>-->
+<!--      <div class="col-md-2 text-right">-->
+<!--        <button class="btn btn-sm  btn-search" (click)="changeSort(true)"-->
+<!--                style=" color: white; background-color: sandybrown">-->
+<!--          <i class="fa fa-arrow-down"></i>-->
+<!--          نزولی-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--  </div>-->
+<!--  <div class="col-md-12">-->
+<!--    <div class="row">-->
+<!--      <div class="col-md-4">-->
+<!--        <label class="for-label">از تاریخ:</label>-->
+<!--        <input class="form-control form-control-sm" id="startDate" #startDate placeholder="از تاریخ">-->
+<!--        &lt;!&ndash;<ng-select bindLabel="_title" bindValue="_value" [(ngModel)]="getAllByFilterAndPagination.startDate"&ndash;&gt;-->
+<!--        &lt;!&ndash;[items]="schedulingList" [placeholder]="'از تاریخ:'"></ng-select>&ndash;&gt;-->
+<!--      </div>-->
+<!--      <div class="col-md-4">-->
+<!--        <label class="for-label">تا تاریخ:</label>-->
+<!--        <input class="form-control form-control-sm" id="endDate" #endDate placeholder="تا تاریخ">-->
+<!--        &lt;!&ndash;<ng-select bindLabel="_title" bindValue="_value" [(ngModel)]="getAllByFilterAndPagination.startDate"&ndash;&gt;-->
+<!--        &lt;!&ndash;[items]="schedulingList" [placeholder]="'تا تاریخ:'"></ng-select>&ndash;&gt;-->
+<!--      </div>-->
+<!--      <div class="col-md-4 text-right">-->
+<!--        <button class="btn btn-sm btn-action btn-search" (click)="getListByFilter()"-->
+<!--                style="margin-top: 30px ;background-color: #042C76; color: white;">-->
+<!--          &lt;!&ndash;      <i class="fa fa-search"></i>&ndash;&gt;-->
+<!--          جستجو-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+
+<!--</div>-->
+
+
+<!--&lt;!&ndash;===================&ndash;&gt;-->
+
+<!--<app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>-->
+
+<!--<div class="col-md -12" *ngIf="!dataOfjSystemMessagesList.itemPage.content.length && !loading">-->
+<!--  <br>-->
+<!--  <br>-->
+<!--  <div class="text-center" style="color: #6d6d6e">-->
+<!--    <a *ngIf="!dataOfjSystemMessagesList.term">هیچ اطلاعاتی ثبت نشده!</a>-->
+<!--    <a *ngIf="dataOfjSystemMessagesList.term">هیچ اطلاعاتی یافت نشد!</a>-->
+<!--  </div>-->
+<!--  <br>-->
+<!--  <br>-->
+<!--</div>-->
+
+
+<!--<div *ngIf="dataOfjSystemMessagesList.itemPage.content.length && !loading" class="tab-pane fade show active"-->
+<!--     id="pills-home" role="tabpanel"-->
+<!--     aria-labelledby="pills-home-tab">-->
+<!--  <table class="table table-bordered table-responsive-md">-->
+<!--    <thead>-->
+
+
+<!--    <tr>-->
+<!--      <th class="text-center" style="width: 5%">ردیف</th>-->
+<!--      <th class="text-center">فرستنده</th>-->
+<!--      &lt;!&ndash;      <th class="text-center">گیرنده</th>&ndash;&gt;-->
+<!--      <th class="text-center">موضوع پیام</th>-->
+<!--      <th class="text-center">تاریخ دریافت</th>-->
+
+
+<!--      <th class="text-center" style="width: 5%"></th>-->
+<!--      <th class="text-center" style="width: 5%"></th>-->
+<!--    </tr>-->
+
+<!--    </thead>-->
+<!--    <ng-container *ngIf="dataOfjSystemMessagesList.itemPage.content.length>0">-->
+<!--      <tbody>-->
+<!--      <ng-container *ngFor="let item of systemMessagesList; let i = index">-->
+<!--        <tr class="text-center">-->
+<!--          <td>{{i + 1}}</td>-->
+<!--          <td>حامی</td>-->
+<!--          &lt;!&ndash;          <td>{{user.name}} {{user.family}}</td>&ndash;&gt;-->
+<!--          <td>{{item.subject}}</td>-->
+<!--          <td>{{item.creationDate}}</td>-->
+<!--          <td>-->
+<!--            <a class="btn btn-sm btn-outline-lightning rounded-0"-->
+<!--               style="cursor: pointer" (click)="showModalDelete(item,i)">-->
+<!--              <i class="fa fa-trash" title="حذف"></i>-->
+<!--            </a>-->
+<!--          </td>-->
+<!--          <td>-->
+<!--            <a class="btn btn-sm btn-outline-lightning rounded-0"-->
+<!--               style="cursor: pointer" (click)="showNotification(item) ">-->
+<!--              <i class="fa fa-eye" title="نمایش"></i>-->
+<!--            </a>-->
+<!--          </td>-->
+<!--        </tr>-->
+<!--      </ng-container>-->
+
+<!--      </tbody>-->
+<!--    </ng-container>-->
+<!--    <ng-container *ngIf="dataOfjSystemMessagesList.itemPage.content.length===0">-->
+<!--      <div class="col-md-12" style="text-align: center"><p>هیچ اطلاعاتی ثبت نشده!</p></div>-->
+<!--    </ng-container>-->
+<!--  </table>-->
+
+<!--  <shr-pagination-->
+<!--    *ngIf="dataOfjSystemMessagesList.itemPage !== null && dataOfjSystemMessagesList.itemPage !== undefined"-->
+<!--    [indicatorCount]="dataOfjSystemMessagesList.indicatorCount"-->
+<!--    [totalPages]="dataOfjSystemMessagesList.itemPage.totalPages"-->
+<!--    [currentPage]="dataOfjSystemMessagesList.queryParamReal.paging.page"-->
+<!--    (selectedPage)="setCurrentPage($event)"-->
+<!--    class="class1"></shr-pagination>-->
+
+
+<!--</div>-->
+
+
+<!--before pagination-->
+<!--<ng-container *ngIf="!showLoader">-->
+<!--  <div class="card table-responsive-md">-->
+<!--    <table class="table table-striped">-->
+<!--      <thead>-->
+<!--      <tr>-->
+<!--        <th class="text-center" style="width: 5%">ردیف</th>-->
+<!--        <th class="text-center">فرستنده</th>-->
+<!--        <th class="text-center">گیرنده</th>-->
+<!--        <th class="text-center">موضوع پیام</th>-->
+<!--        <th class="text-center">تاریخ دریافت</th>-->
+
+
+<!--        <th class="text-center" style="width: 5%"></th>-->
+<!--        <th class="text-center" style="width: 5%"></th>-->
+<!--      </tr>-->
+<!--      </thead>-->
+<!--      <tbody>-->
+<!--      <ng-container *ngFor="let item of sentList; let i = index">-->
+<!--        <tr class="text-center">-->
+<!--          <td>{{i + 1}}</td>-->
+<!--          <td>حامی</td>-->
+<!--          <td>{{user.name}} {{user.family}}</td>-->
+<!--          <td>{{item.subject}}</td>-->
+<!--          <td>{{item.creationDate | convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}</td>-->
+<!--          <td>-->
+<!--            <a class="btn btn-sm btn-outline-lightning rounded-0"-->
+<!--               style="cursor: pointer" (click)="showNotification(item) ">-->
+<!--              <i class="fa fa-eye" title="نمایش"></i>-->
+<!--            </a>-->
+<!--          </td>-->
+<!--          <td>-->
+<!--            <a class="btn btn-sm btn-outline-lightning rounded-0"-->
+<!--               style="cursor: pointer" (click)="showModalDelete(item,i)">-->
+<!--              <i class="fa fa-trash" title="حذف"></i>-->
+<!--            </a>-->
+<!--          </td>-->
+<!--        </tr>-->
+<!--      </ng-container>-->
+
+<!--      </tbody>-->
+<!--    </table>-->
+
+
+<!--  </div>-->
+<!--</ng-container>-->
+<!--<ng-container *ngIf="showLoader">-->
+<!--  <div class="col-md-12 text-center">-->
+<!--    <app-loading-bar [size]="'fa-3x'"></app-loading-bar>-->
+<!--  </div>-->
+<!--</ng-container>-->
+
+
+<!--&lt;!&ndash;**************************************************************************&ndash;&gt;-->
+<!--<app-conferm-delete-->
+<!--  [title]="selectedItemForDelete.title"-->
+<!--  [loading]="selectedItemForDelete.loading"-->
+<!--  [modalId]="'modalId'+selectedItemForDelete.id"-->
+<!--  (value)="deleteItem($event)"-->
+<!--&gt;</app-conferm-delete>-->
+
+
+<!--ts-->
+
+<!-- sentList: Inbox.GetAll[] = [];
+  showLoader = true;
+  user = new UserDto.Create();
+  toolkit2 = Toolkit2;
+  myMoment = Moment;
+  dateViewMode = DateViewMode;
+
+  selectedItemForDelete = new DeleteModel();
+
+  constructor(public notificationService: NotificationService,
+              public activatedRoute: ActivatedRoute,
+              public router: Router) {
+  }
+
+  ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('user'));
+    this.getAllSystemMessages();
+  }
+
+  ngOnDestroy(): void {
+  }
+
+  getAllSystemMessages() {
+    this.notificationService.getAllystemMesege({userId: this.user.id}).pipe(takeUntilDestroyed(this))
+      .subscribe((res: Inbox.GetAll[]) => {
+        if (res && res.length > 0) {
+          this.sentList = res;
+          this.showLoader = false;
+        }
+      });
+  }
+
+  showModalDelete(item: Inbox.GetAll, i) {
+    this.selectedItemForDelete.loading = false;
+    this.selectedItemForDelete.id = item.id;
+    this.selectedItemForDelete.title = ' آیا پیام   ' + '"' + item.subject + '"' + ' حذف  شود؟ ';
+    this.selectedItemForDelete.index = i;
+    setTimeout(e => {
+      ModalUtil.showModal('modalId' + this.selectedItemForDelete.id);
+    }, 10);
+  }
+
+  deleteItem(event) {
+    if (event) {
+      this.notificationService.delete({notificationId: this.selectedItemForDelete.id})
+        .pipe(takeUntilDestroyed(this)).subscribe((res: boolean) => {
+        if (res) {
+          this.sentList = this.sentList.filter((e) => {
+            return e.id !== this.selectedItemForDelete.id;
+          });
+          ModalUtil.hideModal('modalId' + this.selectedItemForDelete.id);
+          DefaultNotify.notifySuccess('با موفقیت حذف شد.');
+        } else if (!res) {
+          ModalUtil.hideModal('modalId' + this.selectedItemForDelete.id);
+        }
+      });
+    } else if (!event) {
+      ModalUtil.hideModal('modalId' + this.selectedItemForDelete.id);
+    }
+
+  }
+
+  showNotification(item: Inbox.GetAll) {
+    this.router.navigate(['view'], {
+      queryParams: {notificationId: item.id},
+      relativeTo: this.activatedRoute
+    });
+  }
+}
+-->
+
+
+
+
+

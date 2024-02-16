@@ -1,0 +1,43 @@
+<div class="table-wrap" style="max-height:60vh;overflow: auto">
+  <table class="table">
+    <thead>
+    <tr>
+      <th class="small-td">ردیف</th>
+      <th> عنوان</th>
+      <th class="small-td">ویرایش</th>
+      <th class="small-td">حذف</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngFor="let entity of entityList; let i=index">
+
+      <tr>
+        <td class="small-td ">
+          {{(i + 1 + (pageIndex * entityList.length))}}
+
+        </td>
+        <td class="small-td"> {{entity.title}}</td>
+
+        <td class="small-td">
+<!--          <img src="../../../../../assets/images/svg/edit.svg" class="edit-icon"-->
+<!--               matTooltip="ویرایش" [routerLink]="['edit']"-->
+<!--               [queryParams]="{entityId:entity.id}">-->
+        </td>
+        <td class="small-td">
+<!--          <img src="../../../../../assets/images/svg/Delete.svg" class="delete-icon"-->
+<!--               (click)="showModalDelete(entity,i)">-->
+        </td>
+      </tr>
+    </ng-container>
+
+    </tbody>
+  </table>
+</div>
+<app-paginator
+  [totalElements]="length"
+  [pageSize]="pageSize"
+  [pageIndex]="pageIndex"
+  [pageSizeOptions]="[1,5,10,15]"
+  [showFirstLastButtons]="true"
+  (page)=" changePage($event)"
+></app-paginator>

@@ -1,0 +1,95 @@
+<div class=" col-md-12 " *ngIf="mode !== 'VIEW' ">
+  <button class="btn btn-sm btn-secondary" type="button" (click)="setService1()" >
+    <i class="fa fa-plus"></i>&nbsp;&nbsp;
+    <span>افزودن کار</span>
+  </button>
+</div>
+
+<div class="col-md-12 text-center" *ngIf="taskList.length === 0">
+  <a style="color: #7884a7">هیچ اطلاعاتی ثبت نشده!</a>
+</div>
+<ng-container *ngIf="taskList.length > 0">
+  <table class="table table-bordered table-responsive-md table-striped" style="margin-top: 10px" >
+    <thead>
+    <tr>
+      <th class="text-center" style="width: 5%">ردیف</th>
+      <th class="text-center">عنوان کار</th>
+      <th class="text-center"> کد کار</th>
+      <th class="text-center"> نوع کار</th>
+      <th class="text-center"> تخمین نفر ساعت</th>
+      <th class="text-center" style="width: 5%" *ngIf="mode !== actionMode.VIEW">ویرایش</th>
+      <th class="text-center" style="width: 5%" *ngIf="mode === actionMode.VIEW">مشاهده</th>
+      <th class="text-center" *ngIf="mode !== actionMode.VIEW" style="width: 5%">حذف</th>
+<!--      <th class="text-center" style="width: 5%"></th>-->
+    </tr>
+    </thead>
+    <tbody>
+
+    <ng-container *ngFor="let item of taskList; let i = index">
+      <tr class="text-center">
+        <td>{{i + 1}}</td>
+        <td>{{item?.title}}</td>
+        <td>{{item?.code}}</td>
+        <td>
+          <ng-container *ngFor="let taskType of taskTypeList">
+            <ng-container *ngIf="taskType._value === item.taskType">
+              {{taskType._title}}
+            </ng-container>
+          </ng-container>
+        </td>
+        <td>{{item?.timeEstimate}}</td>
+        <td *ngIf="mode !== actionMode.VIEW">
+          <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+             (click)="chooseSelectedItemForEdit(item,i)" style="cursor: pointer ; font-weight: bold">
+            <i class="fa fa-edit" title="ویرایش"></i>
+          </a>
+        </td>
+        <td *ngIf="mode === actionMode.VIEW">
+          <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+             (click)="chooseSelectedItemForView(item,i)" style="cursor: pointer ; font-weight: bold">
+            <i class="fa fa-eye" title="مشاهده"></i>
+          </a>
+        </td>
+        <td *ngIf="mode !== actionMode.VIEW">
+          <a  class="btn btn-sm btn-outline-lightning rounded-0"
+             style="cursor: pointer"
+             (click)="showModalDelete(item,i)">
+            <i class="fa fa-trash" title="حذف"></i>
+          </a>
+        </td>
+
+<!--        <td>-->
+<!--          <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+<!--             (click)="chooseSelectedItemForView(item)" style="cursor: pointer ; font-weight: bold">-->
+<!--            <i class="fa fa-eye" title="نمایش"></i>-->
+<!--          </a>-->
+<!--        </td>-->
+
+      </tr>
+    </ng-container>
+
+    </tbody>
+  </table>
+</ng-container>
+
+
+<!--==================WorkTableView=========================-->
+
+<div class="col-md-12">
+  <app-task-action
+    [readService]="readService"
+    *ngIf="showAddTask" [modeView]="modeView" [mode]="mode" [referenceId]="referenceId"
+                   (messageEvent)="receiveMessage($event)" [formStatus]="'NotPending'"
+                   [taskGroupId]="taskGroupId"
+                   (closeTaskModal)="showAddTask = false;"
+                   [taskId]="taskId"></app-task-action>
+</div>
+
+
+
+<app-conferm-delete
+  [title]="selectedItemForDelete.title"
+  [loading]="selectedItemForDelete.loading"
+  [modalId]="'modalId'+selectedItemForDelete.id"
+  (value)="deleteItem($event)"
+></app-conferm-delete>

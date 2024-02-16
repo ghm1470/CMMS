@@ -1,0 +1,494 @@
+<div
+        style="    height: 50vh;
+    max-height: 50vh;
+    overflow: auto;">
+    <!--    <div class=" col-md-12 " style="margin-top: 10px ; margin-bottom: 25px ;" *ngIf="!isView&&enableItems">-->
+    <!--        <button class="btn btn-sm btn-secondary " (click)="addNewMiscCost()">-->
+    <!--            <i class="fa fa-plus"></i>&nbsp;-->
+    <!--            افزودن-->
+    <!--            هزینه متفرقه-->
+    <!--        </button>-->
+    <!--    </div>-->
+
+    <div class="row" style="margin: 0">
+
+        <ng-container *ngIf="!isView&&enableItems">
+            <div class=" col-md-12 " style="margin-top: 10px ; margin-bottom: 25px ">
+                <button class="btn btn-sm btn-secondary" (click)="addNewMiscCost()">
+                    <i class="fa fa-plus"></i>&nbsp;
+                    افزودن هزینه متفرقه
+
+                </button>
+            </div>
+        </ng-container>
+
+        <div class="col-md-12">
+            <div class="text-center" *ngIf="!miscCostList.length">
+                <a style="color: #7884a7">هیچ اطلاعاتی ثبت نشده!</a>
+            </div>
+            <ng-container *ngIf="miscCostList.length">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th class="text-center" style="width: 5%">ردیف</th>
+                        <th class="text-center"> عنوان</th>
+                        <th class="text-center">نوع هزینه</th>
+                        <th class="text-center">توضیحات</th>
+                        <th class="text-center">مقدار تخمین زده شده</th>
+                        <th class="text-center">مقدار واقعی</th>
+                        <th class="text-center"  *ngIf="!isView&&enableItems"style="width: 5%">ویرایش</th>
+                        <th class="text-center" *ngIf="isView||!enableItems"style="width: 5%">مشاهده</th>
+                        <th class="text-center" *ngIf="!isView&&enableItems"style="width: 5%">حذف</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <ng-container *ngFor="let item of miscCostList; let i = index">
+                        <tr class="text-center">
+                            <td>{{i + 1}}</td>
+                            <td>{{item?.title}}</td>
+                            <td>
+                                <ng-container *ngFor="let miscCostType of miscCostTypeList">
+                                    <ng-container *ngIf="miscCostType._value === item.miscCostType">
+                                        {{miscCostType._title}}
+                                    </ng-container>
+                                </ng-container>
+                            </td>
+                            <!--                        <td>{{item?.description}}</td>-->
+                            <td class="vertical-align-center"
+                                style=" text-overflow: ellipsis;
+                                                            overflow: hidden;
+                                                             white-space: nowrap;
+                                                             max-width: 100px;">
+                                {{item?.description}}
+                            </td>
+                            <td>{{item?.estimatedQuantity}}</td>
+                            <td>{{item?.quantity}}</td>
+                            <td *ngIf="!isView&&enableItems">
+                                <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                   (click)="chooseSelectedItemForEdit(item,i)"
+                                   style="cursor: pointer ; font-weight: bold">
+                                    <i class="fa fa-edit" title="ویرایش"></i>
+                                </a>
+                            </td>
+                            <td *ngIf="isView||!enableItems">
+                                <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                   (click)="chooseSelectedItemForEdit(item,i)"
+                                   style="cursor: pointer ; font-weight: bold">
+                                    <i class="fa fa-eye" title="مشاهده"></i>
+                                </a>
+                            </td>
+                            <td *ngIf="!isView&&enableItems">
+                                <a class="btn btn-sm btn-outline-lightning rounded-0"
+                                   style="cursor: pointer" nbdAreYouSure (then)="deleteItem(item)">
+                                    <i class="fa fa-trash" title="حذف"></i>
+                                </a>
+                            </td>
+
+                        </tr>
+                    </ng-container>
+
+                    </tbody>
+                </table>
+            </ng-container>
+            <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+        </div>
+    </div>
+</div>
+<!--<div class="col-md-12 text-left mt-2">-->
+<!--    <ng-container-->
+<!--            *ngIf="sendInformationNumberOfTabs.numberOfFormIdList < sendInformationNumberOfTabs.lengthFormIdList - 1 || sendInformationNumberOfTabs.hasForm ">-->
+<!--        <button (click)="nextOrPrev('next')" class="btn btn-sm btn-warning" type="button">-->
+
+<!--            <span>بعدی</span>-->
+<!--        </button>-->
+<!--    </ng-container>-->
+<!--    <button (click)="nextOrPrev('prev')" class="btn btn-sm btn-cancel-back" type="button" style="float: right ">-->
+
+<!--        <span>قبلی</span>-->
+<!--    </button>-->
+<!--</div>-->
+
+
+<!--<div class="modal" tabindex="-1" role="dialog" id="miscCostWorkTableModal" data-backdrop="static">-->
+<!--    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <div class="col-lg-12">-->
+<!--                    <div class="modal-title">-->
+<!--                        <i class="fa fa-plus"></i> &nbsp;&nbsp;-->
+<!--                        <span *ngIf="mode === actionMode.ADD &&  !isView&&enableItems"> افزودن هزینه متفرقه</span>-->
+<!--                        <span *ngIf="mode === actionMode.EDIT && !isView&&enableItems"> ویرایش هزینه متفرقه</span>-->
+<!--                        <span *ngIf="mode === actionMode.EDIT && isView"> نمایش هزینه متفرقه</span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <form #miscCostForm="ngForm">-->
+<!--                <div class="modal-body" style="display: flow-root;  padding: 15px;border-radius: 5px">-->
+
+<!--                    <div class="col-md-12">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-md-6 form-group required col-sm-12">-->
+<!--                                <label class="for-label"> عنوان هزینه متفرقه:</label>-->
+<!--                                <div class="input-group input-group-sm">-->
+<!--                                    <input [disabled]="isView" type="text" placeholder="عنوان مجموعه سفارش هزینه متفرقه"-->
+<!--                                           [(ngModel)]="miscCost.title"-->
+<!--                                           class="form-control form-control-sm" maxlength="80" name="title"-->
+<!--                                           #title="ngModel"-->
+<!--                                           nbvRequired nbvMinlength="1"-->
+<!--                                           nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."-->
+<!--                                           nbvPattern="{{myPattern.TITLEFa}}"-->
+<!--                                           [class.is-valid]="!(title?.errors?.nbvRequired || title?.errors?.nbvMinlength || title?.errors?.nbvPattern)"-->
+<!--                                           [class.is-invalid]="(title?.errors?.nbvRequired || title?.errors?.nbvMinlength || title?.errors?.nbvPattern) && (title.touched || doSave)"-->
+<!--                                           dest="titleValidation">-->
+<!--                                </div>-->
+<!--                                <div id="titleValidation"></div>-->
+<!--                            </div>-->
+
+<!--                            <div class="col-md-6 form-group required col-sm-12">-->
+<!--                                <label class="control-label" style="font-size: 12px">نوع هزینه :</label>-->
+<!--                                <div class="input-group input-group-sm">-->
+<!--                                    <ng-select [disabled]="isView" dir="rtl" [(ngModel)]="miscCost.miscCostType"-->
+
+<!--                                               placeholder="نوع هزینه" name="userTypeId" style="width: 100%;"-->
+<!--                                               dropdownPosition="bottom">-->
+<!--                                        <ng-option *ngFor="let item of miscCostTypeList; let i = index"-->
+<!--                                                   [value]="item._value">-->
+<!--                                            {{item._title }}-->
+<!--                                        </ng-option>-->
+<!--                                    </ng-select>-->
+<!--                                </div>-->
+<!--                                <div id="miscCostTypeValidation" style="opacity: 0; height: 0"></div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-md-12 form-group required">-->
+<!--                                <label class="control-label" style="font-size: 12px">توضیحات :</label>-->
+<!--                                <textarea [disabled]="isView" class="form-control form-control-sm"-->
+<!--                                          placeholder="توضیحات کار"-->
+<!--                                          [(ngModel)]="miscCost.description"-->
+<!--                                          #description="ngModel" name="description"-->
+<!--                                          [class.is-valid]="!(description?.errors?.nbvRequired || description?.errors?.nbvPattern)"-->
+<!--                                          [class.is-invalid]="(description?.errors?.nbvRequired || description?.errors?.nbvPattern) && (description.touched || doSave)"-->
+<!--                                          dest="descriptionValidation">-->
+<!--                </textarea>-->
+<!--                            </div>-->
+<!--                            <div id="descriptionValidation"></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    <div class="col-md-12">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-md-4 form-group required col-sm-12">-->
+<!--                                <label class="for-label"> مقدار تخمین زده شده:</label>-->
+<!--                                <div class="input-group input-group-sm">-->
+<!--                                    <input [disabled]="isView" type="text" placeholder="مقدار تخمین زده شده"-->
+<!--                                           [(ngModel)]="miscCost.estimatedQuantity"-->
+<!--                                           class="form-control form-control-sm" maxlength="10" name="estimatedQuantity"-->
+<!--                                           #estimatedQuantity="ngModel"-->
+<!--                                           nbvMinlength="1" nbvPattern="{{myPattern.number}}"-->
+<!--                                           (change)="changeEstimatedQuantity()"-->
+<!--                                           nbvPatternMsgHtml="مقدار تخمین زده شده را به صورت عددی وارد کنید."-->
+<!--                                           [class.is-valid]="!(estimatedQuantity?.errors?.nbvRequired || estimatedQuantity?.errors?.nbvMinlength || estimatedQuantity?.errors?.nbvPattern)"-->
+<!--                                           [class.is-invalid]="(estimatedQuantity?.errors?.nbvRequired || estimatedQuantity?.errors?.nbvMinlength || estimatedQuantity?.errors?.nbvPattern) && (estimatedQuantity.touched || doSave)"-->
+<!--                                           dest="estimatedQuantityValidation">-->
+<!--                                </div>-->
+<!--                                <div id="estimatedQuantityValidation"></div>-->
+<!--                            </div>-->
+
+<!--                            <div class="col-md-4 form-group required col-sm-12">-->
+<!--                                <label class="for-label"> قیمت تخمین زده شده برای هر واحد:</label>-->
+<!--                                <div class="input-group input-group-sm">-->
+<!--                                    <input [disabled]="isView" type="text" placeholder="قیمت تخمین زده شده برای هر واحد"-->
+<!--                                           [(ngModel)]="miscCost.estimatedUnitCost"-->
+<!--                                           class="form-control form-control-sm" maxlength="10" name="estimatedUnitCost"-->
+<!--                                           #estimatedUnitCost="ngModel"-->
+<!--                                           nbvMinlength="1" nbvPattern="{{myPattern.number}}"-->
+<!--                                           (change)="changeEstimatedUnitCost()"-->
+<!--                                           nbvPatternMsgHtml="قیمت تخمین زده شده برای هر واحد را به صورت عددی وارد کنید."-->
+<!--                                           [class.is-valid]="!(estimatedUnitCost?.errors?.nbvRequired || estimatedUnitCost?.errors?.nbvMinlength || estimatedUnitCost?.errors?.nbvPattern)"-->
+<!--                                           [class.is-invalid]="(estimatedUnitCost?.errors?.nbvRequired || estimatedUnitCost?.errors?.nbvMinlength || estimatedUnitCost?.errors?.nbvPattern) && (estimatedUnitCost.touched || doSave)"-->
+<!--                                           dest="estimatedUnitCostValidation">-->
+<!--                                </div>-->
+<!--                                <div id="estimatedUnitCostValidation"></div>-->
+<!--                            </div>-->
+
+<!--                            <div class="col-md-4 form-group required col-sm-12"-->
+<!--                                 *ngIf="miscCost.estimatedQuantity && miscCost.estimatedUnitCost">-->
+<!--                                <label class="for-label"> قیمت کل تخمین زده شده:</label>-->
+<!--                                <div class="input-group input-group-sm">-->
+<!--                                    <input [disabled]="isView" type="text" placeholder="قیمت کل تخمین زده شده"-->
+<!--                                           [value]="miscCost.estimatedQuantity * miscCost.estimatedUnitCost"-->
+<!--                                           class="form-control form-control-sm" disabled name="estimatedTotalCost">-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    <div class="col-md-12">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-md-4 form-group required col-sm-12">-->
+<!--                                <label class="for-label"> مقدار:</label>-->
+<!--                                <div class="input-group input-group-sm">-->
+<!--                                    <input [disabled]="isView" type="text" placeholder="مقدار"-->
+<!--                                           [(ngModel)]="miscCost.quantity"-->
+<!--                                           class="form-control" maxlength="10" name="quantity" #quantity="ngModel"-->
+<!--                                           nbvMinlength="1" nbvPattern="{{myPattern.number}}"-->
+<!--                                           nbvPatternMsgHtml="مقدار را به صورت عددی وارد کنید."-->
+<!--                                           (change)="changeQuantity()"-->
+<!--                                           [class.is-valid]="!(quantity?.errors?.nbvRequired || quantity?.errors?.nbvMinlength || quantity?.errors?.nbvPattern)"-->
+<!--                                           [class.is-invalid]="(quantity?.errors?.nbvRequired || quantity?.errors?.nbvMinlength || quantity?.errors?.nbvPattern) && (quantity.touched || doSave)"-->
+<!--                                           dest="quantityValidation">-->
+<!--                                </div>-->
+<!--                                <div id="quantityValidation"></div>-->
+<!--                            </div>-->
+
+<!--                            <div class="col-md-4 form-group required col-sm-12">-->
+<!--                                <label class="for-label"> قیمت واقعی هر واحد:</label>-->
+<!--                                <div class="input-group input-group-sm">-->
+<!--                                    <input [disabled]="isView" type="text" placeholder="قیمت واقعی هر واحد"-->
+<!--                                           [(ngModel)]="miscCost.actualUnitCost"-->
+<!--                                           class="form-control form-control-sm" maxlength="10" name="actualUnitCost"-->
+<!--                                           #actualUnitCost="ngModel"-->
+<!--                                           nbvMinlength="1" nbvPattern="{{myPattern.number}}"-->
+<!--                                           (change)="changeActualUnitCost()"-->
+<!--                                           nbvPatternMsgHtml="قیمت واقعی هر واحد را به صورت عددی وارد کنید."-->
+<!--                                           [class.is-valid]="!(actualUnitCost?.errors?.nbvRequired || actualUnitCost?.errors?.nbvMinlength || actualUnitCost?.errors?.nbvPattern)"-->
+<!--                                           [class.is-invalid]="(actualUnitCost?.errors?.nbvRequired || actualUnitCost?.errors?.nbvMinlength || actualUnitCost?.errors?.nbvPattern) && (actualUnitCost.touched || doSave)"-->
+<!--                                           dest="actualUnitCostValidation">-->
+<!--                                </div>-->
+<!--                                <div id="actualUnitCostValidation"></div>-->
+<!--                            </div>-->
+
+<!--                            <div class="col-md-4 form-group required col-sm-12"-->
+<!--                                 *ngIf="miscCost.quantity && miscCost.actualUnitCost">-->
+<!--                                <label class="for-label"> قیمت کل:</label>-->
+<!--                                <div class="input-group input-group-sm">-->
+<!--                                    <input [disabled]="isView" type="text" placeholder="قیمت کل" disabled-->
+<!--                                           [value]="miscCost.quantity * miscCost.actualUnitCost"-->
+<!--                                           class="form-control form-control-sm" name="actualTotalCost">-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                        </div>-->
+<!--                    </div>-->
+
+
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <div class="btn-group-sm">-->
+<!--                        <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal"-->
+<!--                                style="margin :0 5px "-->
+<!--                                (click)="cancelModal()">-->
+<!--                            انصراف-->
+<!--                        </button>-->
+<!--                        <button *ngIf="!isView&&enableItems" type="button" class="btn btn-action btn-sm"-->
+<!--                                (click)="action(miscCostForm)">-->
+<!--                            <span *ngIf="mode === actionMode.ADD">ذخیره</span>-->
+<!--                            <span *ngIf="mode === actionMode.EDIT">ویرایش</span>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
+
+<!--    </div>-->
+<!--</div>-->
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.LARGE"
+        autoShow="false"
+        (onShow)="onShowModal()"
+        (onClose)="onCloseModal()"
+        [myId]="'miscCostWorkTableModal'">
+    <div modal-header>
+        <div class="col-lg-12">
+            <div class="modal-title">
+                <i class="fa fa-plus"></i> &nbsp;&nbsp;
+                <span *ngIf="mode === actionMode.ADD &&  !isView&&enableItems"> افزودن هزینه متفرقه</span>
+                <span *ngIf="mode === actionMode.EDIT && !isView&&enableItems"> ویرایش هزینه متفرقه</span>
+                <span *ngIf="mode === actionMode.EDIT && (isView||!enableItems)"> نمایش هزینه متفرقه</span>
+            </div>
+        </div>
+
+    </div>
+    <div modal-body  *ngIf="showModalBody">
+        <form #miscCostForm="ngForm">
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 form-group required col-sm-12">
+                        <label class="for-label"> عنوان هزینه متفرقه:</label>
+                        <label style="color: red">*</label>
+
+                        <div class="input-group input-group-sm">
+                            <input [disabled]="isView||!enableItems" type="text"
+                                   placeholder="عنوان مجموعه سفارش هزینه متفرقه"
+                                   [(ngModel)]="miscCost.title"
+                                   class="form-control form-control-sm" maxlength="80" name="title" #title="ngModel"
+                                   nbvRequired nbvMinlength="1"
+                                   nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."
+                                   [class.is-valid]="!(title?.errors?.nbvRequired || title?.errors?.nbvMinlength || title?.errors?.nbvPattern)"
+                                   [class.is-invalid]="(title?.errors?.nbvRequired || title?.errors?.nbvMinlength || title?.errors?.nbvPattern) && (title.touched || doSave)"
+                                   dest="titleValidation">
+                        </div>
+                        <div id="titleValidation"></div>
+                    </div>
+
+                    <div class="col-md-6 form-group required col-sm-12">
+                        <label class="control-label" style="font-size: 12px">نوع هزینه :</label>
+                        <div class="input-group input-group-sm">
+                            <ng-select [disabled]="isView||!enableItems" dir="rtl" [(ngModel)]="miscCost.miscCostType"
+
+                                       placeholder="نوع هزینه" name="userTypeId" style="width: 100%;"
+                                       dropdownPosition="bottom">
+                                <ng-option *ngFor="let item of miscCostTypeList; let i = index"
+                                           [value]="item._value">
+                                    {{item._title }}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                        <div id="miscCostTypeValidation" style="opacity: 0; height: 0"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 form-group required">
+                        <label class="control-label" style="font-size: 12px">توضیحات :</label>
+                        <textarea [disabled]="isView||!enableItems" class="form-control form-control-sm"
+                                  placeholder="توضیحات کار"
+                                  [(ngModel)]="miscCost.description"
+                                  #description="ngModel" name="description"
+                                  [class.is-valid]="!(description?.errors?.nbvRequired || description?.errors?.nbvPattern)"
+                                  [class.is-invalid]="(description?.errors?.nbvRequired || description?.errors?.nbvPattern) && (description.touched || doSave)"
+                                  dest="descriptionValidation">
+                </textarea>
+                    </div>
+                    <div id="descriptionValidation"></div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label"> مقدار تخمین زده شده:</label>
+                        <div class="input-group input-group-sm">
+                            <input [disabled]="isView||!enableItems" type="text" placeholder="مقدار تخمین زده شده"
+                                   [(ngModel)]="miscCost.estimatedQuantity"
+                                   class="form-control form-control-sm" maxlength="10" name="estimatedQuantity"
+                                   #estimatedQuantity="ngModel"
+                                   nbvMinlength="1" nbvPattern="{{myPattern.number}}"
+                                   (change)="changeEstimatedQuantity()"
+                                   nbvPatternMsgHtml="مقدار تخمین زده شده را به صورت عددی وارد کنید."
+                                   [class.is-valid]="!(estimatedQuantity?.errors?.nbvRequired || estimatedQuantity?.errors?.nbvMinlength || estimatedQuantity?.errors?.nbvPattern)"
+                                   [class.is-invalid]="(estimatedQuantity?.errors?.nbvRequired || estimatedQuantity?.errors?.nbvMinlength || estimatedQuantity?.errors?.nbvPattern) && (estimatedQuantity.touched || doSave)"
+                                   dest="estimatedQuantityValidation">
+                        </div>
+                        <div id="estimatedQuantityValidation"></div>
+                    </div>
+
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label"> قیمت تخمین زده شده برای هر واحد:</label>
+                        <div class="input-group input-group-sm">
+                            <input [disabled]="isView||!enableItems" type="text"
+                                   placeholder="قیمت تخمین زده شده برای هر واحد"
+                                   [(ngModel)]="miscCost.estimatedUnitCost"
+                                   class="form-control form-control-sm" maxlength="10" name="estimatedUnitCost"
+                                   #estimatedUnitCost="ngModel"
+                                   nbvMinlength="1" nbvPattern="{{myPattern.number}}"
+                                   (change)="changeEstimatedUnitCost()"
+                                   nbvPatternMsgHtml="قیمت تخمین زده شده برای هر واحد را به صورت عددی وارد کنید."
+                                   [class.is-valid]="!(estimatedUnitCost?.errors?.nbvRequired || estimatedUnitCost?.errors?.nbvMinlength || estimatedUnitCost?.errors?.nbvPattern)"
+                                   [class.is-invalid]="(estimatedUnitCost?.errors?.nbvRequired || estimatedUnitCost?.errors?.nbvMinlength || estimatedUnitCost?.errors?.nbvPattern) && (estimatedUnitCost.touched || doSave)"
+                                   dest="estimatedUnitCostValidation">
+                        </div>
+                        <div id="estimatedUnitCostValidation"></div>
+                    </div>
+
+                    <div class="col-md-4 form-group required col-sm-12"
+                         *ngIf="miscCost.estimatedQuantity && miscCost.estimatedUnitCost">
+                        <label class="for-label"> قیمت کل تخمین زده شده:</label>
+                        <div class="input-group input-group-sm">
+                            <input [disabled]="isView||!enableItems" type="text" placeholder="قیمت کل تخمین زده شده"
+                                   [value]="miscCost.estimatedQuantity * miscCost.estimatedUnitCost"
+                                   class="form-control form-control-sm" disabled name="estimatedTotalCost">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label"> مقدار:</label>
+                        <div class="input-group input-group-sm">
+                            <input [disabled]="isView||!enableItems" type="text" placeholder="مقدار"
+                                   [(ngModel)]="miscCost.quantity"
+                                   class="form-control" maxlength="10" name="quantity" #quantity="ngModel"
+                                   nbvMinlength="1" nbvPattern="{{myPattern.number}}"
+                                   nbvPatternMsgHtml="مقدار را به صورت عددی وارد کنید." (change)="changeQuantity()"
+                                   [class.is-valid]="!(quantity?.errors?.nbvRequired || quantity?.errors?.nbvMinlength || quantity?.errors?.nbvPattern)"
+                                   [class.is-invalid]="(quantity?.errors?.nbvRequired || quantity?.errors?.nbvMinlength || quantity?.errors?.nbvPattern) && (quantity.touched || doSave)"
+                                   dest="quantityValidation">
+                        </div>
+                        <div id="quantityValidation"></div>
+                    </div>
+
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label"> قیمت واقعی هر واحد:</label>
+                        <div class="input-group input-group-sm">
+                            <input [disabled]="isView||!enableItems" type="text" placeholder="قیمت واقعی هر واحد"
+                                   [(ngModel)]="miscCost.actualUnitCost"
+                                   class="form-control form-control-sm" maxlength="10" name="actualUnitCost"
+                                   #actualUnitCost="ngModel"
+                                   nbvMinlength="1" nbvPattern="{{myPattern.number}}"
+                                   (change)="changeActualUnitCost()"
+                                   nbvPatternMsgHtml="قیمت واقعی هر واحد را به صورت عددی وارد کنید."
+                                   [class.is-valid]="!(actualUnitCost?.errors?.nbvRequired || actualUnitCost?.errors?.nbvMinlength || actualUnitCost?.errors?.nbvPattern)"
+                                   [class.is-invalid]="(actualUnitCost?.errors?.nbvRequired || actualUnitCost?.errors?.nbvMinlength || actualUnitCost?.errors?.nbvPattern) && (actualUnitCost.touched || doSave)"
+                                   dest="actualUnitCostValidation">
+                        </div>
+                        <div id="actualUnitCostValidation"></div>
+                    </div>
+
+                    <div class="col-md-4 form-group required col-sm-12"
+                         *ngIf="miscCost.quantity && miscCost.actualUnitCost">
+                        <label class="for-label"> قیمت کل:</label>
+                        <div class="input-group input-group-sm">
+                            <input [disabled]="isView||!enableItems" type="text" placeholder="قیمت کل" disabled
+                                   [value]="miscCost.quantity * miscCost.actualUnitCost"
+                                   class="form-control form-control-sm" name="actualTotalCost">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </form>
+        <div class="col-md-12">
+            <div class="row justify-content-end">
+                <div class="btn-group-sm">
+                    <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal"
+                            style="margin :0 5px "
+                            (click)="cancelModal()">
+                        انصراف
+                    </button>
+                    <button *ngIf="!isView&&enableItems" type="button" class="btn btn-action btn-sm"
+                            (click)="action(miscCostForm)">
+                        <span *ngIf="mode === actionMode.ADD">ذخیره</span>
+                        <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--    <div modal-footer>-->
+
+    <!--    </div>-->
+</nbw-modal>

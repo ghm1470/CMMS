@@ -1,0 +1,165 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6  card-title">
+                <i class="fa fa-list"></i>
+                &nbsp;&nbsp;
+                <span>لیست درجه اهمیت </span>
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <button title="جستجو" data-toggle="collapse" href="#form-search"
+                        class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">
+                    <i class="fa fa-search"></i>
+                </button>
+                <!--/////دکمه افزودن-->
+                <ng-container>
+                    <ng-container *ngIf=" roleList.DegreeOfImportance_create;else notAccessCreateTemp">
+                        <button class="btn btn-secondary btn-sm" [routerLink]="'upsert'">
+                            <i class="fa fa-plus"></i>
+                            <span class="d-none d-sm-inline d-sm-inline">
+                                                        افزودن
+                            </span>
+                        </button>
+                    </ng-container>
+                    <ng-template #notAccessCreateTemp>
+                        <button style="cursor: not-allowed"
+                                class="btn btn-secondary btn-sm">
+                            <i class="fa fa-plus"></i>
+                            <span class="d-none d-sm-inline d-sm-inline">
+                                 &nbsp;&nbsp;            افزودن
+                            </span>
+                        </button>
+                    </ng-template>
+                </ng-container>
+                <!--/////دکمه افزودن!!!!-->
+
+            </div>
+        </div>
+    </div>
+    <div class="card-body card-body-content">
+        <div class="collapse" id="form-search">
+            <div class="card" style="margin-bottom: 10px">
+                <div class="card-body card-body-filter">
+                    <div class="row" style="margin-bottom: 10px; margin-top: -10px">
+                        <div class="col-md-4 form-group required col-sm-12">
+                            <label class="for-label">عنوان:</label>
+                            <input class="form-control " [(ngModel)]="term"
+                                   placeholder="جستجو براساس عنوان"
+                                   style="font-size: 12px">
+                        </div>
+
+                        <div class="col-md-1" style="margin-top: 30px">
+                            <button class="btn btn-sm btn-search" (click)="search()"
+                            >
+                                جستجو
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <ng-container>
+            <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+            <!--/////////empety List ////////////////-->
+            <div class="col-md -12" *ngIf="!entityList.length && !loading">
+                <div class="text-center" style="color: #6d6d6e">
+                    <a *ngIf="entityList.length===0">هیچ اطلاعاتی یافت نشد!</a>
+                </div>
+            </div>
+            <!--///////// Table ////////////////-->
+            <ng-container *ngIf="entityList.length > 0&& !loading">
+                <table class="table table-bordered table-responsive-md table-striped">
+                    <thead>
+                    <tr style="text-align: center">
+                        <th class="text-center" style="width: 5%">ردیف</th>
+                        <th class="text-center">عنوان</th>
+                        <th class="text-center" style="width: 5%">ویرایش</th>
+                        <th class="text-center" style="width: 5%">حذف</th>
+                    </tr>
+                    </thead>
+                    <ng-container *ngIf="entityList.length>0">
+                        <tbody>
+                        <ng-container *ngFor="let entity of entityList; let i = index">
+                            <tr class="text-center">
+                                <td>
+                                    {{(i + 1 + (pageIndex * pageSize))}}
+                                </td>
+                                <td>
+
+                                    <ng-container *ngIf="entity?.name;else noDataTemp">
+                                        {{entity?.name}}
+                                    </ng-container>
+                                </td>
+
+                                <td>
+                                    <ng-container *ngIf="roleList.DegreeOfImportance_update;else notEditAccessTemp">
+
+                                        <a *ngIf="!loadingCheck||entity.id!==selectedEntity.id"
+                                           class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                           (click)="checkUsed(entity,'edit')"
+                                           style="cursor: pointer ; font-weight: bold">
+                                            <i class="fa fa-edit" title="ویرایش"></i>
+                                        </a>
+
+                                        <i *ngIf="loadingCheck&&entity.id===selectedEntity.id"
+                                           class="fa fa-spinner fa-pulse fa-1x"></i>
+                                    </ng-container>
+                                    <ng-template #notEditAccessTemp>
+                                        <i class="fa fa-edit" title="ویرایش" style="cursor: no-drop"></i>
+
+                                    </ng-template>
+                                </td>
+                                <td>
+                                    <ng-container *ngIf="roleList.DegreeOfImportance_Delete;else notDeleteAccessTemp">
+                                        <a *ngIf="!loadingCheck||entity.id!==selectedEntity.id"
+                                           class="btn btn-sm btn-outline-lightning rounded-0"
+                                           style="cursor: pointer"
+                                           (click)="checkUsed(entity,'delete',i)"
+                                        >
+                                            <i class="fa fa-trash" title="حذف"></i>
+                                        </a>
+
+                                        <i *ngIf="loadingCheck&&entity.id===selectedEntity.id"
+                                           class="fa fa-spinner fa-pulse fa-1x"></i>
+                                    </ng-container>
+                                    <ng-template #notDeleteAccessTemp>
+                                        <i class="fa fa-trash" style="cursor: no-drop" title="حذف"></i>
+
+                                    </ng-template>
+
+                                </td>
+                            </tr>
+                        </ng-container>
+
+                        </tbody>
+                    </ng-container>
+                </table>
+            </ng-container>
+            <!--    pagination-->
+            <app-paginator
+                    [totalElements]="length"
+                    [pageSize]="pageSize"
+                    [pageIndex]="pageIndex"
+                    [pageSizeOptions]="[]"
+                    [showFirstLastButtons]="true"
+                    (page)=" changePage($event)"
+            ></app-paginator>
+
+
+            <!--    pagination-->
+        </ng-container>
+    </div>
+</div>
+
+
+<app-conferm-delete
+        [title]="selectedItemForDelete.title"
+        [loading]="selectedItemForDelete.loading"
+        [modalId]="'modalId'+selectedItemForDelete.id"
+        (value)="deleteItem($event)"
+></app-conferm-delete>
+
+<ng-template #noDataTemp> ----</ng-template>

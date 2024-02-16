@@ -1,0 +1,14 @@
+<div class="card rounded-0 h-100">
+  <div class="card-title mb-1 p-3">
+    <i class="fa fa-list"></i>&nbsp;&nbsp;
+    <span>لیست خرید ها</span>
+    <button [routerLink]="'action'" [queryParams]="{mode: actionMode.ADD}"
+            class="btn  btn-sm" style="float: left; margin-top: -5px; color: #042C76" >
+      <i class="fa fa-plus-circle fa-2x"></i>
+    </button>
+  </div>
+  <hr style="margin: 0">
+  <div class="card-body">
+    <app-purchase-list></app-purchase-list>
+  </div>
+</div>

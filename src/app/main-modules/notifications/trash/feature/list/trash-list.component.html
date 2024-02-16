@@ -1,0 +1,452 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+        <i class="fa fa-list"></i>&nbsp;&nbsp;
+        <span>لیست پیام های حذف شده</span>
+
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+        <button title="جستجو" data-toggle="collapse" href="#activity-search"
+                class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">
+          <i class="fa fa-search"></i>
+        </button>
+
+      </div>
+    </div>
+  </div>
+  <div class="card-body card-body-content">
+    <div class="collapse" id="activity-search">
+      <div class="card" style="margin-bottom: 10px">
+        <div class="card-body card-body-filter">
+
+          <div class="row">
+            <div class="col-md-2  form-group">
+              <label class="for-label">فرستنده</label>
+              <ng-select dir="rtl" [(ngModel)]="deletedNotification.senderUserId"
+                         placeholder="فرستنده" name="recipient"
+                         style="width: 100%; margin-bottom: 15px ; font-size: 13px"
+                         dropdownPosition="bottom"
+                         id="senderUser"
+
+              >
+                <ng-option value="-1" disabled=""> فرستنده ی پیام</ng-option>
+                <ng-option [value]="user.id">{{user.name}} {{user.family}}</ng-option>
+
+                <ng-option *ngFor="let item of userList; let i = index"
+                           [value]="item.id">
+                  {{item.name}} {{item.family}}
+                </ng-option>
+              </ng-select>
+
+            </div>
+            <div class="col-md-2  form-group">
+              <label class="for-label">گیرنده</label>
+              <ng-select dir="rtl" [(ngModel)]="deletedNotification.recipientUserId"
+                         placeholder="گیرنده" name="recipient"
+                         style="width: 100%; margin-bottom: 15px ; font-size: 13px"
+                         dropdownPosition="bottom"
+                         id="recipient"
+
+              >
+                <ng-option value="-1" disabled=""> گیرنده ی پیام</ng-option>
+                <ng-option [value]="user.id" disabled="">{{user.name}} {{user.family}}</ng-option>
+                <ng-option *ngFor="let item of userList; let i = index"
+                           [value]="item.id">
+                  {{item.name}} {{item.family}}
+                </ng-option>
+              </ng-select>
+
+            </div>
+            <div class="col-md-2">
+              <label class="for-label">از تاریخ:</label>
+              <input class="form-control form-control-sm" id="startDate" #startDate placeholder="از تاریخ">
+              <!--<ng-select bindLabel="_title" bindValue="_value" [(ngModel)]="getAllByFilterAndPagination.startDate"-->
+              <!--[items]="schedulingList" [placeholder]="'از تاریخ:'"></ng-select>-->
+            </div>
+            <div class="col-md-2">
+              <label class="for-label">تا تاریخ:</label>
+              <input class="form-control form-control-sm" id="endDate" #endDate placeholder="تا تاریخ">
+              <!--<ng-select bindLabel="_title" bindValue="_value" [(ngModel)]="getAllByFilterAndPagination.startDate"-->
+              <!--[items]="schedulingList" [placeholder]="'تا تاریخ:'"></ng-select>-->
+            </div>
+
+            <div class="col-md-4">
+              <button class="btn btn-sm  btn-search" style=" margin-top: 30px;"
+                      (click)="getListByFilter()">
+                جستجو
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+    <ng-container *ngIf="! dataOfTrashList.itemPage.content.length && loading === false">
+      <div style="text-align: center">نتیجه ای یافت نشد.</div>
+    </ng-container>
+    <ng-container *ngIf=" dataOfTrashList.itemPage.content.length">
+      <table class="table table-bordered table-striped table-responsive-md">
+        <thead>
+
+        <tr>
+          <th class="text-center" style="width: 5%">ردیف</th>
+          <th class="text-center" style="width: 15%">فرستنده</th>
+          <th class="text-center" style="width: 15%">گیرنده</th>
+          <th class="text-center" style="width:40%">موضوع پیام</th>
+          <th class="text-center" style="width: 15%">تاریخ
+            &nbsp;
+            <i class="fas fa-sort-up" style="font-size: 15pt; cursor: pointer" title="مرتب سازی به صورت صعودی" (click)="changeSort(false)" ></i>&nbsp;
+            <i class="fas fa-sort-down" style="font-size: 15pt ; cursor: pointer" title="مرتب سازی به صورت نزولی" (click)="changeSort(true)"></i>
+          </th>
+          <th class="text-center" style="width: 5%"></th>
+          <th class="text-center" style="width: 5%"></th>
+        </tr>
+
+
+        </thead>
+        <ng-container *ngIf=" dataOfTrashList.itemPage.content.length">
+          <tbody>
+
+          <ng-container *ngFor="let item of dataOfTrashList.itemPage.content; let i = index">
+            <tr class="text-center">
+              <td class="text-center" style="width: 5%">{{toolkit2.Common.En2Fa(((((dataOfTrashList.queryParamReal.paging.page) * dataOfTrashList.queryParamReal.paging.size)) + (i + 1)))}}</td>
+              <td class="text-center" style="width: 15%">{{item.senderUserName}} {{item.senderUserFamily}}</td>
+              <td>{{item.recipientUserName}} {{item.recipientUserFamily}}</td>
+              <td class="text-center" style="width: 30%">{{item.subject}}</td>
+              <td class="text-center" style="width: 10%">
+
+<!--                {{item.creationDate | convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                {{myMoment.convertIsoToJDate(item?.creationDate) | perNumber}}
+
+              </td>
+              <!--          <td class="text-center" style="width: 10%">{{MyToolkit2.Moment.getJaliliDateFromIsoOrFull(item.creationDate) }}</td>-->
+              <td class="text-center" style="width: 5%">
+                <a class="btn btn-sm btn-outline-lightning rounded-0"
+                   style="cursor: pointer" (click)="showNotification(item) ">
+                  <i class="fa fa-eye" title="نمایش"></i>
+                </a>
+              </td>
+
+              <td class="text-center" style="width: 5%">
+                <a class="btn btn-sm btn-outline-lightning rounded-0"
+                   style="cursor: pointer" (click)="showModalDelete(item,i)">
+                  <i class="fa fa-trash" title="حذف"></i>
+                </a>
+              </td>
+            </tr>
+          </ng-container>
+
+
+          </tbody>
+        </ng-container>
+      </table>
+    </ng-container>
+
+    <shr-pagination
+      *ngIf="dataOfTrashList.itemPage.content.length"
+      [indicatorCount]="dataOfTrashList.indicatorCount"
+      [totalPages]="dataOfTrashList.itemPage.totalPages"
+      [currentPage]="dataOfTrashList.queryParamReal.paging.page"
+      (selectedPage)="setCurrentPage($event)"
+      class="class1"></shr-pagination>
+  </div>
+</div>
+
+<!--**************************************************************************-->
+<app-conferm-delete
+  [title]="selectedItemForDelete.title"
+  [loading]="selectedItemForDelete.loading"
+  [modalId]="'modalIda'+selectedItemForDelete.id"
+  (value)="deleteItem($event)"
+></app-conferm-delete>
+
+
+
+
+
+
+
+
+
+
+
+<!--before same style in project-->
+<!--////////// Search input //////////-->
+<!--<div class="row" style="margin-bottom: 10px">-->
+<!--  <div class="col-md-12 text-left">-->
+<!--    <div class="row">-->
+<!--      <div class="col-md-3">-->
+<!--        <p>مرتب سازی بر حسب زمان:</p>-->
+
+<!--      </div>-->
+<!--      <div class="col-md-2 text-left">-->
+<!--        <button class="btn btn-sm btn-action btn-search" (click)="changeSort(false)"-->
+<!--                style="color: white;background-color: #2da75f">-->
+<!--          <i class="fa fa-arrow-up"></i>-->
+<!--          صعودی-->
+<!--        </button>-->
+<!--      </div>-->
+<!--      <div class="col-md-2 text-right">-->
+<!--        <button class="btn btn-sm  btn-search" (click)="changeSort(true)"-->
+<!--                style=" color: white; background-color: sandybrown">-->
+<!--          <i class="fa fa-arrow-down"></i>-->
+<!--          نزولی-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--  </div>-->
+
+<!--  <div class="col-md-12">-->
+<!--    <div class="row">-->
+<!--      <div class="col-md-2  form-group">-->
+<!--        <label class="for-label">فرستنده</label>-->
+<!--        <ng-select dir="rtl" [(ngModel)]="deletedNotification.senderUserId" -->
+<!--                   placeholder="فرستنده" name="recipient"-->
+<!--                   style="width: 100%; margin-bottom: 15px ; font-size: 13px"-->
+<!--                   dropdownPosition="bottom"-->
+<!--                   id="senderUser"-->
+
+<!--        >-->
+<!--          <ng-option value="-1" disabled=""> فرستنده ی پیام</ng-option>-->
+<!--          <ng-option *ngFor="let item of userList; let i = index"-->
+<!--                     [value]="item.id">-->
+<!--            {{item.name}} {{item.family}}-->
+<!--          </ng-option>-->
+<!--        </ng-select>-->
+
+<!--      </div>-->
+<!--      <div class="col-md-2  form-group">-->
+<!--        <label class="for-label">گیرنده</label>-->
+<!--        <ng-select dir="rtl" [(ngModel)]="deletedNotification.recipientUserId" -->
+<!--                   placeholder="گیرنده" name="recipient"-->
+<!--                   style="width: 100%; margin-bottom: 15px ; font-size: 13px"-->
+<!--                   dropdownPosition="bottom"-->
+<!--                   id="recipient"-->
+
+<!--        >-->
+<!--          <ng-option value="-1" disabled=""> گیرنده ی پیام</ng-option>-->
+<!--          <ng-option *ngFor="let item of userList; let i = index"-->
+<!--                     [value]="item.id">-->
+<!--            {{item.name}} {{item.family}}-->
+<!--          </ng-option>-->
+<!--        </ng-select>-->
+
+<!--      </div>-->
+<!--      <div class="col-md-2">-->
+<!--        <label class="for-label">از تاریخ:</label>-->
+<!--        <input class="form-control form-control-sm" id="startDate" #startDate placeholder="از تاریخ">-->
+<!--        &lt;!&ndash;<ng-select bindLabel="_title" bindValue="_value" [(ngModel)]="getAllByFilterAndPagination.startDate"&ndash;&gt;-->
+<!--        &lt;!&ndash;[items]="schedulingList" [placeholder]="'از تاریخ:'"></ng-select>&ndash;&gt;-->
+<!--      </div>-->
+<!--      <div class="col-md-2">-->
+<!--        <label class="for-label">تا تاریخ:</label>-->
+<!--        <input class="form-control form-control-sm" id="endDate" #endDate placeholder="تا تاریخ">-->
+<!--        &lt;!&ndash;<ng-select bindLabel="_title" bindValue="_value" [(ngModel)]="getAllByFilterAndPagination.startDate"&ndash;&gt;-->
+<!--        &lt;!&ndash;[items]="schedulingList" [placeholder]="'تا تاریخ:'"></ng-select>&ndash;&gt;-->
+<!--      </div>-->
+<!--      <div class="col-md-3 text-center">-->
+<!--        <button class="btn btn-sm btn-action btn-search" (click)="getListByFilter()"-->
+<!--                style="margin-top: 30px ;background-color: #042C76; color: white;">-->
+<!--          &lt;!&ndash;      <i class="fa fa-search"></i>&ndash;&gt;-->
+<!--          جستجو-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+
+<!--</div>-->
+
+<!--&lt;!&ndash;===================&ndash;&gt;-->
+
+<!--<app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>-->
+
+<!--<div class="col-md -12" *ngIf="!dataOfTrashList.itemPage.content.length && loading === false">-->
+<!--  <br>-->
+<!--  <br>-->
+<!--  <div class="text-center" style="color: #6d6d6e">-->
+<!--    <a *ngIf="!dataOfTrashList.term">هیچ اطلاعاتی ثبت نشده!</a>-->
+<!--    <a *ngIf="dataOfTrashList.term">هیچ اطلاعاتی یافت نشد!</a>-->
+<!--  </div>-->
+<!--  <br>-->
+<!--  <br>-->
+<!--</div>-->
+
+
+<!--<div *ngIf="dataOfTrashList.itemPage.content.length && !loading" class="tab-pane fade show active" id="pills-home"-->
+<!--     role="tabpanel"-->
+<!--     aria-labelledby="pills-home-tab">-->
+<!--  <table class="table table-bordered table-responsive-md">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--      <th class="text-center" style="width: 5%">ردیف</th>-->
+<!--      <th class="text-center" style="width: 15%">فرستنده</th>-->
+<!--      <th class="text-center" style="width: 15%">گیرنده</th>-->
+<!--      <th class="text-center" style="width:40%">موضوع پیام</th>-->
+<!--      <th class="text-center" style="width: 15%">تاریخ</th>-->
+<!--      <th class="text-center" style="width: 5%"></th>-->
+<!--      <th class="text-center" style="width: 5%"></th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <ng-container *ngIf="dataOfTrashList.itemPage.content.length>0">-->
+<!--      <tbody>-->
+<!--      <ng-container *ngFor="let item of trashList; let i = index">-->
+<!--        <tr class="text-center">-->
+<!--          <td class="text-center" style="width: 5%">{{i + 1}}</td>-->
+<!--          <td class="text-center" style="width: 15%">{{item.senderUserName}} {{item.senderUserFamily}}</td>-->
+<!--          <td>{{item.recipientUserName}} {{item.recipientUserFamily}}</td>-->
+<!--          <td class="text-center" style="width: 30%">{{item.subject}}</td>-->
+<!--          <td class="text-center" style="width: 10%">{{item.creationDate}}</td>-->
+<!--          &lt;!&ndash;          <td class="text-center" style="width: 10%">{{MyToolkit2.Moment.getJaliliDateFromIsoOrFull(item.creationDate) }}</td>&ndash;&gt;-->
+<!--          <td class="text-center" style="width: 5%">-->
+<!--            <a class="btn btn-sm btn-outline-lightning rounded-0"-->
+<!--               style="cursor: pointer" (click)="showNotification(item) ">-->
+<!--              <i class="fa fa-eye" title="نمایش"></i>-->
+<!--            </a>-->
+<!--          </td>-->
+
+<!--          <td class="text-center" style="width: 5%">-->
+<!--            <a class="btn btn-sm btn-outline-lightning rounded-0"-->
+<!--               style="cursor: pointer" (click)="showModalDelete(item,i)">-->
+<!--              <i class="fa fa-trash" title="حذف"></i>-->
+<!--            </a>-->
+<!--          </td>-->
+<!--        </tr>-->
+<!--      </ng-container>-->
+
+<!--      </tbody>-->
+<!--    </ng-container>-->
+
+<!--  </table>-->
+<!--  <ng-container *ngIf="dataOfTrashList.itemPage.content.length===0">-->
+<!--    <div class="col-md-12" style="text-align: center"><p>هیچ اطلاعاتی ثبت نشده!</p></div>-->
+<!--  </ng-container>-->
+<!--  <shr-pagination-->
+<!--    *ngIf="dataOfTrashList.itemPage !== null && dataOfTrashList.itemPage !== undefined"-->
+<!--    [indicatorCount]="dataOfTrashList.indicatorCount"-->
+<!--    [totalPages]="dataOfTrashList.itemPage.totalPages"-->
+<!--    [currentPage]="dataOfTrashList.queryParamReal.paging.page"-->
+<!--    (selectedPage)="setCurrentPage($event)"-->
+<!--    class="class1"></shr-pagination>-->
+<!--</div>-->
+
+<!--before pagination-->
+<!--<ng-container *ngIf="!showLoader">-->
+<!--  <div class="card table-responsive-md">-->
+<!--    <table class="table table-striped">-->
+<!--      <thead>-->
+<!--      <tr>-->
+<!--        <th class="text-center" style="width: 5%">ردیف</th>-->
+<!--        <th class="text-center">فرستنده</th>-->
+<!--        <th class="text-center">گیرنده</th>-->
+<!--        <th class="text-center">موضوع پیام</th>-->
+<!--        <th class="text-center">تاریخ دریافت</th>-->
+
+
+<!--        <th class="text-center" style="width: 5%"></th>-->
+<!--      </tr>-->
+<!--      </thead>-->
+<!--      <tbody>-->
+<!--      <ng-container *ngFor="let item of trashList; let i = index">-->
+<!--        <tr class="text-center">-->
+<!--          <td>{{i + 1}}</td>-->
+<!--          <td>{{item.senderUserName}} {{item.senderUserFamily}}</td>-->
+<!--          <td>{{item.recipientUserName}} {{item.recipientUserFamily}}</td>-->
+<!--          <td>{{item.subject}}</td>-->
+<!--          <td>{{item.creationDate | convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}</td>-->
+<!--          <td>-->
+<!--            <a class="btn btn-sm btn-outline-lightning rounded-0"-->
+<!--               style="cursor: pointer" (click)="showModalDelete(item,i)">-->
+<!--              <i class="fa fa-trash" title="حذف"></i>-->
+<!--            </a>-->
+<!--          </td>-->
+<!--        </tr>-->
+<!--      </ng-container>-->
+
+<!--      </tbody>-->
+<!--    </table>-->
+
+
+<!--  </div>-->
+<!--</ng-container>-->
+<!--<ng-container *ngIf="showLoader">-->
+<!--  <div class="col-md-12 text-center">-->
+<!--    <app-loading-bar [size]="'fa-3x'"></app-loading-bar>-->
+<!--  </div>-->
+<!--</ng-container>-->
+
+
+<!--ts-->
+<!-- trashList: Inbox.GetTrash[] = [];
+  showLoader = true;
+  user = new UserDto.Create();
+  toolkit2 = Toolkit2;
+  myMoment = Moment;
+  dateViewMode = DateViewMode;
+
+  selectedItemForDelete = new DeleteModel();
+
+  constructor(public notificationService: NotificationService,
+              public activatedRoute: ActivatedRoute,
+              public router: Router) {
+  }
+
+  ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('user'));
+    this.getAllTrash();
+  }
+
+  ngOnDestroy(): void {
+  }
+
+  getAllTrash() {
+    this.notificationService.getAllTrash({userId: this.user.id}).pipe(takeUntilDestroyed(this))
+      .subscribe((res: Inbox.GetTrash[]) => {
+        if (res) {
+          this.showLoader = false;
+          if (res.length > 0) {
+            this.trashList = res;
+            console.log(this.trashList);
+          }
+        }
+      });
+  }
+
+  showModalDelete(item, i) {
+    this.selectedItemForDelete.loading = false;
+    this.selectedItemForDelete.id = item.notificationId;
+    this.selectedItemForDelete.title = ' آیا پیام   ' + '"' + item.subject + '"' + ' حذف  شود؟ ';
+    this.selectedItemForDelete.index = i;
+    setTimeout(e => {
+      ModalUtil.showModal('modalDeleteId' + this.selectedItemForDelete.id);
+    }, 50);
+  }
+
+
+  deleteItem(event) {
+    if (event) {
+      this.notificationService.delete({notificationId: this.selectedItemForDelete.id})
+        .pipe(takeUntilDestroyed(this)).subscribe((res: boolean) => {
+        if (res) {
+          this.trashList = this.trashList.filter((e) => {
+            return e.notificationId !== this.selectedItemForDelete.id;
+          });
+          ModalUtil.hideModal('modalDeleteId' + this.selectedItemForDelete.id);
+          DefaultNotify.notifySuccess('با موفقیت حذف شد.');
+        } else if (!res) {
+          ModalUtil.hideModal('modalDeleteId' + this.selectedItemForDelete.id);
+        }
+      });
+    } else if (!event) {
+      ModalUtil.hideModal('modalDeleteId' + this.selectedItemForDelete.id);
+    }
+
+  }
+
+
+}
+-->

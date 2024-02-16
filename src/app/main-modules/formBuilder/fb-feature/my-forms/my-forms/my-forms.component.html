@@ -1,0 +1,49 @@
+<!--<div class="col-md-4 col-md-offset-4 col-sm-4 col-xs-12 text-center " style="margin-bottom: 10px">-->
+  <!--<div class=" backShadow" style="padding:20px ; width: 100% ;font-size: large; font-weight: bold"-->
+       <!--*ngIf="data!=null">{{data.firstPage.myForms}}-->
+  <!--</div>-->
+<!--</div>-->
+
+<!--<div class="col-md-10 col-md-offset-1 backShadow" style="height: 80vh; overflow-y: auto">-->
+
+  <!--<ul class="rolldown-list" id="myList">-->
+    <!--<ng-container *ngFor="let item of forms ; let i= index">-->
+      <!--<li>-->
+        <!--<div class="col-md-1" style="margin-top: -10px">-->
+        <!--<span>-->
+          <!--{{i+1}}-->
+        <!--</span>-->
+        <!--</div>-->
+        <!--<div class="col-md-5" style="margin-top: -10px">-->
+          <!--<span *ngIf="data !== null"> {{data.myForms.formTitle}}: {{item.title}}</span>-->
+        <!--</div>-->
+        <!--<div class="col-md-3" style="margin-top: -10px">-->
+          <!--<span *ngIf="item.formStatus === MyFormStatus.EDITING"> {{data.myForms.editForm}}:-->
+            <!--<img (click)="editForm()" src="~/../assets/images/public/editIcon.png">-->
+          <!--</span>-->
+          <!--<span *ngIf="item.formStatus === MyFormStatus.RUNNING"> {{data.myForms.editForm}}: {{data.myForms.runningForm}}</span>-->
+          <!--<span-->
+            <!--*ngIf="item.formStatus === MyFormStatus.FINISH"> {{data.myForms.editForm}}: {{data.myForms.finishForm}}</span>-->
+        <!--</div>-->
+        <!--<div class="col-md-1" style="margin-top: -10px">-->
+          <!--{{data.myForms.deleteForm}}:-->
+          <!--<img src="~/../assets/images/public/delete.png" (click)="deleteForm(form.id)" height="20px" width="20px"-->
+               <!--[hidden]="item.formStatus !== MyFormStatus.EDITING">-->
+        <!--</div>-->
+        <!--<div class="col-md-1" style="margin-top: -10px">-->
+          <!--{{data.myForms.answers}}:-->
+          <!--<a routerLink="answerList/{{item.id}}">-->
+            <!--<img src="~/../assets/images/myForms/users.svg" height="25px" width="25px">-->
+          <!--</a>-->
+        <!--</div>-->
+        <!--<div class="col-md-1" style="margin-top: -10px">-->
+          <!--{{data.myForms.analysis}}:-->
+          <!--<a routerLink="formAnalysis/{{item.id}}">-->
+            <!--<img src="~/../assets/images/myForms/analysis.svg" height="30px" width="30px">-->
+          <!--</a>-->
+        <!--</div>-->
+      <!--</li>-->
+    <!--</ng-container>-->
+  <!--</ul>-->
+
+<!--</div>-->

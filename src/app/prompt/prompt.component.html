@@ -1,0 +1,89 @@
+<ng-container *ngIf="!pwa">
+  <div *ngIf="data.mobileType === 'android'" class="p-0">
+    <div class="col-xs-12 text-center">
+      <img src="../../assets/icons/icon-72x72.png" >
+    </div>
+    <div class="panel panel-default col-xs-12 p-0" style="margin-top: 5px">
+      <div class="panel-body flow-root">
+        <p style="text-align: center">
+          وب اپلیکیشن
+          <strong style="color: #0071c5!important">
+            حامی
+          </strong>
+          را به صفحه اصلی موبایل خود اضافه کنید
+        </p>
+      </div>
+    </div>
+    <div class="col-xs-12">
+      <button mat-button (click)="installPwa()" style="text-align: center;background-color: #0071c5!important;color: white!important; width: 100%">
+        افزودن به صفحه اصلی
+      </button>
+    </div>
+  </div>
+
+<!--  <mat-toolbar *ngIf="data.mobileType === 'android'"  class="android-prompt" style="background-color: #ffffff!important">-->
+<!--    <div class="col-xs-12 text-center">-->
+<!--      <img src="../../assets/icons/icon-72x72.png" >-->
+<!--    </div>-->
+<!--    <div class="panel panel-default col-xs-12 p-0">-->
+<!--      <div class="panel-body flow-root">-->
+<!--        <p style="text-align: center">-->
+<!--          وب اپلیکیشن-->
+<!--          <strong style="color: #0071c5!important">-->
+<!--            سما لایو-->
+<!--          </strong>-->
+<!--          را به صفحه اصلی موبایل خود اضافه کنید-->
+<!--        </p>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="col-xs-12">-->
+<!--      <button mat-button (click)="installPwa()" style="background-color: #0071c5!important;color: white!important; width: 100%">-->
+<!--        افزودن به صفحه اصلی-->
+<!--      </button>-->
+<!--    </div>-->
+<!--  </mat-toolbar>-->
+
+  <div *ngIf="data.mobileType === 'ios'" class="p-0">
+<div class="col-xs-12 text-center">
+    <img src="../../assets/icons/icon-72x72.png" >
+</div>
+    <div class="panel panel-default col-xs-12 p-0" style="margin-top: 5px">
+      <div class="panel-body flow-root">
+        <p style="text-align: center">
+          وب اپلیکیشن
+          <strong style="color: #0071c5!important">
+            حامی
+          </strong>
+          را به صفحه اصلی موبایل خود اضافه کنید
+        </p>
+        <p style="border-top: 1px solid silver"></p>
+        <p  style="text-align: right!important;direction: rtl!important;">
+          <strong>۱- </strong>
+          با مرورگر سافاری وارد شوید. در نوار پایین دکمه
+          <img src="../../assets/ios-menu-btn.png" width="25">
+          <strong>Share</strong>
+          را انتخاب کنید.
+        </p>
+        <p  style="text-align: right!important;direction: rtl!important;">
+          <strong>۲- </strong>
+          منوی باز شده را به  بالا بکشید و گزینه
+          <img src="../../assets/ios-add-btn.png" width="20">
+          <strong>Add to home screen</strong>
+          را انتخاب کنید.
+        </p>
+        <p  style="text-align: right!important;direction: rtl!important;">
+          <strong>۳- </strong>
+          در مرحله بعد در قسمت بالا روی
+          <strong>Add</strong>
+          کلیک کنید.
+        </p>
+      </div>
+    </div>
+
+
+    <button mat-button (click)="close()" style="background-color: #0071c5!important;color: white!important;width: 100%;text-align: center;direction: rtl!important;">
+      متوجه شدم !
+    </button>
+  </div>
+</ng-container>
+

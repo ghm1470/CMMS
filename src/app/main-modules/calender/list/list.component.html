@@ -1,0 +1,422 @@
+<!--<button class="btn btn-success" routerLink="add">-->
+<!--  add-->
+<!--</button>-->
+<ng-container *ngIf="viewMode==='calender'">
+
+    <div class="card" dir="rtl" style="min-height: 80vh">
+
+
+        <!--  <div id="main-content">-->
+        <div class=" row m-0">
+            <div class="col-sm-12 col-md-12 col-lg-3   px-0" (click)="weekMode=true">
+
+                <div class=" row m-0">
+
+                    <div class="col-12 p-0 card" style="margin: 0">
+                        <div class="row m-0">
+                            <div class="col-12 p-0 cursor-pointer text-center currentDay"
+                                 (click)="changeMonth('selectCurrentDay');setCurrentWeek()">
+                                امروز :
+                                {{(currentYear + '/' + currentMonth.number + '/' + currentDay)|perNumber}}
+                            </div>
+                        </div>
+                        <div class="row m-0">
+                            <div class="col-1 p-0 cursor-pointer text-center" matTooltip="سال قبل"
+                                 (click)="setYear('prev')"> <<
+                            </div>
+                            <div class="col-1 p-0 cursor-pointer text-center" matTooltip="ماه قبل"
+                                 (click)="setMonth('prev')"> <
+                            </div>
+
+                            <div class="col-4 p-0 cursor-pointer text-center" matTooltip="انتخاب ماه">
+                                <ng-select style="width: 100%" [addTag]="false"
+                                           [multiple]="false"
+                                           [clearable]="false"
+                                           [hideSelected]="true"
+                                           [virtualScroll]="true"
+                                           placeholder=" انتخاب ماه "
+                                           [id]="'monthCounter-btn'"
+                                           [name]="'monthCounter-btn'"
+                                           [bindLabel]="'title'"
+                                           [bindValue]="'number'"
+                                           (change)="changeMonth()"
+                                           [(ngModel)]="selectMonth.number">
+                                    <ng-container *ngFor="let month of monthList">
+                                        <ng-option [value]="month.number">
+                                            {{month.title}}
+                                        </ng-option>
+                                    </ng-container>
+
+                                </ng-select>
+                            </div>
+                            <div class="col-4 p-0 cursor-pointer text-center" matTooltip="انتخاب سال">
+                                <!--                                       (scrollToEnd)="setYearList()"-->
+                                <ng-select style="width: 100%" [addTag]="false"
+                                           [multiple]="false"
+                                           [clearable]="false"
+                                           [hideSelected]="true"
+                                           [virtualScroll]="true"
+                                           (change)="changeMonth()"
+                                           placeholder=" انتخاب سال "
+                                           [id]="'YearCounter-btn'"
+                                           [name]="'YearCounter-btn'"
+                                           [(ngModel)]="selectYear">
+                                    <ng-container *ngFor="let year of yearList">
+                                        <ng-option [value]="year">
+                                            {{year.toString()|perNumber}}
+                                        </ng-option>
+                                    </ng-container>
+
+                                </ng-select>
+                            </div>
+                            <div class="col-1 p-0 cursor-pointer text-center" matTooltip="ماه بعد"
+                                 (click)="setMonth('next')"> >
+                            </div>
+                            <div class="col-1 p-0 cursor-pointer text-center" matTooltip="سال بعد"
+                                 (click)="setYear('next')"> >>
+                            </div>
+
+                        </div>
+                        <div class="row m-0">
+
+                            <table class=" table-bordered table-hover" style="width: 100% "
+                                   [ngStyle]="{'cursor':(loadingGetListFrCalendar || this.loadingGetListForCalendarSchedule) ? 'wait': 'pointer'}"
+
+                            >
+                                <tr style="background-color: #424a4e;color: white;font-size: 10px;text-align: center">
+
+                                    <ng-container *ngFor="let day of pWeekList">
+                                        <td style="width: 14.28%">{{day.title}}</td>
+
+                                    </ng-container>
+                                    <!--                                    <td>شنبه</td>-->
+                                    <!--                                    <td>یکشنبه</td>-->
+                                    <!--                                    <td>دوشنبه</td>-->
+                                    <!--                                    <td>سه شنبه</td>-->
+                                    <!--                                    <td>چهار شنبه</td>-->
+                                    <!--                                    <td>پنج شنبه</td>-->
+                                    <!--                                    <td>جمعه</td>-->
+                                </tr>
+                                <!--                            emptyDay: monthDayList[dayRow + (dayRowList.length * i) - 1] === -1,-->
+                                <!--                            meetingEmptyDay: monthDayList[dayRow + (dayRowList.length * i) - 1] !== -1,-->
+
+                                <ng-container *ngFor="let column of dayColumn;let i=index">
+                                    <tr (click)="selectWeek(i)"
+                                        class="text-center"
+                                        [ngStyle]="{'background-color':selectedWeekIndex === i ? '#1f8df1': ''}">
+
+                                        <ng-container *ngFor="let dayRow of dayRowList;let j=index">
+                                            <td class="meetingEmptyDay"
+                                                [matTooltip]="(monthDayList[dayRow + (dayRowList.length * i) - 1] === currentDay)&&
+                                                             (selectMonth.number===currentMonth.number)&&(selectYear===currentYear)?'امروز':''"
+                                                matTooltipPosition="above"
+                                                [ngClass]="{
+                  selectedWeek:selectedWeekIndex === i,
+                  emptyDay:(i===0)&& (monthDayList[dayRow + (dayRowList.length * i) - 1] >7 )||(i>3)&& (monthDayList[dayRow + (dayRowList.length * i) - 1] <8 ),
+
+                    currentDay: ((monthDayList[dayRow + (dayRowList.length * i) - 1] === currentDay)&&
+                   (selectMonth.number===currentMonth.number)&&(selectYear===currentYear)) &&
+                   (dayRow + (dayRowList.length * i) - 1!==copyCurrentDayIndex),
+
+                    selectedDay: monthDayList[dayRow + (dayRowList.length * i) - 1] === selectedDay,
+
+                    selectedMeetingForDay:getSelectedMeetingForDay(monthDayList[dayRow + (dayRowList.length * i) - 1] ),
+
+                    fryDay:(j===6)&& monthDayList[dayRow + (dayRowList.length * i) - 1] !== -1
+
+                  }"
+                                                (click)=" selectDay(monthDayList[dayRow + (dayRowList.length * i) - 1])">
+
+                                                <!--                                                     {{ (monthDayList[dayRow + (dayRowList.length * i) - 1] !== -1 ? monthDayList[dayRow + (dayRowList.length * i) - 1] : '')|perNumber}}-->
+                                                {{ (monthDayList[dayRow + (dayRowList.length * i) - 1])|perNumber}}
+
+                                                <!--                                            <ng-container *ngIf="(monthDayList[dayRow + (dayRowList.length * i) - 1] === currentDay)&&-->
+                                                <!--                                                             (selectMonth.number===currentMonth.number)&&(selectYear===currentYear)">-->
+                                                <!--                                                <i style="font-size: 10px">امروز</i>-->
+                                                <!--                                            </ng-container>-->
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                </ng-container>
+                            </table>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="loadingGetListFrCalendar||loadingGetListForCalendarSchedule">
+                        <!--                        ;else showListTemp-->
+
+                        <div class="col-12 justify-content-center loading-get-one text-center">
+                <span class="mt-2 px-4  align-items-center d-inline-flex">
+                  <span class="fa fa-spinner fa-spin ml-2"></span>
+                  درحال بارگذاری
+                </span>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-12 col-lg-9  px-1">
+                <div class="row m-0">
+                    <!--                    <ng-container *ngIf="loadingGetListFrCalendar||loadingGetListForCalendarSchedule">-->
+                    <!--                        &lt;!&ndash;                        ;else showListTemp&ndash;&gt;-->
+
+                    <!--                        <div class="col-12 justify-content-center loading-get-one text-center">-->
+                    <!--                <span class="mt-2 px-4  align-items-center d-inline-flex">-->
+                    <!--                  <span class="fa fa-spinner fa-spin ml-2"></span>-->
+                    <!--                  درحال بارگذاری-->
+                    <!--                </span>-->
+                    <!--                        </div>-->
+                    <!--                    </ng-container>-->
+
+                    <!--                    <ng-template #showListTemp>-->
+
+                    <ng-container *ngIf="weekMode">
+
+                        <div class="container
+
+d-block d-sm-none
+	d-none d-sm-block d-md-none
+ 	d-none d-md-block d-lg-none
+
+">
+                            <div class="row">
+                                <ng-container *ngFor="let day  of pWeekList;let i=index">
+                                    <div class="col-12 text-center cursor-pointer my-1" style="border: 1px solid;padding: 5px;" (click)="setSelectedDayForGetOne(day.title + selectedWeekDayListFulDate[i])
+                                              ;selectedWorkOrderDtoForHtmlListForOneDayShow=workOrderDtoForHtmlList[i]">
+                                        {{day.title}}
+                                        <span [ngStyle]="{'color':(selectedWeekDayListFulDateCurrentDayIndex===i) ? '#f36e21': ''}">
+                                            {{(selectedWeekDayListFulDate[i] !== -1 ? selectedWeekDayListFulDate[i] : '-')|perNumber }}
+
+                                            </span>
+                                    </div>
+
+                                    <!--                                    <ng-container *ngFor="let dayRowList of dayRowList ;let j=index">-->
+                                    <ng-container *ngFor="let workOrder of workOrderDtoForHtmlList[i]">
+                                        <div class="col-12 p-0 m-0">
+                                            <ng-container [ngTemplateOutlet]="dataOfWorkOrder "
+                                                          [ngTemplateOutletContext]="{$implicit:workOrder}"></ng-container>
+                                        </div>
+                                    </ng-container>
+                                    <!--                                    </ng-container>-->
+                                </ng-container>
+
+                            </div>
+
+                        </div>
+                        <!--                        <div class="d-sm-none d-md-block d-none d-sm-block">-->
+                        <div class="col-12
+d-none d-lg-block d-xl-none
+	d-none d-xl-block
+"
+                             style="padding:0;padding-left: 3px">
+                            <table class="table table-bordered table-hover mb-0">
+                                <tr class="text-center cursor-pointer">
+                                    <ng-container *ngFor="let day  of pWeekList;let i=index">
+                                        <td
+                                                style="width: 14.28%" (click)="setSelectedDayForGetOne(day.title + selectedWeekDayListFulDate[i])
+                                              ;selectedWorkOrderDtoForHtmlListForOneDayShow=workOrderDtoForHtmlList[i]"
+                                        >
+                                            {{day.title}}
+                                            <br>
+                                            <span [ngStyle]="{'color':(selectedWeekDayListFulDateCurrentDayIndex===i) ? '#f36e21': ''}">
+
+                                            {{(selectedWeekDayListFulDate[i] !== -1 ? selectedWeekDayListFulDate[i] : '-')|perNumber }}
+                                                <!--                                                <br>-->
+                                                <!--                                                {{ workOrderDtoForHtmlList[i].length.toString()|perNumber}}-->
+
+                                            </span>
+                                        </td>
+                                    </ng-container>
+
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-12
+                           d-none d-lg-block d-xl-none
+	d-none d-xl-block
+                           p-0"
+                             style="height: 70vh ; overflow: auto">
+                            <table class="table table-bordered table-hover">
+                                <tr class="text-center cursor-pointer">
+                                    <ng-container *ngFor="let dayRowList of dayRowList ;let i=index">
+                                        <td class="p-0" style="width: 14.28%;height: 75vh">
+                                            <ng-container *ngFor="let workOrder of workOrderDtoForHtmlList[i]">
+                                                <ng-container [ngTemplateOutlet]="dataOfWorkOrder "
+                                                              [ngTemplateOutletContext]="{$implicit:workOrder}"></ng-container>
+                                            </ng-container>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+
+                            </table>
+                        </div>
+                        <!--                        </div>-->
+                    </ng-container>
+                    <ng-container *ngIf="!weekMode">
+                        <div class="col-12  " style="padding:0;padding-left: 3px">
+
+                            <table class="table table-bordered table-hover mb-0">
+                                <tr class="text-center cursor-pointer">
+                                    <td (click)="weekMode=true" style="width: 6%;    background-color: #4598d2;
+    color: white;" matTooltip="بازگشت به لیست هفته "><i class="fa fa-arrow-right"></i></td>
+                                    <td colspan="4"> {{selectedDayForGetOne|perNumber }}
+                                        <!--                                                                              &#45;&#45;  {{ selectedWorkOrderDtoForHtmlListForOneDayShow.length.toString()|perNumber}}-->
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-12 p-0 " style="height: 70vh ; overflow: auto">
+
+                            <table class="table table-bordered table-hover">
+                                <tr class="text-center cursor-pointer">
+                                    <td colspan="5" style="height: 75vh" class="p-0">
+                                        <div class="row m-0 ">
+                                            <ng-container
+                                                    *ngFor="let workOrder of selectedWorkOrderDtoForHtmlListForOneDayShow">
+                                                <div class="col-md-3 p-0">
+                                                    <ng-container [ngTemplateOutlet]="dataOfWorkOrder "
+                                                                  [ngTemplateOutletContext]="{$implicit:workOrder}"></ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </ng-container>
+                    <!--                    </ng-template>-->
+
+                </div>
+
+            </div>
+            <!--    <div class=" col-4" style="margin: 0;">-->
+            <!--      <p>کارهای امروز</p>-->
+            <!--      <table class="table table-bordered table-hover">-->
+            <!--        <tr>-->
+            <!--          <td>عنوان</td>-->
+            <!--          <td>توضیحات</td>-->
+            <!--          <td>زمان شروع</td>-->
+            <!--          <td>زمان پایان</td>-->
+            <!--        </tr>-->
+            <!--        <ng-container *ngFor="let session of currentDaySessionList?.sessionList;let i=index">-->
+            <!--          <tr>-->
+            <!--            <td>{{session.title}}</td>-->
+            <!--            <td>  {{session.description}}</td>-->
+            <!--            <td>   {{MyMoment.convertIsoToJDateWithTimeEnToFa(session.startDate)}}</td>-->
+            <!--            <td>   {{MyMoment.convertIsoToJDateWithTimeEnToFa(session.endDate)}}</td>-->
+            <!--          </tr>-->
+            <!--        </ng-container>-->
+            <!--      </table>-->
+            <!--    </div>-->
+        </div>
+    </div>
+
+
+    <!--//////// نمایش کاربران //////////-->
+    <nbw-modal
+            [hasHeader]="true"
+            [hasFooter]="false"
+            (onClose)="userListForShowInModal=[]"
+            [modalSize]="MyModalSize.DEFAULT"
+            autoShow="false"
+            [myId]="'userListForShowInModalId'">
+        <div modal-header>
+            <i class="fa fa-users"></i>
+            کاربران
+        </div>
+        <div modal-body>
+            <div class="col-md-12">
+                <div class="row">
+                    <ng-container *ngFor="let user of userListForShowInModal">
+                        <div class="col-4">
+                            <i class="fa fa-user"></i>
+                            {{ user.name + ' ' + user.family}}
+                        </div>
+                    </ng-container>
+
+                </div>
+            </div>
+        </div>
+    </nbw-modal>
+
+    <ng-template #dataOfWorkOrder let-workOrder>
+        <div style="border: 3px solid #c6c6cd;
+background: #fff8f8  url(assets/images/calendar/line-pattern.png) top repeat-x;" class="p-1 m-1"
+
+             [ngStyle]="workOrder.type==='past-notDone' && {'border' : '3px solid rgb(250 139 154)'}||
+             workOrder.type==='past' && {'border' : '3px solid rgb(203 255 212)'}"
+
+             [matTooltip]="workOrder.type==='past-notDone'?'انجام نشده':''||
+             workOrder.type==='past'?'انجام شده':''||
+             workOrder.type==='future'?'زمان انجام نرسیده':''
+"
+             matTooltipPosition="right"
+
+        >
+            <div class="row text-start mx-0 mb-2 " style="min-height: 50px;max-height: 50px;
+    overflow: auto;">
+                {{workOrder?.assetName}}
+                <!--                {{workOrder.type === 'past-notDone' ? 'انجام نشده' : ''}}-->
+            </div>
+            <div class="row text-start m-0">
+
+                <div class="col-12 p-0 selectIcon" style="min-height: 25px;max-height: 25px;  overflow: auto;">
+                    <ng-container *ngIf="workOrder.delay>=1">
+                        {{ workOrder.delay }}
+                        روز تاخیر
+                    </ng-container>
+                </div>
+                <ng-container *ngIf="workOrder.userList.length>1;else userListOneOreNotTemp">
+                    <div class="col-12 p-0 selectIcon" style="min-height: 25px;max-height: 25px;  overflow: auto;">
+                                    <span (click)="ShowInModalUserList(workOrder.userList)"
+                                          matTooltip="نمایش کاربران"
+                                          class="selectIcon">
+                                        <i class="fa fa-users"></i>
+
+                                    </span>
+                    </div>
+                </ng-container>
+
+
+                <ng-template #userListOneOreNotTemp>
+                    <div class="col-12 p-0 " style="min-height: 25px;max-height: 25px;overflow: auto;">
+                        <ng-container *ngIf="workOrder.userList.length===1">
+                            <i class="fa fa-user"></i>
+                            {{workOrder.userList[0].name + ' ' + workOrder.userList[0].family}}
+                        </ng-container>
+
+                        <ng-container *ngIf="workOrder.userList.length===0">
+                            <i class="fa fa-user-slash " matTooltip=" تخصیص داده نشده"></i>
+                        </ng-container>
+                    </div>
+
+                </ng-template>
+
+
+                <div class="col-12 p-0 selectIcon mt-2">
+                            <span>
+                            <i class="fa fa-eye" (click)="selectSelectedItemIdForAction(workOrder)"
+                               matTooltip="مشاهده"></i>
+                            </span>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+</ng-container>
+<!--// گذشته-->
+<ng-container *ngIf="viewMode==='pastGetOne'">
+    <app-action
+            [entityId]="selectedItemIdForAction"
+            [actionMode]="ActionMode.VIEW"
+            (back)="viewMode='calender'"
+    ></app-action>
+</ng-container>
+
+<!--// آینده -->
+<ng-container *ngIf="viewMode==='futureGetOne'">
+    <app-scheduling
+            [entityId]="selectedItemIdForAction"
+            [actionMode]="ActionMode.VIEW"
+            (back)="viewMode='calender'"
+    ></app-scheduling>
+</ng-container>

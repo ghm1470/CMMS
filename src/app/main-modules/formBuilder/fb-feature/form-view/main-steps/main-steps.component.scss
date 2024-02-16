@@ -1,0 +1,163 @@
+//li.active >a {
+//  background-color: white!important;
+//  color: black!important;
+//}
+//
+//li.active{
+//  border-bottom: 3px solid red!important;
+//}
+
+html[dir="rtl"] li.marginUl {
+  margin-right: 5% !important;
+
+}
+
+html[dir="ltr"] li.marginUl {
+  margin-left: 5% !important;
+
+}
+
+
+html[dir="rtl"] div.marginDiv {
+  margin-right: -10px !important;
+  margin-left: 10px !important;
+
+}
+
+html[dir="ltr"] div.marginDiv {
+  margin-right: 10px !important;
+  margin-left: -10px !important;
+}
+
+.backShadow {
+
+}
+
+ul.nav-pills {
+  width: 100%;
+  border-radius: 3px;
+  padding: 0;
+
+  a {
+    text-decoration: none;
+    width: 100%;
+  }
+
+  h5 {
+    font-size: 15px !important;
+    margin-bottom: 0;
+    color: #6a6e80;
+    padding: 16px 0;
+    text-align: center;
+  }
+
+  li {
+    position: relative;
+    background-color: #e9ecef;
+    margin-right: 21px;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3px;
+    &:first-child {
+      margin-right: 0;
+    }
+  }
+
+  li:not(:last-child):after, li:not(:first-child):before {
+    content: "";
+    position: absolute;
+    top: 0;
+    border: 0 solid #e9ecef;
+    border-width: 27.6px 10px;
+    width: 0;
+    height: 0;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+  }
+
+  li:not(:first-child):before {
+    border-color: #e9ecef;
+    right: -17px;
+    border-right-color: transparent;
+
+  }
+
+  li:not(:last-child):after {
+    left: -20px;
+    border-color: transparent;
+    border-right-color: #e9ecef;
+  }
+
+  li:last-child {
+    border-radius: 3px 0 0 3px;
+  }
+  li:first-child {
+    -webkit-border-radius: 0 3px 3px 0;
+    -moz-border-radius: 0 3px 3px 0;
+    border-radius: 0 3px 3px 0;
+  }
+
+  li.active {
+    background-color: #28547b;
+
+    &:after {
+      border-right-color: #28547b;
+    }
+
+    &:before {
+      border-color: #28547b;
+      border-right-color: transparent;
+    }
+
+    h5 {
+      color: #fff !important;
+    }
+  }
+}
+
+.step {
+  width: calc(20% - 17px);
+  height: 55px;
+  margin-right: 2px;
+}
+
+
+@media screen and (max-width: 770px) {
+  ul.nav-pills a > h5 {
+    font-size: 14px !important;
+  }
+
+  .step {
+    width: calc(20% - 17px);
+    height: 55px;
+  }
+}
+
+
+@media screen and (max-width: 610px) {
+
+  .step {
+    width: 45%;
+    height: 55px;
+    margin-top: 5px;
+  }
+}
+
+
+@media screen and (max-width: 440px) {
+
+  .step {
+    width: 90%;
+    height: 55px;
+    margin-top: 5px;
+  }
+}

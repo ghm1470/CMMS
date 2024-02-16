@@ -1,0 +1,157 @@
+<div class="collapse" id="assets-search">
+    <div class="card" style="margin-bottom: 10px">
+        <div class="card-body card-body-filter">
+            <div class="row">
+                <div class="col-md-3 form-group required col-sm-12">
+                    <label class="for-label">جستجو:</label>
+                    <input class="form-control form-control-sm" [(ngModel)]="this.term"
+                           [placeholder]="'جستجو براساس عنوان'"
+                           style="font-size: 12px">
+                </div>
+                <div class="col-md-3 form-group required col-sm-12">
+                    <label class="for-label">خانواده گروه دارایی</label>
+                    <ng-select dir="rtl" [(ngModel)]="parentCategoryId"
+
+                               (change)="changeCategory()"
+                               placeholder="خانواده گروه دارایی " name="parentId" style="width: 100%;"
+                               dropdownPosition="bottom">
+                        <ng-option *ngFor="let item of categoryList; let i = index"
+                                   [value]="item.id">
+                            {{item.title}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+
+                <div class="col-md-3 form-group required col-sm-12">
+                    <label class="for-label">زیر دسته</label>
+                    <ng-select dir="rtl" [(ngModel)]="subCategoryId"
+
+                               placeholder="زیر دسته" name="parentId" style="width: 100%;"
+                               dropdownPosition="bottom">
+                        <ng-option *ngFor="let item of subCategoryList; let i = index"
+                                   [value]="item.id">
+                            {{item.title}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+                <div class="col-md-1" style="margin-top: 30px">
+                    <button class="btn btn-sm btn-search" (click)="search()"
+                    >
+                        جستجو
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+<ng-container *ngIf="entityList.length===0 && loading === false">
+    <a style="color: #7884a7" *ngIf="!term">هیچ قالب دارایی ثبت نشده!</a>
+    <a style="color: #7884a7" *ngIf="term">جستجو یافت نشد</a>
+</ng-container>
+
+
+<ng-container *ngIf="entityList.length>0 && !loading">
+    <table class="table table-bordered table-responsive-md table-striped">
+        <thead>
+        <tr style="text-align: center">
+            <th class="text-center" style="width: 5%">ردیف</th>
+            <th class="text-center">عنوان</th>
+            <th class="text-center">خانواده گروه دارایی</th>
+            <th class="text-center">زیر دسته</th>
+            <!--<th class="text-center" >وضعیت</th>-->
+            <th class="text-center" style="width: 5%">مشاهده</th>
+            <th class="text-center" style="width: 5%">ویرایش</th>
+            <th class="text-center" style="width: 5%">حذف</th>
+        </tr>
+        </thead>
+        <ng-container *ngIf="entityList.length>0">
+            <tbody>
+            <ng-container *ngFor="let item of entityList; let i = index">
+                <tr class="text-center">
+                    <td>
+                        {{(i + 1 + (pageIndex * pageSize))}}
+                    </td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.parentCategoryTitle}}</td>
+                    <td>
+                        <span *ngIf="item.subCategoryTitle">{{item.subCategoryTitle}}</span>
+                        <span *ngIf="!item.subCategoryTitle">---</span>
+                    </td>
+                    <!--<td>-->
+                    <!--<span *ngIf="item.status">فعال</span>-->
+                    <!--<span *ngIf="!item.status">غیر فعال</span>-->
+                    <!--</td>-->
+                    <td>
+                        <ng-container *ngIf="roleList.AssetTemplate_see;else notSeeAccessTemp">
+                            <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                               (click)="chooseSelectedItemForViewInfo(item)" style="cursor: pointer ; font-weight: bold">
+                                <i class="fa fa-eye" title="مشاهده"></i>
+                            </a>
+                        </ng-container>
+                        <ng-template #notSeeAccessTemp>
+                            <i class="fa fa-eye" title="مشاهده" style="cursor: no-drop"></i>
+                        </ng-template>
+                    </td>
+                    <td>
+
+                        <ng-container *ngIf="roleList.AssetTemplate_update;else notEditAccessTemp">
+
+                            <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                               (click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">
+                                <i class="fa fa-edit" title="ویرایش"></i>
+                            </a>
+                        </ng-container>
+                        <ng-template #notEditAccessTemp>
+                            <i class="fa fa-edit" title="ویرایش" style="cursor: no-drop"></i>
+
+                        </ng-template>
+
+                    </td>
+                    <td>
+                        <ng-container *ngIf="roleList.AssetTemplate_delete;else notDeleteAccessTemp">
+                            <a class="btn btn-sm btn-outline-lightning rounded-0"
+                               style="cursor: pointer"
+                               (click)="showModalDelete(item,i)"
+                            >
+                                <i class="fa fa-trash" title="حذف"></i>
+                            </a>
+                        </ng-container>
+                        <ng-template #notDeleteAccessTemp>
+                            <i class="fa fa-trash" style="cursor: no-drop" title="حذف"></i>
+
+                        </ng-template>
+
+                    </td>
+                </tr>
+            </ng-container>
+
+            </tbody>
+        </ng-container>
+    </table>
+
+
+</ng-container>
+<!--    pagination-->
+<app-paginator
+        [totalElements]="length"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[]"
+        [showFirstLastButtons]="true"
+        (page)=" changePage($event)"
+></app-paginator>
+
+
+<!--    pagination-->
+<!--**********************-->
+<app-conferm-delete
+        [title]="selectedItemForDelete.title"
+        [loading]="selectedItemForDelete.loading"
+        [modalId]="'modalId'+selectedItemForDelete.id"
+        (value)="deleteItem($event)"
+></app-conferm-delete>

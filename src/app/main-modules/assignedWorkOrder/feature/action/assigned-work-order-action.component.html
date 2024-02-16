@@ -1,0 +1,279 @@
+
+<app-work-order-action
+[from]="'assignedWorkOrder'"
+></app-work-order-action>
+<!--<div class="card  rounded-0 h-100">-->
+<!--  <div class="card-title mb-1 p-3">-->
+<!--    <h3>-->
+<!--      <span *ngIf="mode === actionMode.ADD">افزودن دستور کار</span>-->
+<!--      <span *ngIf="mode === actionMode.EDIT">ویرایش دستور کار</span>-->
+
+<!--      <span class="cursor-pointer" (click)="cancel()">-->
+<!--        <i class="fas fa-arrow-left float-left"></i>-->
+<!--      </span>-->
+<!--    </h3>-->
+<!--  </div>-->
+<!--  <hr style="margin: 0">-->
+<!--  <div class="card-body">-->
+<!--    <div class="col-xs-10 col-xs-offset-1">-->
+<!--      <form #workOrderForm="ngForm" (submit)="action(workOrderForm)">-->
+<!--        <div class="row">-->
+<!--          <div class="col-md-4 form-group required col-sm-12">-->
+<!--            <label class="for-label">نام دستور کار:</label>-->
+<!--            <label style="color: red">*</label>-->
+<!--            <div class="input-group input-group-sm">-->
+<!--              <input type="text" placeholder="نام دستور کار" [(ngModel)]="workOrder.title"-->
+<!--                     class="form-control form-control-sm" maxlength="80" name="name"-->
+<!--                     nbvRequired #name="ngModel" nbvMinlength="3"-->
+<!--                     [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvMinlength)"-->
+<!--                     [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvMinlength) && (name.touched || doSave)"-->
+<!--                     dest="nameValidation" [disabled]="mode===actionMode.VIEW">-->
+<!--            </div>-->
+<!--            <div id="nameValidation"></div>-->
+<!--          </div>-->
+
+<!--          <div class="col-md-4 form-group required col-sm-12">-->
+<!--            <label class="for-label">کد دستور کار:</label>-->
+<!--            <label style="color: red">*</label>-->
+<!--            <div class="input-group input-group-sm">-->
+<!--              <input type="text" placeholder="کد دستور کار" [(ngModel)]="workOrder.code"-->
+<!--                     class="form-control form-control-sm" minlength="1" maxlength="80" name="code"-->
+<!--                     nbvRequired #code="ngModel" (change)="changeAssetCode()"-->
+<!--                     [nbvPattern]="myPattern.EnNumberAndAlphabetic"-->
+<!--                     nbvPatternMsgHtml="کد دستور کار باید به صورت اعداد و حروف انگلیسی وارد گردد."-->
+<!--                     [class.is-valid]="!(code?.errors?.nbvRequired || code?.errors?.nbvPattern)"-->
+<!--                     [class.is-invalid]="(code?.errors?.nbvRequired || code?.errors?.nbvPattern) && (code.touched || doSave)"-->
+<!--                     dest="codeValidation" [disabled]="mode===actionMode.VIEW">-->
+<!--            </div>-->
+<!--            <div id="codeValidation"></div>-->
+<!--          </div>-->
+
+<!--          <div class="col-md-4 form-group required col-sm-12">-->
+<!--            <label class="for-label">نوع بازدید:</label>-->
+<!--            <label style="color: red">*</label>-->
+<!--            <div class="input-group input-group-sm">-->
+<!--              <select [(ngModel)]="workOrder.maintenanceType" name="maintenanceType" class="form-control"-->
+<!--                      #maintenanceType="ngModel" nbvRequired-->
+<!--                      [class.is-valid]="!(maintenanceType?.errors?.nbvRequired)"-->
+<!--                      [class.is-invalid]="(maintenanceType?.errors?.nbvRequired) && (maintenanceType.touched || doSave)"-->
+<!--                      dest="maintenanceTypeValidation" [disabled]="mode===actionMode.VIEW">-->
+<!--                <option value="-1" disabled>نوع دستور کار</option>-->
+<!--                <option *ngFor="let item of maintenanceTypeList" [value]="item._value">{{item._title}}</option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--            <div id="maintenanceTypeValidation" style="opacity: 0; height: 0"></div>-->
+<!--          </div>-->
+
+<!--          <div class="col-md-4 form-group required col-sm-12">-->
+<!--            <label class="for-label">اولویت:</label>-->
+<!--            <label style="color: red">*</label>-->
+<!--            <div class="input-group input-group-sm">-->
+<!--              <select [(ngModel)]="workOrder.priority" name="priority" class="form-control"-->
+<!--                      #priority="ngModel" nbvRequired-->
+<!--                      [class.is-valid]="!(priority?.errors?.nbvRequired)"-->
+<!--                      [class.is-invalid]="(priority?.errors?.nbvRequired) && (priority.touched || doSave)"-->
+<!--                      dest="priorityValidation" [disabled]="mode===actionMode.VIEW">-->
+<!--                <option value="-1" disabled>اولویت دستور کار</option>-->
+<!--                <option *ngFor="let item of priorityList" [value]="item._value">{{item._title}}</option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--            <div id="priorityValidation" style="opacity: 0; height: 0"></div>-->
+<!--          </div>-->
+
+<!--          <div class="col-md-4 form-group required col-sm-12">-->
+<!--            <label class="for-label">دارایی:</label>-->
+<!--            <label style="color: red">*</label>-->
+<!--            <div class="input-group input-group-sm">-->
+<!--              <select [(ngModel)]="workOrder.assetId" name="assetId" class="form-control"-->
+<!--                      #assetId="ngModel" nbvRequired nbvPattern="{{myPattern.OBJECT_ID}}"-->
+<!--                      nbvPatternMsgHtml=""-->
+<!--                      [class.is-valid]="!(assetId?.errors?.nbvRequired || assetId?.errors?.nbvPattern)"-->
+<!--                      [class.is-invalid]="(assetId?.errors?.nbvRequired || assetId?.errors?.nbvPattern) && (assetId.touched || doSave)"-->
+<!--                      dest="assetIdValidation" [disabled]="mode===actionMode.VIEW">-->
+<!--                <option value="-1" disabled>دارایی</option>-->
+<!--                <option *ngFor="let item of assetList" [value]="item.id">{{item.name}}</option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--            <div id="assetIdValidation" style="opacity: 0; height: 0"></div>-->
+<!--          </div>-->
+
+<!--          <div class="col-md-4 form-group required col-sm-12">-->
+<!--            <label class="for-label">پروژه:</label>-->
+<!--            <div class="input-group input-group-sm">-->
+<!--              <ng-select dir="rtl" [(ngModel)]="workOrder.projectId" name="projectId"-->
+<!--                         placeholder="انتخاب پروژه" style="width: 100%;"-->
+<!--                         dropdownPosition="bottom" [disabled]="mode===actionMode.VIEW">-->
+<!--                &lt;!&ndash;                <ng-option value="-1" disabled>پروژه</ng-option>&ndash;&gt;-->
+<!--                <ng-option *ngFor="let item of projectList; let i = index"-->
+<!--                           [value]="item.id">-->
+<!--                  {{item.name}}-->
+<!--                </ng-option>-->
+<!--              </ng-select>-->
+<!--&lt;!&ndash;              <select [(ngModel)]="workOrder.projectId" name="projectId" class="form-control"&ndash;&gt;-->
+<!--&lt;!&ndash;                      #projectId="ngModel" nbvRequired nbvPattern="{{myPattern.OBJECT_ID}}"&ndash;&gt;-->
+<!--&lt;!&ndash;                      nbvPatternMsgHtml=""&ndash;&gt;-->
+<!--&lt;!&ndash;                      [class.is-valid]="!(projectId?.errors?.nbvRequired || projectId?.errors?.nbvPattern)"&ndash;&gt;-->
+<!--&lt;!&ndash;                      [class.is-invalid]="(projectId?.errors?.nbvRequired || projectId?.errors?.nbvPattern) && (projectId.touched || doSave)"&ndash;&gt;-->
+<!--&lt;!&ndash;                      dest="projectIdValidation" [disabled]="mode===actionMode.VIEW">&ndash;&gt;-->
+<!--&lt;!&ndash;                <option value="-1" disabled>پروژه</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                <option *ngFor="let item of projectList" [value]="item.id">{{item.name}}</option>&ndash;&gt;-->
+<!--&lt;!&ndash;              </select>&ndash;&gt;-->
+<!--            </div>-->
+<!--            <div id="projectIdValidation" style="opacity: 0; height: 0"></div>-->
+<!--          </div>-->
+
+<!--          <div class="col-md-4 form-group required col-sm-12">-->
+<!--            <label class="for-label">وضعیت:</label>-->
+<!--            <label style="color: red">*</label>-->
+<!--            <div class="input-group input-group-sm">-->
+<!--              <select [(ngModel)]="workOrder.statusId" name="statusId" class="form-control"-->
+<!--                      #statusId="ngModel" nbvRequired nbvPattern="{{myPattern.OBJECT_ID}}"-->
+<!--                      nbvPatternMsgHtml=""-->
+<!--                      [class.is-valid]="!(statusId?.errors?.nbvRequired || statusId?.errors?.nbvPattern)"-->
+<!--                      [class.is-invalid]="(statusId?.errors?.nbvRequired || statusId?.errors?.nbvPattern) && (statusId.touched || doSave)"-->
+<!--                      dest="statusIdValidation" [disabled]="mode===actionMode.VIEW">-->
+<!--                <option value="-1" disabled>انتخاب وضعیت</option>-->
+<!--                <option *ngFor="let item of workOrderStatusList" [value]="item.id">{{item.name}}</option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--            <div id="statusIdValidation" style="opacity: 0; height: 0"></div>-->
+<!--          </div>-->
+
+
+
+<!--          <div class="col-md-4 form-group required col-sm-12">-->
+<!--            <label class="for-label">زمان شروع پروژه: </label>-->
+<!--            <label style="color: red">*</label>-->
+<!--            <input class="form-control form-control-sm" [disabled]="mode===actionMode.VIEW"-->
+<!--                   id="startDate" #startDate placeholder="زمان شروع پروژه">-->
+<!--          </div>-->
+
+<!--          <div class="col-md-4 form-group required col-sm-12">-->
+<!--            <label class="for-label">زمان پایان پروژه: </label>-->
+<!--            <input class="form-control form-control-sm" [disabled]="mode===actionMode.VIEW"-->
+<!--                   id="endDate" #endDate placeholder="زمان پایان پروژه">-->
+<!--          </div>-->
+
+<!--          <div class="col-md-4 form-group required col-sm-12">-->
+<!--            <label class="for-label">آخرین مهلت: </label>-->
+<!--            <label style="color: red">*</label>-->
+<!--            <input class="form-control form-control-sm"  [disabled]="mode===actionMode.VIEW"-->
+<!--                   id="requiredCompletionDate" #requiredCompletionDate placeholder="آخرین مهلت">-->
+<!--          </div>-->
+
+<!--        </div>-->
+<!--        <div class="row" *ngIf="mode!==actionMode.VIEW">-->
+<!--          <div class="col-md-12" *ngIf="!workOrder.image || !workOrder.image.fileByte">-->
+<!--            <label style="width: 180px;height: 30px; margin: 5px 5px 10px 10px; text-align: center">-->
+<!--              <a class="btn btn-action" style="font-size: 14px;">-->
+<!--                <i class="fa fa-paperclip " aria-hidden="true"-->
+<!--                   style="font-size: larger"></i>-->
+<!--                انتخاب تصویر-->
+<!--              </a>-->
+<!--              <input type="file" style="display: none;" multiple #input-->
+<!--                     (change)="onChangeUploader($event)">-->
+<!--            </label>-->
+<!--          </div>-->
+<!--          <div class="col-md-12 img-fluid img-thumbnail" *ngIf="workOrder.image && workOrder.image.fileByte">-->
+<!--            <img [src]="'data:image/jpg;base64,' + workOrder.image.fileByte" class="img img-responsive"-->
+<!--                 height="200" width="200">-->
+<!--            <i class="fa fa-trash" style="color: red" (click)="deleteImage()"></i>-->
+<!--          </div>-->
+<!--          <div class="form-group required col-sm-12 text-left">-->
+<!--            <button class="btn btn-action" type="submit">-->
+<!--              <span *ngIf="mode === actionMode.ADD">ذخیره</span>-->
+<!--              <span *ngIf="mode === actionMode.EDIT">ویرایش</span>-->
+<!--            </button>-->
+<!--          </div>-->
+
+<!--        </div>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--    <hr>-->
+
+<!--    <div class="col-md-12" style="padding: 0" *ngIf="menuStatus">-->
+<!--      <ul class="nav nav-tabs" role="navigation" style="text-align: right;padding-right: 0">-->
+<!--        <li class="nav-item">-->
+<!--          <a href="#information" id="informationInMenu" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+<!--             data-toggle="tab" role="tab" aria-controls="information" (click)="basicInformation = true">کلیات</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <a href="#completionDetails" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+<!--             data-toggle="tab" role="tab" aria-controls="completionDetails" (click)="completionDetails = true">اطلاعات تکمیلی</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <a href="#tasks" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+<!--             data-toggle="tab" role="tab" aria-controls="tasks" (click)="tasks = true">وظایف</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <a href="#taskGroup" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+<!--             data-toggle="tab" role="tab" aria-controls="tasks" (click)="taskGroup = true">مجموعه وظایف</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <a href="#workOrderPart" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+<!--             data-toggle="tab" role="tab" aria-controls="workOrderPart" (click)="parts = true">قطعات بکار برده شده</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <a href="#miscCost" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+<!--             data-toggle="tab" role="tab" aria-controls="miscCost" (click)="miscCost = true">هزینه متفرقه</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <a href="#notification" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+<!--             data-toggle="tab" role="tab" aria-controls="notification" (click)="notification = true">آگاه سازی</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <a href="#reports" style="color: #a0a0a0;font-size: 14px" class="nav-link"-->
+<!--             data-toggle="tab" role="tab" aria-controls="reports" (click)="reports = true">گزارشات</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <a href="#file" style="color: #a0a0a0;font-size: 14px" class="nav-link" data-toggle="tab"-->
+<!--             role="tab" aria-controls="file" (click)="file = true">مستندات</a>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--      <div class="tab-content">-->
+<!--&lt;!&ndash;        اطلاعات تکمیلی&ndash;&gt;-->
+<!--        <div class="tab-pane fade" id="information" role="tabpanel" style="padding: 20px">-->
+<!--          <app-work-order-basic-information *ngIf="basicInformation" [workOrderId]="workOrderId" [modeW]="mode"></app-work-order-basic-information>-->
+<!--        </div>-->
+<!--&lt;!&ndash;        اطلاعات تکمیلی&ndash;&gt;-->
+<!--        <div class="tab-pane fade" id="completionDetails" role="tabpanel" style="padding: 20px">-->
+<!--          <app-completion-detail *ngIf="completionDetails" [workOrderId]="workOrderId" [modeW]="mode"></app-completion-detail>-->
+<!--        </div>-->
+<!--&lt;!&ndash;        مجموعه وظایف&ndash;&gt;-->
+<!--        <div class="tab-pane fade" id="taskGroup" role="tabpanel" style="padding: 20px">-->
+<!--          <app-work-order-task-group *ngIf="taskGroup" [workOrderId]="workOrderId" [modeW]="mode"></app-work-order-task-group>-->
+<!--        </div>-->
+<!--        &lt;!&ndash;وظایف&ndash;&gt;-->
+<!--        <div class="tab-pane fade" id="tasks" role="tabpanel" style="padding: 20px">-->
+<!--          <app-task-list *ngIf="tasks" [referenceId]="workOrderId" [modeW]="mode"></app-task-list>-->
+<!--        </div>-->
+<!--        &lt;!&ndash;قطعات به کار برده شده&ndash;&gt;-->
+<!--        <div class="tab-pane fade" id="workOrderPart" role="tabpanel" style="padding: 20px">-->
+<!--          <app-part-with-usage-count *ngIf="parts" [referenceId]="workOrderId" [modeW]="mode"></app-part-with-usage-count>-->
+<!--        </div>-->
+<!--        &lt;!&ndash;هزینه های متفرقه&ndash;&gt;-->
+<!--        <div class="tab-pane fade" id="miscCost" role="tabpanel" style="padding: 20px">-->
+<!--          <app-misc-cost *ngIf="miscCost" [workOrderId]="workOrderId" [modeW]="mode"></app-misc-cost>-->
+<!--        </div>-->
+<!--        &lt;!&ndash;آگاه سازی&ndash;&gt;-->
+<!--        <div class="tab-pane fade" id="notification" role="tabpanel" style="padding: 20px">-->
+<!--          <app-notify *ngIf="notification" [referenceId]="workOrderId" [modeW]="mode"></app-notify>-->
+<!--        </div>-->
+<!--        &lt;!&ndash;گزارشات&ndash;&gt;-->
+<!--        <div class="tab-pane fade" id="reports" role="tabpanel" style="padding: 20px">-->
+<!--          <h1> در دست ساخت </h1>-->
+<!--          <br>-->
+<!--          <h2>under construction</h2>-->
+<!--        </div>-->
+<!--&lt;!&ndash;        مستندات&ndash;&gt;-->
+<!--        <div class="tab-pane fade" id="file" role="tabpanel" style="padding: 20px">-->
+<!--          <app-document *ngIf="file" [extraId]="workOrderId"-->
+<!--                        (documents)="changeDocumentList($event)" [mode]="mode"></app-document>-->
+<!--        </div>-->
+
+<!--      </div>-->
+
+<!--    </div>-->
+
+<!--  </div>-->
+<!--</div>-->

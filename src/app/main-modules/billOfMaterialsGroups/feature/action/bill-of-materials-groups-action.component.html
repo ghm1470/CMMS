@@ -1,0 +1,243 @@
+<div id="BomCreate" class="carousel slide" data-interval="false">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6 col-8 col-sm-6 card-title">
+                            <ng-container *ngIf="mode === actionMode.ADD">
+                                <i class="fa fa-plus"></i>&nbsp;
+                                افزودن BOM
+                            </ng-container>
+                            <ng-container *ngIf="mode === actionMode.EDIT">
+                                <i class="fa fa-edit"></i>&nbsp;
+                                ویرایش BOM
+                            </ng-container>
+                            <ng-container *ngIf="mode === actionMode.VIEW">
+                                <i class="fa fa-eye"></i>&nbsp;
+                                نمایش BOM
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6 col-4 col-sm-6 text-left">
+                            <button (click)="cancel()"
+                                    class="btn btn-cancel-back btn-sm">
+                                بازگشت
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <form #BOMForm="ngForm" (submit)="checkBomCode2(BOMForm)">
+                    <div class="card-body card-body-content">
+                        <div class="row">
+                            <div class="col-md-6 form-group required col-sm-12">
+                                <label for="BOMName" class="control-label" style="font-size: 12px">نام گروه BOM</label>
+                                <label style="color: red">*</label>
+                                <div class="input-group input-group-sm">
+                                    <input class="form-control form-control-sm input-c  " id="BOMName" name="BOMName"
+                                           placeholder="نام " [(ngModel)]="BOM.bomGroupName" autocomplete="off"
+                                           nbvRequired #BOMName="ngModel"
+                                           nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."
+                                           nbvPattern="{{myPattern.TITLEFa}}"
+                                           [class.is-valid]="!(BOMName?.errors?.nbvRequired || BOMName?.errors?.nbvPattern)"
+                                           [class.is-invalid]="(BOMName?.errors?.nbvRequired || BOMName?.errors?.nbvPattern) && (BOMName.touched || doSave)"
+                                           dest="BOMNameValidation">
+                                </div>
+                                <div id="BOMNameValidation" style="opacity: 0; height: 0"></div>
+                            </div>
+
+
+                            <div class="col-md-6 form-group required col-sm-12">
+                                <label for="BOMCode" class="control-label" style="font-size: 12px">کد گروه BOM</label>
+                                <label style="color: red">*</label>
+                                <i class="fa fa-spinner  fa-pulse fa-1x loadingSearch" *ngIf="checkBOMCodeLoading"></i>
+                                <div class="input-group input-group-sm">
+                                    <input class="form-control form-control-sm input-c  " id="BOMCode" name="BOMCode"
+                                           placeholder="کد " [(ngModel)]="BOM.code" autocomplete="off"
+                                           nbvRequired #BOMCode="ngModel"
+                                           nbvPattern="{{myPattern.EnNumberAndAlphabetic}}"
+                                           nbvPatternMsgHtml="کد  کار باید به صورت کاراکتر های انگلیسی وارد گردد."
+                                           [class.is-valid]="!(BOMCode?.errors?.nbvRequired || BOMCode?.errors?.nbvPattern)"
+                                           [class.is-invalid]="(BOMCode?.errors?.nbvRequired || BOMCode?.errors?.nbvPattern) && (BOMCode.touched || doSave)"
+                                           dest="BOMCodeValidation">
+                                </div>
+                                <div id="BOMCodeValidation" style="opacity: 0; height: 0"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="card-footer text-left">
+                        <ng-container *ngIf="mode !== actionMode.VIEW">
+                            <ng-container *ngIf="mode === actionMode.ADD">
+                                <button class="btn btn-action btn-sm" type="submit">
+                                    <span>ثبت</span>
+                                    <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+                                </button>
+                            </ng-container>
+
+                            <ng-container *ngIf="mode === actionMode.EDIT">
+                                <button class="btn btn-action btn-sm" type="submit">
+                                    <span>ویرایش</span>
+                                    <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+                                </button>
+                                <button class="btn btn-warning btn-sm" type="button" *ngIf="valid" (click)="next()">
+                                    مرحله بعد - تکمیل اطلاعات BOM
+                                </button>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="mode === actionMode.VIEW">
+                            <button class="btn btn-warning btn-sm" type="button" (click)="next()">
+                                مرحله بعد - نمایش اطلاعات تکمیلی BOM
+                            </button>
+                        </ng-container>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6 col-6 col-sm-6 card-title">
+                            <i class="fa fa-list"></i>&nbsp;&nbsp;
+                            تکمیل اطلاعات BOM
+                            {{BOM.bomGroupName}}
+                        </div>
+                        <div class="col-md-6 col-6 col-sm-6 text-left">
+                            <button class="btn btn-sm btn-cancel-back" (click)="prev()">
+                                بازگشت به مرحله قبل
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body card-body-content">
+                    <ul class="nav nav-tabs p-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#home" id="partList"
+                               style="font-size: 12px">لیست قطعات </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " data-toggle="tab" href="#assetList" style="font-size: 12px"
+                               (click)="assetListB = true">لیست دارایی های </a>
+                        </li>
+                    </ul>
+                    <!--================================================================================>-->
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="home">
+                            <!--)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))-->
+                            <app-bom-parts *ngIf="partListB" [mode]="mode" [BOMId]="BOMId"
+                            ></app-bom-parts>
+                            <!--)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))-->
+                        </div>
+                        <div class="tab-pane fade" id="assetList" *ngIf="assetListB===true">
+                            <!--(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((-->
+                            <app-bom-assets [mode]="mode" [BOMId]="BOMId"
+                            ></app-bom-assets>
+                            <!--(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((-->
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--================================================================================================-->
+
+<!--<div class="card">-->
+<!--<div class="card-header">-->
+<!--<div class="row">-->
+<!--<div class="col-md-6 col-8 col-sm-6 card-title">-->
+<!--<ng-container *ngIf="mode === actionMode.ADD">-->
+<!--<i class="fa fa-plus"></i>&nbsp;-->
+<!--افزودن BOM-->
+<!--</ng-container>-->
+<!--<ng-container *ngIf="mode === actionMode.EDIT">-->
+<!--<i class="fa fa-edit"></i>&nbsp;-->
+<!--ویرایش BOM</ng-container>-->
+<!--<ng-container *ngIf="mode === actionMode.VIEW">-->
+<!--<i class="fa fa-eye"></i>&nbsp;-->
+<!--نمایش-->
+<!--BOM</ng-container>-->
+
+<!--</div>-->
+<!--<div class="col-md-6 col-4 col-sm-6 text-left">-->
+<!--<button (click)="cancel()"-->
+<!--class="btn btn-cancel-back btn-sm">-->
+<!--بازگشت-->
+<!--</button>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--<form #BOMForm="ngForm" (submit)="action(BOMForm)">-->
+<!--<div class="card-body card-body-content">-->
+<!--<fieldset class="scheduler-border" id="comapny-documents" style="background-color: #f5f5f5">-->
+<!--<div class="col-md-4">-->
+<!--<div class=" w-100 form-group mb-0" style="margin-right: 20px">-->
+<!--<label for="1" class="control-label" style="font-size: 12px">نام گروه BOM</label>-->
+<!--<input type="text" class="form-control form-control-sm  input-c" id="1" name="name" placeholder="نام "-->
+<!--[(ngModel)]="BOM.bomGroupName" nbvRequired-->
+<!--#BOMName="ngModel" nbvMinlength="3"-->
+<!--[class.is-valid]="!(BOMName?.errors?.nbvRequired || BOMName?.errors?.nbvMinlength)"-->
+<!--[class.is-invalid]="(BOMName?.errors?.nbvRequired || BOMName?.errors?.nbvMinlength) && (BOMName.touched || doSave)"-->
+<!--dest="BOMNameValidation">-->
+<!--</div>-->
+<!--<div id="BOMNameValidation"></div>-->
+
+
+<!--</div>-->
+<!--</fieldset>-->
+
+<!--<div class="col-md-12 p-0" >-->
+<!--<ul class="nav nav-tabs p-0">-->
+<!--<li class="nav-item active">-->
+<!--<a class="nav-link " data-toggle="tab" href="#partsBOM" id="oneActive" style="font-size: 12px">لیست-->
+<!--قطعات </a>-->
+<!--</li>-->
+<!--<li class="nav-item">-->
+<!--<a class="nav-link" data-toggle="tab" href="#assetsBOM" style="font-size: 12px"-->
+<!--(click)="assetsShow = true">دارایی های BOM</a>-->
+<!--</li>-->
+<!--</ul>-->
+<!--&lt;!&ndash;================================================================================>&ndash;&gt;-->
+<!--<div class="tab-content mt-1">-->
+
+<!--<div class="tab-pane " id="partsBOM"  >-->
+<!--&lt;!&ndash;              (BOMPart)="receiveBOMPart($event)"&ndash;&gt;-->
+<!--<app-bom-parts [mode]="mode" [BOMId]="BOMId" [BOMGroupName]="BOM.bomGroupName"-->
+<!--[doBack]="doBack"-->
+<!--&gt;</app-bom-parts>-->
+<!--</div>-->
+<!--&lt;!&ndash;             (BOMAsset)="receiveBOMAsset($event)"&ndash;&gt;-->
+<!--<div class="tab-pane" id="assetsBOM" *ngIf="assetsShow===true">-->
+<!--<app-bom-assets [mode]="mode" [BOMId]="BOMId" [BOMGroupName]="BOM.bomGroupName"-->
+<!--&gt;</app-bom-assets>-->
+<!--</div>-->
+
+<!--</div>-->
+<!--</div>-->
+
+<!--</div>-->
+<!--<div class="card-footer text-left">-->
+<!--<ng-container *ngIf="mode===actionMode.ADD">-->
+<!--<button type="submit" class="btn btn-action btn-sm " data-dismiss="modal" style="margin :0 5px ">-->
+<!--ثبت نهایی-->
+<!--</button>-->
+<!--</ng-container>-->
+<!--<ng-container *ngIf="mode===actionMode.EDIT">-->
+
+<!--<button type="submit" class="btn btn-action btn-am " data-dismiss="modal" style="margin :0 5px ">-->
+<!--ویرایش نهایی-->
+<!--</button>-->
+<!--</ng-container>-->
+<!--</div>-->
+<!--</form>-->
+<!--</div>-->

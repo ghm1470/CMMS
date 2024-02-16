@@ -1,0 +1,64 @@
+<div class="row">
+  <div class="col-10">
+    کارهای  روز :
+    {{selectedDay?.day}}
+    /
+    <!--    {{selectMonth.number| ConvertMonthToTitle}}-->
+    {{selectedDay?.month?.number}}
+    <!--    ماه-->
+    <!--    :-->
+    <!--    سال :-->
+    /
+    {{selectedDay?.year}}
+  </div>
+  <div class="col-2">
+    <button class="btn btn-success" (click)="back()">
+      بازگشت
+    </button>
+  </div>
+  <div class="col-12">
+    <table class="table table-bordered table-hover">
+      <tr>
+        <td>عنوان</td>
+        <td>توضیحات</td>
+        <td>زمان شروع</td>
+        <td>زمان پایان</td>
+        <td> مشاهده</td>
+      </tr>
+      <ng-container *ngFor="let session of selectedDay?.sessionList;let i=index">
+        <tr>
+          <td>{{session?.title}}</td>
+          <td>  {{session?.description}}</td>
+          <td>   {{MyMoment.convertIsoToJDateWithTimeEnToFa(session?.startDate)}}</td>
+          <td>   {{MyMoment.convertIsoToJDateWithTimeEnToFa(session?.endDate)}}</td>
+          <td><span class="fa fa-eye" (click)="showSessionDetail(session)"></span></td>
+        </tr>
+      </ng-container>
+    </table>
+
+  </div>
+
+
+</div>
+
+
+<!-- نمایش جلسه بر اساس روز انتخاب شده-->
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="false"
+  [modalSize]="MyModalSize.X_LARGE"
+  autoShow="false"
+  [myId]="'showSessionDetailModal'">
+  <div modal-header>
+    جزییات :
+    {{selectedSession?.title}}
+  </div>
+  <div modal-body style="height: 60vh">
+    <label>توضیحات :</label>
+    <p>{{selectedSession?.description}}</p>
+    <label>زمان شروع :</label>
+    <p>{{MyMoment.convertIsoToJDateWithTimeEnToFa(selectedSession?.startDate)}}</p>
+
+  </div>
+</nbw-modal>
+<!-- !! نمایش جلسه بر اساس روز انتخاب شده-->

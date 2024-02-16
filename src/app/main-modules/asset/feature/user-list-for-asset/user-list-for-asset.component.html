@@ -1,0 +1,168 @@
+<div class="card">
+    <div class="card-body card-body-content">
+        <div class="col-md-12" style="margin-bottom: 20px; margin-top: 15px;">
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-radio-button [checked]="assignedToUser" (change)="openAssignedToUserCard($event)">
+                        <strong style="font-size: 15px; color: #4c4c4c">
+                            تخصیص به شخص
+                        </strong>
+                    </mat-radio-button>
+                </div>
+                <div class="col-md-6">
+                    <mat-radio-button [checked]="assignedToGroup" (change)="openAssignedToGroupCard($event)">
+                        <strong style="font-size: 15px; color: #4c4c4c">
+                            تخصیص به گروه
+                        </strong>
+                    </mat-radio-button>
+                </div>
+
+            </div>
+        </div>
+        <div class="card card-body">
+            <ng-container *ngIf="modePage!==actionMode.VIEW">
+
+                <div class="row">
+                    <!--                        ///پست-->
+
+                    <div class="col-md-4 form-group required col-sm-12">
+                        <label class="for-label">انتخاب پست </label>
+                        <span style="color: red">*</span>
+                        <div class="input-group input-group-sm">
+                            <ng-select
+                                    style="width: 100%"
+                                    [loading]="loadingUserTypeList2"
+                                    [(ngModel)]="selectedUserTypeId2"
+                                    [disabled]="modePage===actionMode.VIEW"
+                                    class="auto-grow"
+                                    bindLabel="name"
+                                    bindValue="id"
+                                    (change)="changeUserType($event)"
+                                    [items]="userTypeList2"
+                                    [placeholder]="'عنوان پست'">
+
+                            </ng-select>
+                        </div>
+                    </div>
+                    <!--                        ///کاربر-->
+                    <ng-container *ngIf="assignedToUser">
+                        <div class="col-md-4 form-group required col-sm-12">
+                            <label class="for-label">انتخاب کاربر </label>
+                            <span style="color: red">*</span>
+                            <div class="input-group input-group-sm">
+                                <!--                                <ng-container *ngIf="!loadingUserList">-->
+                                <ng-select
+                                        style="width: 100%"
+                                        [(ngModel)]="parentUserId2"
+                                        name="parentUserId"
+                                        class="auto-grow"
+                                        [disabled]="modePage===actionMode.VIEW"
+                                        (scrollToEnd)="getAllUsersOfUserType()"
+                                        [loading]="loadingUserList2"
+                                        (change)="selectUser()"
+                                        [placeholder]="'انتخاب کاربر'">
+                                    <ng-container *ngFor="let user of userList2; let i= index ">
+
+                                        <ng-option
+                                                [value]="user.id">
+                                            {{user.name + '  ' + user?.family}}
+                                            <!--                                            {{' ( ' + user.userTypeName + ' )  ' }}-->
+                                        </ng-option>
+                                    </ng-container>
+
+                                </ng-select>
+                            </div>
+                            <div id="parentUserIdValidation"
+                                 style="opacity: 0; height: 0"></div>
+                        </div>
+                    </ng-container>
+
+                </div>
+            <br>
+            </ng-container>
+
+            <!--////////////////////////////////////////////////////////////////////////////////-->
+            <ng-container *ngIf="assignedToUser">
+                <div class="col-md-12">
+                    <table class="table table-striped table-bordered table-responsive-md">
+                        <thead>
+                        <tr>
+                            <td class="text-center" style="width: 10%">ردیف</td>
+                            <td class="text-center" style="width: 40%">نام</td>
+                            <td class="text-center" style="width: 40%">نام خانوادگی</td>
+                            <td class="text-center" style="width: 40%">پست</td>
+                            <td class="text-center" style="width: 10%" *ngIf="modePage!==actionMode.VIEW">حذف</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <ng-container *ngIf="userListAssignedToUser?.length > 0">
+                            <tr *ngFor="let item of userListAssignedToUser;let i = index">
+                                <th class="text-center" style="width: 10%">{{i + 1}}</th>
+                                <td class="text-center"
+                                    style="width: 40%">{{item.name}}</td>
+                                <td class="text-center"
+                                    style="width: 40%">{{item.family}}</td>
+                                <td class="text-center"
+                                    style="width: 40%">{{item?.userTypeName}}</td>
+                                <td class="text-center" style="width: 5%" *ngIf="modePage!==actionMode.VIEW">
+                                    <i class="fa fa-trash" (click)="deleteUser2(item.id)"
+                                       style="cursor: pointer;"></i>
+                                </td>
+                            </tr>
+                        </ng-container>
+                        </tbody>
+                    </table>
+                    <div class="col-md-12 text-center" *ngIf="userListAssignedToUser?.length === 0">
+                        موردی افزوده نشده است
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="assignedToGroup">
+                <div class="col-md-12">
+                    <table class="table table-striped table-bordered table-responsive-md">
+                        <thead>
+                        <tr>
+                            <td class="text-center" style="width: 10%">ردیف</td>
+                            <td class="text-center" style="width: 40%">پست</td>
+                            <td class="text-center" style="width: 10%" *ngIf="modePage!==actionMode.VIEW">حذف</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <ng-container *ngIf="userListAssignedToGroup?.length > 0">
+                            <tr *ngFor="let item of userListAssignedToGroup;let i = index">
+                                <th class="text-center" style="width: 10%">{{i + 1}}</th>
+                                <td class="text-center"
+                                    style="width: 40%">{{item.userTypeName}}</td>
+
+                                <td class="text-center" style="width: 5%" *ngIf="modePage!==actionMode.VIEW">
+                                    <i class="fa fa-trash"
+                                       (click)="deleteGroup(item.userTypeId)"
+                                       style="cursor: pointer;"></i>
+                                </td>
+                            </tr>
+                        </ng-container>
+                        </tbody>
+                    </table>
+                    <div class="col-md-12 text-center" *ngIf="userListAssignedToGroup?.length === 0">
+                        موردی افزوده نشده است
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="card-footer text-left">
+            <button class="btn btn-action btn-sm" type="button"
+                    *ngIf="modePage!==actionMode.VIEW"
+                    (click)="addPersonnelToProject();addGroupPersonnelToProject()">
+                ثبت اطلاعات
+            </button>
+        </div>
+
+
+    </div>
+</div>
+
+
+<!--**************************************************************************-->

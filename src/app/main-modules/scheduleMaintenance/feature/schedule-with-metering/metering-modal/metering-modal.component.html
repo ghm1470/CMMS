@@ -1,0 +1,125 @@
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="false"
+  [dataBackdrop]="true"
+  [modalSize]="MyModalSize.CUSTOM_WIDTH"
+  [customWidthPercent]="{xs: 100, md:65}"
+  autoShow="false"
+  (onClose)="cancelModal()"
+  [myId]="'MeteringSModal'">
+
+<div modal-header>
+  <span *ngIf=" mode === actionMode.ADD" style="font-size: 15px;color: #4c4c4c">افزودن برنامه ریز کارکردی </span>
+  <span *ngIf="mode === actionMode.EDIT && modeView !== actionMode.VIEW"  style="font-size: 15px;color: #4c4c4c">ویرایش برنامه ریز کارکردی</span>
+  <span *ngIf="modeView === actionMode.VIEW"  style="font-size: 15px;color: #4c4c4c">نمایش برنامه ریز کارکردی</span>
+</div>
+  <div modal-body style="display: flow-root">
+  <form #scheduleWithMeteringForm="ngForm" (submit)="action(scheduleWithMeteringForm)" id="formsScheduleWithMetering">
+    <div class="row">
+
+      <div class="col-md-4 form-group required col-sm-12">
+        <label class="for-label" for="unitOfMeasurementId">واحد اندازه گیری :</label>
+        <span style="color: red">*</span>
+        <ng-select dir="rtl"
+                   [disabled]="modeView === actionMode.VIEW"
+                   [(ngModel)]="scheduleMetering.unitOfMeasurementId"
+                   placeholder="انتخاب واحد اندازه گیری "
+                   style="padding: 0"
+                   #unitOfMeasurementId="ngModel"
+                   id="unitOfMeasurementId"
+                   name="unitOfMeasurementId"
+                   class="form-control"
+                   nbvRequired
+                   [class.is-valid]="!(unitOfMeasurementId?.errors?.nbvRequired || unitOfMeasurementId?.errors?.nbvPattern)"
+                   [class.is-invalid]="(unitOfMeasurementId?.errors?.nbvRequired || unitOfMeasurementId?.errors?.nbvPattern)
+                                                        && (unitOfMeasurementId.touched || doSave)"
+                   dropdownPosition="bottom">
+          <ng-option *ngFor="let item of unitOfMeasurementList; let i = index"
+                     [value]="item.id">
+            {{item.unit}}
+          </ng-option>
+        </ng-select>
+        <div id="unitOfMeasurementIdListValidation" style="opacity: 0; height: 0"></div>
+      </div>
+
+
+
+      <div class="col-md-4 form-group required col-sm-12">
+        <label class="for-label">هر:</label>
+        <label style="color: red">*</label>
+        <div class="input-group input-group-sm">
+          <input type="text" [(ngModel)]="scheduleMetering.per"
+                 class="form-control" minlength="1" maxlength="80" name="meteringPer"
+                 nbvRequired #meteringPer="ngModel" (change)="changePerMetering()"
+                 nbvPattern="{{myPattern.number}}"
+                 nbvPatternMsgHtml="مدت دوره زمانی را به صورت عددی وارد کنید."
+                 [class.is-valid]="!(meteringPer?.errors?.nbvRequired || meteringPer?.errors?.nbvPattern)"
+                 [class.is-invalid]="(meteringPer?.errors?.nbvRequired || meteringPer?.errors?.nbvPattern) && (meteringPer.touched || doSave)"
+                 dest="meteringPerValidation">
+        </div>
+        <div id="meteringPerValidation"></div>
+      </div>
+
+      <!--<div class="col-md-4 form-group required col-sm-12">-->
+        <!--<label class="for-label">نوع دوره:</label>-->
+        <!--<div class="input-group input-group-sm">-->
+          <!--<select [(ngModel)]="scheduleMetering.fixType" name="meteringFixType" class="form-control"-->
+                  <!--#meteringFixType="ngModel" nbvRequired-->
+                  <!--[class.is-valid]="!(meteringFixType?.errors?.nbvRequired)"-->
+                  <!--[class.is-invalid]="(meteringFixType?.errors?.nbvRequired) && (meteringFixType.touched || doSave)"-->
+                  <!--dest="meteringFixTypeValidation">-->
+            <!--<option value="-1" disabled>نوع دوره</option>-->
+            <!--<option *ngFor="let item of fixTypeList" [value]="item._value">{{item._title}}</option>-->
+          <!--</select>-->
+        <!--</div>-->
+        <!--<div id="meteringFixTypeValidation" style="opacity: 0; height: 0"></div>-->
+      <!--</div>-->
+      <div class="col-md-4 form-group required col-sm-12">
+        <label class="for-label">شروع از:</label>
+        <label style="color: red">*</label>
+        <div class="input-group input-group-sm">
+          <input type="text" [(ngModel)]="scheduleMetering.startDistance"
+                 class="form-control" minlength="1" maxlength="10" name="meteringStartOn"
+                 nbvRequired #meteringStartOn="ngModel" (change)="changeStartOn()"
+                 nbvPattern="{{myPattern.number}}"
+                 nbvPatternMsgHtml="مدت دوره زمانی را به صورت عددی وارد کنید."
+                 [class.is-valid]="!(meteringStartOn?.errors?.nbvRequired || meteringStartOn?.errors?.nbvPattern)"
+                 [class.is-invalid]="(meteringStartOn?.errors?.nbvRequired || meteringStartOn?.errors?.nbvPattern) && (meteringStartOn.touched || doSave)"
+                 dest="meteringStartOnValidation">
+        </div>
+        <div id="meteringStartOnValidation"></div>
+      </div>
+
+      <div class="col-md-4 form-group required col-sm-12">
+        <label class="for-label">تا:</label>
+        <label style="color: red">*</label>
+        <div class="input-group input-group-sm">
+          <input type="text" [(ngModel)]="scheduleMetering.endDistance"
+                 class="form-control" minlength="1" maxlength="10" name="meteringEndOn"
+                 nbvRequired #meteringEndOn="ngModel" (change)="changeEndOn()"
+                 nbvPattern="{{myPattern.number}}"
+                 nbvPatternMsgHtml="مدت دوره زمانی را به صورت عددی وارد کنید."
+                 [class.is-valid]="!(meteringEndOn?.errors?.nbvRequired || meteringEndOn?.errors?.nbvPattern)"
+                 [class.is-invalid]="(meteringEndOn?.errors?.nbvRequired || meteringEndOn?.errors?.nbvPattern) && (meteringEndOn.touched || doSave)"
+                 dest="meteringEndOnValidation">
+        </div>
+        <div id="meteringEndOnValidation"></div>
+      </div>
+
+    </div>
+    <div class="btn-group-sm text-left" style="margin-top: 15px">
+      <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal" style="margin :0 5px "
+              (click)="cancelModal()">
+        انصراف
+      </button>
+
+      <button *ngIf="modeView!==actionMode.VIEW" type="submit" class="btn btn-action btn-sm " style="margin :0 5px "
+      >
+
+        <i *ngIf="loadingAction" class="fa fa-spinner fa-pulse fa-1x"></i>
+        ثبت
+      </button>
+    </div>
+  </form>
+  </div>
+</nbw-modal>

@@ -1,0 +1,43 @@
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        (onClose)="onCloseEmit()"
+        [modalSize]="MyModalSize.DEFAULT"
+        autoShow="false"
+        [myId]="modalId">
+    <div modal-header>
+        <i class="fa fa-trash" style="color: gray">
+            حذف
+        </i>
+    </div>
+    <div modal-body>
+        <div class="col-md-12">
+            <div class="row">
+                {{title}}
+
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="col-md-12">
+            <div class="row justify-content-end">
+                <button class="btn  btn-cancel"
+                        style="background-color: #d1d1d1"
+                        (click)="conferm(false)">
+                    خیر
+                </button>
+                &nbsp;
+                &nbsp;
+                <button class="btn btn-save"
+                        [disabled]="loading"
+                        style="background-color: #eeeeee"
+                        (click)="conferm(true)">
+
+                    بله
+                    <i class="fa fa-spinner fa-pulse " *ngIf="loading"></i>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</nbw-modal>

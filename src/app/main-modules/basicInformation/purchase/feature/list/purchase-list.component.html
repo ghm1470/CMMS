@@ -1,0 +1,63 @@
+<!--<div class="row" style="margin-bottom: 10px">-->
+  <!--<div class="col-md-5 input-group input-group-sm">-->
+    <!--<input type="text" placeholder="عنوان" [(ngModel)]="dataOfPurchaseList.term"-->
+           <!--class="form-control" minlength="3" maxlength="20" name="name"-->
+           <!--(change)="getListSelf()">-->
+  <!--</div>-->
+  <!--&lt;!&ndash;<div class="col-md-1">&ndash;&gt;-->
+  <!--&lt;!&ndash;<button class="btn btn-sm btn-action btn-search" (click)="getListSelf()">&ndash;&gt;-->
+  <!--&lt;!&ndash;&lt;!&ndash;<i class="fa fa-search"></i>&ndash;&gt;&ndash;&gt;-->
+  <!--&lt;!&ndash;جستجو&ndash;&gt;-->
+  <!--&lt;!&ndash;</button>&ndash;&gt;-->
+  <!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--</div>-->
+
+<!--<div class="card table-responsive-md">-->
+  <!--<table class="table table-striped">-->
+    <!--<thead>-->
+    <!--<tr>-->
+      <!--<th class="text-center" style="width: 5%">ردیف</th>-->
+      <!--<th class="text-center" >عنوان خرید</th>-->
+      <!--<th class="text-center" >کد بودجه</th>-->
+      <!--<th class="text-center" >مبلغ بودجه</th>-->
+      <!--<th class="text-center" >واحد پولی</th>-->
+      <!--<th class="text-center" >توضیحات</th>-->
+      <!--<th class="text-center" style="width: 5%"></th>-->
+      <!--<th class="text-center" style="width: 5%"></th>-->
+    <!--</tr>-->
+    <!--</thead>-->
+    <!--<tbody>-->
+    <!--<ng-container *ngFor="let item of dataOfPurchaseList.itemPage.content; let i = index">-->
+      <!--<tr class="text-center">-->
+        <!--<td>{{i + 1}}</td>-->
+        <!--<td>{{item.}}</td>-->
+        <!--<td>{{item.code}}</td>-->
+        <!--<td>{{item.budgetAmount}}</td>-->
+        <!--<td>{{item.currency.title}}</td>-->
+        <!--<td>{{item.description}}</td>-->
+        <!--<td>-->
+          <!--<a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+             <!--(click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">-->
+            <!--<i class="fa fa-edit" title="ویرایش"></i>-->
+          <!--</a>-->
+        <!--</td>-->
+        <!--<td>-->
+          <!--<a class="btn btn-sm btn-outline-lightning rounded-0"-->
+             <!--style="cursor: pointer" nbdAreYouSure (then)="deleteItem(item)">-->
+            <!--<i class="fa fa-trash" title="حذف"></i>-->
+          <!--</a>-->
+        <!--</td>-->
+      <!--</tr>-->
+    <!--</ng-container>-->
+
+    <!--</tbody>-->
+  <!--</table>-->
+
+  <!--<shr-pagination-->
+    <!--*ngIf="dataOfPurchaseList.itemPage !== null && dataOfPurchaseList.itemPage !== undefined"-->
+    <!--[indicatorCount]="dataOfPurchaseList.indicatorCount"-->
+    <!--[totalPages]="dataOfPurchaseList.itemPage.totalPages"-->
+    <!--[currentPage]="dataOfPurchaseList.queryParamReal.paging.page"-->
+    <!--(selectedPage)="setCurrentPage($event)"-->
+    <!--class="class1"></shr-pagination>-->
+<!--</div>-->

@@ -1,0 +1,60 @@
+<!--<div class="col-lg-12 col-sm-12 col-xs-12">-->
+
+  <!--<img src="../../../../../assets/images/back.png" width="50" style="margin-left: -44px ; margin-top: -2px"-->
+       <!--*ngIf="showBackButton" (click)="locationback()">-->
+  <!--<button *ngIf="showBackButton" class="btn btn-warning " (click)="locationback()"-->
+          <!--style="border-radius: 30px; width: 160px; height: 40px;">بازگشت-->
+  <!--</button>-->
+
+
+  <!--<div class="col-md-12">-->
+    <!--<div class="widget flat radius-bordered">-->
+      <!--<div class="widget-body">-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="col-md-6" style="margin-top: 7px">
+{{titleField}}
+    </div>
+    <div class="col-md-6">
+      <button class="btn btn-cancel-back pull-right"
+               (click)="locationBack()"
+      > بازگشت
+      </button>
+    </div>
+  </div>
+    <form [formGroup]="form" (ngSubmit)="save(form.value)">
+  <div class="panel-body"  >
+        <div class="col-md-6  col-sm-6  col-xs-12 "
+             [class.has-error]="form.controls['title'].touched &&
+                                                       !form.controls['title'].valid"
+             [class.has-success]="form.controls['title'].valid">
+          <label>عنوان</label>
+          <input type="text" class="form-control"
+                 placeholder="عنوان را وارد کنید"
+                 [(ngModel)]="formCategory.title"
+                 formControlName="title">
+          <p class="alert alert-danger"
+             *ngIf="!form.controls['title'].valid && form.controls['title'].touched">
+            وارد کردن عنوان الزامی است
+          </p>
+        </div>
+
+
+  </div>
+      <div class="panel-footer">
+        <div class="col-md-12">
+          <button type="submit" class="btn btn-action pull-right mobile-top-space" [disabled]="!form.valid || actionButton"
+                  style="width:110px; margin-bottom: 10px">
+            <i class="fa fa-floppy-o">&nbsp;</i>
+            &nbsp; ثبت
+          </button>
+        </div>
+      </div>
+    </form>
+
+</div>

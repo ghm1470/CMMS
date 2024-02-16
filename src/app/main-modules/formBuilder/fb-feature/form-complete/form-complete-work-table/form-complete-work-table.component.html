@@ -1,0 +1,875 @@
+<app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+<!--<button (click)="test()">test</button>-->
+<ng-container *ngIf="!loading">
+    <div *ngIf="form != null && form.elementList.length > 0"
+         style="    height: 50vh;
+    max-height: 50vh;
+    overflow: auto;">
+        <br>
+        <form [formGroup]="formComplete" autocomplete="off">
+            <div class="row form-group" style="margin: 0" *ngFor="let item of listDisplay;let i = index;">
+                <div [ngSwitch]="item.elementType" class="w-100">
+                    <!--                    CHECK_BOX-->
+                    <ng-container class="w-100" *ngSwitchCase="'CHECK_BOX'">
+                        <div class="col-md-2 text-center">
+                            <img *ngIf="item.imageStatus == MyImageStatus.SAVED_IMAGE" [src]="url + item.picture.path"
+                                 height="100px" width="100px">
+                        </div>
+                        <div class="col-md-10">
+                            <div class="w-100 text-right" style="margin-top: -25px">
+                                <label class="control-label" style="font-size: 12px">{{item.label }}
+                                    <span style="color: red" *ngIf="item.required"> * </span>
+                                </label>
+                                <a class="toolTipColor" [title]="item.helpText">
+                                    <i class="fa fa-info-circle"></i>
+                                </a>
+                            </div>
+                            <ng-container
+                                    *ngIf="formData.answerList[item.index] == null || MyToolkit.checkIsNullOrUndefined(incomingFormData)">
+                                <div *ngFor="let ch of item.optionList;let q=index;">
+                                    <div class="row col-md-12" style="margin-bottom: 10px;">
+                                        <div class="col-md-1">
+                                            <input type="checkbox"
+                                                   name="selection{{item.id}}" [value]="item.id"
+                                                   [checked]="getChecked(item,ch)"
+                                                   (click)="onChangeCheck($event.target.checked, ch.id,item.index,item)"
+                                                   [disabled]="finalLevel === false|| formStatus!== 'pending' || isView||!enableItems"
+                                            >
+                                        </div>
+                                        <div class="col-md-1 text-center"
+                                             *ngIf="ch.imageStatus == MyImageStatus.SAVED_IMAGE">
+                                            <img [src]="url + ch.path" height="50px" width="50px">
+                                        </div>
+                                        <div class="col-md-5 text-right">
+                                            <span style="font-size: 12px">&nbsp;&nbsp;{{ch.caption}}</span>
+                                        </div>
+                                    </div>
+                                    <!--                                    اگر زیر سوال داشت-->
+                                    <ng-container
+                                            *ngIf="hideCollapse(item.index,ch,'subQuestionCheck'+item.index+'-'+q)==true&&ch.subQuestionList.length>0">
+                                        <ng-container [ngTemplateOutlet]="subQuestionDisplayCHECK_BOXTemp"
+                                                      [ngTemplateOutletContext]="{$implicit:ch,q:q }">
+                                        </ng-container>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                            <ng-container
+                                    *ngIf="formData.answerList[item.index] != null && !MyToolkit.checkIsNullOrUndefined(incomingFormData)">
+                                <div *ngFor="let ch of item.optionList;let q=index;">
+                                    <div class="row col-md-12" style="margin-bottom: 10px;">
+                                        <div class="col-md-1">
+                                            <!--                                               (click)="onChangeCheck($event.target.checked, ch.id,item.index,item)"-->
+                                            <!--                                               [checked]="formData.answerList[item.index].answerIdList.indexOf(ch.id) > -1"-->
+                                            <input type="checkbox" name="selection{{item.id}}" [value]="ch.id"
+                                                   [checked]="getChecked(item,ch)"
+                                                   (click)="onChangeCheck1($event.target.value, item,item.index)"
+                                                   [disabled]="finalLevel === false ||formStatus!== 'pending' || isView||!enableItems">
+                                        </div>
+                                        <div class="col-md-1 text-center"
+                                             *ngIf="ch.imageStatus == MyImageStatus.SAVED_IMAGE">
+                                            <img [src]="url + ch.path" height="50px" width="50px">
+                                        </div>
+                                        <div class="col-md-5 text-right">
+                                            <span>&nbsp;&nbsp;{{ch.caption}}</span>
+                                        </div>
+                                    </div>
+                                    <!--                                    اگر زیر سوال داشت-->
+                                    <ng-container
+                                            *ngIf="hideCollapse(item.index,ch,'subQuestionCheck'+item.index+'-'+q)==true&&ch.subQuestionList.length>0">
+                                        <ng-container [ngTemplateOutlet]="subQuestionDisplayCHECK_BOXTemp"
+                                                      [ngTemplateOutletContext]="{$implicit:ch,q:q }">
+                                        </ng-container>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                            <div class="col-md-6 col-md-offset-3">
+                                <p style="color: red">{{errorMessages[item.index]}}</p>
+                            </div>
+                            <!--                            <div class="col-md-12" *ngFor="let ch of item.optionList;let q=index">-->
+                            <!--                                <ng-container-->
+                            <!--                                        *ngIf="hideCollapse(item.index,ch,'subQuestionCheck'+item.index+'-'+q)==true">-->
+                            <!--                                    <div style="margin-top: 0px;margin-bottom: 0px;"-->
+                            <!--                                         id="subQuestionCheck{{item.index}}-{{q}}">-->
+                            <!--                                        <app-sub-question-display [subList]="ch.subQuestionList" [list]="list"-->
+                            <!--                                                                  [formData]="formData"-->
+                            <!--                                                                  (onAnswer)="fillAnswer($event)">-->
+                            <!--                                        </app-sub-question-display>-->
+                            <!--                                    </div>-->
+                            <!--                                </ng-container>-->
+                            <!--                            </div>-->
+
+                            <ng-template #subQuestionDisplayCHECK_BOXTemp let-ch let-q>
+                                <div style="margin-top: 0px;margin-bottom: 0px;"
+                                     id="subQuestionCheck{{item.index}}-{{q}}">
+                                    <app-sub-question-display [subList]="ch.subQuestionList" [list]="list"
+                                                              [formData]="formData"
+                                                              [finalLevel]="finalLevel"
+                                                              [isView]="isView"
+                                                              [formStatus]="formStatus"
+                                                              [enableItems]="enableItems"
+                                                              (onAnswer)="fillAnswer($event)">
+                                    </app-sub-question-display>
+                                </div>
+                            </ng-template>
+                        </div>
+                        <hr style="margin-top: 30px;">
+                    </ng-container>
+
+                    <!--                    COMBO_BOX-->
+                    <ng-container class="w-100" *ngSwitchCase="'COMBO_BOX'">
+                        <div class="col-md-2 text-center">
+                            <img *ngIf="item.imageStatus == MyImageStatus.SAVED_IMAGE" [src]="url + item.picture.path"
+                                 height="100px" width="100px">
+                        </div>
+                        <div class="col-md-10">
+                            <div class="w-100 text-right" style="margin-top: -25px">
+                                <label class="control-label text-justify" style="font-size: 12px">{{ item.label }}
+                                    <span style="color: red" *ngIf="item.required"> * </span>
+                                </label>
+                                <a class="toolTipColor" [title]="item.helpText">
+                                    <i class="fa fa-info-circle"></i>
+                                </a>
+                            </div>
+                            <ng-container
+                                    *ngIf="formData.answerList[item.index] == null || MyToolkit.checkIsNullOrUndefined(incomingFormData)">
+                                <div class="pr-0 col-md-8 col-md-offset-2  text-center"
+                                     *ngIf="item.comboBoxType == 'SINGLE'">
+                                    <select class="col-md-12 form-control" name="selectedSingle{{i}}"
+                                            style="font-size: 12px"
+                                            [disabled]="formStatus!== 'pending' || isView||!enableItems"
+                                            (change)="onChangeElementAnswer($event, item, item.index, 'COMBO_SINGLE')">
+                                        <option *ngFor="let singleOpt of item.comboOptionList;let j=index;"
+                                                [value]="singleOpt"
+                                                [selected]="formData?.answerList[item.index]?.answerIdList?.indexOf(singleOpt) > -1"
+                                                style="font-size: 12px">
+
+                                            <!--                                            [selected]="j===0"-->
+                                            {{singleOpt}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="pr-0 col-md-8 col-md-offset-2  text-center"
+                                     *ngIf="item.comboBoxType == 'MULTIPLE'">
+                                    <select class="col-md-12 form-control" name="selectedMulti{{i}}" multiple="multiple"
+                                            [(ngModel)]="combo[i]"
+                                            style="font-size: 12px"
+                                            [disabled]="formStatus!== 'pending' || isView||!enableItems"
+                                            (change)="onChangeElementAnswer(null, item, item.index, 'COMBO_MULTIPLE')">
+                                        <option *ngFor="let multiOpt of item.comboOptionList;let k=index;"
+                                                [value]="multiOpt"
+                                                [selected]="i===0"> {{multiOpt}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </ng-container>
+                            <ng-container
+                                    *ngIf="formData.answerList[item.index] != null && !MyToolkit.checkIsNullOrUndefined(incomingFormData)">
+                                <div class="pr-0 col-md-8 col-md-offset-2  text-center"
+                                     *ngIf="item.comboBoxType == 'SINGLE'">
+                                    <select class="col-md-12 form-control" name="selectedSingle{{i}}"
+                                            [disabled]="formStatus!== 'pending' || isView||!enableItems"
+                                            (change)="onChangeElementAnswer($event, item, item.index, 'COMBO_SINGLE')">
+                                        <option *ngFor="let singleOpt of item.comboOptionList;let j=index;"
+                                                [value]="singleOpt"
+                                                [selected]="formData.answerList[item.index].answerIdList.indexOf(singleOpt) > -1">
+                                            {{singleOpt}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="w-100" *ngIf="item.comboBoxType == 'MULTIPLE'">
+                                    <select class="col-md-12 form-control" name="selectedMulti{{i}}" multiple="multiple"
+                                            [(ngModel)]="combo[i]"
+                                            [disabled]="formStatus!== 'pending' || isView||!enableItems"
+                                            (change)="onChangeElementAnswer(null, item, item.index, 'COMBO_MULTIPLE')">
+                                        <option *ngFor="let multiOpt of item.comboOptionList;let k=index;"
+                                                [value]="multiOpt"
+                                                [selected]="formData.answerList[item.index].answerIdList.indexOf(multiOpt) > -1"> {{multiOpt}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6 col-md-offset-3">
+                            <p style="color: red">{{errorMessages[item.index]}}</p>
+                        </div>
+                        <hr style="margin-top: 30px;">
+                    </ng-container>
+
+                    <!--                    DATE-->
+                    <ng-container class="w-100" *ngSwitchCase="'DATE'">
+                        <div class="col-md-2 text-center">
+                            <img *ngIf="item.imageStatus == MyImageStatus.SAVED_IMAGE" [src]="url + item.picture.path"
+                                 height="100px" width="100px">
+                        </div>
+                        <div class="col-md-10">
+                            <div class="w-100 text-right" style="margin-top: -20px">
+                                <label class="control-label text-justify" style="font-size: 12px">{{item.label }}
+                                    <span style="color: red" *ngIf="item.required"> * </span>
+                                </label>
+                                <a class="toolTipColor" [title]="item.helpText">
+                                    <i class="fa fa-info-circle"></i>
+                                </a>
+                            </div>
+                            <ng-container
+                                    *ngIf="formData.answerList[item.index] == null || MyToolkit.checkIsNullOrUndefined(incomingFormData)
+                    || formData.answerList[item.index].answerIdList.length==0">
+                                <div class="pr-0 col-md-8 col-md-offset-2">
+                                    <div class="input-group" *ngIf="isRtl">
+                                        <div class="input-group-addon">
+                                            <span class="fa fa-calendar" id="date{{i}}"></span>
+                                        </div>
+                                        <input type="text" class="form-control" style="border-radius: 0"
+                                               id="inputDate{{i}}"
+                                               #Date
+                                               [placeholder]="data.public.enterDate"
+                                               [disabled]="formStatus!== 'pending' || isView||!enableItems"
+                                               (click)="onChangeElementAnswer($event.target.value, item, item.index, MyElementType.DATE)"/>
+                                    </div>
+                                    <div class="input-group" *ngIf="!isRtl">
+                                        <div class="input-group-addon">
+                                            <span class="fa fa-calendar" id="dateMiladi{{i}}"></span>
+                                        </div>
+                                        <input type="text" class="form-control" style="border-radius: 0"
+                                               id="inputDateMiladi{{i}}" #Date
+                                               placeholder="data.public.enterDate"
+                                               (click)="onChangeElementAnswer($event.target.value, item, item.index, MyElementType.DATE)"/>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container
+                                    *ngIf="formData.answerList[item.index] != null && !MyToolkit.checkIsNullOrUndefined(incomingFormData)
+                    && formData.answerList[item.index].answerIdList.length > 0">
+                                <div class="col-md-8 col-md-offset-2">
+                                    <div class="input-group" *ngIf="isRtl">
+                                        <div class="input-group-addon">
+                                            <span class="far fa-calendar-alt" id="date1{{i}}"
+                                                  (click)="showDate(i)"></span>
+                                        </div>
+                                        <input type="text" class="form-control col-md-3" id="inputDate1{{i}}" #Date
+                                               [value]="MyToolkit2.Moment.getJaliliDateFromIsoOrFull(formData.answerList[item.index].answerIdList[0])"
+                                               [disabled]="formStatus!== 'pending' || isView||!enableItems"
+                                               name="endDate_{{i}}"
+                                               (click)="onChangeElementAnswer($event.target.value, item, item.index, MyElementType.DATE)"/>
+                                    </div>
+                                    <div class="input-group" *ngIf="!isRtl">
+                                        <div class="input-group-addon">
+                    <span class="far fa-calendar-alt" id="dateMiladi1{{i}}"
+                          (click)="showDateGregorian(i)"></span>
+                                        </div>
+                                        <input type="text" class="form-control col-md-3" id="inputDateMiladi1{{i}}"
+                                               #Date
+                                               placeholder="data.public.enterDate" name="endDateMiladi_{{i}}"
+                                               [(ngModel)]="formData?.answerList[item.index]?.answerIdList[0]"
+                                               [disabled]="formStatus!== 'pending' || isView||!enableItems"
+                                               (click)="onChangeElementAnswer($event.target.value, item, item.index, MyElementType.DATE)"/>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6 col-md-offset-3">
+                            <p style="color: red">{{errorMessages[item.index]}}</p>
+                        </div>
+                        <hr style="margin-top: 30px;">
+                    </ng-container>
+
+                    <!--                    NUMERICAL-->
+                    <ng-container class="w-100" *ngSwitchCase="'NUMERICAL'">
+                        <div class="col-md-2 text-center">
+                            <img *ngIf="item.imageStatus == MyImageStatus.SAVED_IMAGE" [src]="url + item.picture.path"
+                                 height="100px" width="100px">
+                        </div>
+                        <div class="col-md-10">
+                            <div class="w-100 text-right" style="margin-top: -20px">
+                                <label class="control-label text-justify" style="font-size: 12px">{{item.label }}
+                                    <span style="color: red" *ngIf="item.required"> * </span>
+                                </label>
+                                <a class="toolTipColor" [title]="item.helpText">
+                                    <i class="fa fa-info-circle"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-10 col-md-offset-1">
+                                <div class="col-md-2 text-right">{{item.endLabel}}</div>
+                                <div class="col-md-8 text-center">
+                                    <p-slider id="slider" [min]="item.minLength" [max]="item.maxLength"
+                                              [step]="item.step"
+                                              [(ngModel)]="slider[i]" name="slider"
+                                              (click)="onChangeElementAnswer(null, item, item.index, MyElementType.NUMERICAL)"></p-slider>
+                                </div>
+                                <div class="col-md-2 text-left">{{item.beginLabel}}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-md-offset-3">
+                            <p style="color: red">{{errorMessages[item.index]}}</p>
+                        </div>
+                        <hr style="margin-top: 30px;">
+                    </ng-container>
+                    <!--                    RADIO_BUTTON-->
+                    <ng-container class="w-100" *ngSwitchCase="'RADIO_BUTTON'">
+                        <div class="col-md-2 text-center">
+                            <img *ngIf="item.imageStatus == MyImageStatus.SAVED_IMAGE" [src]="url + item.picture.path"
+                                 height="100px" width="100px">
+                        </div>
+                        <div class="col-md-10">
+                            <div class="w-100 text-right" style="margin-top: -25px">
+                                <label class="control-label text-justify" style="font-size: 12px">{{item.label }}
+                                    <span style="color: red" *ngIf="item.required"> * </span>
+                                </label>
+                                <a class="toolTipColor" [title]="item.helpText">
+                                    <i class="fa fa-info-circle"></i>
+                                </a>
+                            </div>
+                            <ng-container
+                                    *ngIf="formData.answerList[item.index] == null || MyToolkit.checkIsNullOrUndefined(incomingFormData)">
+                                <div *ngFor="let ch of item.optionList;let q=index">
+                                    <div class="row col-md-12" style="margin-bottom: 10px;">
+                                        <div class="col-md-1">
+                                            <input type="radio" name="radio{{item.id}}" [value]="ch.id"
+                                                   [disabled]="formStatus!== 'pending' || isView||!enableItems"
+                                                   [checked]="formData?.answerList[item.index]?.answerIdList[0] == ch?.id"
+                                                   (click)="onChangeElementAnswer($event, item, item.index, MyElementType.RADIO_BUTTON)"
+                                            >
+                                        </div>
+                                        <div class="col-md-1 text-center"
+                                             *ngIf="ch.imageStatus == MyImageStatus.SAVED_IMAGE">
+                                            <img [src]="url + ch.path" height="50px" width="50px">
+                                        </div>
+                                        <div class="col-md-5 text-right">
+                                            <span>&nbsp;&nbsp;{{ch.caption}}</span>
+                                        </div>
+                                    </div>
+                                    <!--                                    اگر زیر سوال داشت-->
+                                    <ng-container
+                                            *ngIf="hideCollapse(item.index,ch,'subQuestionRadio'+item.index+'-'+q)===true&&ch.subQuestionList.length>0">
+                                        <div
+                                                class="panel-collapse collapse"
+                                                style="margin-top: 0px;margin-bottom: 0px;"
+                                                id="subQuestionRadio{{item.index}}-{{q}}">
+
+                                            <app-sub-question-display [subList]="ch.subQuestionList" [list]="list"
+                                                                      [formData]="formData"
+                                                                      [finalLevel]="finalLevel"
+                                                                      [isView]="isView"
+                                                                      [formStatus]="formStatus"
+                                                                      [enableItems]="enableItems"
+                                                                      (onAnswer)="fillAnswer($event)">
+                                            </app-sub-question-display>
+
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                            <ng-container
+                                    *ngIf="formData.answerList[item.index] != null && !MyToolkit.checkIsNullOrUndefined(incomingFormData)">
+                                <div *ngFor="let ch of item.optionList;let q=index">
+                                    <div class="row col-md-12" style="margin-bottom: 10px;">
+                                        <div class="col-md-1">
+                                            <input type="radio" name="radio{{item.id}}" [value]="ch.id"
+                                                   [disabled]="formStatus!== 'pending' || isView||!enableItems"
+                                                   [checked]="formData.answerList[item.index].answerIdList[0] == ch.id"
+                                                   (click)="onChangeElementAnswer($event, item, item.index, MyElementType.RADIO_BUTTON)"
+                                            >
+                                            <!--                                               attr.data-target="#subQuestionRadio{{item.index}}-{{q}}">-->
+                                        </div>
+                                        <div class="col-md-1 text-center"
+                                             *ngIf="ch.imageStatus == MyImageStatus.SAVED_IMAGE">
+                                            <img [src]="url + ch.path" height="50px" width="50px">
+                                        </div>
+                                        <div class="col-md-5 text-right">
+                                            <span>&nbsp;&nbsp;{{ch.caption}}</span>
+                                        </div>
+                                    </div>
+
+                                    <!--                                    اگر زیر سوال داشت-->
+
+                                    <ng-container
+                                            *ngIf="hideCollapse(item.index,ch,'subQuestionRadio'+item.index+'-'+q)===true&&ch.subQuestionList.length>0">
+
+                                        <div
+                                                class="panel-collapse collapse"
+                                                style="margin-top: 0px;margin-bottom: 0px;"
+                                                id="subQuestionRadio{{item.index}}-{{q}}">
+
+                                            <app-sub-question-display [subList]="ch.subQuestionList" [list]="list"
+                                                                      [formData]="formData"
+                                                                      [finalLevel]="finalLevel"
+                                                                      [isView]="isView"
+                                                                      [formStatus]="formStatus"
+                                                                      [enableItems]="enableItems"
+                                                                      (onAnswer)="fillAnswer($event)">
+                                            </app-sub-question-display>
+
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6 col-md-offset-3">
+                            <p style="color: red">{{errorMessages[item.index]}}</p>
+                        </div>
+
+                        <hr style="margin-top: 30px;">
+                    </ng-container>
+
+                    <!--                    STAR_RATING-->
+                    <ng-container class="w-100" *ngSwitchCase="'STAR_RATING'">
+                        <div class="col-md-2 text-center">
+                            <img *ngIf="item.imageStatus == MyImageStatus.SAVED_IMAGE" [src]="url + item.picture.path"
+                                 height="100px" width="100px">
+                        </div>
+                        <div class="col-md-10">
+                            <div class="w-100 text-right" style="margin-top: -25px">
+                                <label class="control-label text-justify" style="font-size: 12px">{{item.label }}
+                                    <span style="color: red" *ngIf="item.required"> * </span>
+                                </label>
+                                <a class="toolTipColor" [title]="item.helpText">
+                                    <i class="fa fa-info-circle"></i>
+                                </a>
+                            </div>
+                            <ng-container
+                                    *ngIf="formData.answerList[item.index] == null || MyToolkit.checkIsNullOrUndefined(incomingFormData)
+                    || formData.answerList[item.index].answerIdList.length==0">
+                                <div class="w-100">
+                                </div>
+                            </ng-container>
+                            <ng-container
+                                    *ngIf="formData.answerList[item.index] != null && !MyToolkit.checkIsNullOrUndefined(incomingFormData)
+            && formData.answerList[item.index].answerIdList.length > 0">
+                                <div class="w-100">
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6 col-md-offset-3">
+                            <p style="color: red">{{errorMessages[item.index]}}</p>
+                        </div>
+                        <hr style="margin-top: 30px;">
+                    </ng-container>
+                    <!--                    TEXT_AREA-->
+                    <ng-container class="w-100" *ngSwitchCase="'TEXT_AREA'">
+                        <div class="col-md-2 text-center">
+                            <img *ngIf="item.imageStatus == MyImageStatus.SAVED_IMAGE" [src]="url + item.picture.path"
+                                 height="100px" width="100px">
+                        </div>
+                        <div class="col-md-10">
+                            <div class="w-100 text-right" style="margin-top: -25px">
+                                <label class="control-label text-justify" style="font-size: 12px">{{item.label }}
+                                    <span style="color: red" *ngIf="item.required"> * </span>
+                                </label>
+                                <a class="toolTipColor" [title]="item.helpText">
+                                    <i class="fa fa-info-circle"></i>
+                                </a>
+                            </div>
+                            <div class="w-100">
+                                <ng-container
+                                        *ngIf="formStatus!== 'pending' || isView||!enableItems;else enabledTextArea">
+                                      <textarea class="form-control" [placeholder]="item.placeHolder"
+                                                disabled
+                                                [(ngModel)]="formData?.answerList[item.index]?.answerIdList[0]"
+                                                name="textArea_{{item.index}}"
+                                                formControlName="textArea"
+                                      >
+
+                                      </textarea>
+                                </ng-container>
+                                <ng-template #enabledTextArea>
+                                      <textarea class="form-control" [placeholder]="item.placeHolder"
+                                                [(ngModel)]="formData?.answerList[item.index]?.answerIdList[0]"
+                                                name="textArea_{{item.index}}"
+                                                formControlName="textArea"
+                                                (change)="onChangeElementAnswer($event, item, item.index, MyElementType.TEXT_AREA)">
+
+                                      </textarea>
+                                </ng-template>
+
+                            </div>
+                            <!--                            <ng-container-->
+                            <!--                                    *ngIf="formData.answerList[item.index] == null || MyToolkit.checkIsNullOrUndefined(incomingFormData)">-->
+                            <!--                                <div class="w-100">-->
+
+                            <!--              <textarea class="form-control" [placeholder]="item.placeHolder"-->
+                            <!--                        [disabled]="formStatus!== 'pending' || isView||!enableItems"-->
+                            <!--                        [(ngModel)]="formData.answerList[item.index].answerIdList[0]" name="textArea_{{item.index}}"-->
+                            <!--                        formControlName="textArea"-->
+                            <!--                        (change)="onChangeElementAnswer($event, item, item.index, MyElementType.TEXT_AREA)">-->
+
+                            <!--              </textarea>-->
+                            <!--                                </div>-->
+                            <!--                            </ng-container>-->
+                            <!--                            <ng-container-->
+                            <!--                                    *ngIf="formData.answerList[item.index] != null && !MyToolkit.checkIsNullOrUndefined(incomingFormData)">-->
+                            <!--                                <div class="w-100">-->
+                            <!--              <textarea class="form-control" [placeholder]="item.placeHolder"-->
+                            <!--                        [disabled]="formStatus!== 'pending' || isView||!enableItems"-->
+                            <!--                        [(ngModel)]="formData.answerList[item.index].answerIdList[0]" name="textArea_{{item.index}}"-->
+                            <!--                        formControlName="textArea"-->
+                            <!--                        (change)="onChangeElementAnswer($event, item, item.index, MyElementType.TEXT_AREA)"></textarea>-->
+                            <!--                                </div>-->
+                            <!--                            </ng-container>-->
+                        </div>
+                        <div class="col-md-6 col-md-offset-3">
+                            <p style="color: red">{{errorMessages[item.index]}}</p>
+                        </div>
+                        <hr style="margin-top: 30px;">
+                    </ng-container>
+                    <!--                TEXT_FIELD-->
+
+                    <ng-container *ngSwitchCase="'TEXT_FIELD'">
+                        <ng-container *ngIf="formData.answerList[item.index]">
+                            <div class="col-md-2 text-center">
+                                <img *ngIf="item.imageStatus == MyImageStatus.SAVED_IMAGE" [src]="url + item.path"
+                                     height="100px" width="100px">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="col-md-12 text-right">
+                                    <label class="control-label text-justify">{{ item.label }}
+                                        <span style="color: red" *ngIf="item.required"> * </span>
+                                    </label>
+                                    <a class="toolTipColor" [title]="item.helpText">
+                                        <i class="fa fa-info-circle"></i>
+                                    </a>
+
+                                </div>
+                                <!--                                item.textFieldType==='Email'-->
+                                <ng-container *ngIf="item.textFieldType==='EMAIL'">
+                                    <div class="col-md-8 col-md-offset-2 text-center">
+                                        <ng-container
+                                                *ngIf="formStatus!== 'pending' || isView||!enableItems;else enabledInputEmail">
+                                            <input class="form-control" [type]="item.textFieldType | lowercase"
+                                                   [id]="item.id"
+                                                   attr.minlength="{{item.minLength}}"
+                                                   attr.maxlength="{{item.maxLength}}"
+                                                   [placeholder]="item.placeHolder"
+                                                   [formControlName]="'email'"
+                                                   [(ngModel)]="formData?.answerList[item.index]?.answerIdList[0]"
+                                                   disabled
+                                            >
+
+                                        </ng-container>
+                                        <ng-template #enabledInputEmail>
+
+                                            <input class="form-control" [type]="item.textFieldType | lowercase"
+                                                   [id]="item.id"
+                                                   attr.minlength="{{item.minLength}}"
+                                                   attr.maxlength="{{item.maxLength}}"
+                                                   [placeholder]="item.placeHolder"
+                                                   [nbvPattern]="myPattern.email"
+                                                   [formControlName]="'email'"
+                                                   nbvPatternMsgHtml="مقدار وارد شده صحیح نیست."
+                                                   (change)="onChangeElementAnswer($event,item,item.index, MyElementType.TEXT_FIELD)"
+                                                   [(ngModel)]="formData?.answerList[item.index]?.answerIdList[0]"
+                                                   dest="emailValidation"
+
+                                            >
+                                            <div id="emailValidation"></div>
+                                        </ng-template>
+
+                                    </div>
+
+
+                                </ng-container>
+                                <!--                                item.textFieldType==='NUMBER'-->
+
+                                <ng-container *ngIf="item.textFieldType==='NUMBER'">
+                                    <div class="col-md-8 col-md-offset-2 text-center">
+                                        <ng-container
+                                                *ngIf="formStatus!== 'pending' || isView||!enableItems;else  enabledInputNumber">
+                                            <input class="form-control" [type]="item.textFieldType | lowercase"
+                                                   [id]="item.id"
+                                                   attr.minlength="{{item.minLength}}"
+                                                   attr.maxlength="{{item.maxLength}}"
+                                                   [placeholder]="item.placeHolder"
+                                                   [formControlName]="'number'"
+                                                   [(ngModel)]="formData?.answerList[item.index]?.answerIdList[0]"
+                                                   disabled
+                                            >
+                                        </ng-container>
+                                        <ng-template #enabledInputNumber>
+                                            <input class="form-control" [type]="item.textFieldType | lowercase"
+                                                   [id]="item.id"
+                                                   attr.minlength="{{item.minLength}}"
+                                                   attr.maxlength="{{item.maxLength}}"
+                                                   [placeholder]="item.placeHolder"
+                                                   [nbvPattern]="myPattern.number"
+                                                   nbvPatternMsgHtml="مقدار وارد شده صحیح نیست."
+                                                   [formControlName]="'number'"
+                                                   (change)="onChangeElementAnswer($event,item,item.index, MyElementType.TEXT_FIELD)"
+                                                   [(ngModel)]="formData?.answerList[item.index]?.answerIdList[0]"
+                                                   dest="numberValidation"
+                                            >
+                                            <div id="numberValidation"></div>
+                                        </ng-template>
+
+                                    </div>
+
+                                </ng-container>
+                                <!--                                item.textFieldType==='TEXT'-->
+
+                                <ng-container *ngIf="item.textFieldType==='TEXT'">
+                                    <div class="col-md-8 col-md-offset-2 text-center">
+                                        <ng-container
+                                                *ngIf="formStatus!== 'pending' || isView||!enableItems;else enabledInputText">
+                                            <input class="form-control" [type]="item.textFieldType | lowercase"
+                                                   [id]="item.id"
+                                                   attr.minlength="{{item.minLength}}"
+                                                   attr.maxlength="{{item.maxLength}}"
+                                                   [placeholder]="item.placeHolder"
+                                                   [formControlName]="'textField'"
+                                                   [(ngModel)]="formData?.answerList[item.index]?.answerIdList[0]"
+                                                   disabled
+                                            >
+                                        </ng-container>
+                                        <ng-template #enabledInputText>
+                                            <input class="form-control" [type]="item.textFieldType | lowercase"
+                                                   [id]="item.id"
+                                                   attr.minlength="{{item.minLength}}"
+                                                   attr.maxlength="{{item.maxLength}}"
+                                                   [placeholder]="item.placeHolder"
+                                                   [nbvPattern]="myPattern.TITLEFa"
+                                                   nbvPatternMsgHtml="مقدار وارد شده صحیح نیست."
+                                                   [formControlName]="'textField'"
+                                                   (change)="onChangeElementAnswer($event,item,item.index, MyElementType.TEXT_FIELD)"
+                                                   [(ngModel)]="formData?.answerList[item.index]?.answerIdList[0]"
+                                                   [disabled]="formStatus!== 'pending' || isView||!enableItems"
+                                                   dest="textFieldValidation"
+                                            >
+                                            <div id="textFieldValidation"></div>
+                                        </ng-template>
+
+                                    </div>
+                                </ng-container>
+                                <!--                                item.textFieldType==='PASSWORD'-->
+
+                                <ng-container *ngIf="item.textFieldType==='PASSWORD'">
+                                    <div class="col-md-8 col-md-offset-2 text-center">
+                                        <ng-container
+                                                *ngIf="formStatus!== 'pending' || isView||!enableItems;else enabledInputPassword">
+                                            <input class="form-control" [type]="item.textFieldType | lowercase"
+                                                   [id]="item.id"
+                                                   attr.minlength="{{item.minLength}}"
+                                                   attr.maxlength="{{item.maxLength}}"
+                                                   [autocomplete]="'new-password' "
+                                                   [placeholder]="item.placeHolder"
+                                                   [formControlName]="'password'"
+                                                   [(ngModel)]="formData?.answerList[item.index]?.answerIdList[0]"
+                                                   disabled
+                                            >
+                                        </ng-container>
+                                        <ng-template #enabledInputPassword>
+                                            <input class="form-control" [type]="item.textFieldType | lowercase"
+                                                   [id]="item.id"
+                                                   attr.minlength="{{item.minLength}}"
+                                                   attr.maxlength="{{item.maxLength}}"
+                                                   [autocomplete]="'new-password' "
+                                                   [placeholder]="item.placeHolder"
+                                                   [nbvPattern]="myPattern.TITLEFa"
+                                                   nbvPatternMsgHtml="مقدار وارد شده صحیح نیست."
+                                                   [formControlName]="'password'"
+                                                   (change)="onChangeElementAnswer($event,item,item.index, MyElementType.TEXT_FIELD)"
+                                                   [(ngModel)]="formData?.answerList[item.index]?.answerIdList[0]"
+                                                   [disabled]="formStatus!== 'pending' || isView||!enableItems"
+                                                   dest="passwordValidation"
+                                            >
+                                            <div id="passwordValidation"></div>
+                                        </ng-template>
+
+                                    </div>
+                                </ng-container>
+
+
+                            </div>
+                            <div class="col-md-12">
+                                <br>
+                                <hr>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <!--                TEXT_FIELD-PASSWORD-->
+
+                    <ng-container *ngSwitchCase="'TEXT_FIELD'">
+                        <!--                        <ng-container *ngIf="item.textFieldType==='PASSWORD'&&formData.answerList[item.index]">-->
+
+                        <!--                            <div class="col-md-2 text-center">-->
+                        <!--                                <img *ngIf="item.imageStatus == MyImageStatus.SAVED_IMAGE" [src]="url + item.path"-->
+                        <!--                                     height="100px" width="100px">-->
+                        <!--                            </div>-->
+                        <!--                            <div class="col-md-8">-->
+                        <!--                                <div class="col-md-12 text-right">-->
+                        <!--                                    <label class="control-label text-justify">{{ item.label }}-->
+                        <!--                                        <span style="color: red" *ngIf="item.required"> * </span>-->
+                        <!--                                    </label>-->
+                        <!--                                    <a class="toolTipColor" [title]="item.helpText">-->
+                        <!--                                        <i class="fa fa-info-circle"></i>-->
+                        <!--                                    </a>-->
+                        <!--                                </div>-->
+                        <!--                                <div class="col-md-8 col-md-offset-2 text-center">-->
+                        <!--                                    <ng-container *ngIf="formData.answerList[item.index].answerIdList[0] === null">-->
+                        <!--                                        <input class="form-control" [type]="item.textFieldType | lowercase"-->
+                        <!--                                               [id]="item.id"-->
+                        <!--                                               attr.minlength="{{item.minLength}}"-->
+                        <!--                                               attr.maxlength="{{item.maxLength}}"-->
+                        <!--                                               [autocomplete]="'new-password' "-->
+                        <!--                                               [placeholder]="'******'"-->
+                        <!--                                               (change)="onChangeElementAnswer($event,item,item.index, MyElementType.TEXT_FIELD)">-->
+                        <!--                                    </ng-container>-->
+                        <!--                                    <ng-container *ngIf="formData.answerList[item.index].answerIdList[0] !== null">-->
+                        <!--                                        <input class="form-control" [type]="item.textFieldType | lowercase"-->
+                        <!--                                               [id]="item.id"-->
+                        <!--                                               attr.minlength="{{item.minLength}}"-->
+                        <!--                                               attr.maxlength="{{item.maxLength}}"-->
+                        <!--                                               [autocomplete]="'new-password' "-->
+                        <!--                                               [placeholder]="'******'"-->
+                        <!--                                               [formControlName]="'password'"-->
+                        <!--                                               (change)="onChangeElementAnswer($event,item,item.index, MyElementType.TEXT_FIELD)"-->
+                        <!--                                               [(ngModel)]="formData.answerList[item.index].answerIdList[0]"-->
+                        <!--                                        >-->
+                        <!--                                    </ng-container>-->
+                        <!--                                </div>-->
+                        <!--                                &lt;!&ndash;                    /////////////////////////////////////////////////////////////////////////&ndash;&gt;-->
+
+
+                        <!--                            </div>-->
+                        <!--                            <div class="col-md-12">-->
+                        <!--                                <br>-->
+                        <!--                                <hr>-->
+                        <!--                            </div>-->
+                        <!--                        </ng-container>-->
+                    </ng-container>
+
+                    <!--                    TIME-->
+                    <ng-container class="w-100" *ngSwitchCase="'TIME'">
+                        <div class="col-md-2 text-center">
+                            <img *ngIf="item.imageStatus == MyImageStatus.SAVED_IMAGE" [src]="url + item.picture.path"
+                                 height="100px" width="100px">
+                        </div>
+                        <div class="col-md-10">
+                            <div class="w-100 text-right" style="margin-top: -25px">
+                                <label class="control-label text-justify" style="font-size: 12px">{{ item.label }}
+                                    <span style="color: red" *ngIf="item.required"> * </span>
+                                </label>
+                                <a class="toolTipColor" [title]="item.helpText">
+                                    <i class="fa fa-info-circle"></i>
+                                </a>
+                            </div>
+                            <ng-container
+                                    *ngIf="formData.answerList[item.index] == null || MyToolkit.checkIsNullOrUndefined(incomingFormData)">
+                                <div class="col-md-8 col-md-offset-2">
+                                    <input type="text" [textMask]="{mask: mask}" class="form-control input-small"
+                                           id="timePicker{{i}}"
+                                           [disabled]="formStatus!== 'pending' || isView||!enableItems"
+                                           #time
+                                           [value]="formData?.answerList[item.index]?.answerIdList[0]?.hour+':'+formData?.answerList[item.index]?.answerIdList[0]?.minute"
+                                           style="margin-right: -15px"
+                                           (change)="onChangeElementAnswer($event.target.value, item, item.index, MyElementType.TIME)"/>
+                                </div>
+                            </ng-container>
+                            <ng-container
+                                    *ngIf="formData.answerList[item.index] != null && !MyToolkit.checkIsNullOrUndefined(incomingFormData)">
+                                <div class="col-md-8 col-md-offset-2">
+                                    <input type="text" [textMask]="{mask: mask}" class="form-control input-small"
+                                           id="timePicker1{{i}}"
+                                           [disabled]="formStatus!== 'pending' || isView||!enableItems"
+                                           [value]="formData.answerList[item.index]?.answerIdList[0]?.hour+':'+formData.answerList[item.index]?.answerIdList[0]?.minute"
+                                           name="time"
+                                           #time
+                                           (change)="onChangeElementAnswer($event.target.value, item, item.index, MyElementType.TIME)"/>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6 col-md-offset-3">
+                            <p style="color: red">{{errorMessages[item.index]}}</p>
+                        </div>
+                        <hr style="margin-top: 30px;">
+                    </ng-container>
+                    <!--                    FILE_ATTACH-->
+                    <ng-container class="w-100" *ngSwitchCase="'FILE_ATTACH'">
+                        <div class="col-md-2 text-center">
+                            <img *ngIf="item.imageStatus == MyImageStatus.SAVED_IMAGE" [src]="url + item.picture.path"
+                                 height="100px" width="100px">
+                        </div>
+                        <div class="col-md-10">
+                            <div class="w-100 text-right" style="margin-top: -25px">
+                                <label class="control-label text-justify" style="font-size: 12px">{{item.label }}
+                                    <span style="color: red" *ngIf="item.required"> * </span>
+                                </label>
+                                <a class="toolTipColor" [title]="item.helpText">
+                                    <i class="fa fa-info-circle"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-8 col-md-offset-2" *ngIf="item.fileType == 'PDF'">
+                                <label>فایل ضمیمه</label>
+                                <span>(فایل با پسوند PDF و حجم کمتر از یک مگابایت باشد.)</span>
+                                <app-attachment
+                                        [attachmentList]="attachmentList"
+                                        [limitation]="item.fileCountLimitation"
+                                        (outputAttachmentList)="setAttachments($event, item, item.index, item.fileCountLimitation)">
+                                </app-attachment>
+                            </div>
+                            <ng-container
+                                    *ngIf="formData.answerList[item.index] == null || MyToolkit.checkIsNullOrUndefined(incomingFormData)
+                    || formData.answerList[item.index].answerIdList.length==0">
+                                <div class="col-md-8 col-md-offset-2" *ngIf="item.fileType == 'IMAGE'">
+                                    <ng-container *ngIf="item.fileCountLimitation == 1">
+                                        <app-image-upload [image]="image" [fileType]="null" [multiple]="false"
+                                                          (returnPhoto)="setImage($event, item, item.index )">
+                                        </app-image-upload>
+                                    </ng-container>
+                                    <ng-container *ngIf="item.fileCountLimitation > 1">
+                                        <app-image-upload [limit]="limit" [limitationCount]="item.fileCountLimitation"
+                                                          [image]="image"
+                                                          [fileType]="null" [multiple]="true"
+                                                          (returnPhoto)="setImage($event, item, item.index )">
+                                        </app-image-upload>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                            <ng-container
+                                    *ngIf="formData.answerList[item.index] != null && !MyToolkit.checkIsNullOrUndefined(incomingFormData)
+            && formData.answerList[item.index].answerIdList.length > 0">
+                                <div class="col-md-8 col-md-offset-2" *ngIf="item.fileType == 'IMAGE'">
+                                    <ng-container *ngIf="item.fileCountLimitation == 1">
+                                        <app-image-upload [image]="formData.answerList[item.index].answerIdList[0]"
+                                                          [fileType]="null"
+                                                          [multiple]="false"
+                                                          (returnPhoto)="setImage($event, item, item.index)">
+                                        </app-image-upload>
+                                    </ng-container>
+                                    <ng-container *ngIf="item.fileCountLimitation > 1">
+                                        <app-image-upload [imageList]="formData.answerList[item.index].answerIdList"
+                                                          [fileType]="null"
+                                                          [multiple]="true"
+                                                          (returnPhoto)="setImage($event, item, item.index)">
+                                        </app-image-upload>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6 col-md-offset-3">
+                            <p style="color: red">{{errorMessages[item.index]}}</p>
+                        </div>
+                    </ng-container>
+
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="form-group required col-sm-12 text-left">
+        <button *ngIf="formStatus === 'pending' && isView === false&&enableItems" (click)="register()"
+                class="btn btn-sm btn-action">
+            <span>ثبت اطلاعات</span>
+            <i class="fa fa-spinner fa-pulse fa-1x" *ngIf="loadingRegister"
+               aria-hidden="true"></i>
+        </button>
+        <!--        <ng-container *ngIf="nextItem">-->
+        <!--            <button (click)="nextOrPrev('next')" class="btn btn-sm btn-warning" type="button"-->
+        <!--                    style=" margin-right: 5px">-->
+
+        <!--                <span>بعدی</span>-->
+        <!--            </button>-->
+        <!--        </ng-container>-->
+        <!--        <button *ngIf="hasWorkOrder" class="btn btn-sm btn-cancel-back" type="button" style="float: right"-->
+        <!--                (click)="nextOrPrev('prev')">-->
+        <!--            <span>قبلی</span>-->
+        <!--        </button>-->
+    </div>
+
+</ng-container>
+

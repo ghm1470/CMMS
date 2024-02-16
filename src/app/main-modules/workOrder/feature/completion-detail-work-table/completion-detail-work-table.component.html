@@ -1,0 +1,116 @@
+<div class="col-md-12" style="padding: 10px">
+    <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+    <form #completionDetailWorkTableForm="ngForm" (submit)="action(completionDetailWorkTableForm)">
+        <div class="row"
+             style="height: 50vh;
+    max-height: 50vh;
+    overflow: auto;">
+            <div class="row" style="margin: 0">
+                <div class="col-md-6 form-group required col-sm-12">
+                    <label class="for-label">تخصیص بودجه:</label>
+                    <div class="input-group input-group-sm">
+                        <ng-select [disabled]="isView||!enableItems" dir="rtl" [(ngModel)]="completionDetail.budgetId"
+                                   placeholder="تخصیص بودجه" name="budgetId" style="width: 100%;"
+                                   dropdownPosition="bottom">
+                            <ng-option *ngFor="let item of budgetList; let i = index"
+                                       [value]="item.id">
+                                {{item.title}}
+                                <!--                                ({{item.code}})-->
+                            </ng-option>
+                        </ng-select>
+                    </div>
+
+                    <div id="budgetIdValidation" style="opacity: 0; height: 0"></div>
+                </div>
+                <div class="col-md-6 form-group required col-sm-12">
+                    <label class="for-label">تخصیص دپارتمان مسئول:</label>
+                    <div class="input-group input-group-sm">
+                        <ng-select [disabled]="isView||!enableItems" dir="rtl"
+                                   [(ngModel)]="completionDetail.chargeDepartmentId"
+                                   placeholder="انتخاب دپارتمان مسئول" name="chargeDepartmentId" style="width: 100%;"
+                                   dropdownPosition="bottom">
+                            <ng-option *ngFor="let item of chargeDepartmentList; let i = index"
+                                       [value]="item.id">
+                                {{item.title}}
+                                <!--                                ({{item.code}})-->
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                    <div id="chargeDepartmentIdValidation" style="opacity: 0; height: 0"></div>
+                </div>
+
+
+                <div class="col-md-12 form-group required col-sm-12">
+                    <label class="for-label">یادداشت:</label>
+                    <div class="input-group input-group-sm">
+        <textarea [disabled]="isView||!enableItems" type="text" placeholder="یادداشت"
+                  [(ngModel)]="completionDetail.note"
+                  class="form-control" maxlength="620" name="note"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12 form-group required col-sm-12">
+                    <label class="for-label">مشکل:</label>
+                    <div class="input-group input-group-sm">
+        <textarea [disabled]="isView||!enableItems" type="text" placeholder="مشکل"
+                  [(ngModel)]="completionDetail.problem"
+                  class="form-control" maxlength="620" name="problem"></textarea>
+                    </div>
+                    <div id="problemValidation"></div>
+                </div>
+
+                <div class="col-md-12 form-group required col-sm-12">
+                    <label class="for-label">علت:</label>
+                    <div class="input-group input-group-sm">
+        <textarea [disabled]="isView||!enableItems" type="text" placeholder="علت"
+                  [(ngModel)]="completionDetail.rootCause"
+                  class="form-control" maxlength="620" name="rootCause"></textarea>
+                    </div>
+                    <div id="rootCauseValidation"></div>
+                </div>
+
+                <div class="col-md-12 form-group required col-sm-12">
+                    <label class="for-label">راه حل:</label>
+                    <div class="input-group input-group-sm">
+        <textarea [disabled]="isView||!enableItems" type="text" placeholder="راه حل"
+                  [(ngModel)]="completionDetail.solution"
+                  class="form-control" maxlength="620" name="solution"></textarea>
+                    </div>
+                    <div id="solutionValidation"></div>
+                </div>
+
+                <div class="col-md-12 form-group required col-sm-12">
+                    <label class="for-label">یادداشت مدیر:</label>
+                    <div class="input-group input-group-sm">
+        <textarea [disabled]="isView||!enableItems" type="text" placeholder="یادداشت مدیر"
+                  [(ngModel)]="completionDetail.adminNote"
+                  class="form-control" maxlength="620" name="adminNote"></textarea>
+                    </div>
+                    <div id="adminNoteValidation"></div>
+                </div>
+
+            </div>
+            <!--            {{sendInformationNumberOfTabs.numberOfFormIdList}}-->
+            <!--            <br>-->
+            <!--            {{sendInformationNumberOfTabs.lengthFormIdList - 1}}-->
+            <!--            <br>-->
+            <!--            {{sendInformationNumberOfTabs.hasForm}}-->
+        </div>
+        <div class="form-group required col-sm-12 text-left">
+            <button *ngIf="!isView&&enableItems" class="btn btn-sm btn-action" type="submit">
+                <span>ثبت اطلاعات</span>
+            </button>
+<!--            <ng-container-->
+<!--                    *ngIf="sendInformationNumberOfTabs.numberOfFormIdList < sendInformationNumberOfTabs.lengthFormIdList - 1  || sendInformationNumberOfTabs.hasForm">-->
+<!--                <button class="btn btn-sm btn-warning" type="button" style=" margin-right: 5px"-->
+<!--                        (click)="nextOrPrev('next')">-->
+<!--                    <span>بعدی</span>-->
+<!--                </button>-->
+<!--            </ng-container>-->
+<!--            <button class="btn btn-sm btn-cancel-back" type="button" style="float: right" (click)="nextOrPrev('prev')">-->
+<!--                <span>قبلی</span>-->
+<!--            </button>-->
+        </div>
+    </form>
+</div>
+

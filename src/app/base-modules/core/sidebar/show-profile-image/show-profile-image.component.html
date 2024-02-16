@@ -1,0 +1,32 @@
+<!--/// مدال نمایش عکس//-->
+<nbw-modal
+        [hasHeader]="false"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.SMALL"
+        modalDialogCentered="true"
+        autoShow="false"
+        [myId]="'showImageModal'">
+
+    <div modal-body class="row justify-content-center" style="padding: 0;margin: 0;">
+        <div class="col-5 text-center p-0 m-0"></div>
+        <div class="col-2 text-center p-0 m-0"
+             data-dismiss="modal"
+             style="    margin-top: 0; z-index: 1; position: fixed">
+            <span class="fa fa-times px-2 cursor-pointer"
+                  style="background-color: #ffffff99;
+                         color: #383030;
+                         padding: 6px;
+                         border-radius: 50%;">
+
+            </span>
+        </div>
+        <div class="col-5 text-center p-0 m-0"></div>
+        <div class="col-12 text-center p-0 m-0">
+
+            <img *ngIf="user?.image?.fileByte"
+                 style="border-radius: 4%"
+                 src="data:image/png;base64,{{ user.image.fileByte }}">
+        </div>
+    </div>
+</nbw-modal>
+<!--/// مدال نمایش عکس//-->

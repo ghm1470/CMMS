@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="card table-responsive-md form-inline">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th class="text-center" style="width: 5%">ردیف</th>
+          <th class="text-center">دستور کار</th>
+          <th class="text-center"> تاریخ دستور کار</th>
+          <th class="text-center">میزان موجودی</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of logList; let i = index">
+          <tr class="text-center">
+            <td>{{i + 1}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.name}}</td>
+
+          </tr>
+        </ng-container>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+

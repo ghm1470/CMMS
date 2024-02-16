@@ -1,0 +1,47 @@
+<div class="card">
+
+    <div class="card-body card-body-content">
+        <div class="row">
+
+            <div class="col-md-4">
+                <mat-radio-group aria-label="Select an option" [(ngModel)]="warranty" (change)="changeWarranty()">
+                    <mat-radio-button [value]="true" class="ml-4">گارانتی دارد</mat-radio-button>
+                    <mat-radio-button [value]="false">گارانتی ندارد</mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+        </div>
+
+        <div class="card-body card-body-content">
+            <form class=" form" [formGroup]="htmlForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <!--             تاریخ گارانتی-->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <label style="color: red">*</label>
+                            <label> تاریخ گارانتی</label>
+                            <input type="text" class="form-control"
+                                   style="direction: ltr"
+                                   id="inputWarrantyDate"
+                                   formControlName="warrantyDate"
+                                   name="warrantyDate"
+                                   autocomplete="off">
+
+                        </div>
+                    </div>
+
+                </div>
+                <div modal-footer class="row justify-content-end"
+                     style="padding-right: 10px;padding-left:10px">
+                    <button type="button" class="btn btn-action btn-sm"
+                            (click)="onSubmit()"
+                            style="    margin: 5px 5px;  min-width: 45px;text-align: center;">
+                        <span> ثبت  </span>
+                        <i class="fa fa-spinner fa-pulse fa-1x" aria-hidden="true" *ngIf="loadingAction"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

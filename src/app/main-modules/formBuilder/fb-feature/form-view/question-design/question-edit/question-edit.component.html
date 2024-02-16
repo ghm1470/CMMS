@@ -1,0 +1,67 @@
+<div [ngSwitch]="editingItem.item.elementType">
+
+  <div *ngSwitchCase="'CHECK_BOX'" class="w-100">
+    <CheckBoxEdit [editingItem]="editingItem" (onUpdate)="UpdateItem($event)">
+    </CheckBoxEdit>
+  </div>
+
+  <div *ngSwitchCase="'COMBO_BOX'" class="w-100">
+    <ComboBoxEdit [editingItem]="editingItem"
+                  (onUpdate)="UpdateItem($event)">
+    </ComboBoxEdit>
+  </div>
+
+  <div *ngSwitchCase="'DATE'" class="w-100">
+    <DateEdit [editingItem]="editingItem"
+              (onUpdate)="UpdateItem($event)">
+    </DateEdit>
+  </div>
+
+  <div *ngSwitchCase="'MATRIX'" class="w-100">
+    <MatrixEdit [editingItem]="editingItem"
+                (onUpdate)="UpdateItem($event)">
+    </MatrixEdit>
+  </div>
+
+  <div *ngSwitchCase="'NUMERICAL'" class="w-100">
+    <NumericalEdit [editingItem]="editingItem"
+                   (onUpdate)="UpdateItem($event)">
+    </NumericalEdit>
+  </div>
+
+  <div *ngSwitchCase="'RADIO_BUTTON'" class="w-100">
+    <RadioButtonEdit [editingItem]="editingItem"
+                     (onUpdate)="UpdateItem($event)">
+    </RadioButtonEdit>
+  </div>
+
+  <div *ngSwitchCase="'STAR_RATING'" class="w-100">
+    <!--<StarRatingEdit [editingItem]="editingItem" (onUpdate)="UpdateItem($event)">-->
+    <!--</StarRatingEdit>-->
+  </div>
+
+  <div *ngSwitchCase="'TEXT_AREA'" class="w-100">
+    <TextAreaEdit [editingItem]="editingItem"
+                  (onUpdate)="UpdateItem($event)">
+    </TextAreaEdit>
+  </div>
+
+  <div *ngSwitchCase="'TEXT_FIELD'" class="w-100">
+    <TextFieldEdit [editingItem]="editingItem"
+                   (onUpdate)="UpdateItem($event)">
+    </TextFieldEdit>
+  </div>
+
+  <div *ngSwitchCase="'TIME'" class="w-100">
+    <TimeEdit [editingItem]="editingItem"
+              (onUpdate)="UpdateItem($event)">
+    </TimeEdit>
+  </div>
+
+  <div *ngSwitchCase="'FILE_ATTACH'" class="w-100">
+    <app-file-attach-edit [editingItem]="editingItem"
+                          (onUpdate)="UpdateItem($event)">
+    </app-file-attach-edit>
+  </div>
+
+</div>

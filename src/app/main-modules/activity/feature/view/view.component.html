@@ -1,0 +1,952 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 card-title">
+                <i class="fa fa-list"></i>
+                <span>مشاهده  فرایند                </span>
+                {{ activity?.title }}
+            </div>
+            <!--            <ng-container  *ngIf="activityId">-->
+            <div class="col-md-6 text-left">
+                <button (click)="backToList()"
+                        class="btn btn-cancel-back btn-sm">
+                    بازگشت به لیست
+                </button>
+            </div>
+            <!--            </ng-container>-->
+        </div>
+    </div>
+    <div class="card-body card-body-content">
+        <div id="acceptationCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+            <div class="carousel-inner">
+                <!--    اسلاید بندی-->
+                <div class="form-inline" style="color: #606063">
+
+                    <div class="col-md-4 text-center active"
+                         [ngClass]="stepNumber== 'activity-step-0' && 'tab-active'"
+                         style="border-radius: 4px;cursor:pointer;margin-bottom: 4px" (click)="selectStep(0)">
+                        <img src="../../../../../assets/images/activity/3.png" class="img-completed"
+                             style="opacity: 0.5">
+                        <p class="mobile-item text-center" style="font-size: 14px">تعریف فرآیند</p>
+                    </div>
+
+                    <div class="col-md-4 text-center"
+                         [ngClass]="stepNumber== 'activity-step-1' && 'tab-active active'"
+                         style="border-radius: 4px;cursor:pointer;margin-bottom: 4px" (click)="selectStep(1)">
+                        <img src="../../../../../assets/images/activity/2.png" class="img-completed"
+                             style="opacity: 0.5">
+                        <p class="mobile-item text-center" style="font-size: 14px">تعریف مرحله</p>
+                    </div>
+
+                    <div class="col-md-4 text-center"
+                         [ngClass]="stepNumber== 'activity-step-2' && 'tab-active active'"
+                         (click)="selectStep(2)"
+                         style="border-radius: 4px;cursor:pointer;margin-bottom: 4px">
+                        <img src="../../../../../assets/images/activity/1.png" class="img-completed"
+                             style="opacity: 0.5">
+                        <p class="mobile-item text-center" style="font-size: 14px">تعیین ارجاع به واحد</p>
+                    </div>
+                </div>
+                <!--/////////////////////step1//////////////////////-->
+
+                <div class="carousel-item" [ngClass]="stepNumber == 'activity-step-0' && 'active'"
+                     id="activity-step-0">
+                    <article class="border rounded p-3 mt-3">
+                        <!--            محتوای مرحله اول-->
+                        <div class="tab-content">
+                            <form [formGroup]="form">
+                                <div class="w-100">
+                                    <div class="col-md-4 form-group required col-sm-12">
+                                        <label class="for-label">عنوان فرآیند:</label>
+                                        <span style="color: red">*</span>
+                                        <input class="form-control form-control-sm" [(ngModel)]="activity.title"
+                                               type="text"
+                                               disabled
+                                               name="activityTitle"
+                                               formControlName="activityTitle"
+                                               [placeholder]="'عنوان'"
+
+                                               style="font-size: 12px">
+                                    </div>
+                                    <div class="col-md-12 form-group required col-sm-12">
+                                        <label class="for-label">توضیحات فرآیند:</label>
+                                        <textarea class="form-control form-control-sm"
+                                                  [(ngModel)]="activity.description" name="description"
+                                                  formControlName="description"
+                                                  [placeholder]="'توضیحات فرآیند'"
+                                                  disabled
+                                                  style="font-size: 12px">
+                        </textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-md-12 text-left px-0" style="margin-top: 15px">
+
+
+                            <button type="button" class="btn btn-sm btn-action"
+                                    [disabled]="loadingGetOne" (click)="selectStep(1)">
+                                ادامه
+                                <i *ngIf="loadingGetOne" class="fa fa-spinner fa-pulse fa-1x"></i>
+                            </button>
+                        </div>
+                    </article>
+                </div>
+
+                <!--/////////////////////step2//////////////////////-->
+
+                <div class="carousel-item" [ngClass]="stepNumber=='activity-step-1' && 'active'"
+                     id="activity-step-1">
+                    <article class="border rounded p-3 mt-3">
+
+                        <div class="row">
+                            <div class="col-md-6 form-group required col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-6 form-group required col-sm-12">
+                                        <label class="for-label">عنوان مرحله:</label>
+                                        <span style="color: red">*</span>
+                                        <input class="form-control form-control-sm"
+                                               [(ngModel)]="activityLevelForEdit.title"
+                                               type="text"
+                                               disabled
+                                               name="title"
+                                               [placeholder]="'عنوان'"
+                                               style="font-size: 12px">
+                                    </div>
+
+<!--                                    <div class="col-md-6 form-group required col-sm-12">-->
+<!--                                        <label class="for-label">فرم دستی:</label>-->
+<!--                                        <ng-select dir="rtl" [(ngModel)]="activityLevelForEdit.formId"-->
+<!--                                                   name="projectId"-->
+<!--                                                   placeholder="فرم متغییر"-->
+<!--                                                   disabled-->
+<!--                                                   style="width: 100%;"-->
+<!--                                                   dropdownPosition="bottom">-->
+<!--                                            <ng-option value="null" disabled>فرم مورد نظر را انتخاب کنید</ng-option>-->
+<!--                                            <ng-option *ngFor="let formItem of formList; let i = index"-->
+<!--                                                       [value]="formItem.id">{{formItem.title}}-->
+<!--                                            </ng-option>-->
+<!--                                        </ng-select>-->
+<!--                                    </div>-->
+                                </div>
+                                <label class="for-label" style="font-size: 15px;">فرم های ثابت</label>
+                                <fieldset class="scheduler-border" id="company-address" style="margin-top: 35px">
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-md-6 form-group required col-sm-12" style="margin-top: 20px">-->
+<!--                                            <input type="checkbox" [checked]="checkedBoolean"-->
+<!--                                                   disabled id="rootBuilding">-->
+<!--                                            <label class="for-label" for="rootBuilding" style="margin-right: 7px">-->
+<!--                                               کلیات-->
+<!--                                            </label>-->
+
+<!--                                        </div>-->
+<!--                                        <div *ngIf="selectWorOrderMaine" class="col-md-1 col-sm-1 col-xs-12 mb-4">-->
+<!--                                            <button style="margin-right: -85px; margin-top: 20px"-->
+<!--                                                    type="button"-->
+<!--                                                    class="btn btn-action btn-sm px-1"-->
+<!--                                                    (click)="showAccessWorkOrderModal()">-->
+<!--                                                مشاهده-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+                                    <div class="row">
+
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <label class="for-label">سایر فرم های دستور کار:</label>
+                                                <!--      [disabled]="!selectWorOrderMaine"-->
+                                                <ng-select [items]="staticFormsList"
+                                                           bindLabel="text"
+                                                           bindValue="value"
+                                                           [addTag]="false"
+                                                           [multiple]="true"
+                                                           style="width: 100%;"
+                                                           placeholder="فرم مورد نظر را انتخاب کنید"
+                                                           dropdownPosition="bottom"
+                                                           disabled
+                                                           [(ngModel)]="activityLevelForEdit.staticFormsIdList">
+                                                </ng-select>
+                                                <!--                                        <ng-select dir="rtl" [(ngModel)]="activityLevelForEdit.staticFormsIdList"-->
+                                                <!--                                                   style="width: 100%"-->
+                                                <!--                                                   name="staticFormsIdList"-->
+                                                <!--                                                   [multiple]="true"-->
+                                                <!--                                                   [clearable]="false"-->
+                                                <!--                                                   [disabled]="!selectWorOrderMaine"-->
+                                                <!--                                                   dropdownPosition="bottom">-->
+                                                <!--                                            <ng-option value="null" disabled>فرم مورد نظر را انتخاب کنید</ng-option>-->
+                                                <!--                                            <ng-option value="completionDetails">کلیات/دستور کار</ng-option>-->
+                                                <!--                                            <ng-option value="information">اطلاعات تکمیلی/دستور کار</ng-option>-->
+                                                <!--                                            <ng-option value="tasks">تخصیص وظایف</ng-option>-->
+                                                <!--                                            <ng-option value="taskGroup">مجموعه وظایف</ng-option>-->
+                                                <!--                                            <ng-option value="workOrderPart">قطعات بکار برده</ng-option>-->
+                                                <!--                                            <ng-option value="miscCost">هزینه متفرقه</ng-option>-->
+                                                <!--                                            <ng-option value="notification">آگاه سازی</ng-option>-->
+                                                <!--                                            <ng-option value="file">مستندات</ng-option>-->
+                                                <!--                                        </ng-select>-->
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </fieldset>
+                                <!--========================================-->
+                                <div class="row">
+                                    <div class="col-md-12 form-group required col-sm-12">
+                                        <label class="for-label">دستورالعمل:</label>
+                                        <textarea class="form-control form-control-sm"
+                                                  [(ngModel)]="activityLevelForEdit.recipe"
+                                                  type="text"
+                                                  disabled
+                                                  name="title"
+                                                  [placeholder]=""
+                                                  style="height: 100px ;resize: none; font-size: 12px">
+                                        </textarea>
+                                    </div>
+
+                                </div>
+
+                                <ng-container *ngIf="editActivityStatus">
+                                    <button type="button"
+                                            style="margin-right: 5px"
+                                            class="btn btn-cancel-back btn-sm px-4"
+                                            (click)="cancelEdit()">
+                                        انصراف
+                                    </button>
+                                </ng-container>
+                            </div>
+                            <div class="col-md-6 form-group required col-sm-12">
+                                <div class="mt-4" *ngIf="activity.activityLevelList.length > 0">
+                                    <h4 class="tables_header">لیست مراحل</h4>
+                                    <div class="w-100 table-responsive">
+                                        <table class="table table-bordered table-striped table-hover mb-0">
+                                            <thead class="text-center">
+                                            <tr>
+                                                <th class="vertical-align-center">ردیف</th>
+                                                <th class="vertical-align-center"> عنوان</th>
+                                                <th class="vertical-align-center">دستورالعمل</th>
+                                                <th class="vertical-align-center">مشاهده</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <ng-container *ngFor="let item of activity.activityLevelList; let i=index">
+
+                                                <tr class="text-center"
+                                                    [ngStyle]="{'background-color':activityLevelForEdit?.id === item?.id ? '#b5f58f': ''}"
+                                                >
+
+                                                    <ng-container *ngIf="item?.id!=='start'&&item?.id!=='end'">
+                                                        <td class="vertical-align-center">{{i  |perNumber}}</td>
+                                                        <td class="vertical-align-center">
+                                                            <span>{{item?.title|perNumber}}</span></td>
+                                                        <td class="vertical-align-center"
+                                                            style=" text-overflow: ellipsis;
+                                                            overflow: hidden;
+                                                             white-space: nowrap;
+                                                             max-width: 100px;">
+                                                            {{item?.recipe|perNumber}}
+                                                        </td>
+
+
+                                                        <td class="vertical-align-center" *ngIf="createActivityLevel">
+                                                            <a *ngIf="item?.title !== 'شروع' && item?.title !== 'پایان'">
+                                                                <!--                                (click)=" edit(item.id,i)"-->
+                                                                <span
+                                                                        (click)=" edit2(item,i)"
+                                                                        style="padding: 0 3px; cursor: pointer; color: #53565d;">
+                                                                   <i class="fa fa-eye" title="مشاهده"></i>
+                                                            </span>
+                                                            </a>
+                                                            <span *ngIf="item?.title === 'شروع' || item?.title == 'پایان'">---</span>
+                                                        </td>
+
+                                                    </ng-container>
+
+                                                </tr>
+                                            </ng-container>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <!--========================================-->
+
+
+                        <div class="col-md-12 text-left px-0">
+                            <button type="button" class="btn btn-sm btn-cancel-back ml-1" (click)="selectStep(0)">
+                                مرحله قبل
+                            </button>
+                            <button type="button" class="btn btn-sm btn-action" (click)="setNOPLevel(false)">ادامه
+                            </button>
+                        </div>
+                    </article>
+                </div>
+
+                <!--/////////////////////step3//////////////////////-->
+
+                <div class="carousel-item" [ngClass]="stepNumber== 'activity-step-2' && 'active'"
+                     id="activity-step-2">
+                    <article class="border rounded p-3 mt-3">
+                        <!--            محتوای مرحله سوم-->
+                        <div class="  w-100  mb-3">
+                            <table class="table  table-bordered table-striped table-hover mb-0">
+                                <thead class="text-center">
+                                <tr>
+                                    <th class="vertical-align-center">ردیف</th>
+                                    <th class="vertical-align-center"> عنوان</th>
+                                    <th class="vertical-align-center">دستورالعمل</th>
+                                    <th class="vertical-align-center">تائید</th>
+                                    <th class="vertical-align-center">اصلاح</th>
+                                    <th class="vertical-align-center"> مخاطب</th>
+<!--                                    <th class="vertical-align-center"> تکنسین</th>-->
+                                    <th class="vertical-align-center"> تایید کننده</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr class="text-center" *ngFor="let item of activity.activityLevelList; let i=index">
+                                    <ng-container *ngIf="item.id !==  'end'">
+                                        <td class="vertical-align-center">{{i + 1 |perNumber}}</td>
+                                        <td class="vertical-align-center">
+                                            <span>{{item.title|perNumber}}</span>
+
+                                        </td>
+                                        <td class="vertical-align-center"
+                                            style=" text-overflow: ellipsis;
+                                                            overflow: hidden;
+                                                             white-space: nowrap;
+                                                             max-width: 100px;">
+                                            {{item?.recipe ? item?.recipe : '---'}}
+                                        </td>
+
+                                        <td class="vertical-align-center">
+                                           <span *ngIf="item.id !== 'end'">
+                                                         <ng-select dir="rtl" [(ngModel)]="item.nextActivityLevel.id"
+                                                                    name="levelTitle"
+                                                                    #acceptOrRejectLevel
+                                                                    placeholder="تایید"
+                                                                    style="width: 100%;"
+                                                                    disabled
+                                                                    dropdownPosition="top">
+                                                              <ng-option value="null" selected disabled>مرحله بعدی را انتخاب کنید</ng-option>
+                                                              <ng-container
+                                                                      *ngFor="let myItem of activity.activityLevelList">
+                                                              <ng-option
+                                                                      *ngIf=" item.id !== myItem.id && myItem.id!=='start'"
+                                                                      [value]="myItem.id">{{myItem.title}}</ng-option>
+                                                             </ng-container>
+                                                         </ng-select>
+                                           </span>
+                                            <span *ngIf="item.id === 'end'">---</span>
+                                        </td>
+
+
+                                        <td class="vertical-align-center">
+                                          <span *ngIf="item.id !== 'start'">
+                                              <ng-select dir="rtl" [(ngModel)]="item.prevActivityLevel.id"
+                                                         name="levelTitle2"
+                                                         #acceptOrRejectLevel
+                                                         placeholder="اصلاح"
+                                                         style="width: 100%;"
+                                                         disabled
+                                                         dropdownPosition="top">
+                                                       <ng-option value="null" selected disabled>مرحله بعدی را انتخاب کنید</ng-option>
+                                                             <ng-container
+                                                                     *ngFor="let myItem of activity.activityLevelList">
+                                                             <ng-option
+                                                                     *ngIf="activityLevelId !== myItem.id && item.id !== myItem.id"
+                                                                     [value]="myItem.id">{{myItem.title}}</ng-option>
+<!--                                                                  && myItem.id!=='start'-->
+                                                             </ng-container>
+                                                     </ng-select>
+                                              <!--========================-->
+                                                   </span>
+                                            <span *ngIf="item.id === 'start'">---</span>
+                                        </td>
+                                        <!--                  ///////////// اطلاعات کاربر انتخاب شده /////////////////-->
+                                        <td class="vertical-align-center justify-content-center">
+                                            <ng-container
+                                                    *ngIf="item.id !== 'start' && item.id !== 'end' ">
+                                                <ng-container *ngIf="item?.userTypeId">
+                                                    <!--                                                    <p style="text-align: center">-->
+                                                    <!--                                                        {{item?.candidateMode === candidateMode.userType_mode ? 'تمامی ' : 'برخی از '}}-->
+                                                    <!--                                                        {{' کاربران پست  ' + item?.userTypeName}}-->
+                                                    <!--                                                    </p>-->
+                                                </ng-container>
+                                                <ng-container *ngIf="item?.userTypeId">
+                                                    <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                                       style="cursor: pointer"
+                                                       (click)="showModalSelectableUser2(item , i, 'ADD')"
+                                                       [matTooltip]=" ' مشاهده   مخاطب'"
+                                                       matTooltipPosition="above"
+                                                    >
+                                                        <i class="fa-plus-circle fa fa-user"> </i>
+
+                                                    </a>
+                                                </ng-container>
+                                                <ng-container *ngIf="!item?.userTypeId">
+                                                    بدون مخاطب
+                                                </ng-container>
+
+                                            </ng-container>
+                                            <ng-container
+                                                    *ngIf="item.id !== 'start' && item.id !== 'end' &&  showOrgNameAndUserTypeNameInTableList[i-1]">
+                                                <a (click)="showModalSelectableUser(item, i, 'EDIT')"
+                                                >
+                                                    <i class="fa fa-edit"></i>
+                                                </a>&nbsp;
+                                                <!--                                                <br>-->
+                                                <!--                                                <label style="font-size: 13px; color: #4c4c4c"> سازمان:</label>-->
+                                                <!--                                                <span style="font-size: 12px">{{showOrgNameAndUserTypeNameInTableList[i - 1].OrgName}} </span>-->
+                                                <br>
+                                                <label style="font-size: 13px; color: #4c4c4c"> پست :</label>
+                                                <span style="font-size: 12px">
+                                                    {{showOrgNameAndUserTypeNameInTableList[i - 1].UserTypeName}}
+                                                </span>
+                                            </ng-container>
+                                        </td>
+
+                                        <!--==============================چک باکس تعیین کاربر سفارش گیرنده تعمیر کار====================-->
+<!--                                        <td class="vertical-align-center">-->
+
+<!--                                            <mat-checkbox *ngIf="item.id !== 'start' && item.id !== 'end' &&-->
+<!--                   item.nextActivityLevel.id!=='end' && item.nextActivityLevel.id!=='start' && item.nextActivityLevel.id"-->
+<!--                                                          [checked]="item.existRecipientOrderUser"-->
+<!--                                                          disabled>-->
+<!--                                                <span style="font-size: 14px">  کاربر تکنسین مرحله بعد</span>-->
+<!--                                            </mat-checkbox>-->
+
+<!--                                            <span-->
+<!--                                                    *ngIf="item.title === 'شروع' || item.title === 'پایان' || item.nextActivityLevel.id=='end' || item.nextActivityLevel.id=='start'">-&#45;&#45;</span>-->
+
+<!--                                        </td>-->
+                                        <!--========================== تعیین کاربر تایید کننده ی درخواست===========================-->
+                                        <td class="vertical-align-center">
+                                            <mat-checkbox *ngIf="item.id !== 'start' && item.id !== 'end'"
+                                                          [checked]="item.workRequestAcceptor"
+                                                          disabled>
+                                                <span style="font-size: 14px"> کاربرتایید کننده ی درخواست</span>
+                                            </mat-checkbox>
+                                        </td>
+                                    </ng-container>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-md-12 text-left px-0">
+                            <button type="button" class="btn btn-sm btn-cancel-back" style="margin: 0 5px"
+                                    (click)="backToStepTwo()">مرحله قبل
+                            </button>
+                            <!--                            <button type="button" class="btn btn-sm btn-action" (click)="saveActivity()">ثبت نهایی-->
+                            <!--                                <i *ngIf="loadingSaveActivity" class="fa fa-spinner fa-pulse fa-1x"></i>-->
+
+                            <!--                            </button>-->
+                        </div>
+                    </article>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- *************************** modal **************************-->
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.LARGE"
+        autoShow="false"
+        [myId]="modalId">
+    <div modal-header>
+        <h6>
+            مشاهده کاربر برای مرحله
+            ({{activityLevelForAddContact.title}})
+        </h6>
+    </div>
+    <div modal-body style="    min-height: 60vh;">
+        <div class="col-md-12 col-sm-4 col-xs-12 mb-2">
+            <div class="input-group">
+                <!--        ////////////////////////////-->
+                <label class="for-label"> پست:</label>
+                <ng-select
+                        [items]="userTypeList"
+                        disabled
+                        id="userType"
+                        name="userType"
+                        bindLabel="name"
+                        bindValue="id"
+                        dropdownPosition="bottom"
+                        #userType="ngModel"
+                        nbvRequired
+                        [(ngModel)]="activityLevelForAddContact.userTypeId"
+                        [addTag]="false"
+                        [multiple]="true"
+                        [loading]="loadingUserTypeList"
+                        placeholder="پست را انتخاب کنید"
+                        style="width: 100%;"
+                >
+                    <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                        <div class="ng-option disabled" style="color: #a8a6a5">
+                            نتیجه یافت نشد...
+                        </div>
+                    </ng-template>
+
+                    <ng-template ng-loadingtext-tmp let-searchTerm="searchTerm">
+                        <div class="ng-option disabled" style="color: #a8a6a5">
+                            در حال جستجو...
+                        </div>
+                    </ng-template>
+                    <ng-template ng-typetosearch-tmp let-searchTerm="searchTerm">
+                        <div class="ng-option disabled" style="color: #a8a6a5">
+                            متن برای جستجو...
+                        </div>
+                    </ng-template>
+                </ng-select>
+                <div id="userTypeDest"></div>
+                <div id="userTypeIdValidation" style="opacity: 0; height: 0"></div>
+                <!--        ////////////////////////////-->
+            </div>
+
+        </div>
+        <div class="col-md-12"
+             *ngIf="userByUserTypeIdAndOrganizationId.length===0&&activityLevelForAddContact.userTypeId&&!loadingUserList">
+            <div class="alert alert-warning" style="margin-top: -8px">
+                <p style="font-size: 12px">کاربری برای پست {{ withoutUser}} ثبت نشده است.</p>
+            </div>
+        </div>
+        <ng-container *ngIf="loadingUserList">
+            <i class="fa fa-spinner fa-pulse fa-1x"></i>
+            در حال دریافت
+        </ng-container>
+
+
+        <div class="col-md-12 col-sm-4 col-xs-12 mb-2" *ngIf="userByUserTypeIdAndOrganizationId.length">
+
+            <div class="input-group">
+                <label class="for-label" style="margin-bottom: -5px">گیرنده: <span style="color: red">*</span>
+                </label>
+            </div>
+        </div>
+        <div class="col-md-12" style="margin-top: 20px" *ngIf="userByUserTypeIdAndOrganizationId.length">
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-checkbox id="one"
+                                  [checked]="activityLevelForAddContact.candidateMode === candidateMode.userType_mode"
+                                  disabled color="primary">
+                        <span style="font-size: 13px">به تمامی کاربران این پست
+                            {{activityLevelForAddContact.userTypeId?.length > 1 ? ' ها ' : ''}}
+                            ارسال شود</span>
+                    </mat-checkbox>
+                    <label style="font-size: 13px ;margin-right: 10px;"></label>
+                </div>
+                <div class="col-md-6">
+                    <mat-checkbox id="tow"
+                                  [checked]="activityLevelForAddContact.candidateMode === candidateMode.user_mode"
+                                  disabled color="primary">
+                        <span style="font-size: 13px;margin-right: 10px;">به برخی کاربران این پست
+                            {{activityLevelForAddContact.userTypeId?.length > 1 ? ' ها ' : ''}}
+                            ارسال شود</span>
+                    </mat-checkbox>
+                </div>
+            </div>
+        </div>
+        <!--==================================-->
+        <!--        <ng-container *ngIf="showSelectUserTable">-->
+        <ng-container *ngIf="activityLevelForAddContact.candidateMode ===candidateMode.user_mode">
+            <div class="col-md-12" *ngIf=" userByUserTypeIdAndOrganizationId.length">
+                <div class="card card-body">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <input type="checkbox" id="selectAllUser" [checked]="selectAllUserBoolean"
+                                   disabled> <span
+                                style="font-size: 14px;
+                                color: #4c4c4c ;
+                                margin-right: 10px;
+                                cursor: pointer">انتخاب همه ی کاربران</span>
+                        </div>
+                    </div>
+
+                    <table class="table table-bordered table-responsive-md table-striped">
+                        <thead>
+                        <tr style="text-align: center">
+                            <th></th>
+                            <th>نام کاربر</th>
+                            <th>پست</th>
+                            <th style="width: 20%">انتخاب</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <ng-container *ngFor="let user of  userByUserTypeIdAndOrganizationId; let i = index">
+                            <tr>
+                                <td style="text-align: center">{{i + 1}}</td>
+                                <td style="text-align: center">{{user.name}} {{user.family}}</td>
+                                <td style="text-align: center">{{user.userTypeName}}</td>
+                                <td style="text-align: center">
+                                    <input type="checkbox"
+                                           [checked]="user?.selectedUserBoolean"
+                                           style="cursor: pointer"
+                                           disabled id="ddd"></td>
+                            </tr>
+                        </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </ng-container>
+        <!--==================================-->
+
+        <ng-template #infoUser>
+            <!--            <div class="col-md-12">-->
+            <!--                <i class="fa fa-info"></i>-->
+            <!--                <a style="color: #2D80B2"> <span style="font-size: 14px"> کاربر این مرحله متغییر می باشد و در اجرای فرآیند تعیین خواهد شد</span>-->
+            <!--                </a>-->
+            <!--                <div class="col-md-12" style="margin-top: 10px">-->
+            <!--                    <ng-container *ngFor="let user of userByUserTypeIdAndOrganizationId">-->
+            <!--                        <a style="background: #f0f0f0;color: #929292;border-radius: 12px; font-size: 12px ">-->
+            <!--                            {{user.name}} {{user.family}}-->
+            <!--                        </a>-->
+            <!--                    </ng-container>-->
+            <!--                </div>-->
+            <!--            </div>-->
+        </ng-template>
+        <hr>
+
+        <div class="row float-left">
+            <div class="col-md-12 form-group required col-sm-12 text-center">
+                <!--                <button class="btn  btn-sm" style="background-color: #042C76; color: white;"-->
+                <!--                        (click)="setUserInActivityLevel2()"-->
+                <!--                >-->
+                <!--                    &lt;!&ndash;                        [disabled]="(userByUserTypeIdAndOrganizationId.length  === 0 && userIdList)"&ndash;&gt;-->
+
+                <!--                    <span>ثبت</span>-->
+                <!--                </button>-->
+                <button class="btn-cancel-back  btn-sm" style="margin-right: 10px"
+                        (click)="cancelSelectableUser2()"
+                >
+                    <span>انصراف</span>
+                </button>
+
+            </div>
+        </div>
+
+
+    </div>
+</nbw-modal>
+
+
+<!--==========================================================-->
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="true"
+        [dataBackdrop]="true"
+        [modalSize]="MyModalSize.CUSTOM_WIDTH"
+        [customWidthPercent]="{xs: 130, md:70}"
+        autoShow="false"
+        [myId]="'accessWorkOrder'">
+    <div modal-header>
+        انتخاب فیلد های اطلاعات پایه ی دستور کار
+    </div>
+    <div modal-body style="display: flow-root">
+
+
+        <ng-container>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="alert alert-success" role="alert"
+                         style="background-color: #eeeeee;padding: 0.3rem;border: none">
+                        <div class="row">
+                            <div class="col-md-7 ">
+                                <h6 class="alert-heading"> نام دستور کار</h6>
+
+
+                            </div>
+                            <div class="col-md-5 ">
+                                <div class=" align-content-end">
+
+                                    <section class="example-section">
+                                        <mat-slide-toggle
+                                                class="example-margin"
+                                                id="title"
+                                                [(ngModel)]="workOrderAccess.title"
+                                                disabled
+                                        >
+                                        </mat-slide-toggle>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    <div class="alert alert-success" role="alert"
+                         style="background-color: #eeeeee;padding: 0.3rem;border: none">
+                        <div class="row">
+                            <div class="col-md-7 ">
+                                <h6 class="alert-heading"> کد دستور کار</h6>
+
+
+                            </div>
+                            <div class="col-md-5 ">
+                                <div class=" align-content-end">
+
+                                    <section class="example-section">
+                                        <mat-slide-toggle
+                                                class="example-margin"
+                                                id="code"
+                                                disabled
+                                                [(ngModel)]="workOrderAccess.code"
+                                        >
+                                        </mat-slide-toggle>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="alert alert-success" role="alert"
+                         style="background-color: #eeeeee;padding: 0.3rem;border: none">
+
+
+                        <div class="row">
+                            <div class="col-md-7 ">
+                                <h6 class="alert-heading"> نوع بازدید</h6>
+                            </div>
+                            <div class="col-md-5">
+                                <div class=" align-content-end">
+                                    <section class="example-section">
+                                        <mat-slide-toggle
+                                                disabled
+                                                class="example-margin"
+                                                id="maintenanceType"
+                                                [(ngModel)]="workOrderAccess.maintenanceType">
+                                        </mat-slide-toggle>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="alert alert-success" role="alert"
+                         style="background-color: #eeeeee;padding: 0.3rem;border: none">
+                        <div class="row">
+                            <div class="col-md-7 ">
+                                <h6 class="alert-heading"> اولویت</h6>
+                            </div>
+                            <div class="col-md-5 ">
+                                <div class=" align-content-end">
+
+                                    <section class="example-section">
+                                        <mat-slide-toggle
+                                                disabled
+                                                class="example-margin"
+                                                id="priority"
+                                                [(ngModel)]="workOrderAccess.priority"
+                                        >
+                                        </mat-slide-toggle>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!--                <div class="col-md-6">-->
+<!--                    <div class="alert alert-success" role="alert"-->
+<!--                         style="background-color: #eeeeee;padding: 0.3rem;border: none">-->
+
+<!--                        <div class="row">-->
+<!--                            <div class="col-md-7 ">-->
+<!--                                <h6 class="alert-heading"> دارایی</h6>-->
+<!--                            </div>-->
+<!--                            <div class="col-md-5 ">-->
+<!--                                <div class=" align-content-end">-->
+
+<!--                                    <section class="example-section">-->
+<!--                                        <mat-slide-toggle-->
+<!--                                                disabled-->
+<!--                                                class="example-margin"-->
+<!--                                                id="assetId"-->
+<!--                                                [(ngModel)]="workOrderAccess.assetId"-->
+<!--                                        >-->
+<!--                                        </mat-slide-toggle>-->
+<!--                                    </section>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div class="col-md-6">
+                    <div class="alert alert-success" role="alert"
+                         style="background-color: #eeeeee;padding: 0.3rem;border: none">
+                        <div class="row">
+                            <div class="col-md-7 ">
+                                <h6 class="alert-heading"> پروژه</h6>
+                            </div>
+                            <div class="col-md-5 ">
+                                <div class=" align-content-end">
+
+                                    <section class="example-section">
+                                        <mat-slide-toggle
+                                                disabled
+                                                class="example-margin"
+                                                id="projectId"
+                                                [(ngModel)]="workOrderAccess.projectId"
+                                        >
+                                        </mat-slide-toggle>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="alert alert-success" role="alert"
+                         style="background-color: #eeeeee;padding: 0.3rem;border: none">
+                        <div class="row">
+                            <div class="col-md-7 ">
+                                <h6 class="alert-heading"> وضعیت</h6>
+                            </div>
+                            <div class="col-md-5 ">
+                                <div class=" align-content-end">
+
+                                    <section class="example-section">
+                                        <mat-slide-toggle
+                                                disabled
+                                                class="example-margin"
+                                                id="statusId"
+                                                [(ngModel)]="workOrderAccess.statusId"
+                                        >
+                                        </mat-slide-toggle>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="alert alert-success" role="alert"
+                         style="background-color: #eeeeee;padding: 0.3rem;border: none">
+                        <div class="row">
+                            <div class="col-md-7 ">
+                                <h6 class="alert-heading"> تاریخ شروع کار</h6>
+                            </div>
+                            <div class="col-md-5 ">
+                                <div class=" align-content-end">
+
+                                    <section class="example-section">
+                                        <mat-slide-toggle
+                                                disabled
+                                                class="example-margin"
+                                                id="startDate"
+                                                [(ngModel)]="workOrderAccess.startDate"
+                                        >
+                                        </mat-slide-toggle>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="alert alert-success" role="alert"
+                         style="background-color: #eeeeee;padding: 0.3rem;border: none">
+                        <div class="row">
+                            <div class="col-md-7 ">
+                                <h6 class="alert-heading"> تاریخ پایان کار</h6>
+                            </div>
+                            <div class="col-md-5 ">
+                                <div class=" align-content-end">
+
+                                    <section class="example-section">
+                                        <mat-slide-toggle
+                                                disabled
+                                                class="example-margin"
+                                                id="endDate"
+                                                [(ngModel)]="workOrderAccess.endDate"
+                                        >
+                                        </mat-slide-toggle>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="alert alert-success" role="alert"
+                         style="background-color: #eeeeee;padding: 0.3rem;border: none">
+                        <div class="row">
+                            <div class="col-md-7 ">
+                                <h6 class="alert-heading"> آخرین مهلت:</h6>
+                            </div>
+                            <div class="col-md-5 ">
+                                <div class=" align-content-end">
+
+                                    <section class="example-section">
+                                        <mat-slide-toggle
+                                                disabled
+                                                class="example-margin"
+                                                id="requiredCompletionDate"
+                                                [(ngModel)]="workOrderAccess.requiredCompletionDate"
+                                        >
+                                        </mat-slide-toggle>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="alert alert-success" role="alert"
+                         style="background-color: #eeeeee;padding: 0.3rem;border: none">
+                        <div class="row">
+                            <div class="col-md-7 ">
+                                <h6 class="alert-heading"> انتخاب تصویر</h6>
+                            </div>
+                            <div class="col-md-5 ">
+                                <div class=" align-content-end">
+
+                                    <section class="example-section">
+                                        <mat-slide-toggle
+                                                disabled
+                                                class="example-margin"
+                                                id="image"
+                                                [(ngModel)]="workOrderAccess.image"
+                                        >
+                                        </mat-slide-toggle>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </ng-container>
+    </div>
+    <div modal-footer>
+        <div class="btn-group-sm">
+            <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal" style="margin :0 6px "
+                    (click)="doNullItemsOfWorkOrderAccess()">
+                انصراف
+            </button>
+            <!--            <button type="button" class="btn btn-action btn-sm "-->
+            <!--                    (click)="changeSetting()" style="margin :0 5px ">-->
+            <!--                تایید و اعمال تغییرات-->
+            <!--                <i *ngIf="loadingChangeSetting" class="fa fa-spinner fa-pulse fa-1x"></i>-->
+            <!--            </button>-->
+        </div>
+    </div>
+</nbw-modal>
+
+

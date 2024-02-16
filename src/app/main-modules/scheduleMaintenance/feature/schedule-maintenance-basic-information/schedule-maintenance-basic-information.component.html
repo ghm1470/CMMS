@@ -1,0 +1,76 @@
+
+<div class="card">
+  <form #scheduleMaintenanceBasicInformationForm="ngForm" (submit)="action(scheduleMaintenanceBasicInformationForm)">
+    <div class="card-body card-body-content">
+      <div class="row">
+        <div class="col-md-4 form-group required col-sm-12">
+          <label class="for-label">تخمین نفر ساعت:</label>
+          <div class="input-group input-group-sm">
+<!--                   nbvRequired-->
+            <input type="text" placeholder="تخمین نفر ساعت" [(ngModel)]="scheduleMaintenanceBasicInformation.laborHour"
+                   class="form-control" minlength="1" maxlength="80" name="laborHour"
+                   #laborHour="ngModel" nbvPattern="{{myPattern.number}}"
+                   nbvPatternMsgHtml="تخمین نفر ساعت باید به صورت عددی وارد گردد." Persian2English
+                   [class.is-valid]="!(laborHour?.errors?.nbvRequired || laborHour?.errors?.nbvPattern)"
+                   [class.is-invalid]="(laborHour?.errors?.nbvRequired || laborHour?.errors?.nbvPattern) && (laborHour.touched || doSave)"
+                   dest="laborHourValidation">
+          </div>
+          <div id="laborHourValidation"></div>
+        </div>
+
+        <div class="col-md-4 form-group required col-sm-12">
+          <label class="for-label">نفر ساعت کار انجام شده:</label>
+          <div class="input-group input-group-sm">
+<!--                   nbvRequired-->
+            <input type="text" placeholder="نفر ساعت کار انجام شده" [(ngModel)]="scheduleMaintenanceBasicInformation.actualLaborHour"
+                   class="form-control" minlength="1" maxlength="80" name="actualLaborHour"
+                   #actualLaborHour="ngModel" nbvPattern="{{myPattern.number}}"
+                   nbvPatternMsgHtml="نفر ساعت کار انجام شده باید به صورت عددی وارد گردد." Persian2English
+                   [class.is-valid]="!(actualLaborHour?.errors?.nbvRequired || actualLaborHour?.errors?.nbvPattern)"
+                   [class.is-invalid]="(actualLaborHour?.errors?.nbvRequired || actualLaborHour?.errors?.nbvPattern) && (actualLaborHour.touched || doSave)"
+                   dest="actualLaborHourValidation">
+          </div>
+          <div id="actualLaborHourValidation"></div>
+        </div>
+        <!--<div class="col-md-4 form-group required col-sm-12">-->
+        <!--<label class="for-label">تاریخ اتمام کار: </label>-->
+        <!--<input class="form-control" id="completionDate" #completionDate placeholder="تاریخ اتمام کار">-->
+        <!--</div>-->
+
+      </div>
+      <div class="row">
+        <div class="col-md-12 form-group required col-sm-12">
+          <label class="for-label">خلاصه کار:</label>
+          <div class="input-group input-group-sm">
+<!--                  nbvRequired-->
+        <textarea type="text" placeholder="خلاصه کار" [(ngModel)]="scheduleMaintenanceBasicInformation.issueSummary"
+                  class="form-control" maxlength="620" name="issueSummary"
+                  #issueSummary="ngModel"
+                  [class.is-valid]="!(issueSummary?.errors?.nbvRequired)"
+                  [class.is-invalid]="(issueSummary?.errors?.nbvRequired) && (issueSummary.touched || doSave)"
+        ></textarea>
+          </div>
+          <div id="issueSummaryValidation"></div>
+        </div>
+        <div class="col-md-12 form-group required col-sm-12">
+          <label class="for-label">دستور العمل کار:</label>
+          <div class="input-group input-group-sm">
+<!--                  nbvRequired-->
+        <textarea type="text" placeholder="دستور العمل کار" [(ngModel)]="scheduleMaintenanceBasicInformation.workInstruction"
+                  class="form-control" maxlength="620" name="workInstruction"
+                  #workInstruction="ngModel"
+                  [class.is-valid]="!(workInstruction?.errors?.nbvRequired)"
+                  [class.is-invalid]="(workInstruction?.errors?.nbvRequired) && (workInstruction.touched || doSave)"
+        ></textarea>
+          </div>
+          <div id="workInstructionValidation"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer text-left" *ngIf="mode!== actionMode.VIEW">
+      <button class="btn btn-action btn-sm" type="submit">
+        <span>ثبت اطلاعات</span>
+      </button>
+    </div>
+  </form>
+</div>

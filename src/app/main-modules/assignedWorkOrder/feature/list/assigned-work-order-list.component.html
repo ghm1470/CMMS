@@ -1,0 +1,432 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-7 col-8 col-sm-6 card-title">
+                <div class="row">
+                    <div class="col-md-7">
+                        <i class="fa fa-list"></i>&nbsp;&nbsp;
+                        <span>لیست دستور کار تخصیص یافته شده به:</span>
+                    </div>
+
+
+                    <div class="col-md-5 d-none d-md-block d-sm-block">
+                        <!--<br>-->
+                        <ng-select [items]="userList"
+                                   bindLabel="name"
+                                   bindValue="id"
+                                   [clearable]="false"
+                                   [(ngModel)]="userId" (change)="search()">
+                            <!--<ng-option *ngFor="let item of userList" [value]="item.id">{{item.name}} {{item.family}}</ng-option>-->
+                        </ng-select>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-5 col-4 col-sm-6 text-left">
+                <button title="جستجو" data-toggle="collapse" href="#user-search"
+                        (click)="openSearchItems()"
+                        class="btn btn-outline-secondary btn-sm" style="margin: 0 5px">
+                    <i class="fa fa-search"></i>
+                </button>
+                <!--        افزودن از این قسمت برداشته شد.-->
+                <!--        <ng-container>-->
+                <!--          <button [routerLink]="'action'" [queryParams]="{mode: actionMode.ADD}"-->
+                <!--                  class="btn btn-secondary btn-sm">-->
+                <!--            <i class="fa fa-plus"></i>&nbsp;&nbsp;-->
+                <!--            افزودن-->
+                <!--          </button>-->
+                <!--        </ng-container>-->
+            </div>
+
+            <div class="col-12 mt-2 d-block d-md-none d-sm-none">
+                <!--<br>-->
+                <ng-select [items]="userList"
+                           bindLabel="name"
+                           bindValue="id"
+                           [clearable]="false"
+                           [(ngModel)]="userId" (change)="search()">
+                    <!--<ng-option *ngFor="let item of userList" [value]="item.id">{{item.name}} {{item.family}}</ng-option>-->
+                </ng-select>
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="card-body card-body-content">
+        <div class="collapse" id="user-search">
+            <div class="card" style="margin-bottom: 10px">
+                <div class="card-body card-body-filter">
+                    <div class="row" >
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="for-label">عنوان دستور کار</label>
+                                <input type="text" class="form-control form-control-sm" placeholder="نام دارایی"
+                                       style="width: 100%" [(ngModel)]="getAllByFilterAndPagination.title">
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="for-label">کد دستور کار</label>
+                                <input type="text" class="form-control form-control-sm" placeholder="کد دارایی"
+                                       style="width: 100%" [(ngModel)]="getAllByFilterAndPagination.code">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="for-label">وضعیت</label>
+                                <ng-select bindLabel="name" bindValue="id"
+                                           [(ngModel)]="getAllByFilterAndPagination.statusId"
+                                           [items]="workOrderStatusList" [placeholder]="'وضعیت'"></ng-select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="for-label">دارایی</label>
+                                <ng-select bindLabel="name" bindValue="id"
+                                           [(ngModel)]="getAllByFilterAndPagination.assetId"
+                                           [items]="assetList" [placeholder]="'دارایی'"></ng-select>
+                            </div>
+
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="for-label">پروژه</label>
+                                <ng-select bindLabel="name" bindValue="id"
+                                           [(ngModel)]="getAllByFilterAndPagination.projectId"
+                                           [items]="projectList" [placeholder]="'پروژه'"></ng-select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="for-label">اولویت</label>
+                                <ng-select bindLabel="_title" bindValue="_value"
+                                           [(ngModel)]="getAllByFilterAndPagination.priority"
+                                           [items]="priorityList" [placeholder]="'اولویت'"></ng-select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="for-label">نوع بازدید</label>
+                                <ng-select bindLabel="_title" bindValue="_value"
+                                           [(ngModel)]="getAllByFilterAndPagination.maintenanceType"
+                                           [items]="maintenanceTypeList" [placeholder]="'نوع بازدید'"></ng-select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-2">
+                                <label class="for-label">وضعیت زمانبندی </label>
+                                <ng-select [(ngModel)]="getAllByFilterAndPagination.fromSchedule"
+                                           name="fromSchedule"
+                                           [placeholder]="'وضعیت زمانبندی'">
+                                    <ng-option [value]="true"> زمانبندی شده</ng-option>
+                                    <ng-option [value]="false"> زمانبندی نشده</ng-option>
+                                </ng-select>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="for-label">تاریخ شروع</label>
+                                <input class="form-control form-control-sm" id="startDate" #startDate
+                                       placeholder="تاریخ شروع پروژه">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+
+                                <label class="for-label">تاریخ پایان</label>
+                                <input class="form-control form-control-sm" id="endDate" #endDate
+                                       placeholder="تاریخ پایان پروژه">
+                            </div>
+                        </div>
+
+                        <div class="col-md-1" style="margin-top: 30px">
+                            <button class="btn btn-sm btn-search"
+                                    (click)="search()">
+                                <!--<i class="fa fa-search"></i>-->
+                                جستجو
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+
+        <ng-container *ngIf="entityList.length===0 && loading === false">
+            <div style="text-align: center">نتیجه ای یافت نشد.</div>
+        </ng-container>
+        <ng-container *ngIf="entityList.length>0">
+            <table class="table table-striped table-bordered table-responsive-md">
+                <thead>
+                <tr style="text-align: center">
+                    <th class="text-center">ردیف</th>
+                    <th class="text-center">عنوان</th>
+                    <th class="text-center">دارایی</th>
+                    <th class="text-center">کد</th>
+                    <th class="text-center">اولویت</th>
+                    <th class="text-center">نوع بازدید</th>
+                    <th class="text-center">پروژه</th>
+                    <th class="text-center">وضعیت</th>
+                    <th class="text-center">تاریخ شروع</th>
+                    <th class="text-center"> تاریخ پایان</th>
+                    <th class="text-center">وضعیت زمانبندی</th>
+                    <th class="text-center" style="width: 5%">مشاهده</th>
+                    <th class="text-center" style="width: 5%">ویرایش</th>
+                </tr>
+
+                </thead>
+                <tbody>
+
+                <ng-container *ngFor="let item of entityList; let i = index">
+                    <tr class="text-center">
+                        <td>
+                            {{(i + 1 + (pageIndex * pageSize))}}            </td>
+                        <td>{{item.title}}</td>
+                        <td>
+                            {{item.assetName ? item.assetName : '----'}}
+                        </td>
+                        <td>{{item.code}}</td>
+                        <td>
+                            <ng-container *ngFor="let priority of priorityList">
+                                <ng-container *ngIf="priority._value === item.priority">
+                                    {{priority._title}}
+                                </ng-container>
+                            </ng-container>
+                        </td>
+                        <td>
+                            <ng-container *ngFor="let maintenanceType of maintenanceTypeList">
+                                <ng-container *ngIf="maintenanceType._value === item.maintenanceType">
+                                    {{maintenanceType._title}}
+                                </ng-container>
+                            </ng-container>
+                        </td>
+
+                        <td>
+                            {{item.projectName ? item.projectName : '----'}}
+                        <td>
+                            {{item.statusName ? item.statusName : '----'}}
+                        </td>
+                        <td class="text-center">
+
+                            {{moment.convertIsoToJDate(item?.startDate) | perNumber}}
+                        </td>
+                        <td class="text-center">
+                            {{moment.convertIsoToJDate(item?.endDate) | perNumber}}
+                            <!--                    {{item?.endDate| convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                        </td>
+                        <td class="text-center">
+                            <ng-container *ngIf="item.fromSchedule === true">زمانبندی شده</ng-container>
+                            <ng-container *ngIf="item.fromSchedule === false">زمانبندی نشده</ng-container>
+                        </td>
+
+
+                        <td>
+<!--                            <ng-container *ngIf="roleList.WorkOrder_see;else notEditSeeTemp">-->
+                                <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                   (click)="chooseSelectedItemForView(item)"
+                                   style="cursor: pointer ; font-weight: bold">
+                                    <i class="fa fa-eye" title="مشاهده"></i>
+                                </a>
+<!--                            </ng-container>-->
+<!--                            <ng-template #notEditSeeTemp>-->
+<!--                                <i class="fa fa-eye" title="مشاهده" style="cursor: no-drop"></i>-->
+
+<!--                            </ng-template>-->
+                        </td>
+                        <td>
+
+<!--                            <ng-container *ngIf="roleList.WorkOrder_update;else notEditAccessTemp">-->
+
+                                <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                   (click)="chooseSelectedItemForEdit(item)"
+                                   style="cursor: pointer ; font-weight: bold">
+                                    <i class="fa fa-edit" title="ویرایش"
+                                       *ngIf="!loadingForCheckUpdate||item.id!==selectedWorkOrderIdForCheck"></i>
+                                    <i *ngIf="loadingForCheckUpdate&&item.id===selectedWorkOrderIdForCheck"
+                                       class="fa fa-spinner fa-pulse fa-1x"></i>
+                                </a>
+<!--                            </ng-container>-->
+<!--                            <ng-template #notEditAccessTemp>-->
+<!--                                <i class="fa fa-edit" title="ویرایش" style="cursor: no-drop"></i>-->
+
+<!--                            </ng-template>-->
+
+                        </td>
+
+                    </tr>
+                </ng-container>
+
+                </tbody>
+            </table>
+
+
+            <!--      <shr-pagination-->
+            <!--        *ngIf="dataOfUserList.itemPage !== null && dataOfUserList.itemPage !== undefined"-->
+            <!--        [indicatorCount]="dataOfUserList.indicatorCount"-->
+            <!--        [totalPages]="dataOfUserList.itemPage.totalPages"-->
+            <!--        [currentPage]="dataOfUserList.queryParamReal.paging.page"-->
+            <!--        (selectedPage)="setCurrentPage($event)"-->
+            <!--        class="class1"-->
+            <!--      ></shr-pagination>-->
+
+
+        </ng-container>
+        <!--    pagination-->
+        <app-paginator
+                [totalElements]="length"
+                [pageSize]="pageSize"
+                [pageIndex]="pageIndex"
+                [pageSizeOptions]="[]"
+                [showFirstLastButtons]="true"
+                (page)=" changePage($event)"
+        ></app-paginator>
+
+
+        <!--    pagination-->
+
+    </div>
+</div>
+
+
+<!--before same style of project-->
+<!--<div class="row" style="margin-bottom: 10px">-->
+
+<!--  <div class="col-md-3  form-group">-->
+<!--    <label class="for-label">عنوان دستور کار</label>-->
+<!--    <input type="text" class="form-control form-control-sm" placeholder="نام دارایی"-->
+<!--           style="width: 100%" [(ngModel)]="componentData.myQuery.getAllByFilterAndPagination.title">-->
+<!--  </div>-->
+<!--  <div class="col-md-3 form-group">-->
+<!--    <label class="for-label">کد دستور کار</label>-->
+<!--    <input type="text" class="form-control form-control-sm" placeholder="کد دارایی"-->
+<!--           style="width: 100%" [(ngModel)]="componentData.myQuery.getAllByFilterAndPagination.code">-->
+<!--  </div>-->
+<!--  <div class="col-md-3">-->
+<!--    <label class="for-label">وضعیت</label>-->
+<!--    <ng-select bindLabel="name" bindValue="id" [(ngModel)]="componentData.myQuery.getAllByFilterAndPagination.statusId"-->
+<!--               [items]="workOrderStatusList" [placeholder]="'وضعیت'"></ng-select>-->
+<!--  </div>-->
+<!--  <div class="col-md-3">-->
+<!--    <label class="for-label">دارایی</label>-->
+<!--    <ng-select bindLabel="name" bindValue="id" [(ngModel)]="componentData.myQuery.getAllByFilterAndPagination.assetId"-->
+<!--               [items]="assetList" [placeholder]="'دارایی'"></ng-select>-->
+<!--  </div>-->
+<!--  <div class="col-md-3">-->
+<!--    <label class="for-label">پروژه</label>-->
+<!--    <ng-select bindLabel="name" bindValue="id" [(ngModel)]="componentData.myQuery.getAllByFilterAndPagination.projectId"-->
+<!--               [items]="projectList" [placeholder]="'پروژه'"></ng-select>-->
+<!--  </div>-->
+<!--  <div class="col-md-3">-->
+<!--    <label class="for-label">اولویت</label>-->
+<!--    <ng-select bindLabel="_title" bindValue="_value"-->
+<!--               [(ngModel)]="componentData.myQuery.getAllByFilterAndPagination.priority"-->
+<!--               [items]="priorityList" [placeholder]="'اولویت'"></ng-select>-->
+<!--  </div>-->
+<!--  <div class="col-md-3">-->
+<!--    <label class="for-label">نوع بازدید</label>-->
+<!--    <ng-select bindLabel="_title" bindValue="_value"-->
+<!--               [(ngModel)]="componentData.myQuery.getAllByFilterAndPagination.maintenanceType"-->
+<!--               [items]="maintenanceTypeList" [placeholder]="'نوع بازدید'"></ng-select>-->
+<!--  </div>-->
+<!--  <div class="col-md-3">-->
+<!--    <label class="for-label">تاریخ شروع</label>-->
+<!--    <input class="form-control form-control-sm" id="startDate" #startDate placeholder="تاریخ شروع پروژه">-->
+<!--  </div>-->
+<!--  <div class="col-md-3">-->
+<!--    <label class="for-label">تاریخ پایان</label>-->
+<!--    <input class="form-control form-control-sm" id="endDate" #endDate placeholder="تاریخ پایان پروژه">-->
+<!--  </div>-->
+<!--  <div class="col-md-1 text-left">-->
+<!--    <button class="btn btn-sm btn-action btn-search" (click)="search()" style="margin-top: 30px">-->
+<!--      جستجو-->
+<!--    </button>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash;/////////empety List ////////////////&ndash;&gt;-->
+<!--<div class="col-md -12" *ngIf="!loading &&dataOfAssignedWorkOrderList.length === 0">-->
+<!--  <br>-->
+<!--  <div class="text-center" style="color: #6d6d6e">-->
+<!--    <a>هیچ اطلاعاتی ثبت نشده!</a>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<!--<div class="card table-responsive-md" *ngIf="dataOfAssignedWorkOrderList.length > 0">-->
+<!--  <table class="table table-striped">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--      <th class="text-center">ردیف</th>-->
+<!--      <th class="text-center">عنوان</th>-->
+<!--      <th class="text-center">کد</th>-->
+<!--      <th class="text-center">اولویت</th>-->
+<!--      <th class="text-center">نوع بازدید</th>-->
+<!--      <th class="text-center">دارایی</th>-->
+<!--      <th class="text-center">پروژه</th>-->
+<!--      <th class="text-center">وضعیت</th>-->
+<!--      <th class="text-center" style="width: 5%"></th>-->
+<!--      <th class="text-center" style="width: 5%"></th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <ng-container *ngFor="let item of dataOfAssignedWorkOrderList; let i = index">-->
+<!--      <tr class="text-center">-->
+<!--        <td>{{toolkit2.Common.En2Fa(((((componentData.myQuery.paging.page) * componentData.myQuery.paging.size)) + (i + 1)))}}</td>-->
+<!--        <td>{{item.title}}</td>-->
+<!--        <td>{{item.code}}</td>-->
+<!--        <td>-->
+<!--          <ng-container *ngFor="let priority of priorityList">-->
+<!--            <ng-container *ngIf="priority._value === item.priority">-->
+<!--              {{priority._title}}-->
+<!--            </ng-container>-->
+<!--          </ng-container>-->
+<!--        </td>-->
+<!--        <td>-->
+<!--          <ng-container *ngFor="let maintenanceType of maintenanceTypeList">-->
+<!--            <ng-container *ngIf="maintenanceType._value === item.maintenanceType">-->
+<!--              {{maintenanceType._title}}-->
+<!--            </ng-container>-->
+<!--          </ng-container>-->
+<!--        </td>-->
+<!--        <td>{{getAssetTitle(item.assetId)}}</td>-->
+<!--        <td>{{getProjectTitle(item.projectId)}}</td>-->
+<!--        <td>{{getStatusTitle(item.statusId)}}-->
+<!--        </td>-->
+<!--        <td>-->
+<!--          <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+<!--             *ngIf="roleList.AssignedWorkOrder_see"-->
+<!--             (click)="chooseSelectedItemForView(item)" style="cursor: pointer ; font-weight: bold">-->
+<!--            <i class="fa fa-eye" title="مشاهده"></i>-->
+<!--          </a>-->
+<!--        </td>-->
+<!--        <td>-->
+<!--          <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+<!--             *ngIf="roleList.AssignedWorkOrder_update"-->
+<!--             (click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">-->
+<!--            <i class="fa fa-edit" title="ویرایش"></i>-->
+<!--          </a>-->
+<!--        </td>-->
+
+<!--      </tr>-->
+<!--    </ng-container>-->
+
+<!--    </tbody>-->
+<!--  </table>-->
+
+<!--  <shr-pagination-->
+<!--    [indicatorCount]="totalElements"-->
+<!--    [totalPages]="totalPages"-->
+<!--    [currentPage]="componentData.myQuery.paging.page"-->
+<!--    (selectedPage)="setPage($event)"-->
+<!--    class="class1"-->
+<!--  ></shr-pagination>-->
+<!--</div>-->

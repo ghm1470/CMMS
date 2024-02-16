@@ -1,0 +1,79 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                <ng-container *ngIf="mode === actionMode.ADD">
+                    <i class="fa fa-plus"></i>&nbsp;
+                    افزودن دسته بندی مشخصات
+                </ng-container>
+                <ng-container *ngIf="mode === actionMode.EDIT">
+                    <i class="fa fa-edit"></i>&nbsp;
+                    ویرایش دسته بندی مشخصات
+                </ng-container>
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <button (click)="cancel()"
+                        class="btn btn-cancel-back btn-sm">
+                    بازگشت
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <form #propertyCategoryForm="ngForm">
+        <div class="card-body card-body-content">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="for-label">عنوان</label>
+                    <span style="color: red">*</span>
+                    <div class="input-group input-group-sm">
+                        <input type="text" placeholder="عنوان"
+                               [(ngModel)]="propertyCategory.title"
+                               class="form-control" maxlength="40" name="title"
+                               nbvRequired
+                               #title="ngModel"
+                               nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."
+                               nbvPattern="{{myPattern.TITLEFa}}"
+                               nbvMinlength="1"
+                               (change)="trimName()"
+                               [class.is-valid]="!(title?.errors?.nbvRequired || title?.errors?.nbvMinlength)"
+                               [class.is-invalid]="(title?.errors?.nbvRequired) && (title.touched || doSave)"
+                               dest="titleValidation">
+                    </div>
+                    <div id="titleValidation"></div>
+                </div>
+                <div class="col-md-4">
+                    <label class="for-label">کد</label>
+                    <span style="color: red">*</span>
+
+                    <div class="input-group input-group-sm">
+                        <!--                   (change)="checkIfCodeExists()"-->
+                        <input type="text" placeholder="کد"
+                               [(ngModel)]="propertyCategory.code"
+                               class="form-control" name="code"
+                               nbvRequired #code="ngModel"
+
+                               nbvPatternMsgHtml="کد باید به صورت حروف و اعداد انگلیسی باشد."
+                               nbvPattern="{{myPattern.smartCode}}"
+                               [class.is-valid]="!(code?.errors?.nbvRequired )"
+                               [class.is-invalid]="(code?.errors?.nbvRequired) && (code.touched || doSave)"
+                               dest="codeValidation">
+                    </div>
+                    <p style="font-size: 14px" *ngIf="codeExist">*کد تکرای می باشد.</p>
+                    <div id="codeValidation"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card-footer text-left">
+            <button class="btn btn-action btn-sm" type="button"
+                    (click)="checkIfCodeExists(propertyCategoryForm)">
+                <span *ngIf="mode === actionMode.ADD">ثبت</span>
+                <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+            </button>
+        </div>
+    </form>
+</div>

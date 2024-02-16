@@ -1,0 +1,136 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="text-center" *ngIf="!workOrderTaskGroupList.length">
+            <a style="color: #7884a7">هیچ اطلاعاتی ثبت نشده!</a>
+        </div>
+        <ng-container *ngIf="workOrderTaskGroupList.length>0">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <td class="text-center" style="width: 10%">ردیف</td>
+                    <td class="text-center">نام</td>
+                    <td class="text-center">کد</td>
+                    <td class="text-center">لیست کارها</td>
+                    <td class="text-center"> مشاهده</td>
+                    <!--<td class="text-center" style="width: 10%" ></td>-->
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of workOrderTaskGroupList;let i = index">
+                    <th class="text-center" style="width: 10%">{{i + 1}}</th>
+                    <td class="text-center">{{item.name}}</td>
+                    <td class="text-center">{{item.code}}</td>
+                    <td class="text-center">
+                        <i class="fa fa-eye" title=" مشاهده  لیست کارها" style="cursor: pointer"
+                           (click)="showTaskList(item)"></i>
+
+                    </td>
+                    <td class="text-center">
+                        <ng-container *ngIf="roleList.TaskGroup_see;else notSeeAccessTemp">
+                            <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                               (click)="chooseSelectedItemForViewPage(item)"
+                               style="cursor: pointer ; font-weight: bold">
+                                <i class="fa fa-eye" title="مشاهده"></i>
+                            </a>
+                        </ng-container>
+                        <ng-template #notSeeAccessTemp>
+                            <i class="fa fa-eye" title="مشاهده" style="cursor: no-drop"></i>
+                        </ng-template>
+                    </td>
+                    <!--<td class="text-center" style="width: 5%" >-->
+                    <!--<i class="fa fa-trash" (click)="deleteTaskGroup(item.id)" style="cursor: pointer;"></i>-->
+                    <!--</td>-->
+                </tr>
+                </tbody>
+            </table>
+        </ng-container>
+    </div>
+    <!--  <div class="col-md-12 text-left mt-2" >-->
+    <!--    <ng-container *ngIf="sendInformationNumberOfTabs.numberOfFormIdList < sendInformationNumberOfTabs.lengthFormIdList - 1  || sendInformationNumberOfTabs.hasForm">-->
+    <!--    <button  (click)="nextOrPrev('next')" class="btn btn-sm btn-warning" type="button" >-->
+
+    <!--      <span  >بعدی</span>-->
+    <!--    </button>-->
+    <!--    </ng-container>-->
+    <!--    <button  (click)="nextOrPrev('prev')" class="btn btn-sm btn-cancel-back" type="button" style="float: right ">-->
+
+    <!--      <span  >قبلی</span>-->
+    <!--    </button>-->
+    <!--  </div>-->
+</div>
+<!--کار های   سررسید-->
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.DEFAULT"
+        autoShow="false"
+        [myId]="'selectedEntityTaskLisModal'">
+    <div modal-header>
+        <h6>
+
+            لیست کارها
+            {{ selectedEntity.name}}
+        </h6>
+    </div>
+    <div modal-body>
+        <div class="col-md-12">
+            <table class="table table-bordered table-striped " *ngIf="selectedEntity?.taskList?.length> 0">
+                <thead>
+                <tr>
+                    <th style="text-align: center">ردیف</th>
+                    <th class="text-center">عنوان</th>
+                    <th class="text-center">کد</th>
+                    <th class="text-center">توضیحات</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let task of selectedEntity?.taskList;let i=index">
+                    <td class="text-center">{{i + 1}}</td>
+                    <td class="text-center">
+                        {{task.title}}
+                    </td>
+                    <td class="text-center">
+                        {{task.code}}
+                    </td>
+                    <td class="text-center">
+                        {{task.description}}
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+            <p class="text-center" *ngIf="selectedEntity?.taskList?.length === 0">
+                مسافتی ثبت نگردیده است.
+            </p>
+        </div>
+    </div>
+</nbw-modal>
+
+
+<!--    -->
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.X_LARGE"
+        autoShow="false"
+        [myId]="'selectedEntityShowModal'">
+    <div modal-header>
+        <h6>
+            مشاهده
+            <!--      {{ selectedEntity.name}}-->
+        </h6>
+    </div>
+    <div modal-body style="    height: 82vh;
+    overflow: auto;
+    max-height: 82vh;">
+        <div class="col-md-12" *ngIf="selectedEntity.id">
+            <app-task-group-action
+                    [mode]="actionMode.VIEW"
+                    [from]="'modal'"
+                    [taskGroupId]="selectedEntity.id"></app-task-group-action>
+        </div>
+    </div>
+</nbw-modal>
+
+
+

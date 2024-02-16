@@ -1,0 +1,281 @@
+<div id="assetCreate" class="carousel slide" data-interval="false">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6 card-title">
+                            <span>مشاهده اطلاعات دارایی</span>
+                        </div>
+                        <div class="col-md-6 text-left">
+                            <button (click)="cancel()"
+                                    class="btn btn-cancel-back btn-sm">
+                                بازگشت
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body card-body-content">
+
+
+                    <div class="row">
+
+                        <div class="col-md-8" style="margin-top: 15px">
+                            <fieldset class="scheduler-border" id="comapvny-documents"
+                                      style="background-color: #f5f5f5">
+                                <div class="row">
+
+                                    <div class="col-md-6 form-group required col-sm-12">
+                                        <label class="for-label">نام دارایی:</label>
+                                        <span style="color: red">*</span>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" placeholder="نام دارایی" [(ngModel)]="asset.name"
+                                                   class="form-control" maxlength="80" name="name"
+                                                   disabled
+                                            ></div>
+                                        <div id="nameValidation"></div>
+                                    </div>
+
+                                    <div class="col-md-6 form-group required col-sm-12">
+                                        <label class="for-label">کد دارایی:</label>
+                                        <span style="color: red">*</span>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" placeholder="کد دارایی" [(ngModel)]="asset.code"
+                                                   class="form-control" minlength="1" maxlength="80" name="code"
+                                                   [disabled]="true">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 form-group required col-sm-12">
+                                        <label class="for-label" for="categoryType">نوع فرایند:</label>
+                                        <span style="color: red">*</span>
+                                        <ng-select dir="rtl" [(ngModel)]="asset.activityIdList"
+                                                   [multiple]="true"
+                                                   placeholder="نوع فرایند"
+                                                   style="padding: 0"
+                                                   #activityId="ngModel"
+                                                   id="activityId"
+                                                   name="activityId"
+                                                   class="form-control"
+                                                   [disabled]="true"
+                                                   dropdownPosition="bottom">
+                                            <ng-option *ngFor="let item of activityList; let i = index"
+                                                       [value]="item.id">
+                                                {{item.title}}
+                                            </ng-option>
+
+                                        </ng-select>
+                                    </div>
+
+                                    <div class="col-md-6 form-group required col-sm-12">
+                                        <label class="for-label" for="categoryType">نوع دسته:</label>
+                                        <span style="color: red">*</span>
+                                        <ng-select dir="rtl" [(ngModel)]="asset.categoryType"
+                                                   placeholder="نوع دسته"
+                                                   id="categoryType"
+                                                   name="categoryType"
+                                                   style="padding: 0"
+                                                   class="form-control"
+                                                   [disabled]="true"
+                                        >
+                                        </ng-select>
+
+                                        <div id="categoryTypeValidation" style="opacity: 0; height: 0"></div>
+                                    </div>
+                                    <div class="col-md-6 form-group required col-sm-12">
+                                        <label class="for-label" for="assetTemplate">قالب دارایی:</label>
+                                        <span style="color: red">*</span>
+                                        <!--                                                       (change)="getAllAssetTemplate()"-->
+                                        <ng-select dir="rtl" [(ngModel)]="asset.assetTemplateId"
+                                                   placeholder="قالب دارایی"
+                                                   id="assetTemplate"
+                                                   name="assetTemplateId"
+                                                   style="padding: 0"
+                                                   class="form-control"
+                                                   disabled
+                                        >
+                                            <ng-option *ngFor="let item of assetTemplateList; let i = index"
+                                                       [value]="item.id">
+                                                {{item.name}}
+                                            </ng-option>
+
+                                        </ng-select>
+
+                                    </div>
+
+                                    <!--                    <ng-container *ngIf="showInput">-->
+                                    <!--                    </ng-container>-->
+                                    <div class="col-md-6 form-group required col-sm-12" style="margin-top: 30px">
+                                        <label>وضعیت: </label>
+                                        <span style="color: red">*</span>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <label class="switch">
+                                            <!--                                <input type="checkbox" [checked]="asset.status" disabled>-->
+                                            <!--                                <span class="slider round"></span>&nbsp;&nbsp;-->
+                                            <label style="color: green" *ngIf="asset.status">فعال</label>
+                                            <label style="color: #990000" *ngIf="!asset.status">غیر فعال</label>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-12 form-group required">
+                                        <label class="for-label">توضیحات دارایی:</label>
+                                        <div class="input-group input-group-sm">
+              <textarea type="text" placeholder="توضیحات دارایی" [(ngModel)]="asset.description"
+                        disabled
+                        class="form-control" minlength="1" maxlength="620" name="description" style="resize: none"
+              ></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-md-4">
+
+                            <fieldset class="scheduler-border" id="comapny-documents"
+                                      style="background-color: #f5f5f5">
+                                <ng-container *ngIf="asset.image && asset.image.fileByte">
+                                    <div class="col-md-12 img-fluid img-thumbnail">
+                                        <img [src]="'data:image/jpg;base64,' + asset.image.fileByte"
+                                             class="img img-responsive"
+                                             height="200" width="200">
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="!(asset.image && asset.image.fileByte)">
+                                    <div class="col-md-12 text-center">
+                                        تصویری برای دارایی ثبت نشده است
+                                    </div>
+                                </ng-container>
+                            </fieldset>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="card-footer text-left">
+                    <button class="btn btn-warning btn-sm" style="margin: 0 5px" type="button"
+                            (click)="next()">
+                        مرحله بعد - اطلاعات تکمیلی دارایی
+                    </button>
+                </div>            </div>
+        </div>
+        <!--        // اطلاعات تکمیلی//-->
+        <div class="carousel-item">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6 card-title">
+                            <span>مشاهده اطلاعات دارایی</span>
+                        </div>
+                        <div class="col-md-6 text-left">
+                            <button (click)="prev()"
+                                    class="btn btn-cancel-back btn-sm">
+                                بازگشت به مرحله قبل
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body card-body-content">
+
+                    <div class="col-md-12" style="padding: 0" *ngIf="menuStatus">
+                        <ul class="nav nav-tabs" role="navigation" style="text-align: right;padding-right: 0">
+                            <li class="nav-item">
+                                <a href="#assetBaseInfo" style="color: #a0a0a0;font-size: 14px" class="nav-link active"
+                                   data-toggle="tab" role="tab" aria-controls="assetBaseInfo">اطلاعات پایه</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#BOM" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab" role="tab" aria-controls="BOM"
+                                   (click)="showPartList = true">قطعات</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#property" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab" role="tab" aria-controls="property"
+                                   (click)="showPropertyList = true">مشخصات
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#personel" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab" role="tab" aria-controls="personel"
+                                   (click)="showUserList = true">پرسنل</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#metering" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab" role="tab" aria-controls="metering"
+                                   (click)="showMeteringList = true">کارکرد</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#warranty" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab" role="tab" aria-controls="warranty"
+                                   (click)="showWarrantyList = true">گارانتی</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#businessSupport" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab" role="tab" aria-controls="businessSupport"
+                                   (click)="showCompanyList = true">کسب
+                                    و کار ها
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#file" style="color: #a0a0a0;font-size: 14px" class="nav-link"
+                                   data-toggle="tab"
+                                   role="tab" aria-controls="file" (click)="showDocumentList = true">مستندات</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <!--اطلاعات پایه-->
+                            <div class="tab-pane fade active show" id="assetBaseInfo" role="tabpanel">
+                                <app-asset-basic-information [assetId]="assetId"
+                                                             [mode]="'VIEW'"></app-asset-basic-information>
+                            </div>
+
+                            <!--قطعات-->
+                            <div class="tab-pane fade" id="BOM" role="tabpanel" style="padding: 20px">
+                                <app-part-list-for-asset *ngIf="showPartList" [assetId]="assetId"
+                                                         [mode]="'VIEW'"></app-part-list-for-asset>
+                            </div>
+                            <!--مشخصات-->
+                            <div class="tab-pane fade" id="property" role="tabpanel" style="padding: 20px">
+                                <app-property-list-for-asset *ngIf="showPropertyList" [assetId]="assetId"
+                                                             [mode]="'VIEW'"></app-property-list-for-asset>
+                            </div>
+                            <!--پرسنل-->
+                            <div class="tab-pane fade" id="personel" role="tabpanel" style="padding: 20px">
+                                <app-user-list-for-asset *ngIf="showUserList" [mode]="'asset'" [entityId]="assetId"
+                                                         [modePage]="'VIEW'"></app-user-list-for-asset>
+                            </div>
+                            <!--کارکرد-->
+                            <div class="tab-pane fade" id="metering" role="tabpanel" style="padding: 20px">
+                                <app-metering-list *ngIf="showMeteringList" [refId]="assetId"></app-metering-list>
+                            </div>
+                            <!--گارانتی-->
+                            <div class="tab-pane fade" id="warranty" role="tabpanel" style="padding: 20px">
+                                <app-warranty-list *ngIf="showWarrantyList" [modePage]="'VIEW'" [type]="'asset'"
+                                                   [assetId]="assetId"></app-warranty-list>
+                            </div>
+                            <!--کسب و کارها-->
+                            <div class="tab-pane fade" id="businessSupport" role="tabpanel" style="padding: 20px">
+                                <app-company-list-for-asset *ngIf="showCompanyList" [assetId]="assetId"
+                                                            [mode]="'VIEW'"></app-company-list-for-asset>
+                            </div>
+
+                            <div class="tab-pane fade" id="file" role="tabpanel" style="padding: 20px">
+                                <app-document *ngIf="showDocumentList" [extraId]="assetId"
+                                              [mode]="'VIEW'"></app-document>
+                                <!--<div class="col-md-12 text-left">-->
+                                <!--<button class="btn btn-action btn-sm" type="button" (click)="doSaveDocumentList()"-->
+                                <!--style="margin-top: 10px; margin-left: -15px">-->
+                                <!--ثبت اطلاعات-->
+                                <!--</button>-->
+                                <!--</div>-->
+                                <!--<app-document-list-for-asset *ngIf="showDocumentList" [assetId]="assetId"></app-document-list-for-asset>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--        // اطلاعات تکمیلی!!!!!!!!!!!//-->
+
+    </div>
+</div>

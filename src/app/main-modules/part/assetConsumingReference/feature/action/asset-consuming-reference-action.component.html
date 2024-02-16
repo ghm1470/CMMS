@@ -1,0 +1,96 @@
+<div class="modal" tabindex="-1" role="dialog" id="AssetConsumingReferenceModal" data-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="col-lg-12" style="margin-bottom: -10px">
+          <div class="modal-title" style="font-size: 18px;
+              font-weight: bold">
+            <h6>
+              <span *ngIf="mode === actionMode.ADD" style="font-size: 14px">
+                <i class="fa fa-plus"></i>&nbsp;افزودن مرجع مصرف تجهیز </span>
+              <span *ngIf="mode === actionMode.EDIT" style="font-size: 14px">
+                <i class="fa fa-edit"></i>&nbsp;ویرایش مرجع مصرف تجهیز </span>
+
+            </h6>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body" style="display: flow-root;  padding: 15px;border-radius: 5px">
+            <form #ACRForm="ngForm" >
+          <div class="col-md-12">
+
+            <div class="row">
+
+              <div class="col-md-12">
+                <button *ngIf="!ACR.assetName" (click)="openModal()"
+                        class="btn btn-secondary btn-sm">
+                  انتخاب مرجع مصرف تجهیز
+                </button>
+
+                <ng-container *ngIf="ACR.assetName && ACR.assetCode">
+                  <div class="col-md-12 mt-2">
+                    <div class="row">
+                      <div class="col-md-12" style="background-color: #EDEDED ;padding: 10px">
+                        <label style="font-size: 14px">مرجع انتخاب شده:</label>
+                        &nbsp;&nbsp;
+                        <strong style="font-size: 14px">
+                          {{ACR.assetName}}
+<!--                          {{ACR.assetCode}}-->
+                        </strong>
+                        <i class="fa fa-trash" style="cursor: pointer; color: #6c757d" (click)="deleteACR()" ></i>
+                      </div>
+                    </div>
+                </div>
+                </ng-container>
+
+              </div>
+            </div>
+            <div class="row mt-3" *ngIf="ACR.assetName && ACR.assetCode">
+              <div class="col-md-5 form-group">
+                  <label for="ACRquantity" style="font-size: 14px"> تعداد:</label>
+                <span style="color: red">*</span>
+                <div class="input-group input-group-sm">
+                  <input type="text" class="form-control form-control-sm" id="ACRquantity" [(ngModel)]="ACR.quantity"
+                         name="ACRquantity"
+                         autocomplete="off"
+                         nbvRequired #ACRquantity="ngModel"
+                         nbvPattern="{{myPattern.number}}"
+                         nbvPatternMsgHtml="ورودی باید به صورت عدد باشد."
+                         nbvRequiredMsgHtml="پر کردن فیلد الزامی می باشد."
+                         [class.is-valid]="!(ACRquantity?.errors?.nbvRequired || ACRquantity?.errors?.nbvPattern)"
+                         [class.is-invalid]="(ACRquantity?.errors?.nbvRequired || ACRquantity?.errors?.nbvPattern) && (ACRquantity.touched || doSave)"
+                         dest="quantityValidation">
+
+                </div>
+                <div id="quantityValidation" ></div>
+              </div>
+            </div>
+          </div>
+            </form>
+      </div>
+      <div class="modal-footer">
+        <div class="row float-left">
+          <div class="col-md-12 form-group  required col-sm-12 text-center" style="margin-left: 23px">
+            <div class="row">
+              <div class="btn-group-sm">
+                <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal" style="margin :0 5px "
+                        (click)="cancelModal(ACRForm)">
+                  انصراف
+                </button>
+                <button class="btn btn-action btn-sm" type="button" [disabled]="ACRForm.invalid" (click)="action(ACRForm)"
+                        style="margin-left: -22px">
+                  <span *ngIf="mode === actionMode.ADD" >ثبت</span>
+                  <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-container *ngIf="showAssetListModal">
+<app-asset-consuming-reference-view (parentAsset)="receiveMessage($event)"
+                                   ></app-asset-consuming-reference-view>
+</ng-container>

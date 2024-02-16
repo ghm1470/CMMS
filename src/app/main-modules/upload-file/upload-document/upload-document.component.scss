@@ -1,0 +1,193 @@
+//.meter {
+//  height: 20px; /* Can be anything */
+//  position: relative;
+//  background: #9d9d9d;
+//  -moz-border-radius: 25px;
+//  -webkit-border-radius: 25px;
+//  border-radius: 25px;
+//  padding: 10px;
+//  box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
+//
+//
+//  span {
+//    display: block;
+//    height: 100%;
+//    border-top-right-radius: 8px;
+//    border-bottom-right-radius: 8px;
+//    border-top-left-radius: 20px;
+//    border-bottom-left-radius: 20px;
+//    background-color: rgb(43, 194, 83);
+//    background-image: linear-gradient( rgb(43, 194, 83) 37%, rgb(84, 240, 84) 69%);
+//    box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3),
+//    inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+//    position: relative;
+//    overflow: hidden;
+//  }
+//  span:after {
+//    content: "";
+//    position: absolute;
+//    top: 0; left: 0; bottom: 0; right: 0;
+//    background-image: linear-gradient(
+//        -45deg,
+//        rgba(255, 255, 255, .2) 25%,
+//        transparent 25%,
+//        transparent 50%,
+//        rgba(255, 255, 255, .2) 50%,
+//        rgba(255, 255, 255, .2) 75%,
+//        transparent 75%,
+//        transparent
+//    );
+//    z-index: 1;
+//    background-size: 50px 50px;
+//    animation: move 2s linear infinite;
+//    border-top-right-radius: 8px;
+//    border-bottom-right-radius: 8px;
+//    border-top-left-radius: 20px;
+//    border-bottom-left-radius: 20px;
+//    overflow: hidden;
+//  }
+//
+//}
+
+
+///////////////////////// 2 /////////////////////////////////////
+//.center {
+//  position: absolute;
+//  top: 50%;
+//  left: 50%;
+//  transform: translate(-50%, -50%);
+//  width: 310px;
+//  padding: 0 50px;
+//  text-align: center;
+//  box-sizing: border-box;
+//  transition: all 0.3s ease 0.3s;
+//  button {
+//    position: relative;
+//    width: 100%;
+//    border: none;
+//    padding: 5px 0;
+//    cursor: pointer;
+//    outline: none;
+//    border-radius: 50px;
+//    background: linear-gradient(#3d42c2, #373bae, #31349b);
+//    transition: 0.5s;
+//
+//    p {
+//      color: white;
+//      font-size: 22px;
+//      font-weight: 700;
+//      text-transform: uppercase;
+//      margin: 15px;
+//    }
+//
+//    .loading, .fa {
+//      position: absolute;
+//      top: 0;
+//      left: 0;
+//      right: 0;
+//      bottom: 0;
+//    }
+//
+//    .loading {
+//      width: 0;
+//      border-radius: 50px;
+//      background: linear-gradient(#3d42c2, #373bae, #31349b);
+//
+//    }
+//
+//    .fa {
+//      color: white;
+//      font-size: 35px;
+//      line-height: 65px;
+//      transform: scale(0);
+//    }
+//
+//  }
+//
+//  button:hover {
+//    background: linear-gradient(#31349b, #373bae, #3d42c2);;
+//  }
+//}
+//.active{
+//  padding: 0;
+//
+//  button{
+//    background: #d9d9d9;
+//    margin-top: 0;
+//
+//    p{
+//      display: none;
+//    }
+//
+//    .loading{
+//      width: 100%;
+//      transition: all 2.7s ease 0.6s;
+//    }
+//  }
+//}
+
+
+///////////////////////////////////
+[type="file"] {
+  height: 0;
+  overflow: hidden;
+  width: 0;
+}
+
+[type="file"] + label {
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'Rubik', sans-serif;
+  font-size: inherit;
+  font-weight: 500;
+  margin-bottom: 0.70rem;
+  outline: none;
+  padding: 0.70rem 20px;
+  position: relative;
+  vertical-align: middle;
+
+
+  &.btn-2 {
+    background: linear-gradient(#6298c2, #6580ae, #54789b);
+
+    //background-color: #adadad;
+    border-radius: 10px;
+    overflow: hidden;
+
+  }
+
+  &:hover {
+    //background: linear-gradient(#31349b, #373bae, #3d42c2);
+    background: linear-gradient(#54789b, #6580ae, #6298c2);
+
+    //background-color: darken(#adadad, 30%);
+  }
+
+}
+
+.file-name {
+  font-size: 10px;
+  position: relative;
+  background: #54789b;
+  color: #fffbff;
+  padding: 8px 12px;
+  border-radius: 5px;
+  margin-left: 15px;
+  user-select: none;
+
+  &:before {
+    position: absolute;
+    content: '';
+    height: 15px;
+    width: 15px;
+    background:#54789b ;
+    left: -7px;
+    top: 50%;
+    z-index: -1;
+    transform: translateY(-50%) rotate(45deg);
+  }
+}
+

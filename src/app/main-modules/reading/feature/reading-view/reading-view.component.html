@@ -1,0 +1,63 @@
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="false"
+  [dataBackdrop]="true"
+  [modalSize]="MyModalSize.CUSTOM_WIDTH"
+  [customWidthPercent]="{xs: 100, md:65}"
+  autoShow="false"
+  (onClose)="cancelModal()"
+  [myId]="'readingForViewModal'">
+  <div modal-header>
+    <span >نمایش متراژخوانده شده </span>
+  </div>
+
+  <div modal-body style="display: flow-root">
+
+    <div class="row">
+      <div class="col-md-6 form-group required col-sm-12">
+        <label class="for-label">دارایی :</label>
+        <div class="input-group input-group-sm">
+          <div  class="form-control form-control-sm" >
+<!--            {{reading.asset.name}}{{reading.asset.code}}-->
+            {{reading?.asset?.name}}
+<!--              {{reading.asset.id}}-->
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 form-group required col-sm-12">
+        <label class="for-label">واحد اندازه گیری:</label>
+        <div class="input-group input-group-sm">
+          <div  class="form-control form-control-sm" >
+<!--            {{reading?.unitOfMeasurement?.unit}}-->
+            {{reading?.unitOfMeasurement?.title}}
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-6 form-group required col-sm-12">
+        <label class="for-label" >مقدار متراژفعلی:</label>
+        <div class="input-group input-group-sm">
+          <div  class="form-control form-control-sm" >
+            {{reading.amount}}
+          </div>
+        </div>
+        <div id="MeteringValidation" style="opacity: 0; height: 0"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 form-group required col-sm-12">
+        <label class="for-label">توضیحات </label>
+        <div class="input-group input-group-sm">
+          <div  class="form-control form-control-sm" style="height: 200px" >
+            {{reading.description}}
+          </div>
+        </div>
+        <div id="descriptionValidation"></div>
+      </div>
+    </div>
+
+  </div>
+</nbw-modal>

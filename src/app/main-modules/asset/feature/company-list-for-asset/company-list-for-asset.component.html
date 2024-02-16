@@ -1,0 +1,265 @@
+<div class="card">
+    <div class="card-body card-body-content">
+        <div class="col-md-12">
+            <div class="col-md-4 text-right " *ngIf="mode!==actionMode.VIEW">
+                <label class="for-label">انتخاب شرکت  </label>
+                <ng-select dir="rtl" (change)="changeCompany()" [(ngModel)]="selectedCompany.id"
+                           placeholder="انتخاب شرکت" name="propertyList" style="width: 100%;"
+                           dropdownPosition="bottom">
+                    <ng-option value="-1" disabled="">انتخاب شرکت</ng-option>
+                    <ng-option *ngFor="let item of companyList; let i = index"
+                               [value]="item.id">
+                        {{item.name}}
+                    </ng-option>
+                </ng-select>
+            </div>
+            <br>
+            <div class="col-md-12" style="text-align: center" *ngIf="loading">
+                <i class="fa fa-spinner fa-pulse fa-3x "></i>
+
+            </div>
+            <div class="text-center">
+                <a *ngIf="!assetCompanyList.length && !loading" style="color: #7884a7">شرکت پشتیبانی ثبت نشده!</a>
+            </div>
+            <table class="table table-bordered table-responsive-md table-striped"
+                   *ngIf="assetCompanyList.length  && !loading">
+                <thead>
+                <tr>
+                    <td class="text-center" style="width: 10%">ردیف</td>
+                    <td class="text-center" style="width: 40%">نام</td>
+                    <td class="text-center" style="width: 40%">کد</td>
+                    <td class="text-center" style="width: 10%">مشاهده</td>
+                    <td class="text-center" style="width: 10%" *ngIf="mode!==actionMode.VIEW">حذف</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of assetCompanyList;let i = index">
+                    <th class="text-center" style="width: 10%">{{toolKit2.Common.En2Fa(i + 1)}}</th>
+                    <td class="text-center" style="width: 40%">{{item.name}}</td>
+                    <td class="text-center" style="width: 40%">{{item.code}}</td>
+                    <td class="text-center" style="width: 5%" >
+                        <i class="fa fa-eye"
+                           *ngIf="selectedCompany.id!==item.id"
+                           (click)="showModalViewCompany(item.id)"
+                           style="cursor: pointer;"></i>
+                        <i *ngIf="selectedCompany.id===item.id&&loadingSelectedCompanyForView"
+                           class="fa fa-spinner fa-pulse fa-2x"></i>
+
+                    </td>
+                    <td class="text-center" style="width: 5%" *ngIf="mode!==actionMode.VIEW">
+                        <i class="fa fa-trash" (click)="deleteCompany(item.id)" style="cursor: pointer;"></i>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer text-left" *ngIf="mode!==actionMode.VIEW">
+        <button class="btn btn-action btn-sm" type="button" (click)="updateAssetCompanyList()">
+            ثبت اطلاعات
+        </button>
+    </div>
+</div>
+
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize.X_LARGE"
+        autoShow="false"
+        [myId]="modalId">
+    <div modal-header>
+        <h6>
+            مشاهده شرکت
+        </h6>
+    </div>
+    <div modal-body>
+        <div class="card-body card-body-content" style="height: 75vh;max-height:75vh;overflow: auto;">
+            <fieldset class="scheduler-border" id="selectedCompanyForView-basicInfo"
+                      style="margin-top: 35px; background-color: #f7f7f7">
+                <legend class="scheduler-border"><h6>اطلاعات پایه</h6></legend>
+                <div class="row" style="margin: 0">
+                    <div class="col-md-8 row form-group required col-sm-12">
+                        <div class="col-md-6 form-group required col-sm-12">
+                            <label class="for-label"> نام شرکت:
+                                <span style="color:red">*</span>
+                            </label>
+                            <div class="input-group input-group-sm">
+                                <input type="text" placeholder="نام شرکت" [(ngModel)]="selectedCompanyForView.name"
+                                       class="form-control"
+                                       disabled
+
+                                >
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group required col-sm-12">
+                            <label class="for-label"> کد شرکت:
+                                <span style="color:red">*</span>
+                            </label>
+                            <div class="input-group input-group-sm">
+                                <input type="text" placeholder="کد شرکت" [(ngModel)]="selectedCompanyForView.code"
+                                       class="form-control"
+                                       disabled
+                                >
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group required col-sm-12">
+                            <label class="for-label"> نوع شرکت:</label>
+                            <div class="input-group input-group-sm">
+                                <input type="text" placeholder="نوع شرکت" [(ngModel)]="selectedCompanyForView.type"
+                                       class="form-control" disabled>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group required col-sm-12">
+                            <label class="for-label"> شماره موبایل:</label>
+                            <div class="input-group input-group-sm">
+                                <input id="phoneNumber" type="text" class="form-control"
+                                       [(ngModel)]="selectedCompanyForView.phoneNumber"
+                                       disabled>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group required col-sm-12">
+                            <label class="for-label"> شماره تلفن ثابت یا فکس:</label>
+                            <div class="input-group input-group-sm">
+                                <input id="fax" type="text" maxlength="11" class="form-control"
+                                       name="fax" [(ngModel)]="selectedCompanyForView.fax"
+                                       disabled>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group required col-sm-12">
+                            <label class="for-label"> پست الکترونیکی:</label>
+                            <div class="input-group input-group-sm">
+                                <input id="email" type="text" maxlength="60" class="form-control"
+                                       name="email" [(ngModel)]="selectedCompanyForView.email"
+                                       disabled>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6 form-group required col-sm-12">
+                            <label class="for-label"> واحد پولی:</label>
+                            <div class="input-group input-group-sm">
+                                <input id="email" type="text" maxlength="60" class="form-control"
+                                       name="email" [(ngModel)]="selectedCompanyForView.currencyName"
+                                       disabled>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group required col-sm-12">
+                            <label class="for-label"> آدرس وب سایت:</label>
+                            <div class="input-group input-group-sm">
+                                <input id="webSite" type="text"
+                                       class="form-control"
+                                       [(ngModel)]="selectedCompanyForView.webSite"
+                                       disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 row form-group required col-sm-12">
+                        <div class="form-group required col-sm-12">
+                            <label class="for-label"> توضیحات درباره شرکت:</label>
+                            <div class="input-group input-group-sm">
+                <textarea type="text" placeholder="توضیحات درباره شرکت" [(ngModel)]="selectedCompanyForView.description"
+                          class="form-control" name="description"
+                          style="height: 260px;max-height: 260px"
+                          #description="ngModel"
+                          [disabled]="true"
+                ></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </fieldset>
+            <div class="row" style="margin: 0">
+                <div class="col-md-6">
+                    <fieldset class="scheduler-border" id="selectedCompanyForView-address"
+                              style="margin-top: 35px;background-color: #f6f6f6">
+                        <legend class="scheduler-border"><h6>اطلاعات مکانی</h6></legend>
+                        <div class="row">
+                            <div class="form-group required col-sm-12">
+                                <label class="for-label">استان:</label>
+                                <div class="input-group input-group-sm">
+                                    <input id="provinceName" type="text"
+                                           class="form-control"
+                                           [(ngModel)]="selectedCompanyForView.address.provinceName"
+                                           disabled>
+
+                                </div>
+                            </div>
+
+
+                            <div class="form-group required col-sm-12">
+                                <label class="for-label"> شهر:</label>
+                                <div class="input-group input-group-sm">
+                                    <input id="cityName" type="text"
+                                           class="form-control"
+                                           [(ngModel)]="selectedCompanyForView.address.cityName"
+                                           disabled>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group required col-sm-12">
+                                <label class="for-label"> آدرس شرکت:</label>
+                                <div class="input-group input-group-sm">
+                  <textarea type="text" placeholder="آدرس شرکت" [(ngModel)]="selectedCompanyForView.address.description"
+                            [disabled]="true"
+                            class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+
+                </div>
+                <div class="col-md-6">
+                    <fieldset class="scheduler-border" id="comapny-documents" style="background-color: #f5f5f5">
+                        <legend class="scheduler-border"><h6>مستندات</h6></legend>
+                        <div class="row">
+
+
+                            <div class="col-md-12 card table-responsive-md"
+                                 *ngIf="selectedCompanyForView.documents.length > 0">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center" style="width: 5%">ردیف</th>
+                                        <th class="text-center">نام فایل</th>
+                                        <th class="text-center">نوع فایل</th>
+                                        <th class="text-center" style="width: 5%">دانلود</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <ng-container *ngFor="let item of selectedCompanyForView.documents; let i = index">
+                                        <tr class="text-center">
+                                            <td>{{i + 1}}</td>
+                                            <td>{{item.showName}}</td>
+                                            <a style="color: #488ae3">{{fileType(item.fileName)}}</a>
+                                            <td>
+                                                <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                                   (click)="downloadFile(item)"
+                                                   style="cursor: pointer ; font-weight: bold">
+                                                    <i class="fa fa-download" title="دانلود"></i>
+                                                </a>
+                                            </td>
+
+                                        </tr>
+                                    </ng-container>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</nbw-modal>

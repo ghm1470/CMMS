@@ -1,0 +1,69 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+        <ng-container *ngIf="mode === actionMode.ADD">
+          <i class="fa fa-plus"></i>&nbsp;
+          افزودن واحد اندازه گیری
+        </ng-container>
+        <ng-container *ngIf="mode === actionMode.EDIT">
+          <i class="fa fa-edit"></i>&nbsp;
+          ویرایش واحد اندازه گیری</ng-container>
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+        <button (click)="cancel()"
+                class="btn btn-cancel-back btn-sm">
+          بازگشت
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <form #userForm="ngForm" (submit)="checkIfUnitAndTitleExist(userForm)">
+    <div class="card-body card-body-content">
+      <div class="row">
+        <div class="col-md-4 form-group required col-sm-12">
+          <label class="for-label">عنوان:</label>
+          <label style="color: red">*</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="عنوان" [(ngModel)]="unitOfMeasurement.title"
+                   class="form-control" minlength="1" maxlength="80" name="title"
+                   nbvRequired #title="ngModel"
+                   id="title"
+                   nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."
+                   nbvPattern="{{myPattern.TITLEFa}}"
+                   [class.is-valid]="!(title?.errors?.nbvRequired || title?.errors?.nbvPattern) "
+                   [class.is-invalid]="(title?.errors?.nbvRequired || title?.errors?.nbvPattern) && (title.touched || doSave)"
+                   dest="titleValidation">
+          </div>
+          <div id="titleValidation"></div>
+        </div>
+        <div class="col-md-4 form-group required col-sm-12">
+          <label class="for-label">واحد:</label>
+          <label style="color: red">*</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="واحد" [(ngModel)]="unitOfMeasurement.unit"
+                   class="form-control" minlength="1" maxlength="20" name="unit"
+                   nbvRequired #unit="ngModel" id="unit"
+                   nbvPattern="{{myPattern.TITLEFa}}"
+                   nbvPatternMsgHtml="واحد باید به صورت حروف و اعداد باشد."
+
+                   [class.is-valid]="!(unit?.errors?.nbvRequired)"
+                   [class.is-invalid]="(unit?.errors?.nbvRequired) && (unit.touched || doSave)"
+                   dest="unitValidation">
+          </div>
+          <div id="unitValidation"></div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="card-footer text-left">
+      <button class="btn btn-action btn-sm" type="submit" [disabled]="disabledButton">
+        <span *ngIf="mode === actionMode.ADD">ذخیره</span>
+        <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+        <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+      </button>
+    </div>
+  </form>
+</div>

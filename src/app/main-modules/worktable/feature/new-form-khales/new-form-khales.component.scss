@@ -1,0 +1,103 @@
+//
+//.form-container {
+//  margin: auto;
+//  padding: 24px;
+//  width: clamp(230px, 40vw, 320px);
+//  background: #FFF;
+//  border-radius: 8px;
+//  box-shadow:
+//          1.1px 2.8px 2.2px rgba(0, 0, 0, 0.02),
+//          2.7px 6.7px 5.3px rgba(0, 0, 0, 0.028),
+//          5px 12.5px 10px rgba(0, 0, 0, 0.035),
+//          8.9px 22.3px 17.9px rgba(0, 0, 0, 0.042),
+//          16.7px 41.8px 33.4px rgba(0, 0, 0, 0.05),
+//          40px 100px 80px rgba(0, 0, 0, 0.07);
+//}
+//
+//.form-item + .form-item {
+//  margin-top: 12px;
+//}
+//
+//.form-submit {
+//  margin-top: 24px;
+//}
+
+.input-container {
+  --label-gap: 24px;
+  --input-height: 40px;
+  --input-pad: 16px;
+
+  display: flex;
+  position: relative;
+  padding-top: var(--label-gap);
+}
+
+.input {
+  width: 100%;
+  border: 1px solid #6D98BA;
+  padding: 0 var(--input-pad);
+  height: var(--input-height);
+  border-radius: 4px;
+}
+
+.input::placeholder {
+  color: transparent;
+}
+
+.input:focus,
+.input:active {
+  outline: none;
+  border-color: #9AADBF;
+  box-shadow: 0 0 2px #9AADBF;
+}
+
+.input:focus + .input-label,
+.input:not(:placeholder-shown) + .input-label {
+  color: #01161E;
+  transform: scale(0.75) translateY(calc(var(--input-height) * -1));
+}
+
+.input[type="password"] {
+  font: large Verdana,sans-serif;
+  letter-spacing: 1px;
+}
+
+.input-label {
+  position: absolute;
+  top: var(--label-gap);
+  right: var(--input-pad);
+  transform-origin: left top;
+  transition: transform 0.26s cubic-bezier(0.14, 0.62, 0.43, 1.08);
+  height: var(--input-height);
+  line-height: var(--input-height);
+  color: #124559;
+  pointer-events: none;
+  letter-spacing: 0.3px;
+}
+
+//<div class="input-container">
+//<input class="input form-control" id="assetId" type="text"
+//formControlName="assetId"
+//placeholder="نام دستگاه" autocomplete="off">
+//<label for="assetId" class="input-label">نام دستگاه</label>
+//</div>
+.timer {
+  //margin: 15px 3px 0 0;
+  text-align: center !important;
+  .dots {
+    display: flex;
+    align-items: center;
+    padding: 15px 15px 0;
+  }
+  i {
+    //margin-right: 13px;
+    cursor: pointer;
+  }
+  & > div > :not(.dots) {
+    width: 44px;
+  }
+}
+
+::ng-deep .ng-select .ng-select-container {
+  height: auto !important;
+}

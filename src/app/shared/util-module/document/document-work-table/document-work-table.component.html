@@ -1,0 +1,154 @@
+<!--<div class="card">-->
+<!--<div class="card-body card-body-content">-->
+<div style="    height: 50vh;
+    max-height: 50vh;
+    overflow: auto;">
+
+    <div class="col-md-6 mb-2" *ngIf="!isView&&enableItems">
+        <label>
+            <a class="btn btn-sm btn-secondary" *ngIf="!uploadLoading" style="cursor: pointer">
+                <i class="fa fa-paperclip " aria-hidden="true"
+                   style="font-size: larger"></i>
+                افزودن فایل
+            </a>
+
+            <a class="btn btn-sm btn-secondary" *ngIf="uploadLoading" style="cursor: not-allowed">
+                <i class="fa fa-spinner fa-pulse fa-1x" aria-hidden="true"></i> در حال آپلود
+
+            </a>
+            <input *ngIf="!uploadLoading"
+                   style="display: none;"
+                   (click)="showModalAddFile()">
+        </label>
+
+    </div>
+
+
+    <ng-container *ngIf="documentList.length && !loading">
+        <table class="table table-striped table-bordered table-responsive-md">
+            <thead>
+            <tr>
+                <th class="text-center" style="width: 5%">ردیف</th>
+                <th class="text-center">نام فایل</th>
+                <th class="text-center">نوع فایل</th>
+                <th class="text-center" *ngIf="!isView" style="width: 5%">دانلود</th>
+                <th class="text-center" *ngIf="!isView&&enableItems" style="width: 5%">حذف</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let item of documentList; let i = index">
+                <tr class="text-center">
+                    <td>{{i + 1}}</td>
+                    <td>{{item.showName}}</td>
+                    <td>
+                        <!--            {{item.fileContentType}}-->
+                        <a style="color: #488ae3">{{fileType(item.fileName)}}</a>
+                    </td>
+                    <td *ngIf="!isView">
+                        <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                           (click)="downloadFile(item)" style="cursor: pointer ; font-weight: bold">
+                            <i class="fa fa-download" title="دانلود"></i>
+                        </a>
+                    </td>
+                    <td *ngIf="!isView&&enableItems">
+                        <a class="btn btn-sm btn-outline-lightning rounded-0"
+                           style="cursor: pointer"
+                           (click)="showModalDelete(item,i)">
+                            <i class="fa fa-trash" title="حذف"></i>
+
+                        </a>
+                    </td>
+                </tr>
+            </ng-container>
+            </tbody>
+        </table>
+
+    </ng-container>
+    <app-loading-spinner [loadingList]="true" *ngIf="loading"></app-loading-spinner>
+    <ng-container *ngIf="documentList.length===0 && !loading">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12 text-center" style="color: #7884a7">
+                    فایلی ثبت نشده است.
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<!--<div class="col-md-12  mt-2 text-left">-->
+<!--    <ng-container-->
+<!--            *ngIf="sendInformationNumberOfTabs.numberOfFormIdList < sendInformationNumberOfTabs.lengthFormIdList - 1  || sendInformationNumberOfTabs.hasForm">-->
+<!--        <button class="btn btn-sm btn-warning" type="button" (click)="nextOrPrev('next')">-->
+<!--            <span>بعدی</span>-->
+<!--        </button>-->
+<!--    </ng-container>-->
+<!--    <button class="btn btn-sm btn-cancel-back" type="button" style="float: right" (click)="nextOrPrev('prev')">-->
+<!--        <span>قبلی</span>-->
+<!--    </button>-->
+<!--</div>-->
+
+
+<!--</div></div>-->
+
+<!-- *************************** modal **************************-->
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [modalSize]="MyModalSize"
+        autoShow="false"
+        [myId]="modalId">
+    <div modal-header>
+        <h6>
+            افزودن فایل
+        </h6>
+    </div>
+    <div modal-body>
+        <form #showNameForm="ngForm" id="showNameForm">
+            <div class="col-md-12">
+                <label class="for-label">نام فایل:</label>
+                <span style="color: red">*</span>
+                <div class="input-group input-group-sm">
+                    <input type="text" placeholder="نام فایل را وارد کنید" [(ngModel)]="showName"
+
+
+                           class="form-control" maxlength="80" name="fileName"
+                           nbvRequired #name="ngModel" nbvMinlength="3"
+                           id="name"
+                           (change)="trimName()"
+                           [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvMinlength) && stringLength(showName,'name')"
+                           [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvMinlength) && (name.touched)"
+                           dest="fileNameValidation">
+                </div>
+                <div id="fileNameValidation"></div>
+            </div>
+        </form>
+
+        <br>
+        <br>
+        <div class="col-md-12 text-center">
+            <!--      width: 180px; height: 30px; margin: 30px -50px 15px 10px;-->
+            <label style=" text-align: center"
+                   *ngIf="showNameForm.valid">
+                <a class="btn btn-action btn-sm" style="font-size: 14px;color: white">
+                    <i class="fa fa-paperclip " aria-hidden="true"
+                       style="font-size: larger"></i>
+                    انتخاب فایل
+                </a>
+                <input type="file" style="display: none;"
+                       accept=".zip,.rar,.tar,.7zip
+       ,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf,.odt, .fodt. , .ZIP,.RAR,.TAR,.7ZIP
+       ,.DOC,.DOCX,.XLS,.XLSX,.PPT,.PPTX,.PDF,.ODT, .FODT."
+
+                       #input
+                       (change)="onChangeUploader(input)">
+            </label>
+        </div>
+    </div>
+</nbw-modal>
+
+<app-conferm-delete
+        [title]="selectedItemForDelete.title"
+        [loading]="selectedItemForDelete.loading"
+        [modalId]="'modalId'+selectedItemForDelete.id"
+        (value)="deleteItem($event)"></app-conferm-delete>

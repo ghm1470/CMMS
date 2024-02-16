@@ -1,0 +1,151 @@
+<nbw-modal
+        [hasHeader]="true"
+        [hasFooter]="false"
+        [dataBackdrop]="true"
+        [modalSize]="MyModalSize.CUSTOM_WIDTH"
+        [customWidthPercent]="{xs: 100, md:75}"
+        autoShow="false"
+        (onClose)="cancelModal()"
+        [myId]="'timeModal'">
+
+    <div modal-header>
+        <span *ngIf=" mode === actionMode.ADD" style="font-size: 15px;color: #4c4c4c">افزودن برنامه ریز زمانی </span>
+        <span *ngIf="mode === actionMode.EDIT && modeView !== actionMode.VIEW" style="font-size: 15px;color: #4c4c4c">ویرایش برنامه ریز زمانی</span>
+        <span *ngIf="modeView === actionMode.VIEW" style="font-size: 15px;color: #4c4c4c">نمایش برنامه ریز زمانی</span>
+    </div>
+
+    <div modal-body style="display: flow-root">
+        <form #scheduleWithTimeForm="ngForm" (submit)="action(scheduleWithTimeForm)" id="formsForSchedule">
+            <div class="row">
+
+
+                <div class="col-md-4 form-group required col-sm-12">
+                    <label class="for-label" for="cycle">دوره زمانی:</label>
+                    <span style="color: red">*</span>
+                    <ng-select dir="rtl"
+                               [disabled]="modeView === actionMode.VIEW"
+                               [(ngModel)]="scheduleWithTime.cycle"
+                               placeholder="دوره زمانی"
+                               style="padding: 0"
+                               #cycle="ngModel"
+                               id="cycle"
+                               name="cycle"
+                               class="form-control"
+                               nbvRequired
+                               [class.is-valid]="!(cycle?.errors?.nbvRequired || cycle?.errors?.nbvPattern)"
+                               [class.is-invalid]="(cycle?.errors?.nbvRequired || cycle?.errors?.nbvPattern)
+                                                        && (cycle.touched || doSave)"
+                               dropdownPosition="bottom">
+                        <ng-option *ngFor="let item of timeTypeList" [value]="item.value">
+                            {{item.title}}
+                        </ng-option>
+                    </ng-select>
+                    <div id="cycleListValidation" style="opacity: 0; height: 0"></div>
+                </div>
+
+                <div class="col-md-4 form-group required col-sm-12">
+                    <label class="for-label">هر چند
+                        <ng-container *ngFor="let item of timeTypeList">
+                            <ng-container *ngIf="scheduleWithTime.cycle === item.value">
+                                {{item.title}}
+                            </ng-container>
+                        </ng-container>
+                        :</label>
+                    <label style="color: red">*</label>
+                    <div class="input-group input-group-sm">
+                        <input type="text" [(ngModel)]="scheduleWithTime.per"
+                               class="form-control"
+                               minlength="1" maxlength="80" name="per"
+                               nbvRequired
+                               #per="ngModel" (change)="changePer()"
+                               nbvPattern="{{myPattern.number}}"
+                               nbvPatternMsgHtml="مدت دوره زمانی را به صورت عددی وارد کنید."
+                               [class.is-valid]="!(per?.errors?.nbvRequired || per?.errors?.nbvPattern)"
+                               [class.is-invalid]="(per?.errors?.nbvRequired || per?.errors?.nbvPattern) && (per.touched || doSave)"
+                               dest="perValidation">
+                    </div>
+                    <div id="perValidation"></div>
+                </div>
+                <div class="col-md-4 form-group required col-sm-12">
+                    <label class="for-label">شروع در تاریخ: </label>
+                    <label style="color: red">*</label>
+                    <div class="input-group input-group-sm">
+                        <input type="text" [(ngModel)]="startOnForNgModel"
+                               class="form-control"
+                               placeholder="شروع در تاریخ"
+                               minlength="1" maxlength="80"
+                               name="startOn"
+                               id="startOn"
+                               nbvRequired
+                               #startOn="ngModel"
+                               [class.is-valid]="!(startOn?.errors?.nbvRequired || startOn?.errors?.nbvPattern)"
+                               [class.is-invalid]="(startOn?.errors?.nbvRequired || startOn?.errors?.nbvPattern) && (startOn.touched || doSave)"
+                               dest="startOnValidation">
+                    </div>
+                    <div id="startOnValidation"></div>
+                </div>
+                <div class="col-md-4 form-group required col-sm-12">
+                    <label class="for-label">پایان در تاریخ: </label>
+                    <label style="color: red">*</label>
+                    <div class="input-group input-group-sm">
+                        <input type="text" [(ngModel)]="endOnForNgModel"
+                               class="form-control"
+                               placeholder="پایان در تاریخ"
+                               minlength="1" maxlength="80"
+                               name="endOn"
+                               id="endOn"
+                               nbvRequired
+                               #endOn="ngModel"
+                               [class.is-valid]="!(endOn?.errors?.nbvRequired || endOn?.errors?.nbvPattern)"
+                               [class.is-invalid]="(endOn?.errors?.nbvRequired || endOn?.errors?.nbvPattern) && (endOn.touched || doSave)"
+                               dest="endOnValidation">
+                    </div>
+                    <div id="endOnValidation"></div>
+                </div>
+
+
+<!--                <div class="col-md-4 form-group required col-sm-12">-->
+<!--                    <label class="for-label">شروع در تاریخ: </label>-->
+<!--                    <label style="color: red">*</label>-->
+
+<!--                    <input class="form-control form-control-sm" id="startOn" placeholder="شروع در تاریخ"-->
+<!--                           autocomplete="off"-->
+<!--                           nbvRequired-->
+<!--                           #startOn="ngModel"-->
+<!--                           [(ngModel)]="startOnForNgModel"-->
+<!--                           [class.is-valid]="!(startOn?.errors?.nbvRequired || startOn?.errors?.nbvPattern)"-->
+<!--                           [class.is-invalid]="(startOn?.errors?.nbvRequired || startOn?.errors?.nbvPattern) && (startOn.touched || doSave)"-->
+<!--                           dest="startOnValidation"-->
+<!--                    >-->
+<!--                    &lt;!&ndash;[(ngModel)]="startOn" name="startOn"&ndash;&gt;-->
+<!--                    <div id="startOnValidation"></div>-->
+
+<!--                </div>-->
+
+<!--                <div class="col-md-4 form-group required col-sm-12">-->
+<!--                    <label class="for-label">پایان در تاریخ: </label>-->
+<!--                    <label style="color: red">*</label>-->
+
+<!--                    <input class="form-control form-control-sm" id="endOn"-->
+<!--                           #endOn placeholder="پایان در تاریخ"-->
+<!--                           autocomplete="off">-->
+<!--                </div>-->
+            </div>
+            <!--<div modal-footer>-->
+            <div class="btn-group-sm text-left" style="margin-top: 15px">
+                <button type="button" class="btn btn-cancel-back btn-sm " data-dismiss="modal" style="margin :0 5px "
+                        (click)="cancelModal()">
+                    انصراف
+                </button>
+                <button *ngIf="modeView !== actionMode.VIEW" type="submit" class="btn btn-action btn-sm "
+                        style="margin :0 5px "
+                >
+                    ثبت
+                    <i *ngIf="loadingAction" class="fa fa-spinner fa-pulse fa-1x"></i>
+
+                </button>
+            </div>
+            <!--</div>-->
+        </form>
+    </div>
+</nbw-modal>

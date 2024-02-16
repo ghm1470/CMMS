@@ -1,0 +1,52 @@
+<div class="row" >
+
+  <div class="col-md-12" *ngIf="partWithUsageCountList.length > 0">
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th class="text-center" style="width: 5%">ردیف</th>
+          <th class="text-center">عنوان قطعه</th>
+          <th class="text-center">موجودی برنامه ریزی شده</th>
+          <th class="text-center">موجودی واقعی</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <ng-container *ngFor="let item of partWithUsageCountList; let i = index">
+          <tr class="text-center">
+            <td>{{i + 1}}</td>
+            <td>{{item?.partName}}</td>
+            <td>{{item?.planedQuantity}}</td>
+            <td>{{item?.actualQuantity}}</td>
+          </tr>
+        </ng-container>
+
+        </tbody>
+      </table>
+  </div>
+
+</div>
+
+<div  class="row" *ngIf="partWithUsageCountList.length === 0" >
+  <div class="col-md-4"></div>
+  <div class="col-md-4"><span style="margin-right: 50px; color: #8a8f94; font-size: 15px">هنوز قطعه ای انتخاب نشده است</span></div>
+  <div class="col-md-4"></div>
+
+</div>
+<!--<div class="col-md-12 text-left mt-2" >-->
+<!--  <ng-container *ngIf="sendInformationNumberOfTabs.numberOfFormIdList < sendInformationNumberOfTabs.lengthFormIdList - 1  || sendInformationNumberOfTabs.hasForm">-->
+<!--    <button  (click)="nextOrPrev('next')" class="btn btn-sm btn-warning" type="button" >-->
+
+<!--      <span  >بعدی</span>-->
+<!--    </button>-->
+<!--  </ng-container>-->
+<!--  <button  (click)="nextOrPrev('prev')" class="btn btn-sm btn-cancel-back" type="button" style="float: right">-->
+
+<!--    <span  >قبلی</span>-->
+<!--  </button>-->
+<!--</div>-->
+
+
+
+
+

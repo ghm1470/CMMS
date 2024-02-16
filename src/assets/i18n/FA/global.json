@@ -1,0 +1,176 @@
+{
+  "header":{
+    "returnButton":"بازگشت",
+    "account":"حساب کاربری",
+    "language":"زبان",
+    "login":"ورود",
+    "logout":"خروج"
+  },
+  "firstPage":{
+    "myForms":"فرم های من",
+    "test":"تست",
+    "createForm":"ایجاد فرم",
+    "analysis":"گزارشات کلی"
+  },
+  "createForm":{
+    "formProperty":"مشخصات فرم",
+    "formQuestion":"طراحی سوالات",
+    "formRelation":"ایجاد رابطه بین سوالات",
+    "formPreDisplay":"پیش نمایش فرم",
+    "formSubmit":"تائید نهایی",
+    "temporalSave":"ذخیره موقت"
+  },
+  "firstFormRegister":{
+    "formTitle":"عنوان فرم",
+    "formCategory":"دسته بندی فرم",
+    "formDescription":"توضیحات فرم",
+    "templateForms":"فرم های الگو",
+    "choosepic":"انتخاب عکس",
+    "titleError":"لطفا عنوان فرم را وارد نمایید.",
+    "categoryError":"لطفا دسته بندی فرم را مشخص نمایید."
+
+  },
+  "formQuestion":{
+    "questionTitle":"عنوان سوال",
+    "questionHelpText":"راهنما",
+    "questionRequired":"اجباری",
+    "questionOption":"گزینه ها",
+    "addOption":"افزودن گزینه",
+    "option1Caption":"گزینه ۱",
+    "question1Title":"عنوان سوال ۱",
+    "maxItemSelectable":"حداکثر تعداد گزینه های قابل انتخاب",
+    "minItemSelectable":"حداقل تعداد گزینه های قابل انتخاب",
+    "comboPlaceholder":"لطفا یکی از گزینه ها را انتخاب نمایید.",
+    "comboPlaceholderTitle":"متن نمونه ابتدای لیست",
+    "date":"تاریخ",
+    "startDate":"ابتدای بازه زمانی",
+    "endDate":"انتهای بازه زمانی",
+    "matrixOption":"گزینه ها(ستون ها)",
+    "matrixQuestion":"سوالات(سطرها)",
+    "addMatrixQuestion": "افزودن سوال",
+    "singleSelect":"تک انتخابی",
+    "multiSelect":"چند انتخابی",
+    "numericalMin":"مقدار کمینه",
+    "numericalMax":"مقدار بیشینه",
+    "numericalEndLabel":"برچسب انتهایی",
+    "numericalStartLabel":"برچسب ابتدایی",
+    "starCount":"تعداد ستاره ها",
+    "initialStarCount":"تعداد اولیه ستاره ها",
+    "starColorStatus":"وضعیت رنگی ستاره ها",
+    "starColorChanging":"متغیر",
+    "starColorGreen":"سبز",
+    "starColorYellow":"زرد",
+    "starColorRed":"قرمز",
+    "starColorGray":"طوسی",
+    "starDirection":"جهت ستاره ها",
+    "directionLTR":"چپ به راست",
+    "directionRTL":"راست به چپ",
+    "answerPlaceholder":"متن نمونه جواب",
+    "txtFieldMaxChar":"حداکثر تعداد کاراکتر",
+    "txtFieldMinChar":"حداقل تعداد کاراکتر",
+    "txtFieldType":"نوع فیلد متنی",
+    "time":"زمان",
+    "samplePlaceholder":"متن نمونه"
+  },
+  "questionRelation":{
+    "subQuestionCommit":"اختصاص زیر سوال",
+    "subQuestions":"زیر سوال ها"
+  },
+  "formComplete":{
+    "completeForm":"تکمیل پرسشنامه"
+  },
+  "myForms":{
+    "formTitle": "عنوان فرم",
+    "editForm": "ویرایش",
+    "finishForm": "اتمام یافته",
+    "runningForm": "در حال تکمیل",
+    "deleteForm": "حذف",
+    "answers": "پاسخ دهندگان به فرم",
+    "analysis": "تحلیل"
+  },
+  "formAnalysis":{
+    "totalAnalysis": "تحلیل کلی",
+    "gender": "جنسیت",
+    "degree": "مدرک تحصیلی",
+    "province": "استان",
+    "excel": "دریافت خروجی اکسل"
+  },
+  "formSubmit":{
+    "noteOne":"",
+    "noteTwo":"پس از ثبت نهایی لینکی دریافت می کنید که می توانید آن را در اختیار کاربران قرار دهید.",
+    "noteThree":"با موارد ذکر شده موافقم.",
+    "submitButton":"ثبت نهایی",
+    "responder":"تعداد کل پاسخ دهندگان"
+  },
+  "imageCropper":{
+    "image":"تصویر"
+  },
+  "textFieldType":{
+    "TEXT": "متن",
+    "EMAIL":"ایمیل",
+    "NUMBER":"عدد",
+    "PASSWORD":"رمز عبور"
+  },
+  "public":{
+    "choosePic":"انتخاب عکس",
+    "edit":"ویرایش",
+    "delete":"حذف",
+    "up":"بالا",
+    "down":"پایین",
+    "duplicate":"کپی",
+    "close":"بستن",
+    "save":"ذخیره",
+    "search":"جستجو",
+    "date":"تاریخ",
+    "time":"زمان",
+    "enterDate":"تاریخ را وارد کنید."
+  },
+  "publicMessage":{
+    "deleteMessage":"تغییرات اعمال شده حذف می شوند. آیا مطمئن هستید؟؟",
+    "yes":"بله",
+    "no":"خیر"
+  },
+  "errorMessages":{
+    "labelRequired":"لطفا عنوان سوال را وارد نمایید.",
+    "helpTextRequired":"لطفا راهنمای سوال را وارد نمایید.",
+    "optionRequired":"لطفا برای سوال گزینه ایجاد نمایید.",
+    "questionRequired":"لطفا سوالات ماتریس را وارد نمایید.",
+    "minItemSelectedRequired":"لطفا حداقل گزینه های قابل انتخاب را مشخص نمایید.",
+    "maxItemSelectedRequired":"لطفا حداکثر گزینه های قابل انتخاب را مشخص نمایید.",
+    "itemRequiredMaxZero":"پاسخ به این سوال اجباری است. مقدار بیشینه نمی تواند صفر باشد.",
+    "placeHolderRequired":"لطفا متن نمونه ابتدای لیست را وارد نمایید.",
+    "startDateGreater":"زمان شروع از زمان پایان بزرگتر است.",
+    "numericalMinRequired":"لطفا مقدار کمینه بازه طیفی را تعیین نمایید.",
+    "numericalMaxRequired":"لطفا مقدار بیشینه بازه طیفی را تعیین نمایید.",
+    "numericalBeginLabelRequired":"لطفا برچسب ابتدایی بازه طیفی را تعیین نمایید.",
+    "numericalEndLabelRequired":"لطفا برچسب نهایی بازه طیفی را تعیین نمایید.",
+    "starCountRequired":"لطفا تعداد ستاره ها را وارد نمایید.",
+    "initialStarCountRequired":"لطفا تعداد اولیه ستاره های رنگی را مشخص نمایید.",
+    "textAreaPlaceholderRequired":"لطفا متن نمونه جواب را وارد نمایید.",
+    "textFieldMinLengthRequired":"لطفا کمینه طول رشته جواب را وارد نمایید.",
+    "textFieldMaxLengthRequired":"لطفا بیشینه طول رشته جواب را وارد نمایید.",
+    "formStatusFinish":"این فرم به اتمام رسیده است.",
+    "formStatusNotRunning":"این فرم هنوز منتشر نشده است.",
+    "answerRequired":"پاسخ به این سوال اجباری است.",
+    "wordsOnly":"برای پاسخ به این سوال از حروف استفاده نمایید.",
+    "minimumCharacter":"حداقل تعداد کاراکتر: ",
+    "maximumCharacter":"حداکثر تعداد کاراکتر: ",
+    "minimumOption":"حداقل گزینه قابل انتخاب: ",
+    "maximumOption":"حداکثر گزینه قابل انتخاب: ",
+    "timeError":"زمان وارد شده صحیح نیست.",
+    "selectOption":"لطفا یکی از گزینه ها را انتخاب نمایید.",
+    "startDateShould":"تاریخ شروع باید از ",
+    "greaterThan":" بزرگتر باشد.",
+    "endDateShould":"تاریخ پایان باید ",
+    "lessThan":" کوچکتر باشد."
+  },
+  "formSubmitMessages": {
+    "noElement":"لطفا به فرم سوالاتی را اضافه نمایید.",
+    "noResponder":"لطفا تعداد پاسخ دهندگان به این فرم را تعیین کنید.",
+    "noTitle":"عنوانی برای فرم مشخص نشده است.",
+    "noCategory":"لطفا دسته بندی فرم را انتخاب نمایید."
+  },
+  "successfulMessages":{
+    "formSubmitted":"فرم شما با موفقیت ثبت شد."
+  }
+}

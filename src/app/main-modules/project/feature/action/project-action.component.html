@@ -1,0 +1,856 @@
+<div id="projectCreate" class="carousel slide" data-interval="false">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6 col-8 col-sm-6 card-title">
+                            <ng-container *ngIf="mode === actionMode.ADD">
+                                <i class="fa fa-plus"></i>&nbsp;
+                                افزودن پروژه
+                            </ng-container>
+                            <ng-container *ngIf="mode === actionMode.EDIT">
+                                <i class="fa fa-edit"></i>&nbsp;
+                                ویرایش پروژه
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6 col-4 col-sm-6 text-left">
+                            <button (click)="cancel()"
+                                    class="btn btn-cancel-back btn-sm">
+                                بازگشت
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <form #projectForm="ngForm" (submit)="changeProjectCode(projectForm)">
+                    <div class="card-body card-body-content">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group required col-md-12">
+                                    <label class="for-label">عنوان:
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" placeholder="عنوان" [(ngModel)]="project.name"
+                                               class="form-control" minlength="1" maxlength="80" name="name"
+                                               id="name"
+                                               (change)="trimName()"
+                                               nbvRequired #name="ngModel"
+                                               nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."
+                                               nbvPattern="{{myPattern.TITLEFa}}"
+                                               [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvPattern)&& stringLength(project.name,'name')"
+                                               [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvPattern) && (name.touched || doSave)"
+                                               dest="nameValidation">
+                                    </div>
+                                    <div id="nameValidation"></div>
+                                </div>
+                                <div class="col-md-12 form-group required">
+                                    <label class="for-label">کد پروژه:
+                                        <span style="color: red">*</span></label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" placeholder="کد پروژه" [(ngModel)]="project.code"
+                                               class="form-control" minlength="1" maxlength="80" name="code"
+                                               nbvRequired #code="ngModel"
+                                               [nbvPattern]="myPattern.EnNumberAndAlphabetic"
+                                               nbvPatternMsgHtml="کد پروژه باید به صورت اعداد و حروف انگلیسی وارد گردد."
+                                               [class.is-valid]="!(code?.errors?.nbvRequired || code?.errors?.nbvPattern)"
+                                               [class.is-invalid]="(code?.errors?.nbvRequired || code?.errors?.nbvPattern) && (code.touched || doSave)"
+                                               dest="codeValidation">
+                                    </div>
+                                    <div id="codeValidation"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="col-md-12 form-group required">
+                                    <label class="for-label">توضیحات پروژه:
+                                    </label>
+                                    <div class="input-group input-group-sm">
+                <textarea type="text" placeholder="توضیحات پروژه" [(ngModel)]="project.description"
+                          class="form-control" minlength="1" name="description"
+                          #description="ngModel" rows="5"
+                          [class.is-valid]="!(description?.errors?.nbvRequired)"
+                          [class.is-invalid]="(description?.errors?.nbvRequired) && (description.touched || doSave)"
+                ></textarea>
+                                    </div>
+                                    <div id="descriptionValidation"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <!--<div class="col-md-3">-->
+                                <!--<label class="for-label">تخمین زمان شروع: </label>-->
+                                <!--<input class="form-control" id="startDate" #startDate placeholder="تخمین زمان شروع">-->
+                                <!--</div>-->
+                                <!--<div class="col-md-3">-->
+                                <!--<label class="for-label">تخمین زمان پایان: </label>-->
+                                <!--<input class="form-control" id="endDate" #endDate placeholder="تخمین زمان پایان">-->
+                                <!--</div>-->
+                                <div class="col-md-4">
+                                    <label class="for-label">تاریخ شروع پروژه : </label>
+                                    <input class="form-control form-control-sm" id="startDate" #startDate
+                                           placeholder="تاریخ شروع پروژه  ">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="for-label">تاریخ پایان پروژه : </label>
+                                    <input class="form-control form-control-sm" id="endDate" #endDate
+                                           placeholder="تاریخ پایان پروژه ">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="for-label">آخرین مهلت: </label>
+                                    <input class="form-control form-control-sm " id="requiredCompletionDate"
+                                           #requiredCompletionDate
+                                           placeholder="آخرین مهلت">
+                                </div>
+                            </div>
+                            <!--</div>-->
+                        </div>
+                        <div class="col-md-12" style="margin-top: 30px">
+
+                        </div>
+                    </div>
+                    <div class="card-footer text-left">
+                        <button class="btn btn-action btn-sm" type="submit">
+                            <span *ngIf="mode === actionMode.ADD">ثبت</span>
+                            <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                            <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+                        </button>
+                        <button class="btn btn-warning btn-sm" type="button"
+                                (click)="getScheduleMaintenanceList();next()">
+                            مرحله بعد - تکمیل اطلاعات پروژه
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6 col-6 col-sm-6 card-title">
+                            <i class="fa fa-list"></i>&nbsp;&nbsp;
+                            تکمیل اطلاعات پروژه
+                            {{project.name}}
+                        </div>
+                        <div class="col-md-6 col-6 col-sm-6 text-left">
+                            <button class="btn btn-sm btn-cancel-back" (click)="prev()">
+                                بازگشت به مرحله قبل
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body card-body-content">
+                    <ul class="nav nav-tabs" role="navigation"
+                        style="text-align: right; margin:0;width: 100%;padding: 0;">
+                        <li class="nav-item" *ngIf="mode !== actionMode.ADD">
+                            <a href="#SMProject" class="nav-link active" data-toggle="tab" role="tab"
+                               aria-controls="SMProject"
+                               style="font-size: 14px">لیست زمان بندی نت</a>
+                        </li>
+                        <li class="nav-item" *ngIf="mode !== actionMode.ADD">
+                            <a href="#WOProject" class="nav-link" data-toggle="tab" role="tab" aria-controls="WOProject"
+                               (click)="getWorkOrderList()"
+                               style="font-size: 14px">لیست سفارش
+                                کار</a>
+                        </li>
+                        <li class="nav-item">
+
+                            <a href="#personnelProject" class="nav-link" data-toggle="tab" role="tab"
+                               (click)="getAllUserType();getPersonnelOfProject()"
+                               aria-controls="personnelProject"
+                               style="font-size: 14px">تکنسین</a>
+                        </li>
+                        <li class="nav-item" (click)="showFileDocument=true">
+                            <a href="#filesProject" class="nav-link" data-toggle="tab" role="tab"
+                               aria-controls="filesProject" (click)="filterUserList()"
+                               style="font-size: 14px">مستندات</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <!--جدول مربوط به لیست زمانبندی نت -->
+                        <div class="tab-pane fade active show" id="SMProject" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body card-body-content">
+                                    <table class="table table-striped table-bordered table-responsive-md"
+                                           *ngIf="scheduleMaintenanceList.length > 0">
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center">ردیف</th>
+                                            <th class="text-center">دارایی</th>
+                                            <th class="text-center">اولویت</th>
+                                            <th class="text-center">نوع بازدید</th>
+                                            <th class="text-center">وضعیت</th>
+                                            <th class="text-center" style="width: 5%">مشاهده</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <ng-container *ngFor="let item of scheduleMaintenanceList; let i = index">
+                                            <tr class="text-center">
+                                                <td>{{i + 1}}</td>
+                                                <td>{{item.asset?.name}}</td>
+                                                <td>{{priorityL[i]?._title}}</td>
+                                                <td>{{maintenanceTypeL[i]?._title}}</td>
+                                                <td>{{item.workOrderStatus?.name}}</td>
+                                                <td>
+                                                    <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                                       (click)="chooseWorkOrderForView(item)"
+                                                       style="cursor: pointer ; font-weight: bold">
+                                                        <i class="fa fa-eye" title="مشاهده"></i>
+                                                    </a>
+                                                </td>
+                                                <!--<td>-->
+                                                <!--<a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+                                                <!--(click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">-->
+                                                <!--<i class="fa fa-edit" title="ویرایش"></i>-->
+                                                <!--</a>-->
+                                                <!--</td>-->
+                                            </tr>
+                                        </ng-container>
+
+                                        </tbody>
+                                    </table>
+                                    <div class="col-md-12 text-center" *ngIf="scheduleMaintenanceList.length === 0">
+                                        موردی یافت نشد
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!--جدول مربوط به لیست دستور کار -->
+                        <div class="tab-pane fade" id="WOProject" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body card-body-content">
+                                    <table class="table table-striped table-responsive-md table-bordered"
+                                           *ngIf="workOrderList.length > 0">
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center">ردیف</th>
+                                            <th class="text-center">عنوان</th>
+                                            <th class="text-center">کد</th>
+                                            <th class="text-center">اولویت</th>
+                                            <th class="text-center">نوع بازدید</th>
+                                            <th class="text-center">دارایی</th>
+                                            <th class="text-center">وضعیت</th>
+                                            <th class="text-center" style="width: 5%">مشاهده</th>
+                                            <!--<th class="text-center" style="width: 5%"></th>-->
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <ng-container *ngFor="let item of workOrderList; let i = index">
+                                            <tr class="text-center">
+                                                <td>{{i + 1}}</td>
+                                                <td>{{item.title}}</td>
+                                                <td>{{item.code}}</td>
+                                                <td>
+                                                    <ng-container *ngFor="let priority of priorityList">
+                                                        <ng-container *ngIf="priority._value === item.priority">
+                                                            {{priority._title}}
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </td>
+                                                <td>
+                                                    <ng-container *ngFor="let maintenanceType of maintenanceTypeList">
+                                                        <ng-container
+                                                                *ngIf="maintenanceType._value === item.maintenanceType">
+                                                            {{maintenanceType._title}}
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </td>
+                                                <td>{{item?.asset?.name}}</td>
+                                                <td>{{item?.status?.name}}
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"
+                                                       (click)="chooseSelectedItemForView(item)"
+                                                       style="cursor: pointer ; font-weight: bold">
+                                                        <i class="fa fa-eye" title="مشاهده"></i>
+                                                    </a>
+                                                </td>
+                                                <!--<td>-->
+                                                <!--<a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+                                                <!--(click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">-->
+                                                <!--<i class="fa fa-edit" title="ویرایش"></i>-->
+                                                <!--</a>-->
+                                                <!--</td>-->
+                                                <!--<td>-->
+                                                <!--<a class="btn btn-sm btn-outline-lightning rounded-0"-->
+                                                <!--style="cursor: pointer" nbdAreYouSure (then)="deleteItem(item)">-->
+                                                <!--<i class="fa fa-trash" title="حذف"></i>-->
+                                                <!--</a>-->
+                                                <!--</td>-->
+                                            </tr>
+                                        </ng-container>
+
+                                        </tbody>
+                                    </table>
+                                    <div class="col-md-12 text-center" *ngIf="workOrderList.length === 0">
+                                        موردی یافت نشد
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!--مربوط به انتخاب تکنسین ها-->
+                        <div class="tab-pane fade" id="personnelProject" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body card-body-content">
+                                    <div class="col-md-12" style="margin-bottom: 20px; margin-top: 15px;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <mat-radio-button [checked]="assignedToUser"
+                                                                  (change)="openAssignedToUserCard($event)">
+                                                    <strong style="font-size: 15px; color: #4c4c4c">
+                                                        تخصیص به شخص
+                                                    </strong>
+                                                </mat-radio-button>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <mat-radio-button [checked]="assignedToGroup"
+                                                                  (change)="openAssignedToGroupCard($event)">
+                                                    <strong style="font-size: 15px; color: #4c4c4c">
+                                                        تخصیص به گروه
+                                                    </strong>
+                                                </mat-radio-button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!--////////////////////////////////////////////////////////////////////////////////-->
+                                    <div class="card card-body">
+                                        <div class="row">
+                                            <!--                        ///پست-->
+
+                                            <div class="col-md-4 form-group required col-sm-12">
+                                                <label class="for-label">انتخاب پست </label>
+                                                <span style="color: red">*</span>
+                                                <div class="input-group input-group-sm">
+                                                    <ng-select
+                                                            style="width: 100%"
+                                                            [loading]="loadingUserTypeList2"
+                                                            [(ngModel)]="selectedUserTypeId2"
+                                                            name="selectedUserTypeId2"
+                                                            class="auto-grow"
+                                                            bindLabel="name"
+                                                            bindValue="id"
+                                                            (change)="changeUserType($event)"
+                                                            [items]="userTypeList2"
+                                                            [placeholder]="'عنوان پست'">
+
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                            <!--                        ///کاربر-->
+                                            <ng-container *ngIf="assignedToUser">
+                                                <div class="col-md-4 form-group required col-sm-12">
+                                                    <label class="for-label">انتخاب کاربر </label>
+                                                    <span style="color: red">*</span>
+                                                    <div class="input-group input-group-sm">
+
+                                                        <!--                                <ng-container *ngIf="!loadingUserList">-->
+                                                        <ng-select
+                                                                style="width: 100%"
+                                                                [(ngModel)]="parentUserId2"
+                                                                name="parentUserId"
+                                                                class="auto-grow"
+                                                                (scrollToEnd)="getAllUsersOfUserType()"
+                                                                [loading]="loadingUserList2"
+                                                                (change)="selectUser()"
+                                                                [placeholder]="'انتخاب کاربر'">
+                                                            <ng-container *ngFor="let user of userList2; let i= index ">
+
+                                                                <ng-option
+                                                                        [value]="user.id">
+                                                                    {{user.name + '  ' + user?.family}}
+                                                                    <!--                                            {{' ( ' + user.userTypeName + ' )  ' }}-->
+                                                                </ng-option>
+                                                            </ng-container>
+
+                                                        </ng-select>
+                                                    </div>
+                                                    <div id="parentUserIdValidation"
+                                                         style="opacity: 0; height: 0"></div>
+                                                </div>
+                                            </ng-container>
+
+                                        </div>
+                                        <!--////////////////////////////////////////////////////////////////////////////////-->
+                                        <br>
+                                        <ng-container *ngIf="assignedToUser">
+                                            <div class="col-md-12">
+                                                <table class="table table-striped table-bordered table-responsive-md">
+                                                    <thead>
+                                                    <tr>
+                                                        <td class="text-center" style="width: 10%">ردیف</td>
+                                                        <td class="text-center" style="width: 40%">نام</td>
+                                                        <td class="text-center" style="width: 40%">نام خانوادگی</td>
+                                                        <td class="text-center" style="width: 40%">پست</td>
+                                                        <td class="text-center" style="width: 10%">حذف</td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    <ng-container *ngIf="projectUsers?.length > 0">
+                                                        <tr *ngFor="let item of projectUsers;let i = index">
+                                                            <th class="text-center" style="width: 10%">{{i + 1}}</th>
+                                                            <td class="text-center"
+                                                                style="width: 40%">{{item.name}}</td>
+                                                            <td class="text-center"
+                                                                style="width: 40%">{{item.family}}</td>
+                                                            <td class="text-center"
+                                                                style="width: 40%">{{item?.userTypeName}}</td>
+                                                            <td class="text-center" style="width: 5%">
+                                                                <i class="fa fa-trash" (click)="deleteUser2(item.id)"
+                                                                   style="cursor: pointer;"></i>
+                                                            </td>
+                                                        </tr>
+                                                    </ng-container>
+                                                    </tbody>
+                                                </table>
+                                                <div class="col-md-12 text-center" *ngIf="projectUsers?.length === 0">
+                                                    موردی افزوده نشده است
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="assignedToGroup">
+                                            <div class="col-md-12">
+                                                <table class="table table-striped table-bordered table-responsive-md">
+                                                    <thead>
+                                                    <tr>
+                                                        <td class="text-center" style="width: 10%">ردیف</td>
+                                                        <td class="text-center" style="width: 40%">پست</td>
+                                                        <td class="text-center" style="width: 10%">حذف</td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    <ng-container *ngIf="projectGroup?.length > 0">
+                                                        <tr *ngFor="let item of projectGroup;let i = index">
+                                                            <th class="text-center" style="width: 10%">{{i + 1}}</th>
+                                                            <td class="text-center"
+                                                                style="width: 40%">{{item.userTypeName}}</td>
+
+                                                            <td class="text-center" style="width: 5%">
+                                                                <i class="fa fa-trash"
+                                                                   (click)="deleteGroup(item.userTypeId)"
+                                                                   style="cursor: pointer;"></i>
+                                                            </td>
+                                                        </tr>
+                                                    </ng-container>
+                                                    </tbody>
+                                                </table>
+                                                <div class="col-md-12 text-center" *ngIf="projectGroup?.length === 0">
+                                                    موردی افزوده نشده است
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+
+                                    <div class="card-footer text-left">
+                                        <button class="btn btn-action btn-sm" type="button"
+                                                (click)="addPersonnelToProject();addGroupPersonnelToProject()">
+                                            ثبت اطلاعات
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!--            //////// فایلها و مستندات /////////-->
+                        <div class="tab-pane fade" id="filesProject" role="tabpanel">
+
+                            <app-document *ngIf="showFileDocument" [extraId]="project.id"
+                                          [mode]="mode"></app-document>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--<div class="card">-->
+<!--    <div class="card-header">-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-6 col-8 col-sm-6 card-title">-->
+<!--                <ng-container *ngIf="mode === actionMode.ADD">-->
+<!--                    <i class="fa fa-plus"></i>&nbsp;-->
+<!--                    افزودن پروژه-->
+<!--                </ng-container>-->
+<!--                <ng-container *ngIf="mode === actionMode.EDIT">-->
+<!--                    <i class="fa fa-edit"></i>&nbsp;-->
+<!--                    ویرایش پروژه-->
+<!--                </ng-container>-->
+<!--            </div>-->
+<!--            <div class="col-md-6 col-4 col-sm-6 text-left">-->
+<!--                <button (click)="cancel()"-->
+<!--                        class="btn btn-cancel-back btn-sm">-->
+<!--                    بازگشت-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <form #projectForm="ngForm" (submit)="changeProjectCode(projectForm)">-->
+<!--        <div class="card-body card-body-content">-->
+<!--            <div class="row">-->
+<!--                <div class="col-md-4">-->
+<!--                    <div class="form-group required col-md-12">-->
+<!--                        <label class="for-label">عنوان:-->
+<!--                            <span style="color: red">*</span>-->
+<!--                        </label>-->
+<!--                        <div class="input-group input-group-sm">-->
+<!--                            <input type="text" placeholder="عنوان" [(ngModel)]="project.name"-->
+<!--                                   class="form-control" minlength="1" maxlength="80" name="name"-->
+<!--                                   id="name"-->
+<!--                                   (change)="trimName()"-->
+<!--                                   nbvRequired #name="ngModel"-->
+<!--                                   nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."-->
+<!--                                   nbvPattern="{{myPattern.TITLEFa}}"-->
+<!--                                   [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvPattern)&& stringLength(project.name,'name')"-->
+<!--                                   [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvPattern) && (name.touched || doSave)"-->
+<!--                                   dest="nameValidation">-->
+<!--                        </div>-->
+<!--                        <div id="nameValidation"></div>-->
+<!--                    </div>-->
+<!--                    <div class="col-md-12 form-group required">-->
+<!--                        <label class="for-label">کد پروژه:-->
+<!--                            <span style="color: red">*</span></label>-->
+<!--                        <div class="input-group input-group-sm">-->
+<!--                            <input type="text" placeholder="کد پروژه" [(ngModel)]="project.code"-->
+<!--                                   class="form-control" minlength="1" maxlength="80" name="code"-->
+<!--                                   nbvRequired #code="ngModel"-->
+<!--                                   [nbvPattern]="myPattern.EnNumberAndAlphabetic"-->
+<!--                                   nbvPatternMsgHtml="کد پروژه باید به صورت اعداد و حروف انگلیسی وارد گردد."-->
+<!--                                   [class.is-valid]="!(code?.errors?.nbvRequired || code?.errors?.nbvPattern)"-->
+<!--                                   [class.is-invalid]="(code?.errors?.nbvRequired || code?.errors?.nbvPattern) && (code.touched || doSave)"-->
+<!--                                   dest="codeValidation">-->
+<!--                        </div>-->
+<!--                        <div id="codeValidation"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-md-8">-->
+<!--                    <div class="col-md-12 form-group required">-->
+<!--                        <label class="for-label">توضیحات پروژه:-->
+<!--                        </label>-->
+<!--                        <div class="input-group input-group-sm">-->
+<!--                <textarea type="text" placeholder="توضیحات پروژه" [(ngModel)]="project.description"-->
+<!--                          class="form-control" minlength="1" name="description"-->
+<!--                          #description="ngModel" rows="5"-->
+<!--                          [class.is-valid]="!(description?.errors?.nbvRequired)"-->
+<!--                          [class.is-invalid]="(description?.errors?.nbvRequired) && (description.touched || doSave)"-->
+<!--                ></textarea>-->
+<!--                        </div>-->
+<!--                        <div id="descriptionValidation"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-12">-->
+<!--                <div class="row">-->
+<!--                    &lt;!&ndash;<div class="col-md-3">&ndash;&gt;-->
+<!--                    &lt;!&ndash;<label class="for-label">تخمین زمان شروع: </label>&ndash;&gt;-->
+<!--                    &lt;!&ndash;<input class="form-control" id="startDate" #startDate placeholder="تخمین زمان شروع">&ndash;&gt;-->
+<!--                    &lt;!&ndash;</div>&ndash;&gt;-->
+<!--                    &lt;!&ndash;<div class="col-md-3">&ndash;&gt;-->
+<!--                    &lt;!&ndash;<label class="for-label">تخمین زمان پایان: </label>&ndash;&gt;-->
+<!--                    &lt;!&ndash;<input class="form-control" id="endDate" #endDate placeholder="تخمین زمان پایان">&ndash;&gt;-->
+<!--                    &lt;!&ndash;</div>&ndash;&gt;-->
+<!--                    <div class="col-md-4">-->
+<!--                        <label class="for-label">آخرین مهلت: </label>-->
+<!--                        <input class="form-control form-control-sm " id="requiredCompletionDate" #requiredCompletionDate-->
+<!--                               placeholder="آخرین مهلت">-->
+<!--                    </div>-->
+<!--                    <div class="col-md-4">-->
+<!--                        <label class="for-label">تاریخ شروع : </label>-->
+<!--                        <input class="form-control form-control-sm" id="startDate" #startDate placeholder="تاریخ شروع ">-->
+<!--                    </div>-->
+<!--                    <div class="col-md-4">-->
+<!--                        <label class="for-label">تاریخ پایان : </label>-->
+<!--                        <input class="form-control form-control-sm" id="endDate" #endDate placeholder="تاریخ پایان ">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash;</div>&ndash;&gt;-->
+<!--            </div>-->
+<!--            <div class="col-md-12" style="margin-top: 30px">-->
+<!--                <ul class="nav nav-tabs" role="navigation" style="text-align: right; margin:0;width: 100%;padding: 0;">-->
+<!--                    <li class="nav-item" *ngIf="mode !== actionMode.ADD">-->
+<!--                        <a href="#SMProject" class="nav-link active" data-toggle="tab" role="tab"-->
+<!--                           aria-controls="SMProject"-->
+<!--                           style="font-size: 14px">لیست زمان بندی نت</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item" *ngIf="mode !== actionMode.ADD">-->
+<!--                        <a href="#WOProject" class="nav-link" data-toggle="tab" role="tab" aria-controls="WOProject"-->
+<!--                           (click)="getWorkOrderList()"-->
+<!--                           style="font-size: 14px">لیست سفارش-->
+<!--                            کار</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+
+<!--                        <a href="#personnelProject" class="nav-link" data-toggle="tab" role="tab"-->
+<!--                           (click)="getPersonnelOfProject()"-->
+<!--                           aria-controls="personnelProject"-->
+<!--                           style="font-size: 14px">تکنسین</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item" (click)="showFileDocument=true">-->
+<!--                        <a href="#filesProject" class="nav-link" data-toggle="tab" role="tab"-->
+<!--                           aria-controls="filesProject" (click)="filterUserList()"-->
+<!--                           style="font-size: 14px">مستندات</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+
+<!--                <div class="tab-content">-->
+<!--                    &lt;!&ndash;جدول مربوط به لیست زمانبندی نت &ndash;&gt;-->
+<!--                    <div class="tab-pane fade active show" id="SMProject" role="tabpanel">-->
+<!--                        <div class="card">-->
+<!--                            <div class="card-body card-body-content">-->
+<!--                                <table class="table table-striped table-bordered table-responsive-md"-->
+<!--                                       *ngIf="scheduleMaintenanceList.length > 0">-->
+<!--                                    <thead>-->
+<!--                                    <tr>-->
+<!--                                        <th class="text-center">ردیف</th>-->
+<!--                                        <th class="text-center">دارایی</th>-->
+<!--                                        <th class="text-center">اولویت</th>-->
+<!--                                        <th class="text-center">نوع بازدید</th>-->
+<!--                                        <th class="text-center">وضعیت</th>-->
+<!--                                        <th class="text-center" style="width: 5%">مشاهده</th>-->
+<!--                                    </tr>-->
+<!--                                    </thead>-->
+<!--                                    <tbody>-->
+<!--                                    <ng-container *ngFor="let item of scheduleMaintenanceList; let i = index">-->
+<!--                                        <tr class="text-center">-->
+<!--                                            <td>{{i + 1}}</td>-->
+<!--                                            <td>{{item.asset?.name}}</td>-->
+<!--                                            <td>{{priorityL[i]?._title}}</td>-->
+<!--                                            <td>{{maintenanceTypeL[i]?._title}}</td>-->
+<!--                                            <td>{{item.workOrderStatus?.name}}</td>-->
+<!--                                            <td>-->
+<!--                                                <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+<!--                                                   (click)="chooseWorkOrderForView(item)"-->
+<!--                                                   style="cursor: pointer ; font-weight: bold">-->
+<!--                                                    <i class="fa fa-eye" title="مشاهده"></i>-->
+<!--                                                </a>-->
+<!--                                            </td>-->
+<!--                                            &lt;!&ndash;<td>&ndash;&gt;-->
+<!--                                            &lt;!&ndash;<a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"&ndash;&gt;-->
+<!--                                            &lt;!&ndash;(click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">&ndash;&gt;-->
+<!--                                            &lt;!&ndash;<i class="fa fa-edit" title="ویرایش"></i>&ndash;&gt;-->
+<!--                                            &lt;!&ndash;</a>&ndash;&gt;-->
+<!--                                            &lt;!&ndash;</td>&ndash;&gt;-->
+<!--                                        </tr>-->
+<!--                                    </ng-container>-->
+
+<!--                                    </tbody>-->
+<!--                                </table>-->
+<!--                                <div class="col-md-12 text-center" *ngIf="scheduleMaintenanceList.length === 0">-->
+<!--                                    موردی یافت نشد-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash;جدول مربوط به لیست دستور کار &ndash;&gt;-->
+<!--                    <div class="tab-pane fade" id="WOProject" role="tabpanel">-->
+<!--                        <div class="card">-->
+<!--                            <div class="card-body card-body-content">-->
+<!--                                <table class="table table-striped table-responsive-md table-bordered"-->
+<!--                                       *ngIf="workOrderList.length > 0">-->
+<!--                                    <thead>-->
+<!--                                    <tr>-->
+<!--                                        <th class="text-center">ردیف</th>-->
+<!--                                        <th class="text-center">عنوان</th>-->
+<!--                                        <th class="text-center">کد</th>-->
+<!--                                        <th class="text-center">اولویت</th>-->
+<!--                                        <th class="text-center">نوع بازدید</th>-->
+<!--                                        <th class="text-center">دارایی</th>-->
+<!--                                        <th class="text-center">وضعیت</th>-->
+<!--                                        <th class="text-center" style="width: 5%">مشاهده</th>-->
+<!--                                        &lt;!&ndash;<th class="text-center" style="width: 5%"></th>&ndash;&gt;-->
+<!--                                    </tr>-->
+<!--                                    </thead>-->
+<!--                                    <tbody>-->
+<!--                                    <ng-container *ngFor="let item of workOrderList; let i = index">-->
+<!--                                        <tr class="text-center">-->
+<!--                                            <td>{{i + 1}}</td>-->
+<!--                                            <td>{{item.title}}</td>-->
+<!--                                            <td>{{item.code}}</td>-->
+<!--                                            <td>-->
+<!--                                                <ng-container *ngFor="let priority of priorityList">-->
+<!--                                                    <ng-container *ngIf="priority._value === item.priority">-->
+<!--                                                        {{priority._title}}-->
+<!--                                                    </ng-container>-->
+<!--                                                </ng-container>-->
+<!--                                            </td>-->
+<!--                                            <td>-->
+<!--                                                <ng-container *ngFor="let maintenanceType of maintenanceTypeList">-->
+<!--                                                    <ng-container-->
+<!--                                                            *ngIf="maintenanceType._value === item.maintenanceType">-->
+<!--                                                        {{maintenanceType._title}}-->
+<!--                                                    </ng-container>-->
+<!--                                                </ng-container>-->
+<!--                                            </td>-->
+<!--                                            <td>{{item?.asset?.name}}</td>-->
+<!--                                            <td>{{item?.status?.name}}-->
+<!--                                            </td>-->
+<!--                                            <td>-->
+<!--                                                <a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"-->
+<!--                                                   (click)="chooseSelectedItemForView(item)"-->
+<!--                                                   style="cursor: pointer ; font-weight: bold">-->
+<!--                                                    <i class="fa fa-eye" title="مشاهده"></i>-->
+<!--                                                </a>-->
+<!--                                            </td>-->
+<!--                                            &lt;!&ndash;<td>&ndash;&gt;-->
+<!--                                            &lt;!&ndash;<a class="btn btn-sm btn-outline-lightning rounded-0 mr-2"&ndash;&gt;-->
+<!--                                            &lt;!&ndash;(click)="chooseSelectedItemForEdit(item)" style="cursor: pointer ; font-weight: bold">&ndash;&gt;-->
+<!--                                            &lt;!&ndash;<i class="fa fa-edit" title="ویرایش"></i>&ndash;&gt;-->
+<!--                                            &lt;!&ndash;</a>&ndash;&gt;-->
+<!--                                            &lt;!&ndash;</td>&ndash;&gt;-->
+<!--                                            &lt;!&ndash;<td>&ndash;&gt;-->
+<!--                                            &lt;!&ndash;<a class="btn btn-sm btn-outline-lightning rounded-0"&ndash;&gt;-->
+<!--                                            &lt;!&ndash;style="cursor: pointer" nbdAreYouSure (then)="deleteItem(item)">&ndash;&gt;-->
+<!--                                            &lt;!&ndash;<i class="fa fa-trash" title="حذف"></i>&ndash;&gt;-->
+<!--                                            &lt;!&ndash;</a>&ndash;&gt;-->
+<!--                                            &lt;!&ndash;</td>&ndash;&gt;-->
+<!--                                        </tr>-->
+<!--                                    </ng-container>-->
+
+<!--                                    </tbody>-->
+<!--                                </table>-->
+<!--                                <div class="col-md-12 text-center" *ngIf="workOrderList.length === 0">-->
+<!--                                    موردی یافت نشد-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash;مربوط به انتخاب تکنسین ها&ndash;&gt;-->
+<!--                    <div class="tab-pane fade" id="personnelProject" role="tabpanel">-->
+<!--                        <div class="card">-->
+<!--                            <div class="card-body card-body-content">-->
+
+<!--                                &lt;!&ndash;////////////////////////////////////////////////////////////////////////////////&ndash;&gt;-->
+<!--                                <div class="row">-->
+<!--                                    &lt;!&ndash;                        ///پست&ndash;&gt;-->
+
+<!--                                    <div class="col-md-4 form-group required col-sm-12">-->
+<!--                                        <label class="for-label">انتخاب پست </label>-->
+<!--                                        <span style="color: red">*</span>-->
+<!--                                        <div class="input-group input-group-sm">-->
+<!--                                            <ng-select-->
+<!--                                                    style="width: 100%"-->
+<!--                                                    [loading]="loadingUserTypeList2"-->
+<!--                                                    class="auto-grow"-->
+<!--                                                    bindLabel="name"-->
+<!--                                                    bindValue="id"-->
+<!--                                                    (change)="changeUserType($event)"-->
+<!--                                                    [items]="userTypeList2"-->
+<!--                                                    [placeholder]="'عنوان پست'">-->
+
+<!--                                            </ng-select>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    &lt;!&ndash;                        ///کاربر&ndash;&gt;-->
+<!--                                    <div class="col-md-4 form-group required col-sm-12">-->
+<!--                                        <label class="for-label">انتخاب کاربر </label>-->
+<!--                                        <span style="color: red">*</span>-->
+<!--                                        <div class="input-group input-group-sm">-->
+
+<!--                                            &lt;!&ndash;                                <ng-container *ngIf="!loadingUserList">&ndash;&gt;-->
+<!--                                            <ng-select-->
+<!--                                                    style="width: 100%"-->
+<!--                                                    [(ngModel)]="parentUserId2"-->
+<!--                                                    name="parentUserId"-->
+<!--                                                    class="auto-grow"-->
+<!--                                                    (scrollToEnd)="getAllUsersOfUserType()"-->
+<!--                                                    [loading]="loadingUserList2"-->
+<!--                                                    [placeholder]="'انتخاب کاربر'">-->
+<!--                                                <ng-container *ngFor="let user of userList2; let i= index ">-->
+
+<!--                                                    <ng-option-->
+<!--                                                            [value]="user.id">-->
+<!--                                                        {{user.name + '  ' + user?.family}}-->
+<!--                                                        &lt;!&ndash;                                            {{' ( ' + user.userTypeName + ' )  ' }}&ndash;&gt;-->
+<!--                                                    </ng-option>-->
+<!--                                                </ng-container>-->
+
+<!--                                            </ng-select>-->
+<!--                                        </div>-->
+<!--                                        <div id="parentUserIdValidation" style="opacity: 0; height: 0"></div>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-2" style="margin-top: 30px">-->
+<!--                                        <a class="btn  btn-sm" style="background-color: #042C76; color: white;"-->
+<!--                                           (click)="selectUser()"-->
+<!--                                        >-->
+<!--                                            <span>ثبت</span>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                &lt;!&ndash;////////////////////////////////////////////////////////////////////////////////&ndash;&gt;-->
+<!--                                <br>-->
+<!--                                <div class="col-md-12">-->
+<!--                                    <table class="table table-striped table-bordered table-responsive-md"-->
+<!--                                           *ngIf="projectUsers?.length > 0">-->
+<!--                                        <thead>-->
+<!--                                        <tr>-->
+<!--                                            <td class="text-center" style="width: 10%">ردیف</td>-->
+<!--                                            <td class="text-center" style="width: 40%">نام</td>-->
+<!--                                            <td class="text-center" style="width: 40%">نام خانوادگی</td>-->
+<!--                                            <td class="text-center" style="width: 40%">پست</td>-->
+<!--                                            <td class="text-center" style="width: 10%"></td>-->
+<!--                                        </tr>-->
+<!--                                        </thead>-->
+<!--                                        <tbody>-->
+
+<!--                                        <ng-container *ngIf="projectUsers?.length > 0">-->
+<!--                                            <tr *ngFor="let item of projectUsers;let i = index">-->
+<!--                                                <th class="text-center" style="width: 10%">{{i + 1}}</th>-->
+<!--                                                <td class="text-center" style="width: 40%">{{item.name}}</td>-->
+<!--                                                <td class="text-center" style="width: 40%">{{item.family}}</td>-->
+<!--                                                <td class="text-center" style="width: 40%">{{item?.userTypeName}}</td>-->
+<!--                                                <td class="text-center" style="width: 5%">-->
+<!--                                                    <i class="fa fa-trash" (click)="deleteUser2(item.id)"-->
+<!--                                                       style="cursor: pointer;"></i>-->
+<!--                                                </td>-->
+<!--                                            </tr>-->
+<!--                                        </ng-container>-->
+<!--                                        </tbody>-->
+<!--                                    </table>-->
+<!--                                    <div class="col-md-12 text-center" *ngIf="projectUsers?.length === 0">-->
+<!--                                        موردی افزوده نشده است-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash;            //////// فایلها و مستندات /////////&ndash;&gt;-->
+<!--                    <div class="tab-pane fade" id="filesProject" role="tabpanel">-->
+
+<!--                        <app-document *ngIf="showFileDocument" [extraId]="project.id"-->
+<!--                                      [mode]="mode"></app-document>-->
+<!--                    </div>-->
+
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="card-footer text-left">-->
+<!--            <button class="btn btn-action btn-sm" type="submit">-->
+<!--                <span *ngIf="mode === actionMode.ADD">ثبت</span>-->
+<!--                <span *ngIf="mode === actionMode.EDIT">ویرایش</span>-->
+<!--                <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>-->
+
+<!--            </button>-->
+<!--        </div>-->
+<!--    </form>-->
+<!--</div>-->

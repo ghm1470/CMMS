@@ -1,0 +1,360 @@
+.main-progress {
+  min-height: 180px;
+  display: flex;
+  align-items: flex-end;
+  overflow-x: auto;
+  ul {
+    list-style: none;
+    padding-right: 20px;
+    display: flex;
+    width: 100%;
+
+    .progress-step {
+      width: 250px;
+      margin: 0;
+      padding: 0;
+      min-width: 234px;
+      &:last-child {
+        width: 55px;
+        min-width: 55px;
+      }
+    }
+
+    .progress-step:last-child {
+      -webkit-box-flex: 0;
+      flex-grow: 0;
+
+      .progress-marker:after {
+        display: none;
+      }
+      .progress-tooltip {
+        right: -142px;
+        main:before {
+          right: initial;
+          left: 26px;
+        }
+      }
+
+    }
+
+    .progress-marker {
+      position: relative;
+
+      &:after {
+        background: #ddd;
+        content: '';
+        display: block;
+        position: absolute;
+        z-index: 0;
+        top: calc(50% - 5px);
+        right: 49px;
+        width: calc(100% - 48px);
+        height: 6px;
+      }
+
+      span {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        background: #ddd;
+        color: #c3c3c3;
+        border-radius: 50%;
+        cursor: pointer;
+        position: relative;
+        z-index: 2;
+
+        &:before {
+          position: absolute;
+          z-index: -2;
+          content: '';
+          width: 99%;
+          height: 99%;
+          border-radius: 50%;
+          border: 2px solid #ddd;
+          -webkit-transition: all 0.2s;
+          -moz-transition: all 0.2s;
+          -ms-transition: all 0.2s;
+          -o-transition: all 0.2s;
+          transition: all 0.2s;
+          background: #fff;
+        }
+
+        &:after {
+          position: absolute;
+          z-index: -1;
+          content: '';
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          border: 2px solid #ddd;
+          -webkit-transition: all 0.2s;
+          -moz-transition: all 0.2s;
+          -ms-transition: all 0.2s;
+          -o-transition: all 0.2s;
+          transition: all 0.2s;
+          background: #fff;
+
+        }
+
+        &:hover {
+          color: #ffffff;
+        }
+
+        &:hover:after {
+          background: #ddd;
+        }
+
+        &:hover:before {
+          width: calc(100% + 12px);
+          height: calc(100% + 12px);
+        }
+      }
+
+      .progress-tooltip {
+        -webkit-transition: all 0.2s;
+        -moz-transition: all 0.2s;
+        -ms-transition: all 0.2s;
+        -o-transition: all 0.2s;
+        transition: all 0.2s;
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        //bottom: calc(100% + 15px);
+        bottom: calc(100% + 7px);
+        right: -15px;
+        width: 200px;
+        content: "";
+        border: 2px solid #ddd;
+        border-radius: 5px;
+
+        & > * {
+          padding: 5px;
+        }
+
+        header {
+          background-color: #dddddd;
+          border-radius: 3px 3px 0 0;
+        }
+
+        main {
+          background-color: #f3f3f3;
+          font-size: 13px;
+          position: relative;
+
+          &:before {
+            content: '';
+            position: absolute;
+            bottom: -7px;
+            right: 33px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #ddd;
+
+          }
+        }
+      }
+
+      span:hover + .progress-tooltip {
+        opacity: 1;
+        visibility: visible;
+        bottom: calc(100% + 15px);
+      }
+
+      &.is-current {
+        span {
+          &:after {
+            color: #2da75f;
+            -webkit-animation: pulse_shadow 2s infinite;
+            animation: pulse_shadow 2s infinite;
+          }
+        }
+      }
+
+      &.is-accept, &.is-finished {
+
+        &.is-current {
+          span {
+            &:after {
+              color: #2da75f;
+              -webkit-animation: pulse_shadow 2s infinite;
+              animation: pulse_shadow 2s infinite;
+            }
+          }
+
+        }
+
+        &:after, span {
+          background: #36ce8f;
+          color: #ffffff;
+        }
+
+        & > span:before, & > span:after {
+          border: 2px solid #36ce8f;
+        }
+
+        & > span:after {
+          background: #36ce8f;
+        }
+
+        .progress-tooltip {
+          border: 2px solid #36ce8f;
+
+          header {
+            background-color: #cbebd2;
+          }
+
+          main {
+            &:before {
+              border-top: 5px solid #36ce8f;
+            }
+          }
+        }
+      }
+      &.is-injected {
+
+
+
+        &:after, span {
+          background: #C0392B    ;
+          color: #ffffff;
+        }
+
+        & > span:before, & > span:after {
+          border: 2px solid #C0392B    ;
+        }
+
+        & > span:after {
+          background: #C0392B    ;
+        }
+
+        .progress-tooltip {
+          border: 2px solid #C0392B    ;
+
+          header {
+            background-color: #cbebd2;
+          }
+
+          main {
+            &:before {
+              border-top: 5px solid #C0392B    ;
+            }
+          }
+        }
+      }
+      &.is-finished {
+        span {
+          &:after {
+            color: #36ce8f;
+            -webkit-animation: pulse_shadow 2s infinite;
+            animation: pulse_shadow 2s infinite;
+          }
+        }
+      }
+      &.is-correction {
+
+        &.is-current {
+          span {
+            &:after {
+              color: #b9b200;
+              -webkit-animation: pulse_shadow 2s infinite;
+              animation: pulse_shadow 2s infinite;
+            }
+          }
+
+        }
+
+        &:after, span {
+          background: #e7df17;
+          color: #ffffff;
+        }
+
+        & > span:before, & > span:after {
+          border: 2px solid #e7df17;
+        }
+
+        & > span:after {
+          background: #e7df17;
+        }
+
+        .progress-tooltip {
+          border: 2px solid #e7df17;
+
+          header {
+            background-color: #ebe7cb;
+          }
+
+          main {
+            &:before {
+              border-top: 5px solid #e7df17;
+            }
+          }
+        }
+      }
+
+      &.is-cancel {
+
+        &.is-current {
+          span {
+            &:after {
+              color: #e91828;
+              -webkit-animation: pulse_shadow 2s infinite;
+              animation: pulse_shadow 2s infinite;
+            }
+          }
+
+        }
+
+        &:after, span {
+          background: #e91828;
+          color: #ffffff;
+        }
+
+        & > span:before, & > span:after {
+          border: 2px solid #e91828;
+        }
+
+        & > span:after {
+          background: #e91828;
+        }
+
+        .progress-tooltip {
+          border: 2px solid #e91828;
+
+          header {
+            background-color: #ebcbd1;
+          }
+
+          main {
+            &:before {
+              border-top: 5px solid #e91828;
+            }
+          }
+        }
+      }
+
+
+    }
+
+  }
+
+}
+
+@keyframes pulse_shadow {
+  0% {
+    -webkit-box-shadow: 0 0;
+    box-shadow: 0 0
+  }
+  70% {
+    -webkit-box-shadow: 2px 2px 15px 10px rgba(255, 255, 255, 0);
+    box-shadow: 2px 2px 15px 10px rgba(255, 255, 255, 0)
+  }
+  100% {
+    -webkit-box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0)
+  }
+}

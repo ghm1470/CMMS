@@ -1,0 +1,142 @@
+
+<nbw-modal
+  [hasHeader]="true"
+  [hasFooter]="false"
+  [modalSize]="MyModalSize.X_LARGE"
+  autoShow="false"
+  [myId]="'showWorkRequestModal'">
+  <div modal-header>
+    <span style="font-size: 16px">
+      مشاهده ی فرم درخواست کار
+    </span>
+  </div>
+  <div modal-body>
+          <app-loading-spinner [loadingList]="true" *ngIf="loading" ></app-loading-spinner>
+          <ng-container *ngIf="!loading" >
+            <fieldset class="scheduler-border">
+                <legend class="scheduler-border"> <h6>اطلاعات درخواست :</h6></legend>
+
+                <div class="col-md-12">
+                  <div class="row">
+
+
+                    <div style="margin-top: 10px; ">
+                      <span class="for-label">ارسال درخواست توسط:</span>
+                      <span style="font-size: 12px;margin-top: 7px; margin-right: 15px">{{submitWorkRequest.userName}} {{submitWorkRequest.userFamily}}</span>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="row">
+
+                    <div class="col-md-4 form-group required col-sm-12" style="margin-top: 30px">
+                      <label class="for-label" for="suggestedTime" style="margin-right: 5px; color: #8a8f94">
+                        عنوان درخواست:</label>
+                      <input  type="text" [(ngModel)]="submitWorkRequest.title" name="titleWorkRequest"
+                              style="font-size: 12px;"
+                             class="form-control"
+                              id="suggestedTime"
+                             [disabled]="true"
+                      >
+
+                    </div>
+
+                    <div class="col-md-4 form-group required col-sm-12" style="margin-top: 30px">
+                      <label class="for-label" for="assetId" style="margin-right: 5px; color: #8a8f94">دارایی:</label>
+                      <input  type="text" [(ngModel)]="asset" name="assetId"
+                              style="font-size: 12px;"
+                              class="form-control"
+                              id="assetId"
+                              [disabled]="true"
+                      >
+
+
+                    </div>
+
+
+
+
+
+
+                    <div class="col-md-4 form-group required col-sm-12" style="margin-top: 30px">
+                      <label class="for-label" for="maintenanceType" style="margin-right: 5px; color: #8a8f94">نوع
+                        نگهداری:</label>
+                      <ng-select dir="rtl" [(ngModel)]="submitWorkRequest.maintenanceType"
+                                 name="maintenanceType"
+                                 id="maintenanceType"
+
+                                 [disabled]="true"
+                                 placeholder="نوع نگهداری:" style="font-size: 12px;width: 100%;"
+                                 dropdownPosition="bottom"
+                      >
+                        <ng-option *ngFor="let item of maintenanceTypeList; let i = index"
+                                   [value]="item.value">
+                          {{item.title}}
+                        </ng-option>
+                      </ng-select>
+
+
+                      <div id="maintenanceTypeValidation" style="opacity: 0; height: 0"></div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4 form-group required col-sm-12" style="margin-top: 30px">
+                      <label class="for-label" for="priority" style="margin-right: 5px; color: #8a8f94">اولویت:</label>
+                      <ng-select dir="rtl" [(ngModel)]="submitWorkRequest.priority"
+                                 name="priority"
+                                 id="priority"
+                                 [disabled]="true"
+
+                                 placeholder="اولویت:" style="font-size: 12px;width: 100%;"
+                                 dropdownPosition="bottom"
+                      >
+                        <ng-option *ngFor="let item of priorityList; let i = index"
+                                   [value]="item.value">
+                          {{item.title}}
+                        </ng-option>
+                      </ng-select>
+                    </div>
+
+                    <div class="col-md-4 form-group required col-sm-12" style="margin-top: 30px">
+                      <label class="for-label" for="activityId" style="margin-right: 5px; color: #8a8f94">فرایند:</label>
+                        <input  type="text" [(ngModel)]="submitWorkRequest.activityName" name="activityId"
+                                style="font-size: 12px;"
+                                class="form-control"
+                                id="activityId"
+                                [disabled]="true"
+                        >
+                    </div>
+
+                  </div>
+
+                </div>
+                <br>
+
+                <div class=" col-md-12 md-form">
+                  <i class="fas fa-pencil-alt prefix grey-text"></i>
+                  <label for="message" class="for-label" style="margin-right: 5px; color: #8a8f94">پیام شما:</label>
+                  <textarea id="message" class="md-textarea form-control" rows="3"
+                            [(ngModel)]="submitWorkRequest.description"
+                            [disabled]="workRequestId"
+style="font-size: 12px;"
+                            name="message"></textarea>
+
+                </div>
+                <br>
+
+              </fieldset>
+
+
+            <div class="col-md-12 text-left px-0">
+              <ng-container>
+                <button type="button" class="btn btn-sm btn-cancel-back" (click)="backToList()">بستن</button>
+              </ng-container>
+            </div>
+          </ng-container>
+  </div>
+</nbw-modal>
+
+
+
+

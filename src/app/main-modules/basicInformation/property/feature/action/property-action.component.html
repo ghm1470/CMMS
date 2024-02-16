@@ -1,0 +1,169 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+                <ng-container *ngIf="mode === actionMode.ADD">
+                    <i class="fa fa-plus"></i>&nbsp;
+                    افزودن مشخصات
+                </ng-container>
+                <ng-container *ngIf="mode === actionMode.EDIT">
+                    <i class="fa fa-edit"></i>&nbsp;
+                    ویرایش مشخصات
+                </ng-container>
+                <ng-container *ngIf="mode === actionMode.VIEW">
+                    <i class="fa fa-eye"></i>&nbsp;
+                    مشاهده مشخصات
+                </ng-container>
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left">
+                <button (click)="cancel()"
+                        class="btn btn-cancel-back btn-sm">
+                    بازگشت
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <form #userForm="ngForm">
+        <div class="card-body card-body-content">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="col-md-12 form-group required col-sm-12">
+                            <label class="for-label">دسته بندی مشخصات</label>
+                            <span style="color: red">*</span>
+                            <ng-select dir="rtl"
+                                       [(ngModel)]="property.propertyCategoryId"
+                                       name="propertyCategory"
+                                       [disabled]="mode===actionMode.VIEW"
+                                       (change)="changePropertyCategory($event)"
+                                       placeholder="دسته بندی مشخصات"
+                                       style="width: 100%;"
+                                       dropdownPosition="bottom">
+                                <ng-option *ngFor="let item of propertyCategoryList" [value]="item.id">{{item.title}}
+                                </ng-option>
+
+                            </ng-select>
+                            <div id="propertyCategoryValidation" style="opacity: 0; height: 0"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="col-md-12 form-group required col-sm-12">
+                            <label class="for-label">نوع مشخصه</label>
+                            <span style="color: red">*</span>
+<!--                                       (change)="property.valueType=null"-->
+                            <ng-select dir="rtl"
+                                       [(ngModel)]="property.type"
+                                       [disabled]="!property.propertyCategoryId||mode===actionMode.VIEW"
+                                       name="type"
+                                       placeholder="نوع مشخصه"
+                                       style="width: 100%;"
+                                       dropdownPosition="bottom">
+                                <ng-option *ngFor="let item of propertyTypeList" [value]="item.value">{{item.title}}
+                                </ng-option>
+                            </ng-select>
+                            <div id="typeValidation" style="opacity: 0; height: 0"></div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-4" *ngIf="property.type == PropertyType[PropertyType.keyValue.toString()]">
+                        <div class="col-md-12 form-group required col-sm-12">
+                            <label class="for-label">نوع مقدار </label>
+                            <span style="color: red">*</span>
+
+                            <div class="input-group input-group-sm">
+                                <select class="form-control form-control-sm" name="dd"
+                                        [disabled]="mode===actionMode.VIEW"
+                                        [(ngModel)]="property.valueType">
+                                    <option [value]="valueType.STRING">متن</option>
+                                    <option [value]="valueType.INTEGER">عدد</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-12 form-group required col-sm-12">
+                            <label class="for-label">کلید واژه</label>
+                            <span style="color: red">*</span>
+
+                            <div class="input-group input-group-sm">
+<!--                                       nbvPatternMsgHtml="کلید واژه باید به صورت حروف و اعداد باشد."-->
+<!--                                       nbvPattern="{{myPattern.TITLEFa}}"-->
+                                <input type="text" placeholder="کلید واژه" [(ngModel)]="property.key"
+                                       [disabled]="mode===actionMode.VIEW"
+                                       class="form-control" minlength="1" maxlength="80" name="key"
+                                       nbvRequired #key="ngModel" (change)="checkPropertyKey()"
+                                       [class.is-valid]="!(key?.errors?.nbvRequired || key?.errors?.nbvPattern)"
+                                       [class.is-invalid]="(key?.errors?.nbvRequired || key?.errors?.nbvPattern) && (key.touched || doSave)"
+                                       dest="keyValidation">
+
+                            </div>
+                            <div id="keyValidation"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <br>
+                        <div class="col-md-12 form-group required col-sm-12"
+                             *ngIf="property.type === PropertyType[PropertyType.selectMulti.toString()] ||
+                        property.type === PropertyType[PropertyType.selectOne.toString()]">
+                            <div class="input-group input-group-sm">
+                                <input type="text" placeholder="مشخصات (  تایپ + Enter )" [(ngModel)]="repositoryItem"
+                                       [disabled]="mode===actionMode.VIEW"
+                                       class="form-control" minlength="3" maxlength="80" name="localRepositoryItem"
+                                       (change)="doAddRepository()"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12"
+                         *ngIf="property.type === PropertyType[PropertyType.selectMulti.toString()] ||
+                        property.type === PropertyType[PropertyType.selectOne.toString()]">
+                        <div class="card table-responsive-md form-inline">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 5%">ردیف</th>
+                                    <th class="text-center">مشخصات</th>
+                                    <th class="text-center" style="width: 5%">حذف</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ng-container *ngFor="let item of property.repository let i = index">
+                                    <tr class="text-center">
+                                        <td>{{toolKit2.Common.En2Fa(i + 1)}}</td>
+                                        <td>{{item}}</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-outline-lightning rounded-0"
+                                               style="cursor: pointer" nbdAreYouSure (then)="deleteRepository(item)">
+                                                <i class="fa fa-trash" title="حذف"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-left">
+            <a class="btn btn-action btn-sm"
+               *ngIf="mode!==actionMode.VIEW"
+               type="submit"
+               (click)="action(userForm)">
+                <span *ngIf="mode === actionMode.ADD">ثبت</span>
+                <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+                <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-2x"></i>
+
+            </a>
+
+
+        </div>
+    </form>
+</div>

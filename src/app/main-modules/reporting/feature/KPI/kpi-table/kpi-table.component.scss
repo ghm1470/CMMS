@@ -1,0 +1,42 @@
+@mixin mq($from) {
+  @media (max-width: $from) {
+    @content;
+  }
+}
+
+.myTable table tbody {
+  display: block;
+  max-height: 50vh;
+  overflow-y: scroll;
+}
+
+.myTable table thead, .myTable table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+
+}
+.myTable table thead, .myTable table  tbody {
+  @include mq('1080px') {
+    width: 125%;
+
+  }
+  @include mq('744px') {
+    width: 150%;
+
+  }
+  @include mq('450px') {
+    width: 200%;
+
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px !important;
+  cursor: pointer !important;
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #000000;
+}

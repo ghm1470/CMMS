@@ -1,0 +1,111 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 col-8 col-sm-6 card-title">
+        <ng-container *ngIf="mode === actionMode.ADD">
+          <i class="fa fa-plus"></i>&nbsp;
+          افزودن شهر
+        </ng-container>
+        <ng-container *ngIf="mode === actionMode.EDIT">
+          <i class="fa fa-edit"></i>&nbsp;
+          ویرایش شهر</ng-container>
+      </div>
+      <div class="col-md-6 col-4 col-sm-6 text-left">
+        <button (click)="cancel()"
+                class="btn btn-cancel-back btn-sm">
+          بازگشت
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <form #userForm="ngForm" (submit)="action(userForm)">
+    <div class="card-body card-body-content">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group required col-sm-12" *ngIf="provinceList.length">
+            <label class="for-label">نام استان:</label>
+            <label style="color: red">*</label>
+            <ng-select style="text-align: right;direction: rtl; font-size: 14px"
+                       id="province"
+                       name="province"
+                       title="province"
+                       placeholder="نام استان را انتخاب کنید"
+                       nbvRequired
+                       [clearable]="false"
+                       nbvPattern="{{myPattern.OBJECT_ID}}"
+                       #provinceId="ngModel"
+                       (change)="getCityList()"
+                       nbvRequiredMsgHtml=" استان را انتخاب کنید "
+                       [class.is-valid]="!(provinceId?.errors?.nbvRequired || provinceId?.errors?.nbvPattern)"
+                       [class.is-invalid]="(provinceId?.errors?.nbvRequired || provinceId?.errors?.nbvPattern) && (provinceId.touched || doSave)"
+                       [(ngModel)]="city.provinceId"
+                       dest="provinceIdValidation" >
+              <ng-option style="text-align: right;direction: rtl" *ngFor="let item of provinceList" value="{{item.id}}">
+                {{item.name}}
+              </ng-option>
+            </ng-select>
+            <div id="provinceIdValidation" style="opacity: 0; height: 0"></div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group required col-sm-12">
+            <label class="for-label">نام شهر:</label>
+            <label style="color: red">*</label>
+            <div class="input-group input-group-sm">
+              <input type="text" placeholder="نام شهر را وارد کنید" [(ngModel)]="city.name"
+                     class="form-control" minlength="3" maxlength="80" name="name"
+                     nbvRequired #name="ngModel"
+                     nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."
+                     nbvPattern="{{myPattern.TITLEFa}}"
+                     [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvPattern)"
+                     [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvPattern) && (name.touched || doSave)"
+                     dest="nameValidation" maxLength="50">
+            </div>
+            <div id="nameValidation"></div>
+          </div>
+        </div>
+<!--        <div class="col-md-6">-->
+<!--          <span style="color: red; font-size:13px">توجه:</span>-->
+<!--          <label class="text-info" *ngIf="!locationSelected " style="margin-bottom: 15px;font-size:13px">-->
+<!--            &nbsp;&nbsp;&nbsp;-->
+<!--            برای انتخاب مکان شهر نقشه را جابجا کنید تا مکان نما بر روی شهر قرار بگیرد سپس بر روی مکان نما کلیک کنید.-->
+<!--          </label>-->
+<!--          <label class="text-info" *ngIf="locationSelected" style="margin-bottom: 15px font-size:13px">-->
+<!--            &nbsp;&nbsp;&nbsp;-->
+<!--            برای ویرایش مکان شهر بر روی ایکن مکان نما کلیک کنید.-->
+<!--          </label>-->
+<!--          <agm-map [latitude]="lat"-->
+<!--                   [longitude]="lng"-->
+<!--                   [zoom]="zoom"-->
+<!--                   (centerChange)="centerChange($event)">-->
+<!--            <agm-marker *ngFor="let item of cityList"-->
+<!--                        [latitude]="item.location.lat"-->
+<!--                        [longitude]="item.location.lng"-->
+<!--                        [label]="item.name"-->
+<!--                        animation="DROP">-->
+
+<!--            </agm-marker>-->
+<!--            <agm-marker *ngIf="locationSelected"-->
+<!--                        [latitude]="city.location.lat"-->
+<!--                        [longitude]="city.location.lng"-->
+<!--                        animation="DROP"-->
+<!--                        (markerClick)="changeLocation()">-->
+
+<!--            </agm-marker>-->
+<!--          </agm-map>-->
+<!--          <img *ngIf="!locationSelected" (click)="doSetCityMarker()" width="40"-->
+<!--               src="../../../../../../assets/images/companyPin.png"-->
+<!--               style="z-index: 99999; position: relative;margin-top: -492px;margin-right: 215px"-->
+<!--               alt="...">-->
+<!--        </div>-->
+      </div>
+    </div>
+    <div class="card-footer text-left">
+      <button class="btn btn-sm btn-action" type="submit">
+        <span *ngIf="mode === actionMode.ADD">ثبت</span>
+        <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,221 @@
+<div class="col-md-8" style="background-color: white; width: 100%;">
+  <div class="text-center">
+    <br>
+  </div>
+
+  <div class="container-fluid ">
+    <div class="form-group" *ngFor="let item of questions;let i = index;">
+      <div [ngSwitch]="item.elementType">
+
+        <!--Check Box-->
+        <div *ngSwitchCase="'CHECK_BOX'">
+          <div class="row">
+            <div class="col-md-12">
+              <label class="control-label  text-justify">
+                {{i + 1}}.{{item.label}}
+              </label>
+            </div>
+          </div>
+          <div class="row" *ngIf="answers[i]!=null">
+            <div class="col-md-12">
+              <div class="col-md-4" style="text-align: right; padding: 0px!important;"
+                   *ngFor="let ch of answers[i];let p=index;">
+                <span>{{ch.caption}}</span>
+                <img *ngIf="ch.imageStatus == MyImageStatus.SAVED_IMAGE"
+                     [src]="url + ch.path" height="50px" width="50px">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <hr>
+          </div>
+        </div>
+
+        <!--Radio Button-->
+        <div *ngSwitchCase="'RADIO_BUTTON'">
+          <div class="row">
+            <div class="col-md-12">
+              <label class="control-label text-justify">
+                {{i + 1}}.{{item.label}}
+              </label>
+            </div>
+          </div>
+          <div class="row" *ngIf="answers[i]!=null">
+            <div class="col-md-12">
+              <span>{{answers[i].caption}}</span>
+              <img *ngIf="answers[i].imageStatus == MyImageStatus.SAVED_IMAGE"
+                   [src]="url + answers[i].path" height="80px" width="80px">
+            </div>
+          </div>
+          <div class="row">
+            <hr>
+          </div>
+        </div>
+
+        <div *ngSwitchCase="'MATRIX'">
+          <div class="row">
+            <div class="col-md-12">
+              <label class="control-label text-justify">
+                {{i + 1}}.{{item.label}}
+              </label>
+            </div>
+          </div>
+          <div class="row" *ngIf="answers[i]!=null">
+            <div class="col-md-12">
+              <ng-container *ngFor="let answer of answers[i]">
+                <div class="col-md-12">
+                  <label>{{answer.question}}</label>
+                </div>
+                <div class="col-md-12" *ngFor="let opt of answer.matrixValueList">
+                  <span>{{opt}}</span>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          <div class="row">
+            <hr>
+          </div>
+        </div>
+
+        <div *ngSwitchCase="'COMBO_BOX'">
+          <div class="row">
+            <div class="col-md-12">
+              <label class="control-label text-justify">
+                {{i + 1}}.{{item.label}}
+              </label>
+            </div>
+          </div>
+          <div class="row" *ngIf="answers[i]!=null">
+            <div class="col-md-12">
+                <span class="control-label text-justify">
+                  {{answers[i]}}
+                </span>
+            </div>
+          </div>
+          <div class="row">
+            <hr>
+          </div>
+        </div>
+
+        <div *ngSwitchCase="'DATE'">
+          <div class="row">
+            <div class="col-md-12">
+              <label class="control-label text-justify">
+                {{i + 1}}.{{item.label}}
+              </label>
+            </div>
+          </div>
+          <div class="row" *ngIf="answers[i]!=null">
+            <div class="col-md-12">
+                <span class="control-label text-justify">
+                  {{moment.getJaliliDateFromIsoOrFull(answers[i])}}
+                </span>
+            </div>
+          </div>
+          <div class="row">
+            <hr>
+          </div>
+        </div>
+
+        <div *ngSwitchCase="'TIME'">
+          <div class="row">
+            <div class="col-md-12">
+              <label class="control-label text-justify">
+                {{i + 1}}.{{item.label}}
+              </label>
+            </div>
+          </div>
+          <div class="row" *ngIf="answers[i]!=null">
+            <div class="col-md-12">
+                <span class="control-label text-justify">
+                  <ng-container *ngIf="answers[i]">
+                          {{answers[i].minute}}     :        {{answers[i].hour}}
+
+                  </ng-container>
+                </span>
+            </div>
+          </div>
+          <div class="row">
+            <hr>
+          </div>
+        </div>
+
+        <div *ngSwitchCase="'FILE_ATTACH'">
+          <div class="row">
+            <div class="col-md-12">
+              <label class="control-label text-justify">
+                {{i + 1}}.{{item.label}}
+              </label>
+            </div>
+          </div>
+          <div class="row" *ngIf="answers[i]!=null">
+            <div class="col-md-12">
+              <span class="control-label text-justify">
+                          <a [href]="url +answers[i].path" target="_blank">{{answers[i].name}}</a>
+                </span>
+            </div>
+          </div>
+          <div class="row">
+            <hr>
+          </div>
+        </div>
+
+        <div *ngSwitchDefault>
+          <div class="row">
+            <div class="col-md-12">
+              <label class="control-label text-justify">
+                {{i + 1}}.{{item.label}}
+              </label>
+            </div>
+          </div>
+          <div class="row" *ngIf="answers[i]!=null">
+            <div class="col-md-12">
+                <span class="control-label text-justify">
+                  {{answers[i]}}
+                </span>
+            </div>
+          </div>
+          <div class="row">
+            <hr>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="col-md-12 text-center" *ngIf="questions.length === 0">
+      <h4>جوابی ثبت نشده است</h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <br>
+  </div>
+</div>
+
+
+<!--&lt;!&ndash;Combo Box&ndash;&gt;-->
+<!--<div *ngSwitchCase="'COMBO_BOX'">-->
+<!--<div class="row">-->
+<!--<div class="col-md-12">-->
+<!--<label class="control-label text-justify">-->
+<!--{{i+1}}.{{item.label}}-->
+<!--</label>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="row" *ngIf="answers[i]!=null">-->
+<!--<div class="col-md-12">-->
+<!--<br>-->
+<!--<ng-container *ngFor="let answer of answers[i].answerIdList">-->
+<!--<label class="control-label text-justify">-->
+<!--{{answer}}-->
+<!--</label>-->
+<!--</ng-container>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="row">-->
+<!--<hr>-->
+<!--<br>-->
+<!--</div>-->
+<!--</div>-->

@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-md-2 text-center">
+        <!--<img *ngIf="item.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE &&-->
+        <!--item.picture.imageStatus != MyImageStatus.DELETE_IMAGE" [src]="item.picture.imageData"-->
+        <!--height="100px" width="100px">-->
+    </div>
+    <div class="col-md-7">
+        <div class="col-md-12 text-right">
+            <label class="control-label">{{item.label}}&nbsp;</label>
+            <span style="color: red" *ngIf="item.required">*</span>
+            <a class="toolTipColor" [title]="item.helpText">
+                <i class="fa fa-info-circle"></i>
+            </a>
+        </div>
+        <div class="col-md-12">
+            <br>
+        </div>
+        <div *ngFor="let opt of item.optionList">
+            <div class="row col-md-12 text-right" style="margin-bottom: 10px;">
+                <div class="col-md-1 text-center">
+                    <input type="radio" name="radioGroup" disabled>
+                </div>
+                <!--<div class="col-md-1 text-center" *ngIf="opt.imageStatus != MyImageStatus.WITHOUT_IMAGE &&-->
+                <!--opt.imageStatus != MyImageStatus.DELETE_IMAGE">-->
+                <!--<img [src]="opt.imageData" height="40px" width="40px">-->
+                <!--</div>-->
+                <div class="col-md-5 text-right">
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{opt.caption}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 text-center" *ngIf="data != null">
+        <!--    <a class="iconColor" *ngIf="index != 0" (click)="upElement()" [tooltip]="data.public.up" tooltipPlacement="bottom">-->
+        <!--      <i class="fa fa-arrow-up cursor-pointer" style="color: #848a92; font-size: 20px!important;"></i>-->
+        <!--    </a>-->
+        <!--    <a class="iconColor" *ngIf="listLength != index+1" (click)="downElement()" [tooltip]="data.public.down"-->
+        <!--       tooltipPlacement="bottom">-->
+        <!--      <i class="fa fa-arrow-down cursor-pointer" style="color: #848a92; font-size: 20px!important;"></i>-->
+        <!--    </a>-->
+        <!--    <a class="iconColor" (click)="duplicate()" [tooltip]="data.public.duplicate" tooltipPlacement="bottom">-->
+        <!--      <i class="fa fa-copy cursor-pointer" style="color: #848a92; font-size: 20px!important;"></i>-->
+        <!--    </a>-->
+        <a class="iconColor" (click)="edit()" [tooltip]="data.public.edit" tooltipPlacement="bottom">
+            <i class="fa fa-edit cursor-pointer" style="color: #848a92; font-size: 20px!important;"></i>
+        </a>&nbsp;
+        <a class="iconColor" (click)="delete()" [tooltip]="data.public.delete" tooltipPlacement="bottom">
+            <i class="fa fa-trash cursor-pointer" style="color: red; font-size: 20px!important;"></i>
+        </a>&nbsp;
+    </div>
+
+</div>

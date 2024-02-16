@@ -1,0 +1,282 @@
+<br>
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-body backShadow">
+                <form class="form-horizontal" [formGroup]="checkBoxForm">
+
+                    <div class="row">
+                        <input type="text"
+                               style="display: none"
+                               [placeholder]="checkBox.id"
+                               [(ngModel)]="checkBox.id"
+                               name="id" formControlName="id">
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-md-12 text-left">
+                            <label class="control-label" *ngIf="data != null">{{data.formQuestion.questionTitle}}
+                                <span style="color: red">*</span>
+
+                            </label>
+                        </div>
+                        <div class="col-md-12 text-left">
+
+                <textarea *ngIf="editingItem.newElement"
+                          rows="3"
+                          type="text"
+                          class="form-control"
+                          [placeholder]="editingItem.item.label"
+                          formControlName="label"
+                          (keyup)="changeLabel($event.target.value)" #label>
+
+                </textarea>
+
+                            <textarea *ngIf="!editingItem.newElement"
+                                      rows="3"
+                                      type="text"
+                                      class="form-control"
+                                      [(ngModel)]="checkBox.label"
+                                      #label formControlName="label">
+
+              </textarea>
+
+                            <p style="color: red"
+                               *ngIf="(saveButton || checkBoxForm.controls['label'].touched) && checkBox.label == '' ">
+                                {{data.errorMessages.labelRequired}}
+                            </p>
+
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row form-group">
+                        <div class="col-md-12 text-left">
+                            <label class="control-label" *ngIf="data != null">{{data.formQuestion.questionHelpText}}
+                            </label>
+                        </div>
+                        <div class="col-md-12 text-left">
+                            <input *ngIf="editingItem.newElement" type="text" class="form-control"
+                                   [placeholder]="editingItem.item.helpText" formControlName="helpText"
+                                   (keyup)="changeHelpText($event.target.value)" #helpText>
+                            <input *ngIf="!editingItem.newElement" type="text" class="form-control"
+                                   [(ngModel)]="checkBox.helpText"
+                                   #helpText formControlName="helpText">
+                        </div>
+                    </div>
+
+
+                    <hr>
+
+                    <div class="row form-group">
+                        <div class="col-md-4 text-left">
+                            <label class="control-label default font-size-15"
+                                   *ngIf="data != null">{{data.formQuestion.questionRequired}}</label>
+                        </div>
+                        <div class="col-md-8 text-left">
+                            <div class="col-md-6 col-md-offset-3">
+                                <input type="checkbox"
+                                       formControlName="required"
+                                       [(ngModel)]="checkBox.required"
+                                       #required>
+
+                                <!--<input type="checkbox" class="form-control" formControlName="required"-->
+                                <!--[(ngModel)]="checkBox.required" #required >-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row form-group">
+                        <div class="col-md-4 text-left">
+                            <label class="control-label default font-size-15 mt-2"
+                                   *ngIf="data != null">{{data.formQuestion.questionOption}}</label>
+                        </div>
+                        <div class="col-md-6 text-left">
+                            <!--<button class="btn btn-block addButton" (click)="createNewOption()"-->
+                            <!--*ngIf="data != null">{{data.formQuestion.addOption}}-->
+                            <!--</button>-->
+                            <button class="btn btn-sm btn-outline-secondary"
+                                    (click)="createNewOption()"
+                                    *ngIf="data != null">
+                                <i class="material-icons "></i>&nbsp;&nbsp;
+                                <span>{{data.formQuestion.addOption}}</span>
+                            </button>
+
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-12">
+                            <br>
+                        </div>
+
+                        <div *ngFor="let ch of opt; let  i = index" class="w-100">
+                            <div class="col-md-12 mb-3">
+                                <div class="w-100">
+                                    <input *ngIf="!editingItem.newElement"
+                                           type="text" class="form-control w-100"
+                                           [value]="ch.caption"
+                                           (change)="onChangeOption($event.target.value, i)"
+                                           name="value" #value>
+
+                                    <input *ngIf="editingItem.newElement"
+                                           type="text"
+                                           class="form-control w-100"
+                                           [placeholder]="ch.caption"
+                                           (change)="onChangeOption($event.target.value, i)"
+                                           name="value" #value>
+
+                                    <img src="../../../../../../../../assets/images/close.png"
+                                         class="btn-remove-img"
+                                         (click)="deleteOption(i)">
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-12 text-left" *ngIf="!checkOptions() && saveButton">
+                            <p style="color: red">
+                                {{data.errorMessages.optionRequired}}
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <hr>
+
+
+                    <div class="row form-group">
+                        <div class="col-md-12 text-left">
+                            <label class="control-label" *ngIf="data != null">{{data.formQuestion.minItemSelectable}}
+                                <span style="color: red">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-12 text-left">
+                            <!--                     (change)="changeMinOptionsNumber($event.target.value)"-->
+                            <input type="number"
+                                   min="0"
+                                   class="form-control"
+                                                 [max]="opt.length"
+                                   [placeholder]="checkBox.minItemSelectable"
+                                   [(ngModel)]="checkBox.minItemSelectable"
+                                   [min]="1"
+                                   #min formControlName="minItemSelectable">
+                            <p style="color: red"
+                               *ngIf="(saveButton || checkBoxForm.controls['minItemSelectable'].touched) && !checkBoxForm.controls['minItemSelectable'].valid">
+                                {{data.errorMessages.minItemSelectedRequired}}
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <hr>
+
+
+                    <div class="row form-group">
+                        <div class="col-md-12 text-left">
+                            <label class="control-label" *ngIf="data != null">{{data.formQuestion.maxItemSelectable}}
+                                <span style="color: red">*</span>
+
+                            </label>
+                        </div>
+                        <div class="col-md-12 text-left">
+                            <!--                     (change)="changeMaxOptionsNumber($event.target.value)"-->
+                            <input type="number"
+                                   min="1"
+                                   class="form-control"
+                                   [placeholder]="checkBox.maxItemSelectable"
+                                   [(ngModel)]="checkBox.maxItemSelectable"
+                                   #max [max]="opt.length"
+                                   [min]="1"
+                                   formControlName="maxItemSelectable">
+                            <p style="color: red"
+                               *ngIf="(saveButton || checkBoxForm.controls['maxItemSelectable'].touched) && !checkBoxForm.controls['maxItemSelectable'].valid ">
+                                {{data.errorMessages.maxItemSelectedRequired}}
+                            </p>
+                            <p style="color: red" *ngIf="checkBox.maxItemSelectable == 0 && checkBox.required">
+                                {{data.errorMessages.itemRequiredMaxZero}}
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <hr>
+
+                    <div class="row form-group">
+                        <div class="w-100">
+                            <button class="btn btn-sm btn-cancel-back"
+                                    style=" margin-top: 10px!important;"
+                                    (click)="close()"
+                                    *ngIf="data != null">
+                                <span>{{data.public.close}}</span>
+                            </button>
+                            <button class="btn btn-sm btn-action" style="margin-top: 10px!important;"
+                                    (click)="save()"
+                                    *ngIf="data != null">
+                                <span>{{data.public.save}}</span>
+                            </button>
+                        </div>
+                    </div>
+
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-body backShadow">
+                <div class="col-md-12 text-right" *ngIf="data != null">
+                    <h4>{{data.formQuestion.questionTitle}}:</h4>
+                    <span>{{checkBox.label}}</span>
+                    <span style="color: red" *ngIf="checkBox.required">*</span>
+                    <a class="toolTipColor" [title]="checkBox.helpText">
+                        <i class="fa fa-info-circle"></i>
+                    </a>
+                </div>
+
+                <!--questionTitle image-->
+                <!--<div class="col-md-12">-->
+                <!--<br>-->
+                <!--<div class="col-md-6">-->
+                <!--<input type="file" accept="image/*" id="image" class="upload" (change)="settingQuestionImage($event)"/>-->
+                <!--</div>-->
+                <!--&lt;!&ndash;<div class="col-md-6" *ngIf="checkBox.picture.imageStatus != MyImageStatus.WITHOUT_IMAGE">&ndash;&gt;-->
+                <!--&lt;!&ndash;<img style="width:200px; border-radius: 7px" [attr.src]="checkBox.picture.imageData">&ndash;&gt;-->
+                <!--&lt;!&ndash;<i class="fa fa-times" aria-hidden="true" style="color: red " (click)="deleteQuestionImage()"></i>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--</div>-->
+                <div class="col-md-12">
+                    <hr>
+                </div>
+
+                <!--options-->
+                <div class="col-md-12 text-right">
+                    <h4 *ngIf="data != null">{{data.formQuestion.questionOption}}</h4>
+                </div>
+
+                <div *ngFor="let ch of opt; let  i = index" class="mb-2">
+                    <div class="col-md-12 text-right">
+                        <span>{{ch.caption}}</span>
+                    </div>
+                    <!--<div class="col-md-12">-->
+                    <!--<div class="col-md-6 mb-2">-->
+                    <!--<input type="file" accept="image/*" id="imageOption-{{i}}" class="upload"-->
+                    <!--(change)="settingOptionImage($event, i)"/>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-6" *ngIf="ch.imageStatus != MyImageStatus.WITHOUT_IMAGE">-->
+                    <!--<img style="width:200px; border-radius: 7px" [attr.src]="ch.imageData">-->
+                    <!--<i class="fa fa-times" aria-hidden="true" style="color: red " (click)="deleteOptionImage(i)"></i>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

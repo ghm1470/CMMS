@@ -1,0 +1,38 @@
+<div class="table-responsive">
+<table class="table border rounded" style="width: 100%; text-align: center;" id="{{config.id}}">
+  <thead>
+  <tr>
+    <!--(click)="trySort(i)"-->
+    <ng-container *ngFor="let column of config.columns;let i=index">
+    <th style="text-align: center;font-style: normal;padding: 0.4rem;"  *ngIf="column?.validationForShow === undefined">
+      <span [ngClass]="{'sortable': config && (column.sort !== undefined)}">{{column?.title}}</span>
+      <!--<i *ngIf="config && (column.sort !== undefined)" class="glyphicon" [ngClass]="{'glyphicon-chevron-down':-->
+       <!--column.sort === 'desc', 'glyphicon-chevron-up': column.sort === 'asc', 'glyphicon-sort': column.sort === ''}"></i>-->
+    </th>
+    <th style="text-align: center;font-style: normal;padding: 0.4rem;"   *ngIf="column?.validationForShow !== undefined && column?.validationForShow">
+      <span [ngClass]="{'sortable': config && (column.sort !== undefined)}">{{column?.title}}</span>
+      <!--<i *ngIf="config && (column.sort !== undefined)" class="glyphicon" [ngClass]="{'glyphicon-chevron-down':-->
+       <!--column.sort === 'desc', 'glyphicon-chevron-up': column.sort === 'asc', 'glyphicon-sort': column.sort === ''}"></i>-->
+    </th>
+    </ng-container>
+  </tr>
+  </thead>
+  <tbody>
+  <!--<tr class="table-bordered">-->
+    <!--<td *ngFor="let column of config.columns" >-->
+      <!--<input *ngIf="config && column.filtering" (keyup)="filterChanged($event)" style="width: 80%;color: black;text-align: center;background-color: #ddd" placeholder="جستجو" [(ngModel)]="column.filtering.filterString" type="text">-->
+    <!--</td>-->
+  <!--</tr>-->
+  <ng-template ngFor let-row [ngForOf]="config.rows" let-i="index">
+    <ng-container [ngTemplateOutletContext]="expanderTemplate?
+                { row:row , i:i , isRowExpanded:isRowExpanded , toggleRow:toggleRow }:
+                { row:row , i:i}"
+      [ngTemplateOutlet]="rowTemplate"></ng-container>
+    <ng-container *ngIf="expanderTemplate"
+                  [ngTemplateOutletContext]="{ row:row , i:i , isRowExpanded:isRowExpanded , toggleRow:toggleRow }"
+                  [ngTemplateOutlet]="expanderTemplate"
+    ></ng-container>
+  </ng-template>
+  </tbody>
+</table>
+</div>

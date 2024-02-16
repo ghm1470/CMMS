@@ -1,0 +1,58 @@
+<div class="col-md-10 col-md-offset-1 backShadow" style="margin-right: -40px">
+  <div>
+    <br>
+
+
+        <form [formGroup]="finalForm">
+          <div class="row">
+          <div class="col-md-12 text-right" style="margin-top: 20px">
+            <input type="checkbox" name="rules1" style="margin-top: 5px; margin-right: 20px" (click)="checkedAR1($event)" (change)="sendAR()">
+            <span  style="font-size: 15px; margin-right: 5px" >بعد از استفاده از فرم امکان ویرایش  و یا حذف آن وجود ندارد.</span>
+          </div>
+          </div>
+<!--          طبق باگ گزارش شده هر دو شرط با هم ادقام بشن -->
+<!--          <div class="row">-->
+<!--          <div class="col-md-12 text-right" style="margin-top: 20px">-->
+<!--           <input type="checkbox" name="rules2"  style="margin-top: 5px; margin-right: 20px" (click)="checkedAR2($event)" (change)="sendAR()">-->
+<!--            <span style="font-size: 15px; margin-right: 5px">پس از استفاده از فرم امکان حذف ان وجود ندارد</span>-->
+<!--          </div>-->
+<!--          </div>-->
+            <br>
+            <br>
+
+          <!--<div class="col-md-12 text-left" style="padding: 0px;">-->
+            <!--<div class="col-md-4">-->
+            <!--<span *ngIf="data != null">{{data.formSubmit.responder}}: &nbsp;</span>-->
+            <!--<input style="margin-top: 10px" class="form-control" type="number" min="1" [(ngModel)]="form.totalResponder"-->
+                   <!--(change)="responderChange($event.target.value)" formControlName="responder">-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--<div class="col-md-12">-->
+            <!--<br>-->
+            <!--<br>-->
+          <!--</div>-->
+          <!--<div style="padding: 0px;" class="col-md-12 text-right" *ngIf="data != null">-->
+            <!--<input type="checkbox" id="checkOk" name="checkOk" formControlName="checkOk"-->
+                          <!--[(ngModel)]="checkOk">-->
+
+            <!--&lt;!&ndash;<input type="checkbox" id="checkOk" name="checkOk" formControlName="checkOk"&ndash;&gt;-->
+                   <!--&lt;!&ndash;(change)="checkOk=!checkOk">&ndash;&gt;-->
+            <!--<span>&nbsp;{{data.formSubmit.noteThree}}</span>-->
+          <!--</div>-->
+        </form>
+      <div class="col-md-12">
+        <!--<button class="btn btn-block addButton" type="submit" *ngIf="data != null" (click)="register()"-->
+        <!--[disabled]="!checkOk && !MyToolkit.checkIsNullOrUndefined(form.totalResponder)">{{data.formSubmit.submitButton}}-->
+        <!--</button>-->
+        <!--<button mat-raised-button type="submit"-->
+                <!--class="pull-left"-->
+                <!--[disabled]="actionButton"-->
+                <!--style="background-color: #007bff;color: #ffffff; margin-top: 30px!important;"-->
+                <!--(click)="register()" *ngIf="data != null">-->
+          <!--<span class="hidden-xs hidden-sm">{{data.formSubmit.submitButton}}</span>-->
+        <!--</button>-->
+      </div>
+
+    </div>
+  </div>
+

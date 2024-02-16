@@ -1,0 +1,157 @@
+
+<div id="taskCreate" class="carousel slide" data-interval="false" >
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-md-6 col-8 col-sm-6 card-title">
+              <ng-container *ngIf="mode === actionMode.ADD">
+                <i class="fa fa-plus"></i>&nbsp;
+                افزودن  کار
+              </ng-container>
+              <ng-container *ngIf="mode === actionMode.EDIT">
+                <i class="fa fa-edit"></i>&nbsp;
+                ویرایش  کار</ng-container>
+
+              <ng-container *ngIf="mode === actionMode.VIEW">
+                <i class="fa fa-edit"></i>&nbsp;
+                مشاهده  کار</ng-container>
+            </div>
+            <div class="col-md-6 col-4 col-sm-6 text-left" *ngIf="from!=='modal'">
+              <button (click)="cancel()"
+                      class="btn btn-cancel-back btn-sm">
+                بازگشت
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <form #taskGroupForm="ngForm">
+          <div class="card-body card-body-content">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 form-group required col-sm-12">
+                  <label class="for-label"> عنوان  کار:</label>
+                  <label  *ngIf="mode!==actionMode.VIEW" style="color: red">*</label> &nbsp;&nbsp;   <ng-container *ngIf="mode===actionMode.VIEW">
+                  <strong>{{taskGroup.name}}</strong>
+                </ng-container>
+                  <div class="input-group input-group-sm">
+
+
+<!--                           nbvPattern="{{myPattern.TITLEFa}}"-->
+                    <input type="text" placeholder="عنوان  کار"
+                           *ngIf="mode!==actionMode.VIEW"
+                           [(ngModel)]="taskGroup.name"
+                           class="form-control" maxlength="80" name="name"
+                           nbvRequired #name="ngModel"
+                           nbvMinlength="1"
+                           (change)="taskGroup.name = taskGroup.name.trim()"
+                           nbvPatternMsgHtml="عنوان باید به صورت حروف و اعداد باشد."
+                           [class.is-valid]="!(name?.errors?.nbvRequired || name?.errors?.nbvMinlength || name?.errors?.nbvPattern)"
+                           [class.is-invalid]="(name?.errors?.nbvRequired || name?.errors?.nbvMinlength || name?.errors?.nbvPattern) && (name.touched || doSave)"
+                           dest="nameValidation">
+                  </div>
+                  <div id="nameValidation"></div>
+                </div>
+
+                <div class="col-md-6 form-group required col-sm-12">
+                  <label class="for-label"> کد  کار:</label>
+<!--                  <label style="color: red" *ngIf="mode!==actionMode.VIEW">*</label> &nbsp;&nbsp;-->
+                  <ng-container *ngIf="mode===actionMode.VIEW">
+                    <strong>{{taskGroup.code}}</strong>
+                  </ng-container>
+                  <div class="input-group input-group-sm">
+
+<!--                           [class.is-valid]="!(code?.errors?.nbvRequired || code?.errors?.nbvPattern)"-->
+                    <input type="text" placeholder="کد  کار"
+                           *ngIf="mode!==actionMode.VIEW"
+                           [(ngModel)]="taskGroup.code"
+                           class="form-control" minlength="1" maxlength="80" name="code"
+                            #code="ngModel" (change)="changeTaskGroupCode()"
+                           nbvPattern="{{myPattern.EnNumberAndAlphabetic}}"
+                           nbvPatternMsgHtml="کد  کار باید به صورت کاراکتر های انگلیسی وارد گردد."
+                           [class.is-invalid]="(code?.errors?.nbvRequired || code?.errors?.nbvPattern) && (code.touched || doSave)"
+                           dest="taskGroupCodeValidation">
+                  </div>
+                  <div id="taskGroupCodeValidation"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-left"  >
+            <button class="btn btn-sm btn-action" type="button" *ngIf="mode!==actionMode.VIEW" [disabled]="uniqCode" (click)="action(taskGroupForm)">
+              <span *ngIf="mode === actionMode.ADD">ذخیره</span>
+              <span *ngIf="mode === actionMode.EDIT">ویرایش</span>
+            </button>
+            <ng-container *ngIf="mode === actionMode.EDIT ">
+              <button class="btn btn-warning btn-sm" type="button" style="margin: 0 5px"  (click)="next()" >
+                مرحله بعد - تکمیل اطلاعات
+              </button>
+            </ng-container>
+            <ng-container *ngIf=" mode ==actionMode.VIEW">
+              <button class="btn btn-warning btn-sm" type="button" style="margin: 0 5px"  (click)="next()" >
+                مرحله بعد - مشاهده اطلاعات
+              </button>
+            </ng-container>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-md-6 col-6 col-sm-6 card-title">
+تکمیل اطلاعات  کار  (
+            {{taskGroup.name}}
+            )</div>
+            <div class="col-md-6 col-6 col-sm-6 text-left">
+              <button (click)="prev()"
+                      class="btn btn-cancel-back btn-sm">
+                بازگشت به مرحله قبل
+              </button>
+            </div>
+          </div>
+        </div>
+          <div class="card-body card-body-content">
+            <ul class="nav nav-tabs p-0" >
+              <li class="nav-item" >
+                <a class="nav-link active"    data-toggle="tab" href="#home" id="inventory" style="font-size: 12px" >لیست کارها</a>
+              </li>
+              <li class="nav-item" >
+                <a class="nav-link "  (click)="showFileDocument = true "  data-toggle="tab" href="#boms"  style="font-size: 12px">بارگذاری مستندات</a>
+              </li>
+            </ul>
+            <!--================================================================================>-->
+            <div class="tab-content">
+              <div class="tab-pane fade show active" id="home" >
+                <div class="card">
+                  <div class="card-body card-body-content">
+                    <app-list-ts (messageEvent)="changeTaskList($event)"
+                                 [mode]="mode"
+                                 [taskGroupId]="taskGroup.id"
+                                 [taskList]="tasks"></app-list-ts>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="boms">
+                <div class="card">
+                  <div class="card-body card-body-content">
+                  <app-document
+                    *ngIf="showFileDocument"
+                    [extraId]="taskGroup.id"
+                    [mode]="mode">
+                  </app-document>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+

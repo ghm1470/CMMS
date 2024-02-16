@@ -1,0 +1,24 @@
+.timer {
+  //margin: 15px 3px 0 0;
+  text-align: center !important;
+
+  .dots {
+    display: flex;
+    align-items: center;
+    padding: 15px 15px 0;
+  }
+
+  i {
+    //margin-right: 13px;
+    cursor: pointer;
+  }
+
+  & > div > :not(.dots) {
+    width: 44px;
+  }
+
+}
+
+::ng-deep .ng-select .ng-select-container {
+  height: auto !important;
+}

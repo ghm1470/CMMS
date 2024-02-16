@@ -1,0 +1,1665 @@
+<ng-container *ngIf="!roleList.Home_see">
+    <div class=" justify-content-center row" style="padding: 0.25rem!important;">
+        <div class="logo">
+        </div>
+        <b style="    font-size: 27px;
+    margin-top: 6%;">
+            <div class=" justify-content-center row" style="padding: 0.25rem!important;margin-bottom: 10px">
+
+                <img src="assets/images/logo/hamiMain.png" height="200" width="248" class="img-rounded">
+            </div>
+            <div class=" justify-content-center row" style="padding: 0.25rem!important;margin-bottom: 10px">
+                به سامانه نگهداری و تعمیرات حــامــی خــوش آمــدیــد
+            </div>
+        </b>
+    </div>
+</ng-container>
+<ng-container *ngIf="roleList.Home_see">
+
+
+    <div class="card p-0" style="border-radius: unset">
+        <div class="card-header" style="padding: 0.25rem!important;background-color: white">
+            <button class="btn btn-sm btn-outline-light" style="float: left" (click)="openModal(selectWidgetModalId)">
+                <i class="fas fa-cog" style="color: #737c95"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-light" style="float: left ; margin: 0 5px">
+                <i class="fas fa-sync-alt" style="color: #737c95"></i>
+            </button>
+        </div>
+        <div class="card-body" style="background-color: rgba(0,0,0,.03)">
+            <div class="row" style="margin-top: -20px">
+                <div class="col-md-8 report-panel">
+                    <div class="row text-center report-side">
+                        <ng-container *ngFor="let item of userWidget ; let i = index">
+                            <ng-container [ngSwitch]="item">
+
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGHEST_PRIORITY_PLANNED_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_HIGHEST_PRIORITY_PLANNED_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardHighestPriorityPlannedWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetHighestPriorityPlannedWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_HIGHEST_PRIORITY_PLANNED_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: rgb(91 91 91);padding:20px"
+                                               id="MANAGER_DASHBOARD_HIGHEST_PRIORITY_PLANNED_WORK_ORDER"></p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGH_PRIORITY_PLANNED_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_HIGH_PRIORITY_PLANNED_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardHighPriorityPlannedWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetHighPriorityPlannedWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_HIGH_PRIORITY_PLANNED_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: orange;padding:20px"
+                                               id="MANAGER_DASHBOARD_HIGH_PRIORITY_PLANNED_WORK_ORDER"></p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_AVERAGE_PRIORITY_PLANNED_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_AVERAGE_PRIORITY_PLANNED_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardAveragePriorityPlannedWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetAveragePriorityPlannedWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_AVERAGE_PRIORITY_PLANNED_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: rgb(91 91 91);padding:20px"
+                                               id="MANAGER_DASHBOARD_AVERAGE_PRIORITY_PLANNED_WORK_ORDER"></p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_LOW_PRIORITY_PLANNED_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_LOW_PRIORITY_PLANNED_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardLowPriorityPlannedWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetLowPriorityPlannedWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_LOW_PRIORITY_PLANNED_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: orange;padding:20px"
+                                               id="MANAGER_DASHBOARD_LOW_PRIORITY_PLANNED_WORK_ORDER"></p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_LOWEST_PRIORITY_PLANNED_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_LOWEST_PRIORITY_PLANNED_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardLowestPriorityPlannedWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetLowestPriorityPlannedWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_LOWEST_PRIORITY_PLANNED_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: rgb(91 91 91);padding:20px"
+                                               id="MANAGER_DASHBOARD_LOWEST_PRIORITY_PLANNED_WORK_ORDER">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_OPEN_PLANNED_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_OPEN_PLANNED_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardOpenPlannedWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetOpenPlannedWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_OPEN_PLANNED_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: orange;padding:20px"
+                                               id="MANAGER_DASHBOARD_OPEN_PLANNED_WORK_ORDER">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_CLOSED_PLANNED_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_CLOSED_PLANNED_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardClosedPlannedWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetClosedPlannedWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_CLOSED_PLANNED_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: orange;padding:20px"
+                                               id="MANAGER_DASHBOARD_CLOSED_PLANNED_WORK_ORDER">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_PENDING_PLANNED_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_PENDING_PLANNED_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardPendingPlannedWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetPendingPlannedWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_PENDING_PLANNED_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: rgb(91 91 91);padding:20px"
+                                               id="MANAGER_DASHBOARD_PENDING_PLANNED_WORK_ORDER">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_DRAFT_PLANNED_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_DRAFT_PLANNED_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardDraftPlannedWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetDraftPlannedWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_DRAFT_PLANNED_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: orange;padding:20px"
+                                               id="MANAGER_DASHBOARD_DRAFT_PLANNED_WORK_ORDER">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_OVER_DUE_PLANNED_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_OVER_DUE_PLANNED_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardOverDuePlannedWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetOverDuePlannedWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_OVER_DUE_PLANNED_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: orange;padding:20px"
+                                               id="MANAGER_DASHBOARD_OVER_DUE_PLANNED_WORK_ORDER">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_PLANNED_WORK_ORDER_RATIO">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_PLANNED_WORK_ORDER_RATIO}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardPlannedWorkOrderRatioTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <!--                    <i class="fa fa-eye" title="مشاهده اطلاعات"></i>-->
+                                            <ng-container>
+                                                <div class="flex-wrapper">
+                                                    <div class="single-chart">
+                                                        <svg viewBox="0 0 36 36" class="circular-chart orange">
+                                                            <path class="circle-bg"
+                                                                  d="M18 2.0845
+                              a 15.9155 15.9155 0 0 1 0 31.831
+                              a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                            />
+                                                            <path class="circle"
+                                                                  id="MANAGER_DASHBOARD_PLANNED_WORK_ORDER_RATIO"
+                                                                  d="M18 2.0845
+                              a 15.9155 15.9155 0 0 1 0 31.831
+                              a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                            />
+                                                            <text x="18" y="20.35" class="percentage"
+                                                                  id="TMANAGER_DASHBOARD_PLANNED_WORK_ORDER_RATIO">۵
+                                                                از ۱۰
+                                                            </text>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGHEST_PRIORITY_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_HIGHEST_PRIORITY_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardHighestPriorityWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetHighestPriorityWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_HIGHEST_PRIORITY_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: orange;padding:20px"
+                                               id="MANAGER_DASHBOARD_HIGHEST_PRIORITY_WORK_ORDER">
+
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGH_PRIORITY_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_HIGH_PRIORITY_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardHighPriorityWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetHighPriorityWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_HIGH_PRIORITY_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: orange;padding:20px"
+                                               id="MANAGER_DASHBOARD_HIGH_PRIORITY_WORK_ORDER">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_AVERAGE_PRIORITY_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_AVERAGE_PRIORITY_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardAveragePriorityWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetAveragePriorityWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_AVERAGE_PRIORITY_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: rgb(91 91 91);padding:20px"
+                                               id="MANAGER_DASHBOARD_AVERAGE_PRIORITY_WORK_ORDER"></p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_LOW_PRIORITY_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_LOW_PRIORITY_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardLowPriorityWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetLowPriorityWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_LOW_PRIORITY_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: rgb(118, 45, 44);padding:20px"
+                                               id="MANAGER_DASHBOARD_LOW_PRIORITY_WORK_ORDER">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_LOWEST_PRIORITY_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_LOWEST_PRIORITY_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardLowestPriorityWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetLowestPriorityWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_LOWEST_PRIORITY_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: orange;padding:20px"
+                                               id="MANAGER_DASHBOARD_LOWEST_PRIORITY_WORK_ORDER">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_OPEN_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_OPEN_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardOpenWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetOpenWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_OPEN_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: rgb(118, 45, 44);padding:20px"
+                                               id="MANAGER_DASHBOARD_OPEN_WORK_ORDER">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_CLOSED_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_CLOSED_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardClosedWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetClosedWorkOrder(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_CLOSED_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: orange;padding:20px"
+                                               id="MANAGER_DASHBOARD_CLOSED_WORK_ORDER">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_PENDING_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_PENDING_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardPendingWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetPendingWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_PENDING_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: rgb(118, 45, 44);padding:20px"
+                                               id="MANAGER_DASHBOARD_PENDING_WORK_ORDER">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_DRAFT_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_DRAFT_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardDraftWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetDraftWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_DRAFT_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: orange;padding:20px"
+                                               id="MANAGER_DASHBOARD_DRAFT_WORK_ORDER">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                        *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_OVER_DUE_WORK_ORDER">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_OVER_DUE_WORK_ORDER}}
+                                            (
+                                            {{toolkit.Common.En2Fa(managerDashboardAccessAssociatedMonth.managerDashboardOverDueWorkOrderTime)}}
+                                            ماه اخیر
+                                            )
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <!--                    <i class="fa fa-clock" title="انتخاب بازه زمانی"></i>-->
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="managerDashboardGetOverDueWorkOrders(managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_OVER_DUE_WORK_ORDER)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: orange;padding:20px"
+                                               id="MANAGER_DASHBOARD_OVER_DUE_WORK_ORDER">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngSwitchCase="managerDashboardAccessEnum.GENERAL_ACTIVE_ASSET">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.GENERAL_ACTIVE_ASSET}}
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="getGeneralOnlineAssets(managerDashboardAccessEnumFATitle.GENERAL_ACTIVE_ASSET)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: rgb(118, 45, 44);padding:20px"
+                                               id="GENERAL_ACTIVE_ASSET">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngSwitchCase="managerDashboardAccessEnum.GENERAL_IN_ACTIVE_ASSET">
+                                    <div class="card card-widget">
+                                        <div class="card-header">
+                                            {{managerDashboardAccessEnumFATitle.GENERAL_IN_ACTIVE_ASSET}}
+                                        </div>
+                                        <div class="card-body vertical-align-center" style="height: 140px">
+                                            <i class="fa fa-eye" title="مشاهده اطلاعات"
+                                               (click)="getGeneralOfflineAssets(managerDashboardAccessEnumFATitle.GENERAL_IN_ACTIVE_ASSET)"></i>
+                                            <p class="text-center "
+                                               style="font-size: 45px!important;color: orange;padding:20px"
+                                               id="GENERAL_IN_ACTIVE_ASSET">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="col-md-4 work-order p-0">
+                    <ul class="nav nav-tabs p-0" id="myTab" role="tablist" style="margin: 5px">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" data-toggle="tab" href="#week" role="tab" aria-controls="week"
+                               (click)="managerDashboardCurrentWeekWorkOrdersForBar()"
+                               aria-selected="true">
+                                دستورکارتصادفی </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-toggle="tab" href="#weekPlanned" role="tab" aria-controls="week"
+                               (click)="managerDashboardCurrentPlannedWorkOrdersForBar()"
+                               aria-selected="true">
+                                دستورکاربرنامه ریزی شده </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-toggle="tab" href="#Pending" role="tab" aria-controls="Pending"
+                               (click)="managerDashboardPendingWorkOrdersForBar()"
+                               aria-selected="false">
+                                معلق
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-toggle="tab" href="#Late" role="tab" aria-controls="contact"
+                               aria-selected="false"
+                               (click)="managerDashboardLateWorkOrdersForBar()">
+                                دیرکرد
+                            </a>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-toggle="tab" href="#unscheduled" role="tab" aria-controls="contact"
+                               aria-selected="false"
+                               (click)="managerDashboardUnscheduledWorkOrdersForBar()">
+                                بدون زمانبندی
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="week" role="tabpanel" aria-labelledby="home-tab"
+                             style="height: calc(100vh - 190px)">
+
+
+                            <ng-scrollbar class="scroll-frame"
+                                          barClass="scrollbar"
+                                          visibility="hover"
+                                          thumbClass="scroll-thumb">
+                                <div class="work-item text-center"
+                                     style="margin-top: 10px;padding: 5px!important;border: none;height: 4vh ;min-height: 30px;background-color: aliceblue;cursor: auto"
+                                     *ngIf="currentWorkOrder.length > 0">
+                                    <strong style="font-size: 1.7vh">
+                                        دستورکارهای تصادفی هفته جاری
+                                    </strong>
+                                </div>
+                                <ng-container *ngFor="let item of currentWorkOrder">
+                                    <div class=" work-item " [routerLink]="'/panel/workOrder/action'"
+                                         [queryParams]="{mode:'VIEW' , workOrderId:item.relatedId}">
+                                        <p [ngStyle]="item.late && {'color': 'red'}">{{item.title}}</p>
+                                        <p>
+                                            <span>{{item.code}}</span>
+                                            <span style="float: left;color: #8a8f94">
+<!--               {{item.requiredCompletionDate| convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                                                {{myMoment.convertIsoToJDate(item?.requiredCompletionDate) | perNumber}}
+
+             </span>
+                                        </p>
+                                    </div>
+                                </ng-container>
+
+
+                                <div class="list-group-item text-center" style="margin-top: 10px;padding: 5px"
+                                     *ngIf="currentWorkOrder.length === 0 && !currentWorkOrderLoader">
+                                    <strong style="font-size: 1.7vh">
+                                        برای هفته جاری موردی یافت نشد
+                                    </strong>
+                                </div>
+
+                                <div class="list-group-item text-center" style="margin-top: 10px;padding: 5px"
+                                     *ngIf="currentWorkOrderLoader">
+                                    <i class="fas fa-spin fa-spinner fa-2x"></i>
+                                </div>
+
+                            </ng-scrollbar>
+                        </div>
+                        <div class="tab-pane fade" id="weekPlanned" role="tabpanel" aria-labelledby="home-tab"
+                             style="height: calc(100vh - 190px)">
+
+                            <ng-scrollbar class="scroll-frame"
+                                          barClass="scrollbar"
+                                          visibility="hover"
+                                          thumbClass="scroll-thumb">
+                                <div class="work-item text-center"
+                                     style="margin-top: 10px;padding: 5px!important;border: none;height: 4vh ;min-height: 30px;background-color: aliceblue;cursor: auto"
+                                     *ngIf="currentPlanedWorkOrder.length > 0">
+                                    <strong style="font-size: 1.7vh">
+                                        دستورکارهای برنامه ریزی شده هفته جاری
+                                    </strong>
+                                </div>
+                                <ng-container *ngFor="let item of currentPlanedWorkOrder">
+                                    <div class=" work-item " [routerLink]="'/panel/workOrder/action'"
+                                         [queryParams]="{mode:'VIEW' , workOrderId:item.relatedId}">
+                                        <p>{{item.title}}</p>
+                                        <p>
+                                            <span>{{item.code}}</span>
+                                            <span style="float: left;color: #8a8f94">
+<!--               {{item.requiredCompletionDate| convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                                                {{myMoment.convertIsoToJDate(item?.requiredCompletionDate) | perNumber}}
+             </span>
+                                        </p>
+                                    </div>
+                                </ng-container>
+
+                                <div class="list-group-item text-center" style="margin-top: 10px;padding: 5px"
+                                     *ngIf="currentPlanedWorkOrder.length === 0 && !currentPlanedWorkOrderLoader">
+                                    <strong style="font-size: 1.7vh">
+                                        برای هفته جاری موردی یافت نشد </strong>
+                                </div>
+
+                                <div class="list-group-item text-center" style="margin-top: 10px;padding: 5px"
+                                     *ngIf="currentPlanedWorkOrderLoader">
+                                    <i class="fas fa-spin fa-spinner fa-2x"></i>
+                                </div>
+
+                            </ng-scrollbar>
+                        </div>
+                        <div class="tab-pane fade" id="Pending" role="tabpanel" aria-labelledby="contact-tab"
+                             style="height: calc(100vh - 190px)">
+                            <ng-scrollbar class="scroll-frame"
+                                          barClass="scrollbar"
+                                          visibility="hover"
+                                          thumbClass="scroll-thumb">
+                                <ng-container *ngFor="let item of pendingWorkOrder">
+                                    <div class=" work-item " [ngStyle]="item.late && {'borderRightColor': 'red'}"
+                                         [routerLink]="'/panel/workOrder/action'"
+                                         [queryParams]="{mode:'VIEW' , workOrderId:item.relatedId}">
+                                        <p [ngStyle]="item.late && {'color': 'red'}">{{item.title}}</p>
+                                        <p>
+                                            <span [ngStyle]="item.late && {'color': 'red'}">{{item.code}}</span>
+                                            <span style="float: left;color: #8a8f94">
+<!--               {{item.requiredCompletionDate| convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                                                {{myMoment.convertIsoToJDate(item?.requiredCompletionDate) | perNumber}}
+
+             </span>
+                                        </p>
+                                    </div>
+                                </ng-container>
+
+                                <div class="list-group-item text-center" style="margin-top: 10px;padding: 5px"
+                                     *ngIf="pendingWorkOrder.length === 0 && !pendingWorkOrderLoader ">
+                                    <strong style="font-size: 1.7vh">
+                                        برای هفته جاری موردی یافت نشد </strong>
+                                </div>
+                                <div class="list-group-item text-center" style="margin-top: 10px;padding: 5px"
+                                     *ngIf="pendingWorkOrderLoader">
+                                    <i class="fas fa-spin fa-spinner fa-2x"></i>
+                                </div>
+                            </ng-scrollbar>
+                        </div>
+                        <div class="tab-pane fade" id="Late" role="tabpanel" aria-labelledby="contact-tab"
+                             style="height: calc(100vh - 190px)">
+                            <ng-scrollbar class="scroll-frame"
+                                          barClass="scrollbar"
+                                          visibility="hover"
+                                          thumbClass="scroll-thumb">
+                                <ng-container *ngFor="let item of lateWorkOrder">
+                                    <div class=" work-item " style="border-right-color:red "
+                                         [routerLink]="'/panel/workOrder/action'"
+                                         [queryParams]="{mode:'VIEW' , workOrderId:item.relatedId}">
+                                        <p style="color:red ">{{item.title}}</p>
+                                        <p>
+                                            <span style="color:red ">{{item.code}}</span>
+                                            <span style="float: left;color: #8a8f94">
+<!--               {{item.requiredCompletionDate| convertToJaliliDate:dateViewMode.YEAR_MONTH_DAY | perNumber}}-->
+                                                {{myMoment.convertIsoToJDate(item?.requiredCompletionDate) | perNumber}}
+             </span>
+                                        </p>
+                                    </div>
+                                </ng-container>
+
+                                <div class="list-group-item text-center" style="margin-top: 10px;padding: 5px"
+                                     *ngIf="lateWorkOrder.length === 0 && !lateWorkOrderLoader ">
+                                    <strong style="font-size: 1.7vh">
+                                        برای هفته جاری موردی یافت نشد </strong>
+                                </div>
+
+                                <div class="list-group-item text-center" style="margin-top: 10px;padding: 5px"
+                                     *ngIf="lateWorkOrderLoader">
+                                    <i class="fas fa-spin fa-spinner fa-2x"></i>
+                                </div>
+                            </ng-scrollbar>
+                        </div>
+                        <div class="tab-pane fade" id="unscheduled" role="tabpanel" aria-labelledby="contact-tab"
+                             style="height: calc(100vh - 190px)">
+                            <ng-scrollbar class="scroll-frame"
+                                          barClass="scrollbar"
+                                          visibility="hover"
+                                          thumbClass="scroll-thumb">
+                                <ng-container *ngFor="let item of unscheduledWorkOrder">
+                                    <div class=" work-item " style="border-right-color:#4c4c4c "
+                                         [routerLink]="'/panel/workOrder/action'"
+                                         [queryParams]="{mode:'VIEW' , workOrderId: item.workOrderId}">
+                                        <p style="color:#4c4c4c ">{{item.workOrderTitle}}</p>
+                                        <p>
+                                            <span style="color:#4c4c4c ">{{item.workOrderCode}}</span>
+                                        </p>
+                                    </div>
+                                </ng-container>
+
+                                <div class="list-group-item text-center" style="margin-top: 10px;padding: 5px"
+                                     *ngIf="unscheduledWorkOrder.length === 0 && !unscheduledWorkOrderLoader ">
+                                    <strong style="font-size: 1.7vh">
+                                        برای هفته جاری موردی یافت نشد </strong>
+                                </div>
+
+                                <div class="list-group-item text-center" style="margin-top: 10px;padding: 5px"
+                                     *ngIf="unscheduledWorkOrderLoader">
+                                    <i class="fas fa-spin fa-spinner fa-2x"></i>
+                                </div>
+                            </ng-scrollbar>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <nbw-modal
+            [hasHeader]="true"
+            [hasFooter]="true"
+            [dataBackdrop]="true"
+            [modalSize]="MyModalSize.CUSTOM_WIDTH"
+            [customWidthPercent]="{xs: 100, md:90}"
+            autoShow="false"
+            [myId]="selectWidgetModalId">
+        <div modal-header>
+            <strong>
+                انتخاب گزارشات صفحه اصلی
+            </strong>
+        </div>
+        <div modal-body style="display: flow-root" style="background-color: aliceblue!important;padding: 10px">
+            <div class="row">
+                <ng-container *ngFor="let item of userRoleAccessWidget">
+                    <ng-container [ngSwitch]="item">
+
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGHEST_PRIORITY_PLANNED_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_HIGHEST_PRIORITY_PLANNED_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGHEST_PRIORITY_PLANNED_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGHEST_PRIORITY_PLANNED_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               (change)="changeMonth(managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGHEST_PRIORITY_PLANNED_WORK_ORDER)"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGHEST_PRIORITY_PLANNED_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardHighestPriorityPlannedWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGH_PRIORITY_PLANNED_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_HIGH_PRIORITY_PLANNED_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGH_PRIORITY_PLANNED_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGH_PRIORITY_PLANNED_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGH_PRIORITY_PLANNED_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardHighPriorityPlannedWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_AVERAGE_PRIORITY_PLANNED_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_AVERAGE_PRIORITY_PLANNED_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_AVERAGE_PRIORITY_PLANNED_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_AVERAGE_PRIORITY_PLANNED_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_AVERAGE_PRIORITY_PLANNED_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardAveragePriorityPlannedWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_LOW_PRIORITY_PLANNED_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_LOW_PRIORITY_PLANNED_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_LOW_PRIORITY_PLANNED_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_LOW_PRIORITY_PLANNED_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_LOW_PRIORITY_PLANNED_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardLowPriorityPlannedWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_LOWEST_PRIORITY_PLANNED_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_LOWEST_PRIORITY_PLANNED_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_LOWEST_PRIORITY_PLANNED_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_LOWEST_PRIORITY_PLANNED_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_LOWEST_PRIORITY_PLANNED_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardLowestPriorityPlannedWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_OPEN_PLANNED_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_OPEN_PLANNED_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_OPEN_PLANNED_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_OPEN_PLANNED_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_OPEN_PLANNED_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardOpenPlannedWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_CLOSED_PLANNED_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_CLOSED_PLANNED_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_CLOSED_PLANNED_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_CLOSED_PLANNED_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_CLOSED_PLANNED_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardClosedPlannedWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_PENDING_PLANNED_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_PENDING_PLANNED_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_PENDING_PLANNED_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_PENDING_PLANNED_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_PENDING_PLANNED_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardPendingPlannedWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_DRAFT_PLANNED_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_DRAFT_PLANNED_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_DRAFT_PLANNED_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_DRAFT_PLANNED_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_DRAFT_PLANNED_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardDraftPlannedWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_OVER_DUE_PLANNED_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_OVER_DUE_PLANNED_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_OVER_DUE_PLANNED_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_OVER_DUE_PLANNED_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_OVER_DUE_PLANNED_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardOverDuePlannedWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_PLANNED_WORK_ORDER_RATIO">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_PLANNED_WORK_ORDER_RATIO}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_PLANNED_WORK_ORDER_RATIO)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_PLANNED_WORK_ORDER_RATIO)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_PLANNED_WORK_ORDER_RATIO)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardPlannedWorkOrderRatioTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+
+                        <ng-container *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_DRAFT_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_DRAFT_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_DRAFT_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_DRAFT_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_DRAFT_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardDraftWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGHEST_PRIORITY_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_HIGHEST_PRIORITY_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGHEST_PRIORITY_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGHEST_PRIORITY_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGHEST_PRIORITY_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardHighestPriorityWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGH_PRIORITY_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_HIGH_PRIORITY_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGH_PRIORITY_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGH_PRIORITY_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_HIGH_PRIORITY_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardHighPriorityWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_AVERAGE_PRIORITY_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_AVERAGE_PRIORITY_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_AVERAGE_PRIORITY_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_AVERAGE_PRIORITY_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_AVERAGE_PRIORITY_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardAveragePriorityWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_LOW_PRIORITY_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_LOW_PRIORITY_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_LOW_PRIORITY_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_LOW_PRIORITY_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_LOW_PRIORITY_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardLowPriorityWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container
+                                *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_LOWEST_PRIORITY_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_LOWEST_PRIORITY_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_LOWEST_PRIORITY_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_LOWEST_PRIORITY_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_LOWEST_PRIORITY_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardLowestPriorityWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_OPEN_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_OPEN_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_OPEN_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_OPEN_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_OPEN_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardOpenWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_CLOSED_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_CLOSED_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_CLOSED_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_CLOSED_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_CLOSED_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardClosedWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_PENDING_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_PENDING_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_PENDING_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_PENDING_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_PENDING_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardPendingWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="managerDashboardAccessEnum.MANAGER_DASHBOARD_OVER_DUE_WORK_ORDER">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.MANAGER_DASHBOARD_OVER_DUE_WORK_ORDER}}
+                                    </div>
+                                    <div class="card-body p-r-10">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_OVER_DUE_WORK_ORDER)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.MANAGER_DASHBOARD_OVER_DUE_WORK_ORDER)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">گزارش بر حسب تعداد
+                                                        ماه:</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="number" min="1"
+                                                               [disabled]="!hasWidget(managerDashboardAccessEnum.MANAGER_DASHBOARD_OVER_DUE_WORK_ORDER)"
+                                                               [(ngModel)]="managerDashboardAccessAssociatedMonth.managerDashboardOverDueWorkOrderTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngSwitchCase="managerDashboardAccessEnum.GENERAL_ACTIVE_ASSET">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.GENERAL_ACTIVE_ASSET}}
+                                    </div>
+                                    <div class="card-body p-r-10" style="height: 111px">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.GENERAL_ACTIVE_ASSET)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.GENERAL_ACTIVE_ASSET)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="managerDashboardAccessEnum.GENERAL_IN_ACTIVE_ASSET">
+                            <div class="col-md-4 col-sm-6 col-12" style="margin-top: 10px">
+                                <div class="card">
+                                    <div class="card-header p-f-s-w">
+                                        {{managerDashboardAccessEnumFATitle.GENERAL_IN_ACTIVE_ASSET}}
+                                    </div>
+                                    <div class="card-body p-r-10" style="height: 111px">
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-top:5px">
+                                                <div class="form-group row">
+                                                    <label class="l-f-s-w col-sm-5 col-form-label">وضعیت نمایش در
+                                                        داشبورد:</label>
+                                                    <div class="col-sm-4">
+                                                        <mat-slide-toggle title="وضعیت نمایش در داشبورد"
+                                                                          [checked]="hasWidget(managerDashboardAccessEnum.GENERAL_IN_ACTIVE_ASSET)"
+                                                                          (change)="selectWidget($event , managerDashboardAccessEnum.GENERAL_IN_ACTIVE_ASSET)">
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                    </ng-container>
+
+                </ng-container>
+            </div>
+
+        </div>
+        <div modal-footer>
+            <div class="btn-group-sm">
+                <button type="button" class="btn btn-action btn-sm " style="margin :0 5px" (click)="sendWidget()">
+                    تایید و اعمال تغییرات
+                </button>
+            </div>
+        </div>
+    </nbw-modal>
+
+
+    <nbw-modal
+            [hasHeader]="true"
+            [hasFooter]="true"
+            [dataBackdrop]="true"
+            [modalSize]="MyModalSize.CUSTOM_WIDTH"
+            [customWidthPercent]="{xs: 100, md:25}"
+            autoShow="false"
+            [myId]="selectDateModalId">
+        <div modal-header>
+            تنظیمات
+        </div>
+        <div modal-body style="display: flow-root">
+
+            <div class="row" style="margin-bottom: 10px;font-size: small">
+                <div class="col-md-11 ">
+                    <label class="for-label-small">گزارش طبق تعداد ماه:</label>
+                    <input type="number" class="form-control" style="width: 100%">
+                </div>
+            </div>
+
+        </div>
+        <div modal-footer>
+            <div class="btn-group-sm">
+                <button type="button" class="btn btn-action btn-sm " style="margin :0 5px ">
+                    ثبت
+                </button>
+            </div>
+        </div>
+    </nbw-modal>
+
+
+    <app-work-order-modal [modalId]="workOrderModalId" [title]="workOrderModalTitle"
+                          [workOrderList]="workOrderList"></app-work-order-modal>
+    <app-asset-modal [modalId]="assetModalId" [title]="assetModalTitle" [assetsList]="assetsList"></app-asset-modal>
+</ng-container>
